@@ -126,8 +126,8 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
                 yearly: 'price_1Skmly7141DXdb9vxsEJIXtL'
             },
             public: {
-                monthly: 'price_1Skmlz7141DXdb9vpHqQF2xn',
-                yearly: 'price_1Skmlz7141DXdb9vgkcFBRzL'
+                monthly: 'price_1SkuNK7141DXdb9vnuksKZoM',
+                yearly: 'price_YEARLY_ESP_PUBLIC'
             },
             productId: 'prod_TiDCLxRBKttFVH'
         },
@@ -179,8 +179,8 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
                 yearly: 'price_1Skmm07141DXdb9vBq8MTI93'
             },
             public: {
-                monthly: 'price_1Skmm07141DXdb9v4FqBWPee',
-                yearly: 'price_1Skmm07141DXdb9vCRq2nVV2'
+                monthly: 'price_1SkuNK7141DXdb9vHGmkpykY',
+                yearly: 'price_YEARLY_PIO_PUBLIC'
             },
             productId: 'prod_TiDCIhY2imgXqH'
         },
@@ -231,8 +231,8 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
                 yearly: 'price_1Skmm17141DXdb9v6pux6HK3'
             },
             public: {
-                monthly: 'price_1Skmm27141DXdb9vtAyRoIcl',
-                yearly: 'price_1Skmm27141DXdb9vUsKSJ6xT'
+                monthly: 'price_1SkuNL7141DXdb9vhUAWY9Gx',
+                yearly: 'price_YEARLY_CON_PUBLIC'
             },
             productId: 'prod_TiDCJozKNAbDKi'
         },
@@ -281,12 +281,12 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
 
         stripe: {
             founder: {
-                monthly: 'price_1Skmm37141DXdb9vCpw491HD',
-                yearly: 'price_1Skmm37141DXdb9vBrtVu81f'
+                monthly: 'price_1SkuNJ7141DXdb9vRRIjNvaC',
+                yearly: 'price_YEARLY_IMP_FOUNDER'
             },
             public: {
-                monthly: 'price_1Skmm37141DXdb9vr31wFjdb',
-                yearly: 'price_1Skmm47141DXdb9v2VnWEyyo'
+                monthly: 'price_1SkuNM7141DXdb9vdHmn0Dvw',
+                yearly: 'price_YEARLY_IMP_PUBLIC'
             },
             productId: 'prod_TiDCIxUh9DXQ3S'
         },
