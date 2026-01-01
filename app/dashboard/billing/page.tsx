@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check, Shield, Zap, Crown, Lock, Code, Headphones, Rocket } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
+import { getPlanAvailability, PlanAvailability } from '@/lib/founderAvailability';
 
 const plans = [
     {
@@ -113,6 +114,15 @@ const plans = [
 export default function BillingPage() {
     const [loading, setLoading] = useState<string | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [availability, setAvailability] = useState<Record<string, PlanAvailability> | null>(null);
+
+    useEffect(() => {
+        async function fetchAvailability() {
+            const data = await getPlanAvailability();
+            setAvailability(data);
+        }
+        fetchAvailability();
+    }, []);
 
     const handleSubscribe = async (planId: string) => {
         if (planId === 'curioso') return;
@@ -124,6 +134,10 @@ export default function BillingPage() {
                 return;
             }
 
+            // Real-time check if still eligible for founder
+            const currentAvail = await getPlanAvailability();
+            const isSoldOut = currentAvail[planId]?.isSoldOut || false;
+
             const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -131,7 +145,7 @@ export default function BillingPage() {
                     plan: planId,
                     userId: user.id,
                     billing: 'monthly',
-                    isFounder: true
+                    isFounder: !isSoldOut
                 })
             });
             const data = await response.json();
@@ -157,7 +171,7 @@ export default function BillingPage() {
                     className="flex items-center justify-center gap-6 mb-3"
                 >
                     <span className="h-[1px] w-10 bg-gold/30"></span>
-                    <span className="text-gold text-[8px] lg:text-[10px] uppercase tracking-[1em] font-black italic shadow-gold">FOUNDER EDITION</span>
+                    <span className="text-gold text-[8px] lg:text-[10px] uppercase tracking-[1em] font-black italic shadow-gold">COMMERCE ENGINE</span>
                     <span className="h-[1px] w-10 bg-gold/30"></span>
                 </motion.div>
 
@@ -184,6 +198,9 @@ export default function BillingPage() {
                 {plans.map((p, i) => {
                     const isHovered = hoveredIndex === i;
                     const isAnyHovered = hoveredIndex !== null;
+                    const planAvail = availability?.[p.id];
+                    const isSoldOut = planAvail?.isSoldOut || false;
+                    const displayPrice = isSoldOut ? p.publicPrice : p.price;
 
                     return (
                         <motion.div
@@ -198,7 +215,11 @@ export default function BillingPage() {
                             }}
                             className={`silk-card p-5 lg:p-7 rounded-[2.5rem] border border-white/60 flex flex-col relative overflow-hidden transition-all duration-500 cursor-pointer ${p.bg} shadow-luxury-sm hover:shadow-luxury`}
                         >
-                            {p.popular && (
+                            {isSoldOut ? (
+                                <div className="absolute top-5 right-5 flex items-center gap-2 bg-charcoal/80 px-2.5 py-1 rounded-full border border-white/10 z-20">
+                                    <span className="text-[6px] text-white font-black uppercase tracking-widest leading-none">SOLD OUT</span>
+                                </div>
+                            ) : p.popular && (
                                 <div className="absolute top-5 right-5 flex items-center gap-2 bg-gold/10 px-2.5 py-1 rounded-full border border-gold/20 z-20">
                                     <Zap className="w-2 h-2 text-gold" />
                                     <span className="text-[6px] text-gold font-black uppercase tracking-widest leading-none">PIÙ AMATO</span>
@@ -217,13 +238,18 @@ export default function BillingPage() {
 
                                 <div className="flex flex-col mb-4">
                                     <div className="flex items-baseline gap-1">
-                                        <span className={`text-3xl lg:text-5xl font-serif tracking-tighter ${p.isDark ? 'text-white' : 'text-charcoal'}`}>{p.price}</span>
+                                        <span className={`text-3xl lg:text-5xl font-serif tracking-tighter ${p.isDark ? 'text-white' : 'text-charcoal'}`}>{displayPrice}</span>
                                         <span className={`text-[8px] lg:text-[9px] uppercase tracking-widest opacity-40 font-bold ${p.isDark ? 'text-white' : 'text-charcoal'}`}>{p.period}</span>
                                     </div>
-                                    {p.id !== 'curioso' && (
+                                    {!isSoldOut && p.id !== 'curioso' && (
                                         <div className="flex items-center gap-2 mt-1">
                                             <span className={`text-[9px] line-through opacity-30 ${p.isDark ? 'text-white' : 'text-charcoal'}`}>{p.publicPrice}</span>
                                             <span className="text-[8px] bg-gold/10 text-gold px-1.5 py-0.5 rounded-md font-bold uppercase tracking-tight">FOUNDER</span>
+                                        </div>
+                                    )}
+                                    {isSoldOut && (
+                                        <div className="mt-1">
+                                            <span className="text-[7px] uppercase tracking-widest font-black opacity-30">Prezzo Pubblico Attivo</span>
                                         </div>
                                     )}
                                 </div>
@@ -274,7 +300,7 @@ export default function BillingPage() {
                                         ? '...'
                                         : p.id === 'curioso'
                                             ? 'ACTIVE'
-                                            : isHovered ? `ACTIVATE ${p.name}` : `Scegli ${p.name}`}
+                                            : isHovered ? (isSoldOut ? 'GET ELITE ACCESS' : `ACTIVATE FOUNDER ${p.name}`) : (isSoldOut ? 'Join the Elite' : `Scegli ${p.name}`)}
                                 </button>
                             </motion.div>
                         </motion.div>
