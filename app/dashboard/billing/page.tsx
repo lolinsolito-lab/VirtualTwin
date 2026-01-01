@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Check, Shield, Zap, Crown, Lock, Code, Headphones, Rocket } from 'lucide-react';
+import { Check, Shield, Zap, Crown, Lock, Code, Headphones, Rocket, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
-import { getPlanAvailability, PlanAvailability } from '@/lib/founderAvailability';
+import { getPlanAvailability, PlanAvailability, PlanName } from '@/lib/founderAvailability';
 
 const plans = [
     {
@@ -13,18 +13,17 @@ const plans = [
         price: "€0",
         publicPrice: "€0",
         period: "per sempre",
-        description: "L'essenza dell'IA per i tuoi primi esperimenti sovrani.",
+        description: "Prova senza impegno",
         features: [
-            "100 Messaggi / mese",
-            "1 Clone AI (Core Engine)",
-            "Sandbox Chat Illimitata",
-            "Watermark VirtualTwin",
-            "Analytics Base"
+            "1 Clone AI",
+            "100 msg/mese",
+            "Watermark",
+            "Community"
         ],
-        icon: Lock,
-        color: "text-charcoal/40",
-        bg: "bg-white/40",
-        btn: "border-charcoal/10 text-charcoal hover:bg-charcoal hover:text-white"
+        icon: Sparkles,
+        color: "text-charcoal/60",
+        bg: "bg-white",
+        btn: "bg-champagne border border-charcoal/10 text-charcoal hover:bg-charcoal hover:text-white"
     },
     {
         id: "esploratore",
@@ -32,19 +31,17 @@ const plans = [
         price: "€39",
         publicPrice: "€65",
         period: "/mese",
-        description: "Inizia a scalare la tua influenza digitale.",
+        description: "Per testare il potenziale",
         features: [
-            "1.000 Messaggi / mese",
-            "1 Clone AI (Sovereign Core)",
-            "WhatsApp & Instagram Link",
-            "Nessun Watermark",
-            "Analytics Avanzate",
-            "Supporto Email"
+            "1 Clone AI",
+            "1K msg/mese",
+            "Analytics Base",
+            "Email Support"
         ],
         icon: Zap,
-        color: "text-gold",
-        bg: "bg-white/60",
-        btn: "gold-gradient text-white shadow-luxury",
+        color: "text-blue-600",
+        bg: "bg-gradient-to-br from-blue-50 to-indigo-50",
+        btn: "bg-blue-600 text-white hover:bg-blue-700",
         popular: true
     },
     {
@@ -53,19 +50,18 @@ const plans = [
         price: "€97",
         publicPrice: "€162",
         period: "/mese",
-        description: "Potenza superiore per professionisti d'elite.",
+        description: "Per chi fa sul serio",
         features: [
-            "5.000 Messaggi / mese",
-            "3 Cloni AI (Dominio Multiplo)",
-            "Personalità AI Avanzata",
-            "A/B Testing Neurale",
-            "Integrazioni Zapier/Make",
-            "Supporto Prioritario Chat"
+            "1 Clone AI",
+            "5K msg/mese",
+            "3 Canali",
+            "A/B Testing"
         ],
-        icon: Shield,
-        color: "text-charcoal",
-        bg: "bg-white/70",
-        btn: "bg-charcoal text-white hover:bg-black transition-all shadow-xl"
+        icon: Zap,
+        color: "text-gold",
+        bg: "bg-gradient-to-br from-gold/5 to-gold/15",
+        btn: "gold-gradient text-white shadow-lg",
+        glow: true
     },
     {
         id: "conquistatore",
@@ -73,20 +69,17 @@ const plans = [
         price: "€197",
         publicPrice: "€328",
         period: "/mese",
-        description: "Domina il mercato con intelligenza superiore.",
+        description: "Per dominare il mercato",
         features: [
-            "20.000 Messaggi / mese",
-            "5 Cloni AI",
-            "Canali Illimitati",
-            "GPT-4o 💎 (Premium AI)",
-            "Custom Training",
-            "Supporto 1-on-1",
-            "API Completa"
+            "3 Cloni AI",
+            "20K msg/mese",
+            "Priority Support",
+            "API Access"
         ],
-        icon: Rocket,
+        icon: Crown,
         color: "text-gold",
-        bg: "bg-white/80 border-gold/10",
-        btn: "bg-gold text-white hover:bg-gold/80 hover:scale-105 transition-all shadow-luxury"
+        bg: "bg-gradient-to-br from-champagne to-white",
+        btn: "bg-charcoal text-white hover:bg-gold transition-all shadow-luxury"
     },
     {
         id: "imperatore",
@@ -94,18 +87,16 @@ const plans = [
         price: "€397",
         publicPrice: "€662",
         period: "/mese",
-        description: "L'apice della sovranità digitale illimitata.",
+        description: "Per costruire imperi",
         features: [
-            "Messaggi ILLIMITATI",
-            "White-label Totale",
-            "10 Cloni AI (Agency)",
-            "Sub-account Clienti",
-            "SLA 99.9% Uptime",
-            "Account Manager Dedicato"
+            "10 Cloni AI",
+            "Illimitato",
+            "White-label",
+            "Account Manager"
         ],
         icon: Crown,
-        color: "text-gold",
-        bg: "gold-gradient text-white !border-transparent",
+        color: "text-white/80",
+        bg: "gold-gradient !border-transparent",
         btn: "bg-white text-gold hover:bg-champagne transition-all shadow-luxury",
         isDark: true
     }
@@ -136,7 +127,7 @@ export default function BillingPage() {
 
             // Real-time check if still eligible for founder
             const currentAvail = await getPlanAvailability();
-            const isSoldOut = currentAvail[planId]?.isSoldOut || false;
+            const isSoldOut = currentAvail[planId as PlanName]?.isSoldOut || false;
 
             const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
