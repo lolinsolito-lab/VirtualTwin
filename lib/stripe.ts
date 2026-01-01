@@ -1,15 +1,31 @@
 import Stripe from 'stripe';
 
-if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error('STRIPE_SECRET_KEY must be defined in environment variables');
-}
+// Lazy initialization to prevent build errors when env vars are not available
+let _stripe: Stripe | null = null;
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2024-12-18.ac' as any, // Use stable or latest
-    appInfo: {
-        name: 'VirtualTwin Sovereign',
-        version: '0.1.0',
-    },
+export const getStripe = (): Stripe => {
+    if (!_stripe) {
+        const secretKey = process.env.STRIPE_SECRET_KEY;
+        if (!secretKey) {
+            console.warn('STRIPE_SECRET_KEY not defined - using placeholder');
+            // Return a placeholder that will fail at runtime but not at build time
+        }
+        _stripe = new Stripe(secretKey || 'sk_placeholder_for_build', {
+            apiVersion: '2024-12-18.acacia' as any,
+            appInfo: {
+                name: 'VirtualTwin Sovereign',
+                version: '0.1.0',
+            },
+        });
+    }
+    return _stripe;
+};
+
+// Export for backward compatibility - lazy proxy
+export const stripe = new Proxy({} as Stripe, {
+    get(_, prop) {
+        return (getStripe() as any)[prop];
+    }
 });
 
 export const STRIPE_PLANS = {
