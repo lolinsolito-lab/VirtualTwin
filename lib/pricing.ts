@@ -81,11 +81,12 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         },
 
         features: [
-            '100 messaggi/mese',
+            '14 giorni trial',
             '1 Clone AI',
-            '1 Canale (WhatsApp OR Instagram)',
-            'Analytics base (7 giorni)',
-            'Watermark "Powered by VirtualTwin"'
+            '100 msg/mese',
+            '1 Canale (WhatsApp O Instagram)',
+            'Watermark obbligatorio',
+            'No analytics'
         ],
         limits: {
             clones: 1,
@@ -113,11 +114,11 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         founderPrice: 39,
         founderYearlyPrice: 390,    // 2 mesi gratis
         founderSpots: 200,
-        founderDiscount: '40% OFF',
+        founderDiscount: '51% OFF',
 
-        // PUBLIC: €65/m
-        publicPrice: 65,
-        publicYearlyPrice: 650,
+        // PUBLIC: €79/m (increases 12%/year)
+        publicPrice: 79,
+        publicYearlyPrice: 790,
 
         stripe: {
             founder: {
@@ -132,18 +133,17 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         },
 
         features: [
-            '1.000 messaggi/mese',
             '1 Clone AI',
-            '2 Canali',
-            'Analytics completi (30 giorni)',
-            'Lead scoring automatico',
-            'Export conversazioni',
-            'Nessun watermark'
+            '1.000 msg/mese',
+            '1 Canale',
+            'Analytics Base',
+            'Email Support <48h',
+            'No watermark'
         ],
         limits: {
             clones: 1,
             messagesPerMonth: 1000,
-            channels: 2,
+            channels: 1,
             teamMembers: 1,
             analyticsRetentionDays: 30,
             apiAccess: false,
@@ -167,11 +167,11 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         founderPrice: 97,
         founderYearlyPrice: 970,
         founderSpots: 150,
-        founderDiscount: '40% OFF',
+        founderDiscount: '51% OFF',
 
-        // PUBLIC: €162/m
-        publicPrice: 162,
-        publicYearlyPrice: 1620,
+        // PUBLIC: €197/m (increases 12%/year)
+        publicPrice: 197,
+        publicYearlyPrice: 1970,
 
         stripe: {
             founder: {
@@ -186,24 +186,22 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         },
 
         features: [
-            '5.000 messaggi/mese',
-            '3 Cloni AI (multi-business)',
-            '3 Canali per clone',
-            'Gemini Pro 🚀 (miglior qualità)',
-            'Analytics avanzati (90 giorni)',
-            'A/B testing messaggi',
-            'Integrazioni Zapier/Make',
-            'Support prioritario chat'
+            '1 Clone AI',
+            '5.000 msg/mese',
+            '3 Canali (WA + IG + Messenger)',
+            'A/B Testing (20% traffico)',
+            'Analytics Pro',
+            'Email Support <24h'
         ],
         limits: {
-            clones: 3,
+            clones: 1,
             messagesPerMonth: 5000,
             channels: 3,
             teamMembers: 3,
             analyticsRetentionDays: 90,
-            apiAccess: true,
+            apiAccess: false,
             whiteLabel: false,
-            prioritySupport: true
+            prioritySupport: false
         },
         ai: {
             provider: 'gemini-pro',
@@ -221,11 +219,11 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         founderPrice: 197,
         founderYearlyPrice: 1970,
         founderSpots: 50,
-        founderDiscount: '40% OFF',
+        founderDiscount: '50% OFF',
 
-        // PUBLIC: €328/m
-        publicPrice: 328,
-        publicYearlyPrice: 3280,
+        // PUBLIC: €397/m (increases 12%/year)
+        publicPrice: 397,
+        publicYearlyPrice: 3970,
 
         stripe: {
             founder: {
@@ -240,20 +238,19 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         },
 
         features: [
-            '20.000 messaggi/mese',
-            '5 Cloni AI',
-            'Tutti i canali illimitati',
+            '3 Cloni AI',
+            '20.000 msg/mese',
+            '3 Canali / clone',
             'GPT-4o 💎 (premium AI)',
-            'Analytics illimitati',
-            'Custom training del clone',
-            'API completa',
-            'Support 1-on-1 mensile',
-            'Onboarding dedicato'
+            'API Access (rate limit 20K)',
+            'Priority Support <12h',
+            'Analytics Advanced + Export',
+            'Integrazioni Zapier/Make'
         ],
         limits: {
-            clones: 5,
+            clones: 3,
             messagesPerMonth: 20000,
-            channels: 10,
+            channels: 9,
             teamMembers: 10,
             analyticsRetentionDays: 365,
             apiAccess: true,
@@ -272,15 +269,15 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         displayName: 'Imperatore',
         tagline: 'L\'impero digitale definitivo',
 
-        // FOUNDER: €397/m (40% off from €662)
-        founderPrice: 397,
-        founderYearlyPrice: 3970,
+        // FOUNDER: €595/m (25% off from €797)
+        founderPrice: 595,
+        founderYearlyPrice: 5950,
         founderSpots: 25,
-        founderDiscount: '40% OFF',
+        founderDiscount: '25% OFF',
 
-        // PUBLIC: €662/m
-        publicPrice: 662,
-        publicYearlyPrice: 6620,
+        // PUBLIC: €797/m (increases 12%/year)
+        publicPrice: 797,
+        publicYearlyPrice: 7970,
 
         stripe: {
             founder: {
@@ -295,20 +292,19 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         },
 
         features: [
-            'Messaggi ILLIMITATI',
             '10 Cloni AI (agency mode)',
-            'White-label completo',
+            '50.000 msg/mese',
+            'Canali illimitati',
             'GPT-4 Turbo 🧠 (max quality)',
-            'Sub-account per clienti',
-            'Dashboard dedicata agency',
-            'API priority',
+            'White-label completo',
+            'API Priority',
             'Account Manager dedicato',
-            'Setup strategico 1-on-1',
-            'SLA 99.9% uptime'
+            'Priority Support <6h',
+            'Onboarding 2h incluso'
         ],
         limits: {
             clones: 10,
-            messagesPerMonth: 999999, // Unlimited
+            messagesPerMonth: 50000, // 50K limit (was unlimited)
             channels: 999,
             teamMembers: 50,
             analyticsRetentionDays: 730, // 2 years

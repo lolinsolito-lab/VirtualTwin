@@ -171,11 +171,11 @@ const PricingUltimate = () => {
         {
             name: "Imperatore",
             icon: Crown,
-            price: "€397",
+            price: "€595",
             publicPrice: "€797",
             period: "/mese",
             story: "Per costruire imperi",
-            features: ["10 Cloni AI", "Illimitato", "White-label", "Account Manager"],
+            features: ["10 Cloni AI", "50K msg/mese", "White-label", "Account Manager"],
             cta: "Regna",
             href: "/contact",
             bg: "gold-gradient",
