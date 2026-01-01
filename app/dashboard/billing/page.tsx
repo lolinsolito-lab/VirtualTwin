@@ -5,14 +5,15 @@ import { Check, Shield, Zap, Crown, Globe, Lock, Code, Headphones } from 'lucide
 
 const plans = [
     {
-        name: "Free",
+        id: "curioso",
+        name: "Curioso",
         price: "€0",
         period: "per sempre",
         description: "Perfetto per testare l'essenza dell'IA.",
         features: [
-            "1 Landing Page d'Elite",
+            "100 Messaggi / mese",
             "1 Clone AI (Sovereign Core)",
-            "500 Chat / mese",
+            "Sandbox Chat Illimitata",
             "Watermark VirtualTwin",
             "Analytics Base"
         ],
@@ -22,14 +23,15 @@ const plans = [
         btn: "border-charcoal/10 text-charcoal hover:bg-charcoal hover:text-white"
     },
     {
-        name: "Starter",
-        price: "€97",
+        id: "esploratore",
+        name: "Esploratore",
+        price: "€39",
         period: "/mese",
         description: "Per chi inizia a costruire il proprio impero.",
         features: [
-            "5 Landing Page d'Elite",
+            "1.000 Messaggi / mese",
             "1 Clone AI (Sovereign Core)",
-            "2.000 Chat / mese",
+            "WhatsApp & Instagram Link",
             "Nessun Watermark",
             "Analytics Avanzate",
             "Supporto Email"
@@ -41,16 +43,17 @@ const plans = [
         popular: true
     },
     {
-        name: "Pro",
-        price: "€197",
+        id: "pioniere",
+        name: "Pioniere",
+        price: "€97",
         period: "/mese",
-        description: "Potenza illimitata per PMI e Agenzie.",
+        description: "Potenza superiore per professionisti d'elite.",
         features: [
-            "Landing Page ILLIMITATE",
+            "5.000 Messaggi / mese",
             "3 Cloni AI (Dominio Multiplo)",
-            "10.000 Chat / mese",
+            "Personalità AI Avanzata",
             "A/B Testing Neurale",
-            "Custom Domain Personalizzato",
+            "Custom Domain (Presto)",
             "Accesso API Prioritario"
         ],
         icon: Shield,
@@ -59,14 +62,15 @@ const plans = [
         btn: "bg-charcoal text-white hover:bg-black transition-all shadow-xl"
     },
     {
-        name: "Agency",
+        id: "imperatore",
+        name: "Imperatore",
         price: "€397",
         period: "/mese",
-        description: "L'apice della sovranità digitale white-label.",
+        description: "L'apice della sovranità digitale illimitata.",
         features: [
-            "Tutto il piano Pro",
+            "Messaggi ILLIMITATI",
             "White-label Totale",
-            "Gestione Clienti (Dashboard)",
+            "Gestione Clienti (Presto)",
             "10 Cloni AI",
             "Supporto Prioritario H24",
             "Setup Strategico Dedicato"
@@ -79,20 +83,29 @@ const plans = [
     }
 ];
 
+import { supabase } from '@/lib/supabase';
+
 export default function BillingPage() {
     const [loading, setLoading] = useState<string | null>(null);
 
-    const handleSubscribe = async (plan: string) => {
-        if (plan === 'free') return;
-        setLoading(plan);
+    const handleSubscribe = async (planId: string) => {
+        if (planId === 'curioso') return;
+        setLoading(planId);
         try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                window.location.href = '/auth/login';
+                return;
+            }
+
             const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    plan,
-                    tenantId: '00000000-0000-0000-0000-000000000000', // Mock - Replace with real tenant logic
-                    ownerEmail: 'ceo@virtualtwin.ai' // Mock - Replace with real user logic
+                    plan: planId,
+                    userId: user.id,
+                    billing: 'monthly',
+                    isFounder: true // Default to founder pricing for this sprint
                 })
             });
             const data = await response.json();
@@ -159,11 +172,11 @@ export default function BillingPage() {
                         </div>
 
                         <button
-                            onClick={() => handleSubscribe(p.name.toLowerCase())}
-                            disabled={loading === p.name.toLowerCase()}
+                            onClick={() => handleSubscribe(p.id)}
+                            disabled={loading === p.id}
                             className={`w-full py-6 rounded-full text-[10px] uppercase tracking-[0.5em] font-black transition-all duration-700 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed border ${p.btn}`}
                         >
-                            {loading === p.name.toLowerCase() ? 'Inizializzazione...' : p.name === 'Free' ? 'Piano Attivo' : `Inizia con ${p.name}`}
+                            {loading === p.id ? 'Inizializzazione...' : p.id === 'curioso' ? 'Piano Attivo' : `Inizia con ${p.name}`}
                         </button>
                     </div>
                 ))}

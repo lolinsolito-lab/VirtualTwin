@@ -58,16 +58,16 @@ export function KanbanBoard({ initialStages, initialLeads }: KanbanBoardProps) {
         const isOverAColumn = initialStages.some(s => s.id === overId);
 
         if (isOverAColumn) {
-            if (activeLead.stage_id !== overId) {
+            if (activeLead.stage !== overId) {
                 setLeads(prev => prev.map(l =>
-                    l.id === activeLeadId ? { ...l, stage_id: overId } : l
+                    l.id === activeLeadId ? { ...l, stage: overId } : l
                 ));
             }
         } else {
             const overLead = leads.find(l => l.id === overId);
-            if (overLead && activeLead.stage_id !== overLead.stage_id) {
+            if (overLead && activeLead.stage !== overLead.stage) {
                 setLeads(prev => prev.map(l =>
-                    l.id === activeLeadId ? { ...l, stage_id: overLead.stage_id } : l
+                    l.id === activeLeadId ? { ...l, stage: overLead.stage } : l
                 ));
             }
         }
@@ -83,10 +83,19 @@ export function KanbanBoard({ initialStages, initialLeads }: KanbanBoardProps) {
         const finalLead = leads.find(l => l.id === activeLeadId);
 
         if (finalLead) {
+            // Map stage back to conversation status
+            const statusMap: Record<string, string> = {
+                'inquiry': 'active',
+                'qualification': 'qualified',
+                'negotiation': 'converted',
+                'closed': 'closed'
+            };
+            const newStatus = statusMap[finalLead.stage] || 'active';
+
             // Update Supabase in background
             await supabase
-                .from('leads')
-                .update({ stage_id: finalLead.stage_id })
+                .from('conversations')
+                .update({ status: newStatus })
                 .eq('id', activeLeadId);
         }
     };
@@ -108,7 +117,7 @@ export function KanbanBoard({ initialStages, initialLeads }: KanbanBoardProps) {
                         id={stage.id}
                         name={stage.name}
                         color={stage.color || 'bg-gold'}
-                        leads={leads.filter(l => l.stage_id === stage.id)}
+                        leads={leads.filter(l => l.stage === stage.id)}
                     />
                 ))}
             </div>

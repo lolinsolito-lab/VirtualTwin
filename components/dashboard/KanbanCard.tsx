@@ -11,12 +11,10 @@ interface KanbanCardProps {
     id: string;
     lead: {
         id: string;
-        full_name: string;
-        phone_number: string;
-        estimated_value: number;
-        source: string;
+        name: string;
+        business: string;
+        value: number;
         created_at: string;
-        tenant_id: string;
     };
 }
 
@@ -61,7 +59,7 @@ export function KanbanCard({ id, lead }: KanbanCardProps) {
             <div className="flex justify-between items-start mb-8">
                 <div className="flex items-center gap-4">
                     <div className="w-12 h-12 gold-gradient rounded-full flex items-center justify-center font-serif text-white text-xl shadow-luxury border border-white/50">
-                        {lead.full_name?.[0] || 'L'}
+                        {lead.name?.[0] || 'L'}
                     </div>
                     <Link
                         href={`/dashboard/chat?leadId=${lead.id}`}
@@ -79,11 +77,11 @@ export function KanbanCard({ id, lead }: KanbanCardProps) {
                     <MoreHorizontal className="w-6 h-6" />
                 </button>
             </div>
-            <h4 className="text-charcoal text-base font-medium tracking-tight mb-2">{lead.full_name}</h4>
-            <p className="text-charcoal/30 text-[9px] uppercase tracking-[0.3em] mb-8 font-black">{lead.phone_number}</p>
+            <h4 className="text-charcoal text-base font-medium tracking-tight mb-2">{lead.name}</h4>
+            <p className="text-charcoal/30 text-[9px] uppercase tracking-[0.3em] mb-8 font-black">{lead.business}</p>
 
             <div className="flex justify-between items-center pt-8 border-t border-charcoal/5">
-                <span className="text-gold font-serif italic text-2xl tracking-tight">€{lead.estimated_value?.toLocaleString() || '0'}</span>
+                <span className="text-gold font-serif italic text-2xl tracking-tight">€{lead.value?.toLocaleString() || '0'}</span>
                 <span className="text-[9px] text-charcoal/20 uppercase tracking-tighter font-bold">{timeAgo(lead.created_at)}</span>
             </div>
         </div>

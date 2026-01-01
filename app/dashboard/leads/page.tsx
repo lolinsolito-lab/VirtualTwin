@@ -22,6 +22,13 @@ export default function LeadsPage() {
         fetchData();
     }, [currentPage]);
 
+    const [statsCounts, setStatsCounts] = useState({
+        total: 0,
+        qualification: 0,
+        negotiation: 0,
+        closed: 0
+    });
+
     async function fetchData() {
         try {
             setLoading(true);
@@ -32,6 +39,18 @@ export default function LeadsPage() {
                 .select('*', { count: 'exact' })
                 .order('last_message_at', { ascending: false })
                 .range((currentPage - 1) * LEADS_PER_PAGE, currentPage * LEADS_PER_PAGE - 1);
+
+            // 2. Fetch specific counts for stats
+            const { count: qualCount } = await supabase.from('conversations').select('*', { count: 'exact', head: true }).eq('status', 'qualified');
+            const { count: negCount } = await supabase.from('conversations').select('*', { count: 'exact', head: true }).eq('status', 'converted');
+            const { count: closedCount } = await supabase.from('conversations').select('*', { count: 'exact', head: true }).eq('status', 'closed');
+
+            setStatsCounts({
+                total: count || 0,
+                qualification: qualCount || 0,
+                negotiation: negCount || 0,
+                closed: closedCount || 0
+            });
 
             // Map conversations to leads format for the Kanban
             const leadsData = (convData || []).map(conv => ({
@@ -106,10 +125,10 @@ export default function LeadsPage() {
                     {/* Stats Bar */}
                     <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10 transition-all duration-1000 delay-200 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                         {[
-                            { label: 'Totale Lead', value: totalLeads || leads.length || 24 },
-                            { label: 'In Qualifica', value: leads.filter(l => l.stage === 'qualification').length || 8 },
-                            { label: 'Negoziazione', value: leads.filter(l => l.stage === 'negotiation').length || 5 },
-                            { label: 'Chiusi', value: leads.filter(l => l.stage === 'closed').length || 11 },
+                            { label: 'Totale Lead', value: statsCounts.total },
+                            { label: 'In Qualifica', value: statsCounts.qualification },
+                            { label: 'Negoziazione', value: statsCounts.negotiation },
+                            { label: 'Chiusi', value: statsCounts.closed },
                         ].map((stat, i) => (
                             <div key={i} className="bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-charcoal/5">
                                 <p className="text-charcoal/40 text-[9px] uppercase tracking-wider font-bold">{stat.label}</p>
