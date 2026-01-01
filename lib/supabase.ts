@@ -1,13 +1,17 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { getEnvSafe, isBuildTime } from './env';
 
-// Get environment variables with fallbacks for build time
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key-for-build';
+// Get environment variables with build-time safety
+const supabaseUrl = getEnvSafe('SUPABASE_URL', 'https://placeholder.supabase.co');
+const supabaseAnonKey = getEnvSafe('SUPABASE_ANON_KEY', 'placeholder-key-for-build');
 
-// Create client - will use placeholder during build, real values at runtime
+// Create client - uses placeholder during build, real values at runtime
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Helper to check if we have real credentials
+// Helper to check if Supabase is properly configured
 export const isSupabaseConfigured = (): boolean => {
     return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 };
+
+// Export for components that need to check configuration
+export { isBuildTime };
