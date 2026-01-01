@@ -20,7 +20,7 @@ export const STRIPE_PRICES = {
             yearly: 'price_1Skmly7141DXdb9vxsEJIXtL'   // €390/anno
         },
         public: {
-            monthly: 'price_REPLACE_ESP_PUBLIC_MONTHLY', // €79/mese
+            monthly: 'price_1SkuNK7141DXdb9vnuksKZoM', // €79/mese
             yearly: 'price_REPLACE_ESP_PUBLIC_YEARLY'    // €790/anno
         }
     },
@@ -32,7 +32,7 @@ export const STRIPE_PRICES = {
             yearly: 'price_1Skmm07141DXdb9vBq8MTI93'   // €970/anno
         },
         public: {
-            monthly: 'price_REPLACE_PIO_PUBLIC_MONTHLY', // €197/mese
+            monthly: 'price_1SkuNK7141DXdb9vHGmkpykY', // €197/mese
             yearly: 'price_REPLACE_PIO_PUBLIC_YEARLY'    // €1970/anno
         }
     },
@@ -44,7 +44,7 @@ export const STRIPE_PRICES = {
             yearly: 'price_1Skmm17141DXdb9v6pux6HK3'   // €1970/anno
         },
         public: {
-            monthly: 'price_REPLACE_CON_PUBLIC_MONTHLY', // €397/mese
+            monthly: 'price_1SkuNL7141DXdb9vhUAWY9Gx', // €397/mese
             yearly: 'price_REPLACE_CON_PUBLIC_YEARLY'    // €3970/anno
         }
     },
@@ -52,11 +52,11 @@ export const STRIPE_PRICES = {
     // Imperatore - €595 Founder / €797 Public
     imperatore: {
         founder: {
-            monthly: 'price_REPLACE_IMP_FOUNDER_MONTHLY', // €595/mese
+            monthly: 'price_1SkuNJ7141DXdb9vRRIjNvaC', // €595/mese
             yearly: 'price_REPLACE_IMP_FOUNDER_YEARLY'    // €5950/anno
         },
         public: {
-            monthly: 'price_REPLACE_IMP_PUBLIC_MONTHLY', // €797/mese
+            monthly: 'price_1SkuNM7141DXdb9vdHmn0Dvw', // €797/mese
             yearly: 'price_REPLACE_IMP_PUBLIC_YEARLY'    // €7970/anno
         }
     }
