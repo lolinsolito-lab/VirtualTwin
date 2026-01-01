@@ -187,7 +187,7 @@ const PricingUltimate = () => {
     ];
 
     return (
-        <section ref={sectionRef} id="pricing" className="py-20 lg:py-28 px-6 lg:px-12 bg-gradient-to-b from-champagne to-white relative overflow-hidden">
+        <section ref={sectionRef} id="pricing" className="py-12 lg:py-28 px-6 lg:px-12 bg-gradient-to-b from-champagne to-white relative overflow-hidden">
             {/* Background */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[150px]"></div>

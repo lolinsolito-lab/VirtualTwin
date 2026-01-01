@@ -49,7 +49,7 @@ const FinalCTAUltimate = () => {
     ];
 
     return (
-        <section ref={sectionRef} className="py-16 lg:py-20 px-6 lg:px-12 bg-charcoal relative overflow-hidden">
+        <section ref={sectionRef} className="py-12 lg:py-20 px-6 lg:px-12 bg-charcoal relative overflow-hidden">
             <div className={`max-w-5xl mx-auto relative z-10 transition-all duration-1000 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {!submitted ? (
@@ -106,7 +106,7 @@ const FinalCTAUltimate = () => {
                         <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-white/10">
                             <form onSubmit={handleSubmit} className="space-y-5">
                                 {/* Name & Email Row */}
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="text-white/40 text-[10px] uppercase tracking-wider font-bold mb-2 block">Nome</label>
                                         <input

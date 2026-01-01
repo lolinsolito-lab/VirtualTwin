@@ -87,7 +87,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Desktop CTA */}
-                <div className="hidden sm:flex items-center gap-4">
+                <div className="hidden lg:flex items-center gap-4">
                     <Link
                         href="/auth/login"
                         className="px-6 py-3 text-charcoal/60 text-[10px] uppercase tracking-[0.3em] font-black hover:text-gold transition-colors"
@@ -105,7 +105,7 @@ const Navbar = () => {
                 {/* Mobile Menu Button */}
                 <button
                     onClick={() => setMenuOpen(!menuOpen)}
-                    className="sm:hidden p-2 rounded-xl bg-gold/10 text-gold"
+                    className="lg:hidden p-2 rounded-xl bg-gold/10 text-gold"
                 >
                     {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </button>
@@ -113,7 +113,7 @@ const Navbar = () => {
 
             {/* Mobile Menu Overlay */}
             {menuOpen && (
-                <div className="fixed inset-0 z-[90] bg-champagne sm:hidden">
+                <div className="fixed inset-0 z-[90] bg-champagne lg:hidden">
                     <div className="flex flex-col items-center justify-center min-h-screen px-8 py-24">
                         {/* Mobile Nav Links */}
                         <nav className="flex flex-col items-center gap-8 mb-12">
