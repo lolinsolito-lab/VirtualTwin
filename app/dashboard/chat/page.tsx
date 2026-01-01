@@ -22,6 +22,17 @@ function ChatContent() {
         stage: 'Lead Discovery'
     });
     const scrollRef = useRef<HTMLDivElement>(null);
+    const [userId, setUserId] = useState<string | null>(null);
+    const [conversationId, setConversationId] = useState<string | null>(null);
+
+    // Get current user
+    useEffect(() => {
+        async function getUser() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) setUserId(user.id);
+        }
+        getUser();
+    }, []);
 
     // 1. Caricamento Dati Live se leadId è presente
     useEffect(() => {
@@ -30,33 +41,31 @@ function ChatContent() {
                 setLoading(true);
                 try {
                     const { data: lead } = await supabase
-                        .from('leads')
-                        .select('*, conversations(*)')
+                        .from('conversations') // The schema uses conversations as the primary lead entity
+                        .select('*')
                         .eq('id', leadId)
                         .single();
 
                     if (lead) {
                         setLiveLead(lead);
+                        setConversationId(lead.id);
                         setExtractedData({
-                            budget: lead.budget_range || 'In analisi...',
-                            desires: lead.desires || 'Estrapolazione in corso...',
-                            stage: lead.pipeline_stages?.name || 'Inquiry'
+                            budget: lead.notes || 'In analisi...', // Mapping notes to desires for now
+                            desires: lead.contact_name || 'Estrapolazione in corso...',
+                            stage: lead.status || 'Inquiry'
                         });
 
-                        const conv = lead.conversations?.[0];
-                        if (conv) {
-                            const { data: history } = await supabase
-                                .from('messages')
-                                .select('*')
-                                .eq('conversation_id', conv.id)
-                                .order('created_at', { ascending: true });
+                        const { data: history } = await supabase
+                            .from('messages')
+                            .select('*')
+                            .eq('conversation_id', lead.id)
+                            .order('created_at', { ascending: true });
 
-                            if (history && history.length > 0) {
-                                setMessages(history.map((m: any) => ({
-                                    role: m.direction === 'inbound' ? 'user' : 'assistant',
-                                    content: m.content
-                                })));
-                            }
+                        if (history && history.length > 0) {
+                            setMessages(history.map((m: any) => ({
+                                role: m.direction === 'incoming' ? 'user' : 'assistant',
+                                content: m.content
+                            })));
                         }
                     }
                 } catch (error) {
@@ -86,14 +95,15 @@ function ChatContent() {
 
         try {
             if (liveLead) {
-                // MODALITÀ LIVE
+                // MODALITÀ LIVE (WhatsApp)
                 const response = await fetch('/api/whatsapp/send', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        phone: liveLead.phone,
+                        phone: liveLead.contact_phone,
                         message: userMessage,
-                        tenantId: liveLead.tenant_id
+                        userId: userId,
+                        conversationId: conversationId
                     })
                 });
 
@@ -106,8 +116,10 @@ function ChatContent() {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        history: messages,
+                        history: messages.slice(-10), // Send last 10 messages for context
                         userInput: userMessage,
+                        userId: userId,
+                        conversationId: conversationId,
                         businessContext: "VirtualTwin Sovereign AI - Automazione WhatsApp d'Elite"
                     })
                 });
@@ -116,6 +128,10 @@ function ChatContent() {
                 if (data.error) throw new Error(data.error);
 
                 setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+
+                if (data.conversationId) {
+                    setConversationId(data.conversationId);
+                }
 
                 if (data.insights) {
                     setExtractedData(prev => ({

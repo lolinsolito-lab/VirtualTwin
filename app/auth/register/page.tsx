@@ -46,6 +46,18 @@ export default function RegisterPage() {
             }
 
             if (authData.user) {
+                // 2. Create the first default clone for the user
+                // We do this here as a simple way to ensure every user has a clone 
+                // for the sandbox chat to work immediately.
+                await supabase.from('clones').insert({
+                    user_id: authData.user.id,
+                    name: 'Clone Principale',
+                    business_name: companyName,
+                    business_description: 'Azienda d\'Elite',
+                    product_service: 'Servizi di Lusso',
+                    is_active: true
+                });
+
                 // Profile is auto-created by trigger
                 // Redirect to dashboard
                 router.push('/dashboard');

@@ -3,16 +3,19 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { TrendingUp, TrendingDown, Users, MessageSquare, Zap, Plus, Download, RefreshCw, ArrowRight, Sparkles } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 // Mini Chart Component
-const MiniChart = ({ data, color = "gold" }: { data: number[], color?: string }) => {
-    const max = Math.max(...data);
-    const min = Math.min(...data);
+const MiniChart = ({ data = [], color = "gold" }: { data?: number[], color?: string }) => {
+    // Ensure we have some data
+    const displayData = data && data.length > 0 ? data : [0, 0, 0, 0, 0, 0, 0];
+    const max = Math.max(...displayData);
+    const min = Math.min(...displayData);
     const range = max - min || 1;
 
     return (
         <div className="flex items-end gap-1 h-12">
-            {data.map((value, i) => {
+            {displayData.map((value, i) => {
                 const height = ((value - min) / range) * 100;
                 return (
                     <div
@@ -31,7 +34,9 @@ const MiniChart = ({ data, color = "gold" }: { data: number[], color?: string })
 const StatusBadge = ({ status }: { status: string }) => {
     const statusConfig: Record<string, { bg: string, text: string, dot: string }> = {
         'Qualifica': { bg: 'bg-green-50', text: 'text-green-600', dot: 'bg-green-500' },
+        'qualified': { bg: 'bg-green-50', text: 'text-green-600', dot: 'bg-green-500' },
         'Inquiry': { bg: 'bg-blue-50', text: 'text-blue-600', dot: 'bg-blue-500' },
+        'active': { bg: 'bg-blue-50', text: 'text-blue-600', dot: 'bg-blue-500' },
         'Negoziazione': { bg: 'bg-amber-50', text: 'text-amber-600', dot: 'bg-amber-500' },
         'Chiuso': { bg: 'bg-purple-50', text: 'text-purple-600', dot: 'bg-purple-500' },
         'Perso': { bg: 'bg-red-50', text: 'text-red-600', dot: 'bg-red-500' },
@@ -49,21 +54,49 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 export default function DashboardPage() {
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [stats, setStats] = useState({
+        totalLeads: 0,
+        conversations: 0,
+        aiAccuracy: 0,
+        recentLeads: [] as any[]
+    });
 
-    // Sample data for charts
-    const chartData = {
-        leads: [12, 15, 18, 14, 20, 22, 24],
-        conversations: [120, 135, 142, 128, 150, 148, 156],
-        accuracy: [96, 97, 97.5, 98, 97.8, 98.2, 98.2]
+    React.useEffect(() => {
+        fetchDashboardData();
+    }, []);
+
+    const fetchDashboardData = async () => {
+        setIsLoading(true);
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { count: leadCount } = await supabase.from('conversations').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
+            const { count: messageCount } = await supabase.from('messages').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
+            const { data: recentLeads } = await supabase.from('conversations').select('*').eq('user_id', user.id).order('last_message_at', { ascending: false }).limit(3);
+
+            setStats({
+                totalLeads: leadCount || 0,
+                conversations: messageCount || 0,
+                aiAccuracy: 98.2, // Stable high for now
+                recentLeads: recentLeads || []
+            });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    const handleRefresh = () => {
+    const handleRefresh = async () => {
         setIsRefreshing(true);
-        setTimeout(() => setIsRefreshing(false), 2000);
+        await fetchDashboardData();
+        setTimeout(() => setIsRefreshing(false), 800);
     };
 
     // Check if has data (for empty state)
-    const hasData = true; // Set to false to see empty state
+    const hasData = stats.totalLeads > 0 || stats.conversations > 0;
 
     return (
         <div className="p-6 lg:p-12 bg-champagne min-h-screen">
@@ -112,9 +145,9 @@ export default function DashboardPage() {
                     {/* Metric Cards with Mini Charts */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                         {[
-                            { icon: Users, label: "Total Leads", val: "24", change: "+12%", status: "up", data: chartData.leads },
-                            { icon: MessageSquare, label: "Conversations", val: "156", change: "+5%", status: "up", data: chartData.conversations },
-                            { icon: Zap, label: "AI Accuracy", val: "98.2%", change: "Optimal", status: "stable", data: chartData.accuracy }
+                            { icon: Users, label: "Total Leads", val: stats.totalLeads.toString(), change: "+0%", status: "stable", data: [] },
+                            { icon: MessageSquare, label: "Conversations", val: stats.conversations.toString(), change: "+0%", status: "stable", data: [] },
+                            { icon: Zap, label: "AI Accuracy", val: `${stats.aiAccuracy}%`, change: "Optimal", status: "stable", data: [] }
                         ].map((stat, i) => (
                             <div key={i} className="bg-white/80 backdrop-blur-sm p-8 rounded-[2rem] border border-white/60 group hover:border-gold/30 hover:shadow-xl transition-all duration-500">
                                 <div className="flex items-start justify-between mb-6">
@@ -153,11 +186,7 @@ export default function DashboardPage() {
                                 </Link>
                             </div>
                             <div className="space-y-4">
-                                {[
-                                    { name: "Julian Rossi", business: "Luxury Yachts", stage: "Qualifica", value: "€45k" },
-                                    { name: "Elena Von Berg", business: "Private Equity", stage: "Inquiry", value: "€120k" },
-                                    { name: "Marco Drago", business: "Swiss Watchmaking", stage: "Negoziazione", value: "€15k" }
-                                ].map((lead, i) => (
+                                {stats.recentLeads.map((lead, i) => (
                                     <Link
                                         key={i}
                                         href="/dashboard/leads"
@@ -165,19 +194,22 @@ export default function DashboardPage() {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 gold-gradient rounded-full flex items-center justify-center font-serif text-white italic text-lg shadow-lg group-hover/item:scale-110 transition-transform">
-                                                {lead.name[0]}
+                                                {(lead.contact_name || 'P')[0]}
                                             </div>
                                             <div>
-                                                <p className="text-charcoal font-medium text-sm">{lead.name}</p>
-                                                <p className="text-charcoal/40 text-[10px] uppercase tracking-wider">{lead.business}</p>
+                                                <p className="text-charcoal font-medium text-sm">{lead.contact_name || 'Prospect Anonimo'}</p>
+                                                <p className="text-charcoal/40 text-[10px] uppercase tracking-wider">{lead.contact_platform_id || 'Sandbox'}</p>
                                             </div>
                                         </div>
                                         <div className="text-right flex items-center gap-4">
-                                            <StatusBadge status={lead.stage} />
-                                            <p className="text-gold text-xl font-serif italic">{lead.value}</p>
+                                            <StatusBadge status={lead.status} />
+                                            <p className="text-gold text-xl font-serif italic">€0</p>
                                         </div>
                                     </Link>
                                 ))}
+                                {stats.recentLeads.length === 0 && (
+                                    <p className="text-center text-charcoal/30 py-10 text-[10px] uppercase tracking-widest font-black">Nessuna attività recente</p>
+                                )}
                             </div>
                         </div>
 

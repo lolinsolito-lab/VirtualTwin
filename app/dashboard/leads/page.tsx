@@ -26,26 +26,32 @@ export default function LeadsPage() {
         try {
             setLoading(true);
 
-            // 1. Fetch Stages
-            const { data: stagesData } = await supabase
-                .from('pipeline_stages')
-                .select('*')
-                .order('order_index', { ascending: true });
-
-            // 2. Fetch Leads with pagination
-            const { data: leadsData, count } = await supabase
-                .from('leads')
+            // 1. Fetch Conversations with pagination
+            const { data: convData, count } = await supabase
+                .from('conversations')
                 .select('*', { count: 'exact' })
-                .order('created_at', { ascending: false })
+                .order('last_message_at', { ascending: false })
                 .range((currentPage - 1) * LEADS_PER_PAGE, currentPage * LEADS_PER_PAGE - 1);
 
-            setStages(stagesData || [
+            // Map conversations to leads format for the Kanban
+            const leadsData = (convData || []).map(conv => ({
+                id: conv.id,
+                name: conv.contact_name || 'Prospect Anonimo',
+                business: conv.contact_platform_id || 'Sandbox',
+                stage: conv.status === 'active' ? 'inquiry' :
+                    conv.status === 'qualified' ? 'qualification' :
+                        conv.status === 'converted' ? 'negotiation' : 'closed',
+                value: conv.conversion_value || 0,
+                created_at: conv.created_at
+            }));
+
+            setStages([
                 { id: 'inquiry', name: 'Inquiry', color: 'bg-blue-500' },
                 { id: 'qualification', name: 'Qualifica', color: 'bg-gold' },
                 { id: 'negotiation', name: 'Negoziazione', color: 'bg-purple-500' },
                 { id: 'closed', name: 'Chiuso', color: 'bg-green-500' }
             ]);
-            setLeads(leadsData || []);
+            setLeads(leadsData);
             setTotalLeads(count || 0);
         } catch (error) {
             console.error("Error fetching leads:", error);
@@ -135,8 +141,8 @@ export default function LeadsPage() {
                                             key={i}
                                             onClick={() => setCurrentPage(pageNum)}
                                             className={`w-10 h-10 rounded-full text-sm font-bold transition-all ${currentPage === pageNum
-                                                    ? 'gold-gradient text-white'
-                                                    : 'bg-white border border-charcoal/10 text-charcoal hover:border-gold'
+                                                ? 'gold-gradient text-white'
+                                                : 'bg-white border border-charcoal/10 text-charcoal hover:border-gold'
                                                 }`}
                                         >
                                             {pageNum}
@@ -149,8 +155,8 @@ export default function LeadsPage() {
                                         <button
                                             onClick={() => setCurrentPage(totalPages)}
                                             className={`w-10 h-10 rounded-full text-sm font-bold transition-all ${currentPage === totalPages
-                                                    ? 'gold-gradient text-white'
-                                                    : 'bg-white border border-charcoal/10 text-charcoal hover:border-gold'
+                                                ? 'gold-gradient text-white'
+                                                : 'bg-white border border-charcoal/10 text-charcoal hover:border-gold'
                                                 }`}
                                         >
                                             {totalPages}

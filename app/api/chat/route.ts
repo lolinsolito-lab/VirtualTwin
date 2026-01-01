@@ -10,83 +10,149 @@ export async function POST(req: Request) {
             history,
             userInput,
             businessContext,
-            userId // Optional: if provided, uses hybrid AI based on plan
+            userId,
+            conversationId: existingConversationId,
+            cloneId: providedCloneId
         } = await req.json();
 
         if (!userInput) {
             return NextResponse.json({ error: "Messaggio mancante" }, { status: 400 });
         }
 
-        // Default business context
-        const context = businessContext || `
-VirtualTwin Sovereign AI - Cloni Digitali per Vendite Automatiche 24/7
+        // 1. Resolve Clone and User
+        let activeUserId = userId;
+        let activeCloneId = providedCloneId;
 
-PRODOTTO: Piattaforma che crea cloni AI per rispondere automaticamente ai clienti su WhatsApp, Instagram e Messenger.
+        // If no cloneId provided, try to find the first active clone for this user
+        if (activeUserId && !activeCloneId) {
+            const { data: clone } = await supabase
+                .from('clones')
+                .select('id')
+                .eq('user_id', activeUserId)
+                .eq('is_active', true)
+                .limit(1)
+                .single();
+            if (clone) activeCloneId = clone.id;
+        }
 
-BENEFICI:
-- Risposta 24/7 (anche alle 23:47)
-- +340% conversion rate
-- Setup in 5 minuti
-- Zero competenze tecniche
+        // 2. Handle Conversation Persistence
+        let conversationId = existingConversationId;
+        if (activeUserId && activeCloneId && !conversationId) {
+            // Create a new sandbox conversation if it doesn't exist
+            const { data: newConv, error: convError } = await supabase
+                .from('conversations')
+                .insert({
+                    user_id: activeUserId,
+                    clone_id: activeCloneId,
+                    contact_name: 'Prospect (Sandbox)',
+                    contact_platform_id: `sandbox_${Date.now()}`,
+                    status: 'active'
+                })
+                .select()
+                .single();
 
-PRICING:
-- Curioso €0: 100 msg/mese
-- Esploratore €39: 1K msg
-- Pioniere €97: 5K msg (PIÙ SCELTO)
-- Conquistatore €197: 20K msg
-- Imperatore €397: Illimitato
-
-OBIETTIVO: Qualificare il lead e guidarlo verso la demo o il piano giusto.
-        `.trim();
-
-        // If userId provided, use hybrid AI with plan-based routing
-        if (userId) {
-            try {
-                // Fetch user's plan from Supabase
-                const { data: profile, error } = await supabase
-                    .from('profiles')
-                    .select('plan_tier, is_founder')
-                    .eq('id', userId)
-                    .single();
-
-                if (!error && profile) {
-                    const aiResponse = await hybridAIResponse(
-                        userInput,
-                        context,
-                        profile.plan_tier || 'curioso',
-                        profile.is_founder || false,
-                        history as ChatHistoryItem[]
-                    );
-
-                    const providerName = getProviderDisplayName(
-                        profile.plan_tier || 'curioso',
-                        profile.is_founder || false
-                    );
-
-                    return NextResponse.json({
-                        ...aiResponse,
-                        provider: providerName,
-                        planTier: profile.plan_tier,
-                        isFounder: profile.is_founder
-                    });
-                }
-            } catch (err) {
-                console.warn('Could not fetch user plan, using default AI:', err);
+            if (!convError && newConv) {
+                conversationId = newConv.id;
             }
         }
 
-        // Fallback to standard Gemini processing
-        const aiResponse = await processConversation(
-            history as ChatHistoryItem[],
-            userInput,
-            context
-        );
+        // 3. Save User Message
+        if (activeUserId && activeCloneId && conversationId) {
+            await supabase.from('messages').insert({
+                conversation_id: conversationId,
+                user_id: activeUserId,
+                clone_id: activeCloneId,
+                content: userInput,
+                direction: 'incoming',
+                sender_type: 'contact',
+                ai_generated: false
+            });
+        }
+
+        // 4. Generate AI Response
+        const context = businessContext || `VirtualTwin AI Strategy Consultant. Goal: Qualify lead for high-ticket AI automation.`;
+
+        // Fetch user's plan if available for Hybrid AI
+        let aiResponse;
+        let providerName = 'Gemini Flash ⚡';
+        let planTier = 'curioso';
+        let isFounder = false;
+
+        if (activeUserId) {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('plan_tier, is_founder')
+                .eq('id', activeUserId)
+                .single();
+
+            if (profile) {
+                planTier = profile.plan_tier || 'curioso';
+                isFounder = profile.is_founder || false;
+                aiResponse = await hybridAIResponse(
+                    userInput,
+                    context,
+                    planTier,
+                    isFounder,
+                    history as ChatHistoryItem[]
+                );
+                providerName = getProviderDisplayName(planTier, isFounder);
+            } else {
+                aiResponse = await processConversation(history as ChatHistoryItem[], userInput, context);
+            }
+        } else {
+            aiResponse = await processConversation(history as ChatHistoryItem[], userInput, context);
+        }
+
+        // 5. Save AI Message
+        if (activeUserId && activeCloneId && conversationId) {
+            await supabase.from('messages').insert({
+                conversation_id: conversationId,
+                user_id: activeUserId,
+                clone_id: activeCloneId,
+                content: aiResponse.reply,
+                direction: 'outgoing',
+                sender_type: 'ai',
+                ai_generated: true,
+                ai_confidence: 0.95
+            });
+
+            // Update conversation stats and insights
+            const insights = aiResponse.insights || {};
+            const updatePayload: any = {
+                total_messages: (history?.length || 0) + 2,
+                last_message_at: new Date().toISOString(),
+            };
+
+            // Intelligent updates based on AI insights
+            if (insights.fullName && insights.fullName !== "...") {
+                updatePayload.contact_name = insights.fullName;
+            }
+            if (insights.suggestedStage) {
+                // Map AI stages to DB statuses
+                const stageMap: Record<string, string> = {
+                    'inquiry': 'active',
+                    'qualification': 'qualified',
+                    'negotiation': 'converted',
+                    'closed': 'closed'
+                };
+                updatePayload.status = stageMap[insights.suggestedStage.toLowerCase()] || 'active';
+            }
+            if (insights.estimatedValue) {
+                updatePayload.conversion_value = insights.estimatedValue;
+            }
+            if (insights.budgetRange || insights.desires) {
+                updatePayload.notes = `Budget: ${insights.budgetRange || "N/A"}\nDesires: ${insights.desires || "N/A"}`;
+            }
+
+            await supabase.from('conversations').update(updatePayload).eq('id', conversationId);
+        }
 
         return NextResponse.json({
             ...aiResponse,
-            provider: 'Gemini Flash ⚡',
-            planTier: 'curioso',
-            isFounder: false
+            provider: providerName,
+            planTier,
+            isFounder,
+            conversationId
         });
 
     } catch (error: any) {
@@ -94,7 +160,7 @@ OBIETTIVO: Qualificare il lead e guidarlo verso la demo o il piano giusto.
         return NextResponse.json(
             {
                 error: "Errore nell'elaborazione del pensiero AI",
-                reply: "Mi scuso, sto avendo un piccolo problema. Riprova tra un momento! 🙏"
+                reply: "Mi scuso, il mio nucleo neurale sta elaborando troppo. Riprova tra un momento! 🙏"
             },
             { status: 500 }
         );
