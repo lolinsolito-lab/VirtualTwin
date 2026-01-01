@@ -72,6 +72,8 @@ export interface ChatAIResponse {
   reply: string; // La risposta da inviare all'utente (Linguaggio d'Elite)
   insights: Partial<LeadInsight>; // Dati estratti dalla conversazione
   shouldNotifyOwner: boolean; // Se l'IA rileva un lead caldissimo
+  action_type?: 'UPDATE_STAGE' | 'CREATE_TASK' | 'SEND_PAYMENT_LINK' | 'NONE';
+  updated_fields?: Record<string, any>;
 }
 
 export interface ChatHistoryItem {
