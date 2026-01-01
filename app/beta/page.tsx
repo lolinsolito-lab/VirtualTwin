@@ -32,6 +32,7 @@ export default function BetaPage() {
                 .insert({
                     email,
                     full_name: name,
+                    name: name, // Redundancy for older schema versions
                     source: 'beta_page',
                     metadata: {
                         referrer: typeof window !== 'undefined' ? document.referrer : '',
