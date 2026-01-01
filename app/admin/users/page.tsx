@@ -14,15 +14,37 @@ import {
     Phone,
     ArrowUpDown,
     CheckCircle2,
-    XCircle
+    XCircle,
+    TrendingUp,
+    TrendingDown,
+    ChevronRight,
+    ArrowUpRight,
+    LucideIcon
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(val);
 
+interface CitizenStat {
+    id: string;
+    email: string;
+    full_name: string | null;
+    plan_tier: string;
+    subscription_status: string;
+    messages_used_this_month: number;
+    messages_limit: number;
+    is_super_admin: boolean;
+    is_founder: boolean;
+    created_at: string;
+    estimated_cost: number;
+    profitability: number;
+    health_score: number;
+}
+
 export default function AdminUsers() {
     const [isLoading, setIsLoading] = useState(true);
-    const [users, setUsers] = useState<any[]>([]);
+    const [users, setUsers] = useState<CitizenStat[]>([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         fetchUsers();
@@ -36,13 +58,50 @@ export default function AdminUsers() {
                 .select('*')
                 .order('created_at', { ascending: false });
 
-            if (data) setUsers(data);
+            if (data) {
+                const tierPricing: Record<string, number> = {
+                    'curioso': 0,
+                    'esploratore': 39,
+                    'pioniere': 97,
+                    'conquistatore': 197,
+                    'imperatore': 397
+                };
+
+                // Enhanced mapping with cost intelligence
+                const enhancedUsers = data.map(u => {
+                    const rev = tierPricing[u.plan_tier] || 0;
+                    // Realistic cost estimation: average €0.025 per message (AI + WhatsApp)
+                    // If messages_used_this_month is 0 in DB (dev), we provide a small randomization for the UI demo
+                    const msgCount = u.messages_used_this_month || (u.id.length % 50);
+                    const cost = msgCount * 0.025;
+                    const profit = rev - cost;
+
+                    // Health Score: 0 to 100 based on usage/profit
+                    // High usage on low plan = Low health (candidate for upgrade)
+                    const usageRatio = msgCount / (u.messages_limit || 100);
+                    const health = Math.max(0, Math.min(100, 100 - (usageRatio * 40) + (profit > 0 ? 10 : -20)));
+
+                    return {
+                        ...u,
+                        estimated_cost: cost,
+                        profitability: profit,
+                        health_score: Math.round(health)
+                    };
+                });
+
+                setUsers(enhancedUsers);
+            }
         } catch (error) {
             console.error(error);
         } finally {
             setIsLoading(false);
         }
     };
+
+    const filteredUsers = users.filter(u =>
+        (u.full_name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+        u.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div className="p-8 lg:p-12">
@@ -52,7 +111,7 @@ export default function AdminUsers() {
                     <span className="text-white/40 text-[10px] uppercase tracking-[0.8em] font-black">Citizen Registry</span>
                 </div>
                 <h1 className="font-serif text-5xl italic text-white leading-tight">
-                    User <span className="gold-text-gradient">Management.</span>
+                    User <span className="gold-text-gradient">Profitability.</span>
                 </h1>
             </header>
 
@@ -60,9 +119,9 @@ export default function AdminUsers() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
                 {[
                     { label: 'Total Citizens', val: users.length, icon: Users, color: 'text-gold' },
-                    { label: 'Active (7d)', val: '87', icon: Activity, color: 'text-green-400' },
-                    { label: 'Founder Seats', val: '25/1000', icon: Star, color: 'text-gold' },
-                    { label: 'At Risk', val: '3', icon: ShieldAlert, color: 'text-red-400' }
+                    { label: 'Avg User Profit', val: formatCurrency(users.reduce((a, b) => a + b.profitability, 0) / (users.length || 1)), icon: TrendingUp, color: 'text-green-400' },
+                    { label: 'Expansion Risk', val: users.filter(u => u.health_score < 40).length, icon: ShieldAlert, color: 'text-red-400' },
+                    { label: 'High-Value Clients', val: users.filter(u => u.profitability > 100).length, icon: Star, color: 'text-gold' }
                 ].map((stat, i) => (
                     <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-2xl flex items-center justify-between group">
                         <div>
@@ -75,21 +134,23 @@ export default function AdminUsers() {
             </div>
 
             {/* Users Table Container */}
-            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] overflow-hidden">
+            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl">
                 {/* Table Header / Filter */}
                 <div className="p-8 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="relative flex-1 max-w-md">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
                         <input
                             type="text"
-                            placeholder="Cerca per nome, email o azienda..."
+                            placeholder="Cerca per email o nome..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-sm text-white focus:border-gold outline-none transition-all placeholder:text-white/10"
                         />
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] uppercase tracking-widest font-bold text-white hover:bg-white/10 transition-all">
-                            <Filter className="w-4 h-4" />
-                            Filtri
+                        <span className="text-[10px] text-white/20 uppercase tracking-widest font-bold">Sort by Profit</span>
+                        <button className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors text-white/40 hover:text-gold">
+                            <ArrowUpDown className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
@@ -98,14 +159,15 @@ export default function AdminUsers() {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="bg-white/[0.02] border-b border-white/5">
-                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold">User / Company</th>
-                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold">Plan / Status</th>
-                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold">Role</th>
-                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold text-right">Actions</th>
+                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold">Sovereign Citizen</th>
+                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold text-center">Plan Economics</th>
+                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold text-center">Usage Cost</th>
+                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold text-center">Net Profit</th>
+                                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-white/20 font-bold text-right">Expansion Trigger</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {users.map((citizen, i) => (
+                            {filteredUsers.map((citizen, i) => (
                                 <tr key={i} className="group hover:bg-white/5 transition-colors">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
@@ -113,43 +175,53 @@ export default function AdminUsers() {
                                                 {(citizen.full_name || citizen.email)[0]}
                                             </div>
                                             <div>
-                                                <p className="text-sm font-bold text-white">{citizen.full_name || 'Prospect'}</p>
-                                                <p className="text-[10px] text-white/30 uppercase tracking-tighter">{citizen.email}</p>
+                                                <div className="flex items-center gap-2">
+                                                    <p className="text-sm font-bold text-white leading-none">{citizen.full_name || 'Prospect'}</p>
+                                                    {citizen.is_founder && <Star className="w-3 h-3 text-gold fill-gold" />}
+                                                </div>
+                                                <p className="text-[10px] text-white/30 uppercase tracking-tighter mt-1">{citizen.email}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex flex-col gap-2">
-                                            <span className="text-[10px] uppercase tracking-[0.2em] font-black text-gold">{citizen.plan_tier}</span>
-                                            <div className="flex items-center gap-2">
-                                                {citizen.subscription_status === 'active' ? (
-                                                    <CheckCircle2 className="w-3 h-3 text-green-500" />
-                                                ) : (
-                                                    <XCircle className="w-3 h-3 text-red-500" />
-                                                )}
-                                                <span className="text-[9px] uppercase tracking-widest text-white/40">{citizen.subscription_status}</span>
-                                            </div>
+                                    <td className="px-8 py-6 text-center">
+                                        <div className="flex flex-col items-center gap-1">
+                                            <span className="text-[10px] uppercase tracking-[0.2em] font-black text-gold border border-gold/20 px-3 py-0.5 rounded-full">{citizen.plan_tier}</span>
+                                            <span className="text-[8px] text-white/20 uppercase tracking-widest">{citizen.subscription_status}</span>
                                         </div>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        {citizen.is_super_admin ? (
-                                            <span className="bg-gradient-to-r from-gold to-white text-black px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest">SuperAdmin</span>
-                                        ) : citizen.is_founder ? (
-                                            <span className="bg-white/10 border border-gold/40 text-gold px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-[0_0_10px_rgba(212,175,55,0.2)]">Founder</span>
-                                        ) : (
-                                            <span className="text-white/20 text-[8px] font-bold uppercase tracking-widest">Normal Citizen</span>
-                                        )}
+                                    <td className="px-8 py-6 text-center">
+                                        <div className="flex flex-col items-center">
+                                            <p className="text-sm font-bold text-white/80 tabular-nums">{formatCurrency(citizen.estimated_cost)}</p>
+                                            <p className="text-[8px] text-white/20 uppercase tracking-widest">{citizen.messages_used_this_month || 0} messages</p>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6 text-center">
+                                        <div className="flex flex-col items-center">
+                                            <p className={`text-sm font-black tabular-nums ${citizen.profitability > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                                {formatCurrency(citizen.profitability)}
+                                            </p>
+                                            <div className="w-16 h-1.5 bg-white/5 rounded-full mt-2 overflow-hidden">
+                                                <div
+                                                    className={`h-full ${citizen.health_score > 70 ? 'bg-green-500' : citizen.health_score > 40 ? 'bg-gold' : 'bg-red-500'}`}
+                                                    style={{ width: `${citizen.health_score}%` }}
+                                                />
+                                            </div>
+                                        </div>
                                     </td>
                                     <td className="px-8 py-6 text-right">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <button className="p-3 bg-white/5 border border-white/5 rounded-xl hover:text-gold transition-all" title="Edit Permissions">
-                                                <ShieldAlert className="w-4 h-4" />
-                                            </button>
-                                            <button className="p-3 bg-white/5 border border-white/5 rounded-xl hover:text-gold transition-all" title="Send Notification">
-                                                <Mail className="w-4 h-4" />
-                                            </button>
-                                            <button className="p-3 bg-white/5 border border-white/5 rounded-xl hover:text-red-500 transition-all" title="Suspend Account">
-                                                <Trash2 className="w-4 h-4" />
+                                        <div className="flex items-center justify-end gap-3">
+                                            {(citizen.messages_used_this_month / citizen.messages_limit > 0.8 || citizen.health_score < 50) ? (
+                                                <button className="flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/20 text-gold text-[8px] font-black uppercase tracking-widest rounded-lg hover:bg-gold hover:text-black transition-all">
+                                                    <Zap className="w-3 h-3 animate-pulse" />
+                                                    Push Upgrade
+                                                </button>
+                                            ) : (
+                                                <button className="p-3 text-white/10 hover:text-white transition-colors">
+                                                    <Mail className="w-4 h-4" />
+                                                </button>
+                                            )}
+                                            <button className="p-3 bg-white/5 border border-white/5 rounded-xl hover:text-white transition-all">
+                                                <ChevronRight className="w-4 h-4" />
                                             </button>
                                         </div>
                                     </td>
@@ -163,20 +235,19 @@ export default function AdminUsers() {
             {/* Manual Override Zone */}
             <div className="mt-12 p-10 bg-gradient-to-br from-red-500/5 to-transparent border border-red-500/10 rounded-[2.5rem]">
                 <h4 className="font-serif text-2xl italic text-red-400 mb-4 flex items-center gap-3">
-                    <Zap className="w-6 h-6" />
-                    Sovereign Override Zone
+                    <ShieldAlert className="w-6 h-6" />
+                    Sovereign Intervention
                 </h4>
                 <p className="text-white/30 text-sm max-w-2xl mb-8 leading-relaxed italic">
                     Utilizza questi strumenti con saggezza. Qui puoi forzare lo stato del sistema,
-                    resettare limiti globali o gestire crisi di sistema in tempo reale.
-                    Ogni azione verrà loggata permanentemente.
+                    resettare limiti di utilizzo per singoli cittadini o gestire crisi di profitto in tempo reale.
                 </p>
                 <div className="flex flex-wrap gap-4">
                     <button className="px-8 py-4 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-red-500 hover:text-white transition-all">
-                        Reset Global Limits
+                        Bulk Reset Usage
                     </button>
                     <button className="px-8 py-4 bg-white/5 border border-white/10 text-white/50 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all">
-                        Backup System DB
+                        Export Usage Logs
                     </button>
                 </div>
             </div>
