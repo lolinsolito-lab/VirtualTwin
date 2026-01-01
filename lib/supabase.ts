@@ -1,43 +1,13 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Get environment variables with fallbacks for build time
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key-for-build';
 
-// Lazy initialization to prevent build errors when env vars are not available
-let _supabase: SupabaseClient | null = null;
+// Create client - will use placeholder during build, real values at runtime
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export const getSupabase = (): SupabaseClient => {
-    if (!_supabase) {
-        if (!supabaseUrl || !supabaseAnonKey) {
-            // During build time, return a mock client that won't be used
-            console.warn('Supabase credentials not available, using placeholder client');
-        }
-        _supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnonKey || 'placeholder');
-    }
-    return _supabase;
-};
-
-// Export for backward compatibility - lazy initialized
-export const supabase = {
-    get from() {
-        return getSupabase().from.bind(getSupabase());
-    },
-    get auth() {
-        return getSupabase().auth;
-    },
-    get storage() {
-        return getSupabase().storage;
-    },
-    get functions() {
-        return getSupabase().functions;
-    },
-    get realtime() {
-        return getSupabase().realtime;
-    },
-    get rpc() {
-        return getSupabase().rpc.bind(getSupabase());
-    },
-    get channel() {
-        return getSupabase().channel.bind(getSupabase());
-    }
+// Helper to check if we have real credentials
+export const isSupabaseConfigured = (): boolean => {
+    return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 };
