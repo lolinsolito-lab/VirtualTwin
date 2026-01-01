@@ -140,15 +140,15 @@ export default function FounderPage() {
                 </div>
 
                 {/* Pricing Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+                <div id="pricing" className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16 scroll-mt-8">
                     {plans.map((plan, i) => (
                         <div
                             key={i}
                             className={`relative rounded-[1.5rem] p-6 border-2 transition-all ${plan.featured
-                                    ? 'bg-gradient-to-br from-gold/10 to-champagne border-gold shadow-xl scale-[1.02]'
-                                    : plan.badge
-                                        ? 'bg-charcoal text-white border-gold shadow-xl'
-                                        : 'bg-white border-charcoal/10 hover:border-gold/50'
+                                ? 'bg-gradient-to-br from-gold/10 to-champagne border-gold shadow-xl scale-[1.02]'
+                                : plan.badge
+                                    ? 'bg-charcoal text-white border-gold shadow-xl'
+                                    : 'bg-white border-charcoal/10 hover:border-gold/50'
                                 }`}
                         >
                             {plan.badge && (
@@ -188,10 +188,10 @@ export default function FounderPage() {
                             <Link
                                 href={`/auth/register?tier=founder&plan=${plan.name.toLowerCase()}`}
                                 className={`block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider ${plan.badge
-                                        ? 'bg-gold text-charcoal hover:bg-gold/90'
-                                        : plan.featured
-                                            ? 'gold-gradient text-white shadow-lg hover:scale-105'
-                                            : 'bg-charcoal/5 text-charcoal hover:bg-charcoal hover:text-white'
+                                    ? 'bg-gold text-charcoal hover:bg-gold/90'
+                                    : plan.featured
+                                        ? 'gold-gradient text-white shadow-lg hover:scale-105'
+                                        : 'bg-charcoal/5 text-charcoal hover:bg-charcoal hover:text-white'
                                     }`}
                             >
                                 Scegli {plan.name}
@@ -292,13 +292,13 @@ export default function FounderPage() {
                         Solo 153 persone avranno questo privilegio. Per sempre.
                     </p>
 
-                    <Link
-                        href="/auth/register?tier=founder"
+                    <a
+                        href="#pricing"
                         className="inline-flex items-center gap-3 bg-white text-gold px-12 py-5 rounded-full text-lg font-bold hover:bg-champagne transition-all transform hover:scale-105 shadow-xl"
                     >
                         BLOCCA IL TUO PREZZO FOUNDER
                         <ArrowRight className="w-5 h-5" />
-                    </Link>
+                    </a>
 
                     <div className="mt-6 text-sm text-white/60">
                         {spotsLeft}/153 Founder · Chiusura 31 Marzo 2026 · Zero carte richieste per trial 14gg
