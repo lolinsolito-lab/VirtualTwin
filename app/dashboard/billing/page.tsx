@@ -12,13 +12,13 @@ const plans = [
         name: "Curioso",
         price: "€0",
         publicPrice: "€0",
-        period: "per sempre",
-        description: "Prova senza impegno",
+        period: "14 giorni",
+        description: "Trial gratuito",
         features: [
             "1 Clone AI",
-            "100 msg/mese",
-            "Watermark",
-            "Community"
+            "100 msg",
+            "1 Canale",
+            "Watermark"
         ],
         icon: Sparkles,
         color: "text-charcoal/60",
@@ -29,14 +29,14 @@ const plans = [
         id: "esploratore",
         name: "Esploratore",
         price: "€39",
-        publicPrice: "€65",
+        publicPrice: "€79",
         period: "/mese",
         description: "Per testare il potenziale",
         features: [
             "1 Clone AI",
             "1K msg/mese",
-            "Analytics Base",
-            "Email Support"
+            "1 Canale",
+            "Email Support <48h"
         ],
         icon: Zap,
         color: "text-blue-600",
@@ -48,14 +48,14 @@ const plans = [
         id: "pioniere",
         name: "Pioniere",
         price: "€97",
-        publicPrice: "€162",
+        publicPrice: "€197",
         period: "/mese",
         description: "Per chi fa sul serio",
         features: [
             "1 Clone AI",
             "5K msg/mese",
             "3 Canali",
-            "A/B Testing"
+            "A/B Test (20%)"
         ],
         icon: Zap,
         color: "text-gold",
@@ -67,14 +67,14 @@ const plans = [
         id: "conquistatore",
         name: "Conquistatore",
         price: "€197",
-        publicPrice: "€328",
+        publicPrice: "€397",
         period: "/mese",
         description: "Per dominare il mercato",
         features: [
             "3 Cloni AI",
             "20K msg/mese",
             "Priority Support",
-            "API Access"
+            "API (20K req)"
         ],
         icon: Crown,
         color: "text-gold",
@@ -84,13 +84,13 @@ const plans = [
     {
         id: "imperatore",
         name: "Imperatore",
-        price: "€397",
-        publicPrice: "€662",
+        price: "€595",
+        publicPrice: "€797",
         period: "/mese",
         description: "Per costruire imperi",
         features: [
             "10 Cloni AI",
-            "Illimitato",
+            "50K msg/mese",
             "White-label",
             "Account Manager"
         ],

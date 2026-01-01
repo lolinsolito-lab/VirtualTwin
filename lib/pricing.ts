@@ -110,7 +110,7 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         displayName: 'Esploratore',
         tagline: 'Per chi inizia a scalare',
 
-        // FOUNDER: €39/m (40% off from €65)
+        // FOUNDER: €39/m (51% off from €79)
         founderPrice: 39,
         founderYearlyPrice: 390,    // 2 mesi gratis
         founderSpots: 200,
@@ -163,7 +163,7 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         tagline: 'Il più scelto dai professionisti',
         popular: true,
 
-        // FOUNDER: €97/m (40% off from €162)
+        // FOUNDER: €97/m (51% off from €197)
         founderPrice: 97,
         founderYearlyPrice: 970,
         founderSpots: 150,
@@ -215,7 +215,7 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
         displayName: 'Conquistatore',
         tagline: 'Per chi domina il mercato',
 
-        // FOUNDER: €197/m (40% off from €328)
+        // FOUNDER: €197/m (50% off from €397)
         founderPrice: 197,
         founderYearlyPrice: 1970,
         founderSpots: 50,
