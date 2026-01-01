@@ -47,6 +47,17 @@ export default function BetaPage() {
                     throw dbError;
                 }
             } else {
+                // Trigger Welcome Email & Admin Notification
+                try {
+                    await fetch('/api/resend/beta-welcome', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, source: 'beta_page' })
+                    });
+                } catch (emailErr) {
+                    console.error('Email automation failed:', emailErr);
+                }
+
                 setSubmitted(true);
             }
         } catch (err) {
