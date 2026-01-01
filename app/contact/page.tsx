@@ -122,13 +122,13 @@ export default function ContactPage() {
                                 <ul className="space-y-4">
                                     {[
                                         "10 Cloni AI personalizzati",
+                                        "50,000 messaggi/mese",
                                         "White-label completo",
-                                        "Landing page illimitate",
-                                        "API access completo",
-                                        "Priority support 24/7",
-                                        "Account manager dedicato",
-                                        "Onboarding personalizzato",
-                                        "Training per il tuo team"
+                                        "API Priority (300 req/min)",
+                                        "Account Manager dedicato",
+                                        "Priority Support <6h",
+                                        "Onboarding 2h incluso",
+                                        "Fair Use Policy"
                                     ].map((item, i) => (
                                         <li key={i} className="flex items-center gap-3">
                                             <Check className="w-5 h-5 text-gold" />
@@ -138,7 +138,7 @@ export default function ContactPage() {
                                 </ul>
                                 <div className="mt-8 pt-6 border-t border-white/10">
                                     <p className="text-white/40 text-sm">A partire da</p>
-                                    <p className="text-4xl font-serif text-gold">€397<span className="text-lg text-white/40">/mese</span></p>
+                                    <p className="text-4xl font-serif text-gold">€595<span className="text-lg text-white/40">/mese</span></p>
                                 </div>
                             </div>
 

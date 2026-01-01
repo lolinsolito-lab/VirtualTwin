@@ -38,11 +38,11 @@ const PricingRedesigned = () => {
             style: "bg-white border-charcoal/10"
         },
         {
-            name: "Agency",
-            price: "€397",
+            name: "Imperatore",
+            price: "€595",
             period: "/mese",
             desc: "White-label per agenzie",
-            features: ["10 Cloni AI", "Tutto illimitato", "White-label completo", "Gestione Clienti", "Supporto Prioritario"],
+            features: ["10 Cloni AI", "50K msg/mese", "White-label completo", "Account Manager", "API Priority"],
             cta: "Contattaci",
             href: "/contact",
             style: "bg-charcoal text-white border-transparent",

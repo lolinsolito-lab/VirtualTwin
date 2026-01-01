@@ -104,7 +104,7 @@ export default function RegisterPage() {
                     <div className="text-center mb-10">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 rounded-full mb-6">
                             <Sparkles className="w-4 h-4 text-green-500" />
-                            <span className="text-green-600 text-[9px] uppercase tracking-[0.4em] font-black">7 Giorni Gratis</span>
+                            <span className="text-green-600 text-[9px] uppercase tracking-[0.4em] font-black">14 Giorni Gratis</span>
                         </div>
                         <h1 className="font-serif text-4xl text-charcoal mb-3 italic">Crea il Tuo <span className="gold-text-gradient">Clone.</span></h1>
                         <p className="text-charcoal/40 text-sm">Nessuna carta di credito richiesta</p>

@@ -11,10 +11,10 @@ interface Message {
 
 const demoResponses: Record<string, string> = {
     "default": "Ciao! 👋 Sono Sarah, il clone demo di VirtualTwin. Chiedimi qualsiasi cosa sul prodotto, sui prezzi, o su come funziona!",
-    "prezzo": "Abbiamo piani per tutti! 💫\n\n• **Curioso** (€0) - Per provare\n• **Esploratore** (€39/m) - Per iniziare\n• **Pioniere** (€97/m) - Il più popolare\n• **Conquistatore** (€197/m) - Per team\n• **Imperatore** (€397/m) - Per agenzie\n\nTutti includono 7 giorni di prova gratuita! Quale ti interessa?",
+    "prezzo": "Abbiamo piani per tutti! 💫\n\n• **Curioso** (€0) - 14gg trial\n• **Esploratore** (€39/m) - 1K msg\n• **Pioniere** (€97/m) - 5K msg\n• **Conquistatore** (€197/m) - 20K msg\n• **Imperatore** (€595/m) - 50K msg\n\nTutti includono 14 giorni di prova gratuita! Quale ti interessa?",
     "funziona": "È semplicissimo! 🚀\n\n1. **2 min** - Rispondi a 5 domande sul tuo business\n2. **30 sec** - L'AI impara il tuo stile\n3. **2 min** - Collega WhatsApp con QR code\n\n**Totale: 5 minuti** e sei live! Vuoi provare adesso?",
     "whatsapp": "Sì! Mi integro perfettamente con WhatsApp Business API tramite 360dialog. 📱\n\nMa non solo! Funziono anche su:\n• Instagram DM\n• Facebook Messenger\n\nUn unico clone, tutti i canali. Vuoi vedere una demo?",
-    "prova": "Perfetto! 🎉 Puoi iniziare la prova gratuita di 7 giorni cliccando il pulsante 'Inizia Gratis' in alto.\n\nNessuna carta richiesta. Nessun impegno. Se non ti piace, non paghi nulla.\n\nTi aspetto dall'altra parte! 🚀",
+    "prova": "Perfetto! 🎉 Puoi iniziare la prova gratuita di 14 giorni cliccando il pulsante 'Inizia Gratis' in alto.\n\nNessuna carta richiesta. Nessun impegno. Se non ti piace, non paghi nulla.\n\nTi aspetto dall'altra parte! 🚀",
     "clone": "Un 'clone' è un'AI che parla **esattamente come te**. 🧠\n\nImpara:\n• Il tuo tono di voce\n• Le tue risposte tipiche\n• Il tuo modo di vendere\n\nI tuoi clienti pensano di parlare con te, ma sei libero di vivere la tua vita! Figo, no?",
     "ciao": "Ciao! 👋 Come posso aiutarti oggi? Chiedimi dei prezzi, come funziona, o qualsiasi altra cosa!",
     "grazie": "Di nulla! 🙏 Se hai altre domande, sono qui. Buona fortuna con il tuo business! 🚀"
@@ -29,7 +29,7 @@ const findResponse = (input: string): string => {
     if (lower.includes('clone') || lower.includes('cos\'è') || lower.includes('cosa')) return demoResponses.clone;
     if (lower.includes('ciao') || lower.includes('salve') || lower.includes('buon')) return demoResponses.ciao;
     if (lower.includes('grazie') || lower.includes('thanks')) return demoResponses.grazie;
-    return "Interessante domanda! 🤔 Per una risposta dettagliata, ti consiglio di provare la versione completa. Clicca 'Inizia Gratis' per i tuoi 7 giorni di prova!";
+    return "Interessante domanda! 🤔 Per una risposta dettagliata, ti consiglio di provare la versione completa. Clicca 'Inizia Gratis' per i tuoi 14 giorni di prova!";
 };
 
 export default function DemoChat() {
