@@ -8,6 +8,10 @@ const supabaseAnonKey = getEnvSafe('SUPABASE_ANON_KEY', 'placeholder-key-for-bui
 // Create client - uses placeholder during build, real values at runtime
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// Admin client for server-side operations (bypasses RLS)
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-for-build';
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
 // Helper to check if Supabase is properly configured
 export const isSupabaseConfigured = (): boolean => {
     return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);

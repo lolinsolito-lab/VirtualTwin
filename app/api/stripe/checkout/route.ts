@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
                 },
             },
             success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/#pricing?canceled=true`,
+            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/billing?canceled=true`,
             allow_promotion_codes: true,
         });
 
