@@ -17,5 +17,18 @@ export const isSupabaseConfigured = (): boolean => {
     return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 };
 
+// Helper to check if a user is a SuperAdmin
+export const isSuperAdmin = async (userId: string): Promise<boolean> => {
+    if (!userId) return false;
+    const { data, error } = await supabaseAdmin
+        .from('profiles')
+        .select('is_super_admin')
+        .eq('id', userId)
+        .single();
+
+    if (error || !data) return false;
+    return !!data.is_super_admin;
+};
+
 // Export for components that need to check configuration
 export { isBuildTime };
