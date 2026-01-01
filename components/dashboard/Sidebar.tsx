@@ -14,7 +14,8 @@ import {
     CreditCard,
     Radio,
     Menu,
-    X
+    X,
+    School
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -28,6 +29,7 @@ const navItems = [
     { icon: Users, label: 'Leads', href: '/dashboard/leads' },
     { icon: MessageSquare, label: 'AI Chat', href: '/dashboard/chat' },
     { icon: Radio, label: 'Canali', href: '/dashboard/channels' },
+    { icon: School, label: 'Founder Academy', href: '/dashboard/academy' },
     { icon: BarChart3, label: 'Analytics', href: '/dashboard/analytics' },
     { icon: CreditCard, label: 'Billing', href: '/dashboard/billing' },
     { icon: Settings, label: 'Impostazioni', href: '/dashboard/settings' },

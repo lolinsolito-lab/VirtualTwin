@@ -38,10 +38,27 @@ const Navbar = () => {
     }, [menuOpen]);
 
     const navLinks = [
-        { href: '#problem', label: 'La Tua Sfida' },
-        { href: '#solution', label: 'Zero Stress' },
-        { href: '#pricing', label: 'Inizia Gratis' },
+        { id: 'problem', label: 'La Tua Sfida' },
+        { id: 'solution', label: 'Zero Stress' },
+        { id: 'pricing', label: 'Inizia Gratis' },
     ];
+
+    const scrollToSection = (e: React.MouseEvent, id: string) => {
+        e.preventDefault();
+        const element = document.getElementById(id);
+        if (element) {
+            const offset = 80; // Offset for navbar height
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = element.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    };
 
     return (
         <>
@@ -58,10 +75,14 @@ const Navbar = () => {
                 {/* Desktop Navigation */}
                 <div className="hidden lg:flex gap-12 xl:gap-16 text-[10px] uppercase tracking-[0.4em] font-black text-charcoal/40">
                     {navLinks.map((link) => (
-                        <a key={link.href} href={link.href} className="hover:text-gold transition-all duration-300 relative group">
+                        <button
+                            key={link.id}
+                            onClick={(e) => scrollToSection(e, link.id)}
+                            className="hover:text-gold transition-all duration-300 relative group cursor-pointer"
+                        >
                             {link.label}
                             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gold group-hover:w-full transition-all duration-300"></span>
-                        </a>
+                        </button>
                     ))}
                 </div>
 
@@ -97,14 +118,16 @@ const Navbar = () => {
                         {/* Mobile Nav Links */}
                         <nav className="flex flex-col items-center gap-8 mb-12">
                             {navLinks.map((link) => (
-                                <a
-                                    key={link.href}
-                                    href={link.href}
-                                    onClick={() => setMenuOpen(false)}
+                                <button
+                                    key={link.id}
+                                    onClick={(e) => {
+                                        scrollToSection(e, link.id);
+                                        setMenuOpen(false);
+                                    }}
                                     className="font-serif text-3xl italic text-charcoal hover:text-gold transition-colors"
                                 >
                                     {link.label}
-                                </a>
+                                </button>
                             ))}
                         </nav>
 
