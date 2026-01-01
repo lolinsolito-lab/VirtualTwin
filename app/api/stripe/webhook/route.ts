@@ -27,9 +27,10 @@ export async function POST(req: Request) {
             case 'checkout.session.completed':
             case 'customer.subscription.created':
             case 'customer.subscription.updated':
-                const subscription = await stripe.subscriptions.retrieve(session.subscription || session.id);
-                const tenantId = session.client_reference_id || subscription.metadata.tenantId;
-                const planType = subscription.metadata.planType || 'free';
+                const subscriptionResponse = await stripe.subscriptions.retrieve(session.subscription || session.id);
+                const subscription = subscriptionResponse as any;
+                const tenantId = session.client_reference_id || subscription.metadata?.tenantId;
+                const planType = subscription.metadata?.planType || 'free';
 
                 // Update or Create Subscription in Supabase
                 const { data: subData, error: subError } = await supabase
