@@ -206,3 +206,6 @@ export async function triggerMakeWebhook(
         return false;
     }
 }
+
+// Alias for backward compatibility
+export const getConversationHistory = getLastMessages;
