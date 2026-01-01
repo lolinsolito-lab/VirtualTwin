@@ -98,7 +98,7 @@ const Navbar = () => {
                         href="/auth/register"
                         className="px-8 lg:px-12 py-3 lg:py-4 rounded-full gold-gradient text-white text-[9px] lg:text-[10px] uppercase tracking-[0.3em] lg:tracking-[0.4em] font-black hover:scale-105 transition-all duration-300 shadow-lg"
                     >
-                        7 Giorni Gratis
+                        14 Giorni Gratis
                     </Link>
                 </div>
 
@@ -138,7 +138,7 @@ const Navbar = () => {
                                 onClick={() => setMenuOpen(false)}
                                 className="w-full py-5 rounded-full gold-gradient text-white text-center text-[11px] uppercase tracking-[0.3em] font-black shadow-lg"
                             >
-                                7 Giorni Gratis
+                                14 Giorni Gratis
                             </Link>
                             <Link
                                 href="/auth/login"

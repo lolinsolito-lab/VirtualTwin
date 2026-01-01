@@ -59,7 +59,7 @@ const HeroRedesigned = () => {
                     <span className="hidden sm:block h-4 w-px bg-charcoal/10"></span>
                     <span>Setup in 5 min</span>
                     <span className="hidden sm:block h-4 w-px bg-charcoal/10"></span>
-                    <span>7 giorni free trial</span>
+                    <span>14 giorni free trial</span>
                 </div>
             </div>
 

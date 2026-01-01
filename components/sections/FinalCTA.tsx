@@ -65,7 +65,7 @@ const FinalCTA = () => {
 
                 {/* Trust Text */}
                 <p className="mt-8 text-white/30 text-sm">
-                    7 giorni gratis · Nessuna carta richiesta · Cancella quando vuoi
+                    14 giorni gratis · Nessuna carta richiesta · Cancella quando vuoi
                 </p>
             </div>
         </section>

@@ -70,10 +70,17 @@ export default function AdminUsers() {
                 // Enhanced mapping with cost intelligence
                 const enhancedUsers = data.map(u => {
                     const rev = tierPricing[u.plan_tier] || 0;
-                    // Realistic cost estimation: average €0.025 per message (AI + WhatsApp)
-                    // If messages_used_this_month is 0 in DB (dev), we provide a small randomization for the UI demo
+
+                    // Realistic Tiered Cost Model (Economies of Scale)
+                    const calculateUserTieredCost = (msgCount: number) => {
+                        if (msgCount <= 1000) return msgCount * 0.015;
+                        if (msgCount <= 5000) return (1000 * 0.015) + (msgCount - 1000) * 0.010;
+                        if (msgCount <= 20000) return (1000 * 0.015) + (4000 * 0.010) + (msgCount - 5000) * 0.005;
+                        return (1000 * 0.015) + (4000 * 0.010) + (15000 * 0.005) + (msgCount - 20000) * 0.002;
+                    };
+
                     const msgCount = u.messages_used_this_month || (u.id.length % 50);
-                    const cost = msgCount * 0.025;
+                    const cost = calculateUserTieredCost(msgCount);
                     const profit = rev - cost;
 
                     // Health Score: 0 to 100 based on usage/profit

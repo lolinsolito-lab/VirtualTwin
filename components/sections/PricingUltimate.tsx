@@ -205,7 +205,7 @@ const PricingUltimate = () => {
                         <span className="italic gold-text-gradient">Libertà?</span>
                     </h2>
                     <p className="text-charcoal/50 text-lg max-w-xl mx-auto mb-8">
-                        7 giorni per provare. Nessuna carta. <span className="text-charcoal font-medium">Zero rischi.</span>
+                        14 giorni per provare. Nessuna carta. <span className="text-charcoal font-medium">Zero rischi.</span>
                     </p>
 
                     {/* COUNTDOWN BONUS */}

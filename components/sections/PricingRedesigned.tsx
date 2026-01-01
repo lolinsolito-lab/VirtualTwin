@@ -60,7 +60,7 @@ const PricingRedesigned = () => {
                         Scegli il Tuo <span className="italic gold-text-gradient">Livello.</span>
                     </h2>
                     <p className="text-charcoal/50 text-lg max-w-xl mx-auto">
-                        7 giorni di prova gratuita. Nessuna carta di credito richiesta.
+                        14 giorni di prova gratuita. Nessuna carta di credito richiesta.
                     </p>
                 </div>
 

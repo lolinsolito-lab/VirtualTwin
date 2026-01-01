@@ -13,7 +13,7 @@ const demoResponses: Record<string, string> = {
     "prezzo": "Abbiamo piani da €39/mese! 💫 Vuoi i dettagli?",
     "funziona": "Semplice! 5 domande → AI impara → QR WhatsApp → Live! 🚀",
     "whatsapp": "Sì! WhatsApp + Instagram + Messenger. Un clone, ovunque. 📱",
-    "prova": "7 giorni gratis, no carta! Clicca 'Inizia Gratis' sopra 🎉",
+    "prova": "14 giorni gratis, no carta! Clicca 'Inizia Gratis' sopra 🎉",
     "ciao": "Ciao! 👋 Come posso aiutarti?",
 };
 

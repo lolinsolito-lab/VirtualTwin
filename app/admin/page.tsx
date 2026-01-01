@@ -80,15 +80,18 @@ export default function AdminOverview() {
                 .select('*', { count: 'exact', head: true })
                 .gte('created_at', today.toISOString());
 
-            // 3. Real Cost Intelligence (Advanced logic)
-            // AI Costs: avg €0.004 per message (mix of models)
-            const aiCosts = (totalMessages || 0) * 0.004;
-            // WhatsApp: €0.025 per conversation window
-            const waCosts = (totalMessages || 0) * 0.005; // Simplified per-msg for now
+            // 3. Tiered Cost Logic (Economies of Scale)
+            const calculateTieredCost = (msgCount: number) => {
+                if (msgCount <= 1000) return msgCount * 0.015;
+                if (msgCount <= 5000) return (1000 * 0.015) + (msgCount - 1000) * 0.010;
+                if (msgCount <= 20000) return (1000 * 0.015) + (4000 * 0.010) + (msgCount - 5000) * 0.005;
+                return (1000 * 0.015) + (4000 * 0.010) + (15000 * 0.005) + (msgCount - 20000) * 0.002;
+            };
+
+            const aiWaCosts = calculateTieredCost(totalMessages || 0);
             const infraCosts = 93;
             const stripeFees = totalRev * 0.015;
-
-            const totalCosts = aiCosts + waCosts + infraCosts + stripeFees;
+            const totalCosts = aiWaCosts + infraCosts + stripeFees;
 
             // 4. SaaS Metrics Logic
             const activeUserCount = users?.length || 100;
@@ -99,8 +102,8 @@ export default function AdminOverview() {
                 revenue: totalRev || 10880,
                 mrr: totalRev || 10880,
                 costs: Math.round(totalCosts),
-                profit: Math.round(totalRev - totalCosts), // ✅ Fix #1: revenue - costs
-                margin: totalRev > 0 ? Number(((totalRev - totalCosts) / totalRev * 100).toFixed(1)) : 94.0,
+                profit: Math.round((totalRev || 10880) - totalCosts),
+                margin: (totalRev || 10880) > 0 ? Number((((totalRev || 10880) - totalCosts) / (totalRev || 10880) * 100).toFixed(1)) : 94.0,
                 activeUsers: activeUserCount,
                 messagesProcessed: totalMessages || 52340,
                 todayMessages: todayCount || 1847,
@@ -110,8 +113,8 @@ export default function AdminOverview() {
                 cac: 35,
                 cacLtvRatio: `1:${Math.round(ltv / 35)}`,
                 costBreakdown: {
-                    ai: Math.round(aiCosts),
-                    whatsapp: Math.round(waCosts),
+                    ai: Math.round(aiWaCosts * 0.45), // Estimate 45% AI
+                    whatsapp: Math.round(aiWaCosts * 0.55), // Estimate 55% WA Windows
                     infra: infraCosts,
                     stripe: Math.round(stripeFees)
                 }
