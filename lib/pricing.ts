@@ -121,14 +121,14 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
 
         stripe: {
             founder: {
-                monthly: 'price_esploratore_founder_monthly',  // Replace with real IDs
-                yearly: 'price_esploratore_founder_yearly'
+                monthly: 'price_1Skmly7141DXdb9vio4hVFWC',
+                yearly: 'price_1Skmly7141DXdb9vxsEJIXtL'
             },
             public: {
-                monthly: 'price_esploratore_public_monthly',
-                yearly: 'price_esploratore_public_yearly'
+                monthly: 'price_1Skmlz7141DXdb9vpHqQF2xn',
+                yearly: 'price_1Skmlz7141DXdb9vgkcFBRzL'
             },
-            productId: 'prod_esploratore'
+            productId: 'prod_TiDCLxRBKttFVH'
         },
 
         features: [
@@ -175,14 +175,14 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
 
         stripe: {
             founder: {
-                monthly: 'price_pioniere_founder_monthly',
-                yearly: 'price_pioniere_founder_yearly'
+                monthly: 'price_1Skmlz7141DXdb9vmLZHunyX',
+                yearly: 'price_1Skmm07141DXdb9vBq8MTI93'
             },
             public: {
-                monthly: 'price_pioniere_public_monthly',
-                yearly: 'price_pioniere_public_yearly'
+                monthly: 'price_1Skmm07141DXdb9v4FqBWPee',
+                yearly: 'price_1Skmm07141DXdb9vCRq2nVV2'
             },
-            productId: 'prod_pioniere'
+            productId: 'prod_TiDCIhY2imgXqH'
         },
 
         features: [
@@ -229,14 +229,14 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
 
         stripe: {
             founder: {
-                monthly: 'price_conquistatore_founder_monthly',
-                yearly: 'price_conquistatore_founder_yearly'
+                monthly: 'price_1Skmm17141DXdb9v12abIA2S',
+                yearly: 'price_1Skmm17141DXdb9v6pux6HK3'
             },
             public: {
-                monthly: 'price_conquistatore_public_monthly',
-                yearly: 'price_conquistatore_public_yearly'
+                monthly: 'price_1Skmm27141DXdb9vtAyRoIcl',
+                yearly: 'price_1Skmm27141DXdb9vUsKSJ6xT'
             },
-            productId: 'prod_conquistatore'
+            productId: 'prod_TiDCJozKNAbDKi'
         },
 
         features: [
@@ -284,14 +284,14 @@ export const PRICING: Record<PlanTier, PlanPricing> = {
 
         stripe: {
             founder: {
-                monthly: 'price_imperatore_founder_monthly',
-                yearly: 'price_imperatore_founder_yearly'
+                monthly: 'price_1Skmm37141DXdb9vCpw491HD',
+                yearly: 'price_1Skmm37141DXdb9vBrtVu81f'
             },
             public: {
-                monthly: 'price_imperatore_public_monthly',
-                yearly: 'price_imperatore_public_yearly'
+                monthly: 'price_1Skmm37141DXdb9vr31wFjdb',
+                yearly: 'price_1Skmm47141DXdb9v2VnWEyyo'
             },
-            productId: 'prod_imperatore'
+            productId: 'prod_TiDCIxUh9DXQ3S'
         },
 
         features: [
