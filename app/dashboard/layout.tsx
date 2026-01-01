@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/dashboard/Sidebar";
+import TrialBanner from "@/components/dashboard/TrialBanner";
 
 export default function DashboardLayout({
     children,
@@ -10,6 +11,8 @@ export default function DashboardLayout({
             <Sidebar />
             {/* Main content - responsive margin for sidebar */}
             <main className="flex-1 lg:ml-72 xl:ml-80 relative overflow-y-auto">
+                {/* Trial Banner for Curioso users */}
+                <TrialBanner />
                 {/* Premium Backdrop Effects */}
                 <div className="absolute inset-0 pointer-events-none">
                     {/* Top-right gold glow */}
