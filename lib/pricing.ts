@@ -1,0 +1,394 @@
+// =============================================
+// VIRTUALTWIN PRICING CONFIGURATION
+// Founder vs Public Pricing Strategy
+// =============================================
+
+export type PlanTier = 'curioso' | 'esploratore' | 'pioniere' | 'conquistatore' | 'imperatore';
+
+interface PlanPricing {
+    // Display info
+    name: string;
+    displayName: string;
+    tagline: string;
+    popular?: boolean;
+
+    // Founder pricing (limited spots, discounted)
+    founderPrice: number;          // Monthly price for founders
+    founderYearlyPrice: number;    // Yearly price for founders (extra discount)
+    founderSpots: number;          // Total founder spots available
+    founderDiscount: string;       // e.g. "40% OFF"
+
+    // Public pricing (after founder spots filled)
+    publicPrice: number;
+    publicYearlyPrice: number;
+
+    // Stripe IDs (to be filled when you create products in Stripe)
+    stripe: {
+        founder: {
+            monthly: string;       // price_xxx
+            yearly: string;
+        };
+        public: {
+            monthly: string;
+            yearly: string;
+        };
+        productId: string;         // prod_xxx
+    };
+
+    // Features & Limits
+    features: string[];
+    limits: {
+        clones: number;
+        messagesPerMonth: number;
+        channels: number;
+        teamMembers: number;
+        analyticsRetentionDays: number;
+        apiAccess: boolean;
+        whiteLabel: boolean;
+        prioritySupport: boolean;
+    };
+
+    // AI Configuration
+    ai: {
+        provider: 'gemini-flash' | 'gemini-pro' | 'gpt-4o' | 'gpt-4-turbo';
+        maxTokensPerMessage: number;
+        priority: 'standard' | 'high' | 'priority';
+    };
+}
+
+// =============================================
+// COMPLETE PRICING TABLE
+// =============================================
+
+export const PRICING: Record<PlanTier, PlanPricing> = {
+    curioso: {
+        name: 'curioso',
+        displayName: 'Curioso',
+        tagline: 'Per testare il potere dell\'AI',
+
+        // FREE TIER - Same for Founder and Public
+        founderPrice: 0,
+        founderYearlyPrice: 0,
+        founderSpots: 1000, // Unlimited practically
+        founderDiscount: 'GRATIS',
+        publicPrice: 0,
+        publicYearlyPrice: 0,
+
+        stripe: {
+            founder: { monthly: '', yearly: '' }, // No Stripe for free
+            public: { monthly: '', yearly: '' },
+            productId: ''
+        },
+
+        features: [
+            '100 messaggi/mese',
+            '1 Clone AI',
+            '1 Canale (WhatsApp OR Instagram)',
+            'Analytics base (7 giorni)',
+            'Watermark "Powered by VirtualTwin"'
+        ],
+        limits: {
+            clones: 1,
+            messagesPerMonth: 100,
+            channels: 1,
+            teamMembers: 1,
+            analyticsRetentionDays: 7,
+            apiAccess: false,
+            whiteLabel: false,
+            prioritySupport: false
+        },
+        ai: {
+            provider: 'gemini-flash',
+            maxTokensPerMessage: 300,
+            priority: 'standard'
+        }
+    },
+
+    esploratore: {
+        name: 'esploratore',
+        displayName: 'Esploratore',
+        tagline: 'Per chi inizia a scalare',
+
+        // FOUNDER: €39/m (40% off from €65)
+        founderPrice: 39,
+        founderYearlyPrice: 390,    // 2 mesi gratis
+        founderSpots: 200,
+        founderDiscount: '40% OFF',
+
+        // PUBLIC: €65/m
+        publicPrice: 65,
+        publicYearlyPrice: 650,
+
+        stripe: {
+            founder: {
+                monthly: 'price_esploratore_founder_monthly',  // Replace with real IDs
+                yearly: 'price_esploratore_founder_yearly'
+            },
+            public: {
+                monthly: 'price_esploratore_public_monthly',
+                yearly: 'price_esploratore_public_yearly'
+            },
+            productId: 'prod_esploratore'
+        },
+
+        features: [
+            '1.000 messaggi/mese',
+            '1 Clone AI',
+            '2 Canali',
+            'Analytics completi (30 giorni)',
+            'Lead scoring automatico',
+            'Export conversazioni',
+            'Nessun watermark'
+        ],
+        limits: {
+            clones: 1,
+            messagesPerMonth: 1000,
+            channels: 2,
+            teamMembers: 1,
+            analyticsRetentionDays: 30,
+            apiAccess: false,
+            whiteLabel: false,
+            prioritySupport: false
+        },
+        ai: {
+            provider: 'gemini-flash',
+            maxTokensPerMessage: 500,
+            priority: 'standard'
+        }
+    },
+
+    pioniere: {
+        name: 'pioniere',
+        displayName: 'Pioniere',
+        tagline: 'Il più scelto dai professionisti',
+        popular: true,
+
+        // FOUNDER: €97/m (40% off from €162)
+        founderPrice: 97,
+        founderYearlyPrice: 970,
+        founderSpots: 150,
+        founderDiscount: '40% OFF',
+
+        // PUBLIC: €162/m
+        publicPrice: 162,
+        publicYearlyPrice: 1620,
+
+        stripe: {
+            founder: {
+                monthly: 'price_pioniere_founder_monthly',
+                yearly: 'price_pioniere_founder_yearly'
+            },
+            public: {
+                monthly: 'price_pioniere_public_monthly',
+                yearly: 'price_pioniere_public_yearly'
+            },
+            productId: 'prod_pioniere'
+        },
+
+        features: [
+            '5.000 messaggi/mese',
+            '3 Cloni AI (multi-business)',
+            '3 Canali per clone',
+            'Gemini Pro 🚀 (miglior qualità)',
+            'Analytics avanzati (90 giorni)',
+            'A/B testing messaggi',
+            'Integrazioni Zapier/Make',
+            'Support prioritario chat'
+        ],
+        limits: {
+            clones: 3,
+            messagesPerMonth: 5000,
+            channels: 3,
+            teamMembers: 3,
+            analyticsRetentionDays: 90,
+            apiAccess: true,
+            whiteLabel: false,
+            prioritySupport: true
+        },
+        ai: {
+            provider: 'gemini-pro',
+            maxTokensPerMessage: 800,
+            priority: 'high'
+        }
+    },
+
+    conquistatore: {
+        name: 'conquistatore',
+        displayName: 'Conquistatore',
+        tagline: 'Per chi domina il mercato',
+
+        // FOUNDER: €197/m (40% off from €328)
+        founderPrice: 197,
+        founderYearlyPrice: 1970,
+        founderSpots: 50,
+        founderDiscount: '40% OFF',
+
+        // PUBLIC: €328/m
+        publicPrice: 328,
+        publicYearlyPrice: 3280,
+
+        stripe: {
+            founder: {
+                monthly: 'price_conquistatore_founder_monthly',
+                yearly: 'price_conquistatore_founder_yearly'
+            },
+            public: {
+                monthly: 'price_conquistatore_public_monthly',
+                yearly: 'price_conquistatore_public_yearly'
+            },
+            productId: 'prod_conquistatore'
+        },
+
+        features: [
+            '20.000 messaggi/mese',
+            '5 Cloni AI',
+            'Tutti i canali illimitati',
+            'GPT-4o 💎 (premium AI)',
+            'Analytics illimitati',
+            'Custom training del clone',
+            'API completa',
+            'Support 1-on-1 mensile',
+            'Onboarding dedicato'
+        ],
+        limits: {
+            clones: 5,
+            messagesPerMonth: 20000,
+            channels: 10,
+            teamMembers: 10,
+            analyticsRetentionDays: 365,
+            apiAccess: true,
+            whiteLabel: false,
+            prioritySupport: true
+        },
+        ai: {
+            provider: 'gpt-4o',
+            maxTokensPerMessage: 1000,
+            priority: 'priority'
+        }
+    },
+
+    imperatore: {
+        name: 'imperatore',
+        displayName: 'Imperatore',
+        tagline: 'L\'impero digitale definitivo',
+
+        // FOUNDER: €397/m (40% off from €662)
+        founderPrice: 397,
+        founderYearlyPrice: 3970,
+        founderSpots: 25,
+        founderDiscount: '40% OFF',
+
+        // PUBLIC: €662/m
+        publicPrice: 662,
+        publicYearlyPrice: 6620,
+
+        stripe: {
+            founder: {
+                monthly: 'price_imperatore_founder_monthly',
+                yearly: 'price_imperatore_founder_yearly'
+            },
+            public: {
+                monthly: 'price_imperatore_public_monthly',
+                yearly: 'price_imperatore_public_yearly'
+            },
+            productId: 'prod_imperatore'
+        },
+
+        features: [
+            'Messaggi ILLIMITATI',
+            '10 Cloni AI (agency mode)',
+            'White-label completo',
+            'GPT-4 Turbo 🧠 (max quality)',
+            'Sub-account per clienti',
+            'Dashboard dedicata agency',
+            'API priority',
+            'Account Manager dedicato',
+            'Setup strategico 1-on-1',
+            'SLA 99.9% uptime'
+        ],
+        limits: {
+            clones: 10,
+            messagesPerMonth: 999999, // Unlimited
+            channels: 999,
+            teamMembers: 50,
+            analyticsRetentionDays: 730, // 2 years
+            apiAccess: true,
+            whiteLabel: true,
+            prioritySupport: true
+        },
+        ai: {
+            provider: 'gpt-4-turbo',
+            maxTokensPerMessage: 1500,
+            priority: 'priority'
+        }
+    }
+};
+
+// =============================================
+// HELPER FUNCTIONS
+// =============================================
+
+/**
+ * Get the appropriate price based on founder availability
+ */
+export function getPriceForPlan(
+    plan: PlanTier,
+    isFounderSpotAvailable: boolean,
+    billing: 'monthly' | 'yearly'
+): number {
+    const pricing = PRICING[plan];
+
+    if (isFounderSpotAvailable) {
+        return billing === 'monthly' ? pricing.founderPrice : pricing.founderYearlyPrice;
+    }
+    return billing === 'monthly' ? pricing.publicPrice : pricing.publicYearlyPrice;
+}
+
+/**
+ * Get Stripe Price ID based on founder status
+ */
+export function getStripePriceId(
+    plan: PlanTier,
+    isFounder: boolean,
+    billing: 'monthly' | 'yearly'
+): string {
+    const pricing = PRICING[plan];
+    const tier = isFounder ? 'founder' : 'public';
+    return pricing.stripe[tier][billing];
+}
+
+/**
+ * Calculate savings for founder vs public
+ */
+export function getFounderSavings(plan: PlanTier, billing: 'monthly' | 'yearly'): {
+    savingsAmount: number;
+    savingsPercent: number;
+} {
+    const pricing = PRICING[plan];
+    const founderPrice = billing === 'monthly' ? pricing.founderPrice : pricing.founderYearlyPrice;
+    const publicPrice = billing === 'monthly' ? pricing.publicPrice : pricing.publicYearlyPrice;
+
+    const savingsAmount = publicPrice - founderPrice;
+    const savingsPercent = Math.round((savingsAmount / publicPrice) * 100);
+
+    return { savingsAmount, savingsPercent };
+}
+
+/**
+ * Get total potential Founder revenue if all spots filled
+ */
+export function getTotalFounderPotentialMRR(): number {
+    return Object.values(PRICING).reduce((total, plan) => {
+        return total + (plan.founderPrice * plan.founderSpots);
+    }, 0);
+}
+
+// Total MRR if all founder spots filled:
+// Curioso: 1000 × €0 = €0
+// Esploratore: 200 × €39 = €7,800
+// Pioniere: 150 × €97 = €14,550
+// Conquistatore: 50 × €197 = €9,850
+// Imperatore: 25 × €397 = €9,925
+// TOTAL FOUNDER MRR POTENTIAL: €42,125/month 🚀
+
+export type { PlanPricing };

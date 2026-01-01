@@ -1,0 +1,16 @@
+{
+    "name": "VirtualTwin",
+    "short_name": "VirtualTwin",
+    "description": "Il Tuo Clone AI che Vende 24/7",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#FFFBF0",
+    "theme_color": "#D4AF37",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

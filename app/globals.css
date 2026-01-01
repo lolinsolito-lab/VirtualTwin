@@ -1,0 +1,397 @@
+@import "tailwindcss";
+
+:root {
+  --gold: #D4AF37;
+  --gold-light: #F1D38A;
+  --gold-dark: #B38B2D;
+  --champagne: #F9F6F0;
+  --silk: #FFFFFF;
+  --charcoal: #1A1A1A;
+  --background: var(--champagne);
+  --foreground: var(--charcoal);
+
+  --shadow-luxury: 0 10px 40px -10px rgba(26, 26, 26, 0.05),
+    0 20px 60px -15px rgba(212, 175, 55, 0.05);
+  --shadow-holographic: 0 30px 80px -20px rgba(212, 175, 55, 0.12);
+  --shadow-mastermind: 0 40px 100px -20px rgba(26, 26, 26, 0.08),
+    0 20px 50px -15px rgba(212, 175, 55, 0.06);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-champagne: var(--champagne);
+  --color-charcoal: var(--charcoal);
+  --color-silk: var(--silk);
+
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Outfit", sans-serif;
+
+  --shadow-luxury: var(--shadow-luxury);
+  --shadow-mastermind: var(--shadow-mastermind);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
+    background-color: var(--champagne);
+    color: var(--charcoal);
+  }
+
+  ::selection {
+    @apply bg-gold text-white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-luxury {
+    @apply font-serif;
+  }
+}
+
+/* Luxury Magazine Gradients */
+.gold-gradient {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold-dark) 100%);
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.silk-card {
+  @apply bg-white/60 backdrop-blur-md border border-white/40 shadow-luxury transition-all duration-700;
+  transform-style: preserve-3d;
+}
+
+.silk-card:hover {
+  box-shadow: var(--shadow-holographic);
+  transform: translateY(-12px) scale(1.02);
+}
+
+/* 3D Depth Perception */
+.perspective-3d {
+  perspective: 2000px;
+  transform-style: preserve-3d;
+}
+
+/* Cyber-Luxury: Holographic Glimmer */
+.holographic-glimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic-glimmer::after {
+  content: "";
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 300%;
+  height: 300%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.holographic-glimmer:hover::after {
+  transform: translate(50%, 50%);
+}
+
+/* Neural Grid Background */
+.neural-grid {
+  background-image: radial-gradient(var(--gold-dark) 0.5px, transparent 0.5px);
+  background-size: 30px 30px;
+  opacity: 0.1;
+}
+
+/* Neural Mastermind Sphere */
+@keyframes neural-pulse {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.05) rotate(180deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+.animate-neural-pulse {
+  animation: neural-pulse 10s linear infinite;
+}
+
+/* Soft Focus Entrance */
+@keyframes soft-focus-in {
+  0% {
+    opacity: 0;
+    filter: blur(15px);
+    transform: translateY(30px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-soft-focus {
+  animation: soft-focus-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Floating Animation for Mastermind feel */
+@keyframes floating-master {
+  0% {
+    transform: translateZ(20px) translateY(0px) rotateX(10deg);
+  }
+
+  50% {
+    transform: translateZ(50px) translateY(-15px) rotateX(12deg);
+  }
+
+  100% {
+    transform: translateZ(20px) translateY(0px) rotateX(10deg);
+  }
+}
+
+.animate-floating-master {
+  animation: floating-master 6s ease-in-out infinite;
+}
+
+/* Scroll Effects */
+.perspective-scroll-item {
+  transition: transform 0.1s ease-out;
+}
+
+/* ====== VISUAL NIRVANA ANIMATIONS ====== */
+
+/* Floating Particles */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+
+  25% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(-10px) translateX(-10px);
+    opacity: 0.4;
+  }
+
+  75% {
+    transform: translateY(-30px) translateX(5px);
+    opacity: 0.5;
+  }
+}
+
+.animate-float {
+  animation: float 15s ease-in-out infinite;
+}
+
+/* Gradient Animation for Titles */
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 4s ease infinite;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Glow Pulse */
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2), 0 0 40px rgba(212, 175, 55, 0.1);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.4), 0 0 80px rgba(212, 175, 55, 0.2);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Magnetic Hover */
+.magnetic-hover {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.magnetic-hover:hover {
+  transform: scale(1.02) translateY(-2px);
+}
+
+/* Reveal Animation */
+@keyframes reveal-up {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+    filter: blur(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.reveal-up {
+  animation: reveal-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Text Reveal */
+@keyframes text-reveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.text-reveal {
+  animation: text-reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+/* Luxury Card Hover */
+.luxury-card {
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.luxury-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 30px 60px -15px rgba(26, 26, 26, 0.1),
+    0 20px 40px -20px rgba(212, 175, 55, 0.15);
+}
+
+/* Glow Button */
+.glow-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-button::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: -1;
+  filter: blur(15px);
+}
+
+.glow-button:hover::before {
+  opacity: 1;
+}
+
+/* Morphing Background */
+@keyframes morph {
+
+  0%,
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+}
+
+.animate-morph {
+  animation: morph 8s ease-in-out infinite;
+}
+
+/* Stagger Children */
+.stagger-children>* {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stagger-children>*:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stagger-children>*:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stagger-children>*:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stagger-children>*:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.stagger-children>*:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.stagger-children>*:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+/* Premium Input Focus */
+.premium-input {
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.premium-input:focus {
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1),
+    0 10px 30px -10px rgba(212, 175, 55, 0.2);
+  border-color: var(--gold);
+}
