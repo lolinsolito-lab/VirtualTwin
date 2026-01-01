@@ -139,6 +139,7 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
     console.log(`[Stripe] Subscription updated for user ${userId}, status: ${subscription.status}`);
 
     // Update profile with subscription status
+    const sub = subscription as any; // Cast for property access
     const { error } = await supabase
         .from('profiles')
         .update({
@@ -146,8 +147,8 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
             plan_tier: plan || undefined,
             is_founder: isFounder || undefined,
             stripe_subscription_id: subscription.id,
-            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-            cancel_at_period_end: subscription.cancel_at_period_end,
+            current_period_end: sub.current_period_end ? new Date(sub.current_period_end * 1000).toISOString() : undefined,
+            cancel_at_period_end: sub.cancel_at_period_end,
             updated_at: new Date().toISOString(),
         })
         .eq('id', userId);
