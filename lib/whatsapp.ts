@@ -2,11 +2,20 @@
 import { supabase } from './supabase';
 import { ChatHistoryItem } from './types';
 
+// 360Dialog API Configuration
+const D360_BASE_URL = 'https://waba.360dialog.io/v1';
+
 /**
- * Verifica la firma di 360dialog (Placeholder per implementazione reale)
+ * Verifica la firma di 360dialog per sicurezza webhook
+ * In produzione: validare X-Hub-Signature se configurato
  */
 export function verifyWhatsAppSignature(payload: any, headers: Headers) {
-    // In produzione: validare X-Hub-Signature o header simile di 360dialog
+    // 360Dialog non richiede signature verification obbligatoria
+    // ma possiamo validare che il payload abbia la struttura attesa
+    if (!payload || (!payload.messages && !payload.statuses)) {
+        console.warn('[360Dialog] Payload non valido ricevuto');
+        return false;
+    }
     return true;
 }
 
@@ -30,13 +39,35 @@ export function extractMessageData(payload: any) {
 }
 
 /**
- * Scarica un file media da 360dialog (Placeholder API reale)
+ * Scarica un file media da 360dialog
  */
-export async function downloadWhatsAppMedia(mediaId: string) {
-    console.log(`[360dialog] Apertura download per mediaId: ${mediaId}`);
-    // In produzione: fetch a https://waba.360dialog.io/v1/media/${mediaId}
-    // Restituirebbe un Buffer dell'audio o immagine
-    return null;
+export async function downloadWhatsAppMedia(mediaId: string): Promise<Buffer | null> {
+    const apiKey = process.env.D360_API_KEY;
+
+    if (!apiKey) {
+        console.error('[360Dialog] D360_API_KEY non configurata');
+        return null;
+    }
+
+    try {
+        const response = await fetch(`${D360_BASE_URL}/media/${mediaId}`, {
+            headers: {
+                'D360-API-KEY': apiKey
+            }
+        });
+
+        if (!response.ok) {
+            console.error(`[360Dialog] Errore download media: ${response.status}`);
+            return null;
+        }
+
+        const arrayBuffer = await response.arrayBuffer();
+        return Buffer.from(arrayBuffer);
+
+    } catch (error) {
+        console.error('[360Dialog] Errore download media:', error);
+        return null;
+    }
 }
 
 /**
@@ -150,12 +181,49 @@ export async function getLastMessages(convId: string, limit = 10): Promise<ChatH
 }
 
 /**
- * Invia un messaggio via 360dialog (Placeholder API real)
+ * Invia un messaggio via 360dialog API
  */
-export async function sendWhatsAppMessage(phone: string, text: string) {
-    console.log(`[360dialog] Invio messaggio a ${phone}: ${text}`);
-    // In produzione: fetch a https://waba.360dialog.io/v1/messages
-    return true;
+export async function sendWhatsAppMessage(phone: string, text: string): Promise<boolean> {
+    const apiKey = process.env.D360_API_KEY;
+
+    if (!apiKey) {
+        console.error('[360Dialog] D360_API_KEY non configurata');
+        return false;
+    }
+
+    try {
+        // Normalizza numero telefono (rimuovi + e spazi)
+        const normalizedPhone = phone.replace(/[^\d]/g, '');
+
+        const response = await fetch(`${D360_BASE_URL}/messages`, {
+            method: 'POST',
+            headers: {
+                'D360-API-KEY': apiKey,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                messaging_product: 'whatsapp',
+                recipient_type: 'individual',
+                to: normalizedPhone,
+                type: 'text',
+                text: { body: text }
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.text();
+            console.error(`[360Dialog] Errore invio: ${response.status} - ${errorData}`);
+            return false;
+        }
+
+        const result = await response.json();
+        console.log(`[360Dialog] ✅ Messaggio inviato a ${phone}:`, result.messages?.[0]?.id);
+        return true;
+
+    } catch (error) {
+        console.error('[360Dialog] Errore invio messaggio:', error);
+        return false;
+    }
 }
 
 /**

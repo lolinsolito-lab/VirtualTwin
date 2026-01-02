@@ -119,7 +119,28 @@ export async function POST(req: Request) {
     }
 }
 
-// Handler per la verifica del webhook (necessario per alcune API)
+// Handler per la verifica del webhook (necessario per 360Dialog/Meta)
 export async function GET(req: Request) {
-    return NextResponse.json({ status: 'Sovereign Webhook Active' });
+    const url = new URL(req.url);
+    const mode = url.searchParams.get('hub.mode');
+    const token = url.searchParams.get('hub.verify_token');
+    const challenge = url.searchParams.get('hub.challenge');
+
+    // 360Dialog/Meta Webhook Verification
+    if (mode === 'subscribe') {
+        const verifyToken = process.env.D360_WEBHOOK_SECRET || 'virtualtwin_sovereign';
+
+        if (token === verifyToken) {
+            console.log('[360Dialog] ✅ Webhook verificato con successo');
+            return new Response(challenge, { status: 200 });
+        } else {
+            console.warn('[360Dialog] ❌ Token di verifica non valido');
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+    }
+
+    return NextResponse.json({
+        status: 'Sovereign Webhook Active',
+        timestamp: new Date().toISOString()
+    });
 }
