@@ -69,16 +69,23 @@ export async function POST(req: Request) {
             if (used >= limit) {
                 console.warn(`[360Dialog] ⚠️ Limite messaggi raggiunto per user ${userId} (${used}/${limit})`);
 
+                // Nome del lead per personalizzazione
+                const leadName = fullName ? fullName.split(' ')[0] : '';
+                const greeting = leadName ? `Ciao ${leadName}! 👋` : 'Ciao! 👋';
+
                 // Messaggio marketing per upgrade intelligente
-                const upgradeMessage = `Ciao! 👋 
+                const upgradeMessage = `${greeting}
 
-Il nostro assistente AI ha ricevuto tantissime richieste questo mese ed è momentaneamente in pausa.
+Grazie per il tuo messaggio! 🙏
 
-📞 Per parlare con un consulente umano, rispondi "UMANO" e ti ricontatteremo entro 24h.
+Il nostro assistente AI è temporaneamente in pausa per questo mese. Ma non ti lasciamo senza risposta!
 
-💡 *Vuoi risposte immediate 24/7?* Chiedi al proprietario di questo numero di sbloccare il piano premium su virtualtwin.app per un servizio ancora più veloce!
+🗓️ *Prenota una chiamata gratuita con Michael*, il nostro fondatore:
+👉 https://calendly.com/virtualtwin/consulenza
 
-Grazie per la pazienza! 🙏`;
+Oppure scrivi a support@virtualtwin.app e ti risponderemo entro 24h.
+
+A presto! ✨`;
 
                 await sendWhatsAppMessage(phone, upgradeMessage, credentials.apiKey);
                 return NextResponse.json({ success: true, message: 'Limit reached' });
