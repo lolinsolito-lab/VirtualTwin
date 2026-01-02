@@ -1,8 +1,9 @@
 // app/api/stripe/create-checkout/route.ts
-// Direct checkout without requiring authentication - for Checkout-First Flow
+// 👑 Imperial Strategy - Direct checkout without requiring authentication
 import { NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
-import { PRICING, getStripePriceId, PlanTier } from '@/lib/pricing';
+import { PRICING, getStripePriceId, IMPERIAL_PRICES, FOUNDER_CONFIG, type PlanTier } from '@/lib/pricing';
+import { getFounderSpotsLeft } from '@/lib/supabaseHelpers';
 
 /**
  * Create Stripe Checkout Session (No Auth Required)
@@ -10,7 +11,7 @@ import { PRICING, getStripePriceId, PlanTier } from '@/lib/pricing';
  * 
  * Body: { plan: PlanTier, tier: 'founder' | 'public' }
  * 
- * This is the Checkout-First flow:
+ * 👑 Imperial Checkout-First Flow:
  * 1. User selects plan on /founder page
  * 2. Redirects to Stripe Checkout (NO LOGIN REQUIRED)
  * 3. Stripe collects email + payment
@@ -20,7 +21,7 @@ import { PRICING, getStripePriceId, PlanTier } from '@/lib/pricing';
 export async function POST(req: Request) {
     try {
         const stripe = getStripe();
-        const { plan, tier = 'founder' } = await req.json();
+        const { plan, tier: requestedTier = 'founder' } = await req.json();
 
         // Validate plan
         if (!plan || !PRICING[plan as PlanTier]) {
@@ -38,19 +39,36 @@ export async function POST(req: Request) {
             );
         }
 
-        // Get the appropriate Stripe price ID
+        // Check if founder spots are still available
+        let tier = requestedTier;
+        if (requestedTier === 'founder') {
+            const spotsLeft = await getFounderSpotsLeft();
+            if (spotsLeft <= 0) {
+                // Auto-switch to public if no founder spots left
+                tier = 'public';
+                console.log(`[Create Checkout] No founder spots left, switching to public tier`);
+            }
+        }
+
         const isFounder = tier === 'founder';
+
+        // Get the appropriate Stripe price ID from Imperial pricing
         const priceId = getStripePriceId(plan as PlanTier, isFounder, 'monthly');
 
-        if (!priceId || priceId.includes('REPLACE') || priceId.includes('YEARLY')) {
-            console.error(`Invalid priceId for ${plan}/${tier}:`, priceId);
+        if (!priceId || priceId.includes('IMPERIAL_') || priceId.includes('REPLACE')) {
+            console.error(`[Create Checkout] Invalid priceId for ${plan}/${tier}:`, priceId);
             return NextResponse.json(
-                { error: 'Prezzi Stripe non configurati correttamente. Contatta il supporto.' },
+                { error: 'Prezzi Stripe non configurati. Esegui scripts/createImperialStripeProducts.js prima.' },
                 { status: 500 }
             );
         }
 
-        console.log(`[Create Checkout] Plan: ${plan}, Tier: ${tier}, PriceId: ${priceId}`);
+        // Get display price for logging
+        const displayPrice = isFounder
+            ? IMPERIAL_PRICES.founder[plan as keyof typeof IMPERIAL_PRICES.founder]
+            : IMPERIAL_PRICES.public_2026[plan as keyof typeof IMPERIAL_PRICES.public_2026];
+
+        console.log(`[Create Checkout] Plan: ${plan}, Tier: ${tier}, Price: €${displayPrice}, PriceId: ${priceId}`);
 
         // Create Stripe Checkout Session
         const session = await stripe.checkout.sessions.create({
@@ -78,18 +96,20 @@ export async function POST(req: Request) {
                 plan,
                 tier,
                 isFounder: isFounder.toString(),
-                source: 'checkout_first_flow',
+                source: 'imperial_checkout_flow',
+                displayPrice: displayPrice.toString(),
             },
             // Success/Cancel URLs
             success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/welcome?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/founder?canceled=true`,
         });
 
-        console.log(`[Create Checkout] Session created: ${session.id}`);
+        console.log(`[Create Checkout] ✅ Session created: ${session.id}`);
 
         return NextResponse.json({
             url: session.url,
             sessionId: session.id,
+            tier, // Return actual tier used (in case it was auto-switched)
         });
 
     } catch (error: any) {

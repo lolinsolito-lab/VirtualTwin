@@ -1,11 +1,13 @@
 // =============================================
 // VIRTUALTWIN SUPABASE HELPERS
 // Helper functions for Sovereign Economics
+// 👑 Imperial Strategy Runtime Enforcement
 // =============================================
 
 import { supabase } from './supabase';
+import { PLAN_LIMITS, type PlanTier } from './pricing';
 
-export type PlanTier = 'curioso' | 'esploratore' | 'pioniere' | 'conquistatore' | 'imperatore';
+export type { PlanTier };
 
 export interface UserProfile {
     id: string;
@@ -43,7 +45,7 @@ export interface PlanLimits {
 /**
  * Get user profile with their plan limits
  */
-export async function getUserWithLimits(userId: string): Promise<{ user: UserProfile; limits: PlanLimits }> {
+export async function getUserWithLimits(userId: string): Promise<{ user: UserProfile; limits: typeof PLAN_LIMITS[PlanTier] }> {
     const { data: user, error: userError } = await supabase
         .from('profiles')
         .select('*')
@@ -54,28 +56,63 @@ export async function getUserWithLimits(userId: string): Promise<{ user: UserPro
         throw new Error(`User not found: ${userError?.message}`);
     }
 
-    const { data: limits, error: limitsError } = await supabase
-        .from('plan_limits')
-        .select('*')
-        .eq('plan', user.plan)
-        .eq('tier', user.plan_tier || 'public')
-        .single();
+    const planTier = (user.plan_tier || user.plan || 'curioso') as PlanTier;
+    const limits = PLAN_LIMITS[planTier];
 
-    if (limitsError || !limits) {
-        throw new Error(`Plan limits not found: ${limitsError?.message}`);
-    }
-
-    return { user: user as UserProfile, limits: limits as PlanLimits };
+    return { user: user as UserProfile, limits };
 }
 
 /**
- * Check if user can send messages (within limits)
+ * 🔐 CHECK CLONE LIMIT - Critical for cost protection
+ */
+export async function checkCloneLimit(userId: string): Promise<{
+    allowed: boolean;
+    currentClones: number;
+    maxClones: number;
+    message?: string;
+}> {
+    const { user, limits } = await getUserWithLimits(userId);
+
+    // Count current clones
+    const { count, error } = await supabase
+        .from('clones')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId);
+
+    if (error) {
+        console.error('Error counting clones:', error);
+        return { allowed: false, currentClones: 0, maxClones: limits.clones, message: 'Errore nel conteggio cloni' };
+    }
+
+    const currentClones = count || 0;
+    const maxClones = limits.clones;
+
+    if (currentClones >= maxClones) {
+        return {
+            allowed: false,
+            currentClones,
+            maxClones,
+            message: `Hai raggiunto il limite di ${maxClones} clone${maxClones > 1 ? 's' : ''} per il piano ${user.plan_tier || user.plan}. Upgrade per avere più cloni.`
+        };
+    }
+
+    return {
+        allowed: true,
+        currentClones,
+        maxClones
+    };
+}
+
+/**
+ * 🔐 CHECK MESSAGE LIMIT - Critical for AI cost protection
  */
 export async function checkMessageLimit(userId: string): Promise<{
     allowed: boolean;
     reason?: 'trial_expired' | 'limit_reached';
     message?: string;
     remaining?: number;
+    used?: number;
+    limit?: number;
 }> {
     const { user, limits } = await getUserWithLimits(userId);
 
@@ -91,18 +128,49 @@ export async function checkMessageLimit(userId: string): Promise<{
         }
     }
 
+    const used = user.monthly_messages_used || 0;
+    const limit = limits.messagesPerMonth;
+
     // Check monthly limit
-    if (user.monthly_messages_used >= limits.max_messages_monthly) {
+    if (used >= limit) {
         return {
             allowed: false,
             reason: 'limit_reached',
-            message: `Hai raggiunto il limite di ${limits.max_messages_monthly.toLocaleString()} messaggi/mese.`
+            message: `Hai raggiunto il limite di ${limit.toLocaleString()} messaggi/mese. Upgrade per continuare.`,
+            used,
+            limit
         };
     }
 
     return {
         allowed: true,
-        remaining: limits.max_messages_monthly - user.monthly_messages_used
+        remaining: limit - used,
+        used,
+        limit
+    };
+}
+
+/**
+ * 🔐 CHECK API ACCESS - For Conquistatore/Imperatore only
+ */
+export async function checkApiAccess(userId: string): Promise<{
+    allowed: boolean;
+    rateLimit: number;
+    message?: string;
+}> {
+    const { user, limits } = await getUserWithLimits(userId);
+
+    if (!limits.apiAccess) {
+        return {
+            allowed: false,
+            rateLimit: 0,
+            message: `API access non disponibile per il piano ${user.plan_tier || user.plan}. Upgrade a Conquistatore o Imperatore.`
+        };
+    }
+
+    return {
+        allowed: true,
+        rateLimit: limits.apiRatePerMinute
     };
 }
 
@@ -118,7 +186,7 @@ export async function incrementMessageUsage(userId: string): Promise<void> {
 
     if (!user) return;
 
-    const lastReset = new Date(user.usage_reset_at);
+    const lastReset = new Date(user.usage_reset_at || new Date());
     const now = new Date();
 
     // Reset if new month
@@ -134,14 +202,47 @@ export async function incrementMessageUsage(userId: string): Promise<void> {
         await supabase
             .from('profiles')
             .update({
-                monthly_messages_used: user.monthly_messages_used + 1
+                monthly_messages_used: (user.monthly_messages_used || 0) + 1
             })
             .eq('id', userId);
     }
 }
 
 /**
- * Log API usage for tracking
+ * Increment API usage counter (for rate limiting)
+ */
+export async function incrementApiUsage(userId: string): Promise<void> {
+    const { data: user } = await supabase
+        .from('profiles')
+        .select('usage_reset_at, monthly_api_requests')
+        .eq('id', userId)
+        .single();
+
+    if (!user) return;
+
+    const lastReset = new Date(user.usage_reset_at || new Date());
+    const now = new Date();
+
+    if (lastReset.getMonth() !== now.getMonth() || lastReset.getFullYear() !== now.getFullYear()) {
+        await supabase
+            .from('profiles')
+            .update({
+                monthly_api_requests: 1,
+                usage_reset_at: now.toISOString()
+            })
+            .eq('id', userId);
+    } else {
+        await supabase
+            .from('profiles')
+            .update({
+                monthly_api_requests: (user.monthly_api_requests || 0) + 1
+            })
+            .eq('id', userId);
+    }
+}
+
+/**
+ * Log API usage for tracking and billing
  */
 export async function logApiUsage(
     userId: string,
@@ -218,13 +319,22 @@ export async function getTrialDaysRemaining(userId: string): Promise<number> {
  * Get founder count for availability tracking
  */
 export async function getFounderCount(): Promise<number> {
-    const { data, error } = await supabase
-        .from('active_founder_count')
-        .select('total_founders')
-        .single();
+    const { count, error } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_founder', true);
 
-    if (error || !data) return 0;
-    return Number(data.total_founders) || 0;
+    if (error) return 0;
+    return count || 0;
+}
+
+/**
+ * Get remaining founder spots
+ */
+export async function getFounderSpotsLeft(): Promise<number> {
+    const TOTAL_FOUNDER_SPOTS = 153;
+    const currentCount = await getFounderCount();
+    return Math.max(0, TOTAL_FOUNDER_SPOTS - currentCount);
 }
 
 /**
@@ -242,9 +352,15 @@ export async function markAsFounder(userId: string): Promise<void> {
 }
 
 /**
- * Generate API key for user
+ * Generate API key for user (Conquistatore/Imperatore only)
  */
-export async function generateApiKey(userId: string): Promise<string> {
+export async function generateApiKey(userId: string): Promise<string | null> {
+    // First check if user has API access
+    const { allowed, message } = await checkApiAccess(userId);
+    if (!allowed) {
+        throw new Error(message);
+    }
+
     const key = `vtw_${crypto.randomUUID().replace(/-/g, '')}`;
 
     await supabase
@@ -257,3 +373,39 @@ export async function generateApiKey(userId: string): Promise<string> {
 
     return key;
 }
+
+/**
+ * Get user's current usage stats
+ */
+export async function getUserUsageStats(userId: string): Promise<{
+    messagesUsed: number;
+    messagesLimit: number;
+    messagesPercent: number;
+    clonesUsed: number;
+    clonesLimit: number;
+    apiRequestsUsed: number;
+    apiRateLimit: number;
+    trialDaysLeft: number;
+}> {
+    const { user, limits } = await getUserWithLimits(userId);
+
+    // Count clones
+    const { count: clonesCount } = await supabase
+        .from('clones')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId);
+
+    const trialDaysLeft = await getTrialDaysRemaining(userId);
+
+    return {
+        messagesUsed: user.monthly_messages_used || 0,
+        messagesLimit: limits.messagesPerMonth,
+        messagesPercent: Math.round(((user.monthly_messages_used || 0) / limits.messagesPerMonth) * 100),
+        clonesUsed: clonesCount || 0,
+        clonesLimit: limits.clones,
+        apiRequestsUsed: user.monthly_api_requests || 0,
+        apiRateLimit: limits.apiRatePerMinute,
+        trialDaysLeft
+    };
+}
+

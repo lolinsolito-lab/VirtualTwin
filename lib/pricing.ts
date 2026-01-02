@@ -1,41 +1,347 @@
 // =============================================
-// VIRTUALTWIN PRICING CONFIGURATION
-// Founder vs Public Pricing Strategy
+// 👑 VIRTUALTWIN IMPERIAL PRICING
+// €1M Revenue Path Strategy
+// Founder (Lifetime Lock) + Public (Escalating)
 // =============================================
 
 export type PlanTier = 'curioso' | 'esploratore' | 'pioniere' | 'conquistatore' | 'imperatore';
+export type PricingTier = 'founder' | 'public';
 
-interface PlanPricing {
-    // Display info
+// =============================================
+// 💰 IMPERIAL PRICES - THE €1M STRATEGY
+// =============================================
+
+export const IMPERIAL_PRICES = {
+    // FOUNDER: Lifetime locked prices (153 spots)
+    founder: {
+        esploratore: 39,      // Entry level
+        pioniere: 147,        // ⭐ BESTSELLER (+51% margin)
+        conquistatore: 347,   // Agency tier
+        imperatore: 697,      // 👑 Enterprise
+    },
+    // PUBLIC: Post-founder prices (Apr 2026+)
+    public_2026: {
+        esploratore: 79,
+        pioniere: 297,        // 2× Founder
+        conquistatore: 697,   // 2× Founder
+        imperatore: 1197,     // 1.7× Founder
+    },
+    // PUBLIC 2027: +15% YoY increase
+    public_2027: {
+        esploratore: 89,
+        pioniere: 347,
+        conquistatore: 797,
+        imperatore: 1347,
+    },
+    // PUBLIC 2030: Final target
+    public_2030: {
+        esploratore: 119,
+        pioniere: 497,
+        conquistatore: 1097,
+        imperatore: 1797,
+    },
+} as const;
+
+// =============================================
+// 🔐 PLAN LIMITS (Critical for Cost Protection)
+// =============================================
+
+export const PLAN_LIMITS = {
+    curioso: {
+        clones: 1,
+        messagesPerMonth: 100,
+        channels: 1,
+        teamMembers: 1,
+        analyticsRetentionDays: 7,
+        apiAccess: false,
+        apiRatePerMinute: 0,
+        whiteLabel: false,
+        prioritySupport: false,
+        aiProvider: 'gemini-flash' as const,
+        maxTokensPerMessage: 300,
+    },
+    esploratore: {
+        clones: 1,
+        messagesPerMonth: 1000,
+        channels: 1,
+        teamMembers: 1,
+        analyticsRetentionDays: 30,
+        apiAccess: false,
+        apiRatePerMinute: 0,
+        whiteLabel: false,
+        prioritySupport: false,
+        aiProvider: 'gemini-flash' as const,
+        maxTokensPerMessage: 500,
+    },
+    pioniere: {
+        clones: 1,
+        messagesPerMonth: 5000,
+        channels: 3,
+        teamMembers: 2,
+        analyticsRetentionDays: 90,
+        apiAccess: false,
+        apiRatePerMinute: 0,
+        whiteLabel: false,
+        prioritySupport: false,
+        aiProvider: 'gemini-pro' as const,
+        maxTokensPerMessage: 1000,
+    },
+    conquistatore: {
+        clones: 3,
+        messagesPerMonth: 20000,
+        channels: 9,
+        teamMembers: 5,
+        analyticsRetentionDays: 180,
+        apiAccess: true,
+        apiRatePerMinute: 60,
+        whiteLabel: false,
+        prioritySupport: true,
+        aiProvider: 'gpt-4o' as const,
+        maxTokensPerMessage: 2000,
+    },
+    imperatore: {
+        clones: 10,
+        messagesPerMonth: 50000,  // Soft limit
+        channels: -1,              // Unlimited
+        teamMembers: 20,
+        analyticsRetentionDays: 365,
+        apiAccess: true,
+        apiRatePerMinute: 300,
+        whiteLabel: true,
+        prioritySupport: true,
+        aiProvider: 'gpt-4-turbo' as const,
+        maxTokensPerMessage: 4000,
+    },
+} as const;
+
+// =============================================
+// 🎫 STRIPE PRICE IDs
+// ⚠️ PLACEHOLDER - Will be filled after running
+//    scripts/createImperialStripeProducts.js
+// =============================================
+
+export const STRIPE_PRICES = {
+    founder: {
+        esploratore: {
+            monthly: 'price_IMPERIAL_FOUNDER_ESPLORATORE',  // €39
+            yearly: 'price_IMPERIAL_FOUNDER_ESPLORATORE_Y',
+        },
+        pioniere: {
+            monthly: 'price_IMPERIAL_FOUNDER_PIONIERE',     // €147
+            yearly: 'price_IMPERIAL_FOUNDER_PIONIERE_Y',
+        },
+        conquistatore: {
+            monthly: 'price_IMPERIAL_FOUNDER_CONQUISTATORE', // €347
+            yearly: 'price_IMPERIAL_FOUNDER_CONQUISTATORE_Y',
+        },
+        imperatore: {
+            monthly: 'price_IMPERIAL_FOUNDER_IMPERATORE',    // €697
+            yearly: 'price_IMPERIAL_FOUNDER_IMPERATORE_Y',
+        },
+    },
+    public: {
+        esploratore: {
+            monthly: 'price_IMPERIAL_PUBLIC_ESPLORATORE',    // €79
+            yearly: 'price_IMPERIAL_PUBLIC_ESPLORATORE_Y',
+        },
+        pioniere: {
+            monthly: 'price_IMPERIAL_PUBLIC_PIONIERE',       // €297
+            yearly: 'price_IMPERIAL_PUBLIC_PIONIERE_Y',
+        },
+        conquistatore: {
+            monthly: 'price_IMPERIAL_PUBLIC_CONQUISTATORE',  // €697
+            yearly: 'price_IMPERIAL_PUBLIC_CONQUISTATORE_Y',
+        },
+        imperatore: {
+            monthly: 'price_IMPERIAL_PUBLIC_IMPERATORE',     // €1197
+            yearly: 'price_IMPERIAL_PUBLIC_IMPERATORE_Y',
+        },
+    },
+} as const;
+
+// =============================================
+// 🎯 FOUNDER PROGRAM CONFIGURATION
+// =============================================
+
+export const FOUNDER_CONFIG = {
+    totalSpots: 153,
+    deadline: new Date('2026-03-31T23:59:59'),
+    benefits: [
+        'Prezzo bloccato LIFETIME',
+        'Badge Legacy Founder',
+        'Accesso a tutte le future feature',
+        'Priority Support Tier 0',
+        'Early Beta Testing',
+    ],
+};
+
+// =============================================
+// 📊 PLAN DISPLAY INFO
+// =============================================
+
+export const PLAN_DISPLAY = {
+    curioso: {
+        name: 'Curioso',
+        tagline: 'Per testare il potere dell\'AI',
+        icon: '🔍',
+        popular: false,
+    },
+    esploratore: {
+        name: 'Esploratore',
+        tagline: 'Per chi inizia a scalare',
+        icon: '⚡',
+        popular: false,
+    },
+    pioniere: {
+        name: 'Pioniere',
+        tagline: 'Il piano più scelto',
+        icon: '🚀',
+        popular: true,
+    },
+    conquistatore: {
+        name: 'Conquistatore',
+        tagline: 'Per agenzie e power users',
+        icon: '💎',
+        popular: false,
+    },
+    imperatore: {
+        name: 'Imperatore',
+        tagline: 'Il trono digitale',
+        icon: '👑',
+        popular: false,
+    },
+} as const;
+
+// =============================================
+// 🛠️ HELPER FUNCTIONS
+// =============================================
+
+/**
+ * Get the Stripe Price ID for a plan
+ */
+export function getStripePriceId(
+    plan: PlanTier,
+    isFounder: boolean = true,
+    billing: 'monthly' | 'yearly' = 'monthly'
+): string {
+    if (plan === 'curioso') return ''; // Free tier
+
+    const tier = isFounder ? 'founder' : 'public';
+    const priceConfig = STRIPE_PRICES[tier][plan as Exclude<PlanTier, 'curioso'>];
+
+    if (!priceConfig) {
+        console.error(`No price config for ${tier}/${plan}`);
+        return '';
+    }
+
+    return priceConfig[billing];
+}
+
+/**
+ * Get the display price for a plan
+ */
+export function getDisplayPrice(
+    plan: PlanTier,
+    isFounder: boolean = true
+): number {
+    if (plan === 'curioso') return 0;
+
+    const prices = isFounder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
+    return prices[plan as Exclude<PlanTier, 'curioso'>] || 0;
+}
+
+/**
+ * Get the plan limits
+ */
+export function getPlanLimits(plan: PlanTier) {
+    return PLAN_LIMITS[plan];
+}
+
+/**
+ * Check if user can create more clones
+ */
+export function canCreateClone(currentClones: number, plan: PlanTier): boolean {
+    const limit = PLAN_LIMITS[plan].clones;
+    return currentClones < limit;
+}
+
+/**
+ * Check if user has messages remaining
+ */
+export function hasMessagesRemaining(usedMessages: number, plan: PlanTier): boolean {
+    const limit = PLAN_LIMITS[plan].messagesPerMonth;
+    return usedMessages < limit;
+}
+
+/**
+ * Get the remaining messages for a plan
+ */
+export function getRemainingMessages(usedMessages: number, plan: PlanTier): number {
+    const limit = PLAN_LIMITS[plan].messagesPerMonth;
+    return Math.max(0, limit - usedMessages);
+}
+
+/**
+ * Check if plan has API access
+ */
+export function hasApiAccess(plan: PlanTier): boolean {
+    return PLAN_LIMITS[plan].apiAccess;
+}
+
+/**
+ * Get API rate limit per minute
+ */
+export function getApiRateLimit(plan: PlanTier): number {
+    return PLAN_LIMITS[plan].apiRatePerMinute;
+}
+
+/**
+ * Get the AI provider for a plan
+ */
+export function getAiProvider(plan: PlanTier): string {
+    return PLAN_LIMITS[plan].aiProvider;
+}
+
+/**
+ * Calculate founder savings vs public over 5 years
+ */
+export function calculateFounderSavings(plan: Exclude<PlanTier, 'curioso'>): number {
+    const founderMonthly = IMPERIAL_PRICES.founder[plan];
+    const publicMonthly = IMPERIAL_PRICES.public_2026[plan];
+    const monthlyDiff = publicMonthly - founderMonthly;
+    return monthlyDiff * 60; // 5 years = 60 months
+}
+
+/**
+ * Get founder discount percentage
+ */
+export function getFounderDiscount(plan: Exclude<PlanTier, 'curioso'>): number {
+    const founder = IMPERIAL_PRICES.founder[plan];
+    const public26 = IMPERIAL_PRICES.public_2026[plan];
+    return Math.round(((public26 - founder) / public26) * 100);
+}
+
+// =============================================
+// 🔄 LEGACY COMPATIBILITY
+// (For existing code that uses old structure)
+// =============================================
+
+interface LegacyPlanPricing {
     name: string;
     displayName: string;
     tagline: string;
     popular?: boolean;
-
-    // Founder pricing (limited spots, discounted)
-    founderPrice: number;          // Monthly price for founders
-    founderYearlyPrice: number;    // Yearly price for founders (extra discount)
-    founderSpots: number;          // Total founder spots available
-    founderDiscount: string;       // e.g. "40% OFF"
-
-    // Public pricing (after founder spots filled)
+    founderPrice: number;
+    founderYearlyPrice: number;
+    founderSpots: number;
+    founderDiscount: string;
     publicPrice: number;
     publicYearlyPrice: number;
-
-    // Stripe IDs (to be filled when you create products in Stripe)
     stripe: {
-        founder: {
-            monthly: string;       // price_xxx
-            yearly: string;
-        };
-        public: {
-            monthly: string;
-            yearly: string;
-        };
-        productId: string;         // prod_xxx
+        founder: { monthly: string; yearly: string };
+        public: { monthly: string; yearly: string };
+        productId: string;
     };
-
-    // Features & Limits
     features: string[];
     limits: {
         clones: number;
@@ -47,344 +353,154 @@ interface PlanPricing {
         whiteLabel: boolean;
         prioritySupport: boolean;
     };
-
-    // AI Configuration
     ai: {
-        provider: 'gemini-flash' | 'gemini-pro' | 'gpt-4o' | 'gpt-4-turbo';
+        provider: string;
         maxTokensPerMessage: number;
-        priority: 'standard' | 'high' | 'priority';
+        priority: string;
     };
 }
 
-// =============================================
-// COMPLETE PRICING TABLE
-// =============================================
-
-export const PRICING: Record<PlanTier, PlanPricing> = {
+// Legacy PRICING object for backward compatibility
+export const PRICING: Record<PlanTier, LegacyPlanPricing> = {
     curioso: {
         name: 'curioso',
         displayName: 'Curioso',
         tagline: 'Per testare il potere dell\'AI',
-
-        // FREE TIER - Same for Founder and Public
         founderPrice: 0,
         founderYearlyPrice: 0,
-        founderSpots: 1000, // Unlimited practically
+        founderSpots: 1000,
         founderDiscount: 'GRATIS',
         publicPrice: 0,
         publicYearlyPrice: 0,
-
         stripe: {
-            founder: { monthly: '', yearly: '' }, // No Stripe for free
+            founder: { monthly: '', yearly: '' },
             public: { monthly: '', yearly: '' },
             productId: ''
         },
-
-        features: [
-            '14 giorni trial',
-            '1 Clone AI',
-            '100 msg/mese',
-            '1 Canale (WhatsApp O Instagram)',
-            'Watermark obbligatorio',
-            'No analytics'
-        ],
-        limits: {
-            clones: 1,
-            messagesPerMonth: 100,
-            channels: 1,
-            teamMembers: 1,
-            analyticsRetentionDays: 7,
-            apiAccess: false,
-            whiteLabel: false,
-            prioritySupport: false
-        },
+        features: ['14 giorni trial', '1 Clone AI', '100 msg/mese', '1 Canale', 'Watermark'],
+        limits: PLAN_LIMITS.curioso,
         ai: {
-            provider: 'gemini-flash',
-            maxTokensPerMessage: 300,
+            provider: PLAN_LIMITS.curioso.aiProvider,
+            maxTokensPerMessage: PLAN_LIMITS.curioso.maxTokensPerMessage,
             priority: 'standard'
         }
     },
-
     esploratore: {
         name: 'esploratore',
         displayName: 'Esploratore',
         tagline: 'Per chi inizia a scalare',
-
-        // FOUNDER: €39/m (51% off from €79)
-        founderPrice: 39,
-        founderYearlyPrice: 390,    // 2 mesi gratis
-        founderSpots: 200,
-        founderDiscount: '51% OFF',
-
-        // PUBLIC: €79/m (increases 12%/year)
-        publicPrice: 79,
-        publicYearlyPrice: 790,
-
+        founderPrice: IMPERIAL_PRICES.founder.esploratore,
+        founderYearlyPrice: IMPERIAL_PRICES.founder.esploratore * 10,
+        founderSpots: 153,
+        founderDiscount: `${getFounderDiscount('esploratore')}% OFF`,
+        publicPrice: IMPERIAL_PRICES.public_2026.esploratore,
+        publicYearlyPrice: IMPERIAL_PRICES.public_2026.esploratore * 10,
         stripe: {
-            founder: {
-                monthly: 'price_1Skmly7141DXdb9vio4hVFWC',
-                yearly: 'price_1Skmly7141DXdb9vxsEJIXtL'
-            },
-            public: {
-                monthly: 'price_1SkuNK7141DXdb9vnuksKZoM',
-                yearly: 'price_YEARLY_ESP_PUBLIC'
-            },
-            productId: 'prod_TiDCLxRBKttFVH'
+            founder: STRIPE_PRICES.founder.esploratore,
+            public: STRIPE_PRICES.public.esploratore,
+            productId: 'prod_imperial_esploratore'
         },
-
-        features: [
-            '1 Clone AI',
-            '1.000 msg/mese',
-            '1 Canale',
-            'Analytics Base',
-            'Email Support <48h',
-            'No watermark'
-        ],
-        limits: {
-            clones: 1,
-            messagesPerMonth: 1000,
-            channels: 1,
-            teamMembers: 1,
-            analyticsRetentionDays: 30,
-            apiAccess: false,
-            whiteLabel: false,
-            prioritySupport: false
-        },
+        features: ['1 Clone AI', '1.000 msg/mese', '1 Canale', 'Analytics Base', 'Email Support <48h'],
+        limits: PLAN_LIMITS.esploratore,
         ai: {
-            provider: 'gemini-flash',
-            maxTokensPerMessage: 500,
+            provider: PLAN_LIMITS.esploratore.aiProvider,
+            maxTokensPerMessage: PLAN_LIMITS.esploratore.maxTokensPerMessage,
             priority: 'standard'
         }
     },
-
     pioniere: {
         name: 'pioniere',
         displayName: 'Pioniere',
-        tagline: 'Il più scelto dai professionisti',
+        tagline: 'Il piano più scelto',
         popular: true,
-
-        // FOUNDER: €97/m (51% off from €197)
-        founderPrice: 97,
-        founderYearlyPrice: 970,
-        founderSpots: 150,
-        founderDiscount: '51% OFF',
-
-        // PUBLIC: €197/m (increases 12%/year)
-        publicPrice: 197,
-        publicYearlyPrice: 1970,
-
+        founderPrice: IMPERIAL_PRICES.founder.pioniere,
+        founderYearlyPrice: IMPERIAL_PRICES.founder.pioniere * 10,
+        founderSpots: 153,
+        founderDiscount: `${getFounderDiscount('pioniere')}% OFF`,
+        publicPrice: IMPERIAL_PRICES.public_2026.pioniere,
+        publicYearlyPrice: IMPERIAL_PRICES.public_2026.pioniere * 10,
         stripe: {
-            founder: {
-                monthly: 'price_1Skmlz7141DXdb9vmLZHunyX',
-                yearly: 'price_1Skmm07141DXdb9vBq8MTI93'
-            },
-            public: {
-                monthly: 'price_1SkuNK7141DXdb9vHGmkpykY',
-                yearly: 'price_YEARLY_PIO_PUBLIC'
-            },
-            productId: 'prod_TiDCIhY2imgXqH'
+            founder: STRIPE_PRICES.founder.pioniere,
+            public: STRIPE_PRICES.public.pioniere,
+            productId: 'prod_imperial_pioniere'
         },
-
-        features: [
-            '1 Clone AI',
-            '5.000 msg/mese',
-            '3 Canali (WA + IG + Messenger)',
-            'A/B Testing (20% traffico)',
-            'Analytics Pro',
-            'Email Support <24h'
-        ],
-        limits: {
-            clones: 1,
-            messagesPerMonth: 5000,
-            channels: 3,
-            teamMembers: 3,
-            analyticsRetentionDays: 90,
-            apiAccess: false,
-            whiteLabel: false,
-            prioritySupport: false
-        },
+        features: ['1 Clone AI', '5.000 msg/mese', '3 Canali', 'A/B Testing 20%', 'Analytics Pro', 'Email Support <24h'],
+        limits: PLAN_LIMITS.pioniere,
         ai: {
-            provider: 'gemini-pro',
-            maxTokensPerMessage: 800,
-            priority: 'high'
+            provider: PLAN_LIMITS.pioniere.aiProvider,
+            maxTokensPerMessage: PLAN_LIMITS.pioniere.maxTokensPerMessage,
+            priority: 'standard'
         }
     },
-
     conquistatore: {
         name: 'conquistatore',
         displayName: 'Conquistatore',
-        tagline: 'Per chi domina il mercato',
-
-        // FOUNDER: €197/m (50% off from €397)
-        founderPrice: 197,
-        founderYearlyPrice: 1970,
-        founderSpots: 50,
-        founderDiscount: '50% OFF',
-
-        // PUBLIC: €397/m (increases 12%/year)
-        publicPrice: 397,
-        publicYearlyPrice: 3970,
-
+        tagline: 'Per agenzie e power users',
+        founderPrice: IMPERIAL_PRICES.founder.conquistatore,
+        founderYearlyPrice: IMPERIAL_PRICES.founder.conquistatore * 10,
+        founderSpots: 153,
+        founderDiscount: `${getFounderDiscount('conquistatore')}% OFF`,
+        publicPrice: IMPERIAL_PRICES.public_2026.conquistatore,
+        publicYearlyPrice: IMPERIAL_PRICES.public_2026.conquistatore * 10,
         stripe: {
-            founder: {
-                monthly: 'price_1Skmm17141DXdb9v12abIA2S',
-                yearly: 'price_1Skmm17141DXdb9v6pux6HK3'
-            },
-            public: {
-                monthly: 'price_1SkuNL7141DXdb9vhUAWY9Gx',
-                yearly: 'price_YEARLY_CON_PUBLIC'
-            },
-            productId: 'prod_TiDCJozKNAbDKi'
+            founder: STRIPE_PRICES.founder.conquistatore,
+            public: STRIPE_PRICES.public.conquistatore,
+            productId: 'prod_imperial_conquistatore'
         },
-
-        features: [
-            '3 Cloni AI',
-            '20.000 msg/mese',
-            '3 Canali / clone',
-            'GPT-4o 💎 (premium AI)',
-            'API Access (rate limit 20K)',
-            'Priority Support <12h',
-            'Analytics Advanced + Export',
-            'Integrazioni Zapier/Make'
-        ],
-        limits: {
-            clones: 3,
-            messagesPerMonth: 20000,
-            channels: 9,
-            teamMembers: 10,
-            analyticsRetentionDays: 365,
-            apiAccess: true,
-            whiteLabel: false,
-            prioritySupport: true
-        },
+        features: ['3 Cloni AI', '20.000 msg/mese', 'API Access (60 req/min)', '9 Canali', 'Priority Support <12h'],
+        limits: PLAN_LIMITS.conquistatore,
         ai: {
-            provider: 'gpt-4o',
-            maxTokensPerMessage: 1000,
-            priority: 'priority'
+            provider: PLAN_LIMITS.conquistatore.aiProvider,
+            maxTokensPerMessage: PLAN_LIMITS.conquistatore.maxTokensPerMessage,
+            priority: 'high'
         }
     },
-
     imperatore: {
         name: 'imperatore',
         displayName: 'Imperatore',
-        tagline: 'L\'impero digitale definitivo',
-
-        // FOUNDER: €595/m (25% off from €797)
-        founderPrice: 595,
-        founderYearlyPrice: 5950,
-        founderSpots: 25,
-        founderDiscount: '25% OFF',
-
-        // PUBLIC: €797/m (increases 12%/year)
-        publicPrice: 797,
-        publicYearlyPrice: 7970,
-
+        tagline: 'Il trono digitale',
+        founderPrice: IMPERIAL_PRICES.founder.imperatore,
+        founderYearlyPrice: IMPERIAL_PRICES.founder.imperatore * 10,
+        founderSpots: 153,
+        founderDiscount: `${getFounderDiscount('imperatore')}% OFF`,
+        publicPrice: IMPERIAL_PRICES.public_2026.imperatore,
+        publicYearlyPrice: IMPERIAL_PRICES.public_2026.imperatore * 10,
         stripe: {
-            founder: {
-                monthly: 'price_1SkuNJ7141DXdb9vRRIjNvaC',
-                yearly: 'price_YEARLY_IMP_FOUNDER'
-            },
-            public: {
-                monthly: 'price_1SkuNM7141DXdb9vdHmn0Dvw',
-                yearly: 'price_YEARLY_IMP_PUBLIC'
-            },
-            productId: 'prod_TiDCIxUh9DXQ3S'
+            founder: STRIPE_PRICES.founder.imperatore,
+            public: STRIPE_PRICES.public.imperatore,
+            productId: 'prod_imperial_imperatore'
         },
-
-        features: [
-            '10 Cloni AI (agency mode)',
-            '50.000 msg/mese',
-            'Canali illimitati',
-            'GPT-4 Turbo 🧠 (max quality)',
-            'White-label completo',
-            'API Priority',
-            'Account Manager dedicato',
-            'Priority Support <6h',
-            'Onboarding 2h incluso'
-        ],
-        limits: {
-            clones: 10,
-            messagesPerMonth: 50000, // 50K limit (was unlimited)
-            channels: 999,
-            teamMembers: 50,
-            analyticsRetentionDays: 730, // 2 years
-            apiAccess: true,
-            whiteLabel: true,
-            prioritySupport: true
-        },
+        features: ['10 Cloni AI', '50K msg/mese', 'White-label', 'Account Manager', 'API Priority (300 req/min)', 'Priority Support <6h'],
+        limits: PLAN_LIMITS.imperatore,
         ai: {
-            provider: 'gpt-4-turbo',
-            maxTokensPerMessage: 1500,
+            provider: PLAN_LIMITS.imperatore.aiProvider,
+            maxTokensPerMessage: PLAN_LIMITS.imperatore.maxTokensPerMessage,
             priority: 'priority'
         }
     }
 };
 
 // =============================================
-// HELPER FUNCTIONS
+// 📐 REVENUE PROJECTIONS (For Reference)
 // =============================================
 
-/**
- * Get the appropriate price based on founder availability
- */
-export function getPriceForPlan(
-    plan: PlanTier,
-    isFounderSpotAvailable: boolean,
-    billing: 'monthly' | 'yearly'
-): number {
-    const pricing = PRICING[plan];
-
-    if (isFounderSpotAvailable) {
-        return billing === 'monthly' ? pricing.founderPrice : pricing.founderYearlyPrice;
-    }
-    return billing === 'monthly' ? pricing.publicPrice : pricing.publicYearlyPrice;
-}
-
-/**
- * Get Stripe Price ID based on founder status
- */
-export function getStripePriceId(
-    plan: PlanTier,
-    isFounder: boolean,
-    billing: 'monthly' | 'yearly'
-): string {
-    const pricing = PRICING[plan];
-    const tier = isFounder ? 'founder' : 'public';
-    return pricing.stripe[tier][billing];
-}
-
-/**
- * Calculate savings for founder vs public
- */
-export function getFounderSavings(plan: PlanTier, billing: 'monthly' | 'yearly'): {
-    savingsAmount: number;
-    savingsPercent: number;
-} {
-    const pricing = PRICING[plan];
-    const founderPrice = billing === 'monthly' ? pricing.founderPrice : pricing.founderYearlyPrice;
-    const publicPrice = billing === 'monthly' ? pricing.publicPrice : pricing.publicYearlyPrice;
-
-    const savingsAmount = publicPrice - founderPrice;
-    const savingsPercent = Math.round((savingsAmount / publicPrice) * 100);
-
-    return { savingsAmount, savingsPercent };
-}
-
-/**
- * Get total potential Founder revenue if all spots filled
- */
-export function getTotalFounderPotentialMRR(): number {
-    return Object.values(PRICING).reduce((total, plan) => {
-        return total + (plan.founderPrice * plan.founderSpots);
-    }, 0);
-}
-
-// Total MRR if all founder spots filled:
-// Curioso: 1000 × €0 = €0
-// Esploratore: 200 × €39 = €7,800
-// Pioniere: 150 × €97 = €14,550
-// Conquistatore: 50 × €197 = €9,850
-// Imperatore: 25 × €397 = €9,925
-// TOTAL FOUNDER MRR POTENTIAL: €42,125/month 🚀
-
-export type { PlanPricing };
+export const REVENUE_PROJECTIONS = {
+    q1_2026_founder: {
+        esploratore: { count: 50, price: 39, mrr: 1950 },
+        pioniere: { count: 60, price: 147, mrr: 8820 },
+        conquistatore: { count: 30, price: 347, mrr: 10410 },
+        imperatore: { count: 13, price: 697, mrr: 9061 },
+        total_mrr: 30241,
+        total_arr: 362892, // €363K ✅ 6 cifre!
+    },
+    q4_2026_mixed: {
+        founder_mrr: 30241,
+        public_mrr: 35430,
+        total_mrr: 65671,
+        total_arr: 788052, // €788K
+    },
+    q4_2027_scale: {
+        total_mrr: 115686,
+        total_arr: 1388232, // €1.38M ✅ 7 cifre!
+    },
+} as const;
