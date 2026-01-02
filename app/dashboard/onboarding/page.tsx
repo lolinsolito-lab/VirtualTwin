@@ -23,15 +23,83 @@ const STEPS = [
 ];
 
 // =============================================
-// STEP 1: WELCOME
+// STEP 1: WELCOME (DYNAMIC BASED ON TIER)
 // =============================================
-function StepWelcome({ onNext }: { onNext: (data: any) => void }) {
+interface UserTierInfo {
+    tier: string;
+    isFounder: boolean;
+    price: string;
+    badge: string;
+    badgeColor: string;
+    subtitle: string;
+    benefits: { icon: any; text: string }[];
+}
+
+const getTierInfo = (tier: string, isFounder: boolean): UserTierInfo => {
+    // Founder users (any tier with is_founder = true)
+    if (isFounder) {
+        return {
+            tier,
+            isFounder: true,
+            price: '€147/mese',
+            badge: 'GENESIS FOUNDER',
+            badgeColor: 'bg-gold/10 text-gold',
+            subtitle: 'Hai bloccato il prezzo Founder per sempre. Configuriamo il tuo clone AI in 5 minuti.',
+            benefits: [
+                { icon: Lock, text: '€147/mese bloccato LIFETIME' },
+                { icon: Sparkles, text: 'Clone AI personalizzato' },
+                { icon: Gift, text: 'Accesso Genesis esclusivo' },
+            ]
+        };
+    }
+
+    // Free tier (curioso)
+    if (tier === 'curioso' || !tier) {
+        return {
+            tier: 'curioso',
+            isFounder: false,
+            price: 'Gratis',
+            badge: 'PROVA GRATUITA',
+            badgeColor: 'bg-emerald-100 text-emerald-600',
+            subtitle: 'Inizia la tua prova gratuita di 14 giorni. Configuriamo il tuo clone AI!',
+            benefits: [
+                { icon: Gift, text: '14 giorni di prova gratuita' },
+                { icon: Sparkles, text: 'Clone AI personalizzato' },
+                { icon: MessageSquare, text: '100 messaggi/mese' },
+            ]
+        };
+    }
+
+    // Public paid tiers
+    const tierNames: Record<string, string> = {
+        'esploratore': 'Esploratore',
+        'pioniere': 'Pioniere',
+        'conquistatore': 'Conquistatore',
+        'imperatore': 'Imperatore'
+    };
+
+    return {
+        tier,
+        isFounder: false,
+        price: '',
+        badge: tierNames[tier] || tier.toUpperCase(),
+        badgeColor: 'bg-charcoal/10 text-charcoal',
+        subtitle: 'Benvenuto! Configuriamo il tuo clone AI in 5 minuti.',
+        benefits: [
+            { icon: Sparkles, text: 'Clone AI personalizzato' },
+            { icon: MessageSquare, text: 'Risposte automatiche 24/7' },
+            { icon: Gift, text: 'Supporto prioritario' },
+        ]
+    };
+};
+
+function StepWelcome({ onNext, tierInfo }: { onNext: (data: any) => void; tierInfo: UserTierInfo }) {
     return (
         <div className="text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 rounded-full mb-8">
-                <Crown className="w-4 h-4 text-gold" />
-                <span className="text-gold font-bold text-sm">GENESIS FOUNDER</span>
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 ${tierInfo.badgeColor}`}>
+                <Crown className="w-4 h-4" />
+                <span className="font-bold text-sm">{tierInfo.badge}</span>
             </div>
 
             {/* Title */}
@@ -41,17 +109,12 @@ function StepWelcome({ onNext }: { onNext: (data: any) => void }) {
 
             {/* Subtitle */}
             <p className="text-charcoal/60 text-lg mb-10 max-w-md mx-auto">
-                Hai bloccato il prezzo Founder per sempre.
-                Configuriamo il tuo clone AI in 5 minuti.
+                {tierInfo.subtitle}
             </p>
 
             {/* Benefits */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-                {[
-                    { icon: Lock, text: '€147/mese bloccato LIFETIME' },
-                    { icon: Sparkles, text: 'Clone AI personalizzato' },
-                    { icon: Gift, text: 'Accesso Genesis esclusivo' },
-                ].map((benefit, i) => (
+                {tierInfo.benefits.map((benefit, i) => (
                     <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-charcoal/5">
                         <benefit.icon className="w-5 h-5 text-gold" />
                         <span className="text-sm text-charcoal">{benefit.text}</span>
@@ -168,8 +231,8 @@ function StepBusinessProfile({ onNext, onBack }: { onNext: (data: any) => void; 
                                 key={t.id}
                                 onClick={() => setFormData(prev => ({ ...prev, tone: t.id }))}
                                 className={`p-3 rounded-xl border text-left transition-all ${formData.tone === t.id
-                                        ? 'border-gold bg-gold/5'
-                                        : 'border-charcoal/10 hover:border-gold/50'
+                                    ? 'border-gold bg-gold/5'
+                                    : 'border-charcoal/10 hover:border-gold/50'
                                     }`}
                             >
                                 <span className="text-lg mr-2">{t.emoji}</span>
@@ -324,8 +387,8 @@ function StepConnectChannels({ onNext, onBack }: { onNext: (data: any) => void; 
                     <div
                         key={channel.id}
                         className={`flex items-center justify-between p-4 bg-white rounded-2xl border transition-all ${connected.includes(channel.id)
-                                ? 'border-green-400'
-                                : 'border-charcoal/10'
+                            ? 'border-green-400'
+                            : 'border-charcoal/10'
                             }`}
                     >
                         <div className="flex items-center gap-4">
@@ -348,10 +411,10 @@ function StepConnectChannels({ onNext, onBack }: { onNext: (data: any) => void; 
                             onClick={() => handleConnect(channel.id)}
                             disabled={connecting === channel.id || connected.includes(channel.id) || !channel.available}
                             className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${connected.includes(channel.id)
-                                    ? 'bg-green-100 text-green-600'
-                                    : channel.available
-                                        ? 'bg-charcoal text-white hover:bg-gold'
-                                        : 'bg-charcoal/10 text-charcoal/40 cursor-not-allowed'
+                                ? 'bg-green-100 text-green-600'
+                                : channel.available
+                                    ? 'bg-charcoal text-white hover:bg-gold'
+                                    : 'bg-charcoal/10 text-charcoal/40 cursor-not-allowed'
                                 }`}
                         >
                             {connecting === channel.id ? (
@@ -452,7 +515,39 @@ export default function OnboardingPage() {
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<any>({});
     const [loading, setLoading] = useState(false);
+    const [tierInfo, setTierInfo] = useState<UserTierInfo>(getTierInfo('curioso', false));
+    const [loadingTier, setLoadingTier] = useState(true);
     const router = useRouter();
+
+    // Fetch user tier on mount
+    useEffect(() => {
+        async function fetchUserTier() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+
+                if (user) {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('subscription_tier, is_founder')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (profile) {
+                        setTierInfo(getTierInfo(
+                            profile.subscription_tier || 'curioso',
+                            profile.is_founder || false
+                        ));
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user tier:', error);
+            } finally {
+                setLoadingTier(false);
+            }
+        }
+
+        fetchUserTier();
+    }, []);
 
     const handleNext = (stepData: any) => {
         setFormData((prev: any) => ({ ...prev, ...stepData }));
@@ -510,9 +605,19 @@ export default function OnboardingPage() {
     };
 
     const renderStep = () => {
+        // Show loading while fetching tier
+        if (loadingTier && currentStep === 1) {
+            return (
+                <div className="text-center">
+                    <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-4" />
+                    <p className="text-charcoal/60">Caricamento...</p>
+                </div>
+            );
+        }
+
         switch (currentStep) {
             case 1:
-                return <StepWelcome onNext={handleNext} />;
+                return <StepWelcome onNext={handleNext} tierInfo={tierInfo} />;
             case 2:
                 return <StepBusinessProfile onNext={handleNext} onBack={handleBack} />;
             case 3:
@@ -545,10 +650,10 @@ export default function OnboardingPage() {
                             }`}
                     >
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${currentStep > step.id
-                                ? 'bg-gold text-white'
-                                : currentStep === step.id
-                                    ? 'bg-gold/20 text-gold'
-                                    : 'bg-charcoal/5'
+                            ? 'bg-gold text-white'
+                            : currentStep === step.id
+                                ? 'bg-gold/20 text-gold'
+                                : 'bg-charcoal/5'
                             }`}>
                             {currentStep > step.id ? (
                                 <Check className="w-4 h-4" />
