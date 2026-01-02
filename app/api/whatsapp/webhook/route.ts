@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import {
     verifyWhatsAppSignature,
     extractMessageData,
-    getTenantByWabaId,
+    getCredentialsByWabaId,
     findOrCreateLead,
     findOrCreateConversation,
     saveMessage,
@@ -14,101 +14,135 @@ import {
 import { processConversation } from '@/lib/gemini';
 import { supabase } from '@/lib/supabase';
 
+// Limiti messaggi per tier
+const TIER_LIMITS: Record<string, number> = {
+    'curioso': 100,
+    'esploratore': 500,
+    'pioniere': 2000,
+    'conquistatore': 5000,
+    'imperatore': 50000,
+};
+
 export async function POST(req: Request) {
     try {
         const payload = await req.json();
         const headers = req.headers;
 
-        // 1. Validazione
+        // 1. Validazione payload
         if (!verifyWhatsAppSignature(payload, headers)) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        // 2. Estrazione dati
+        // 2. Estrazione dati messaggio
         const { phone, text, fullName, type, mediaId, mimeType } = extractMessageData(payload);
 
         if (!phone) {
             return NextResponse.json({ success: true, message: 'Invalid payload' });
         }
 
-        let mediaBuffer: Buffer | undefined = undefined;
-        if (mediaId && (type === 'voice' || type === 'audio' || type === 'image')) {
-            const downloaded = await downloadWhatsAppMedia(mediaId);
-            if (downloaded) mediaBuffer = downloaded as Buffer;
-        }
+        // 3. Identificazione Utente/Tenant dal WABA ID
+        const wabaId = payload.metadata?.display_phone_number ||
+            payload.entry?.[0]?.changes?.[0]?.value?.metadata?.phone_number_id ||
+            'default';
 
-        // 3. Identificazione Tenant (Multi-tenancy)
-        // Nota: In produzione il WABA ID viene dal payload di 360dialog
-        const wabaId = payload.metadata?.display_phone_number || 'default';
-        const tenantId = await getTenantByWabaId(wabaId);
+        const tenantData = await getCredentialsByWabaId(wabaId);
 
-        if (!tenantId) {
-            console.error(`Tenant not found for WABA ID: ${wabaId}`);
+        if (!tenantData) {
+            console.error(`[360Dialog] Nessun utente trovato per WABA ID: ${wabaId}`);
             return NextResponse.json({ error: 'Tenant not found' }, { status: 404 });
         }
 
-        // 4. Lead & Conversation management
-        const lead = await findOrCreateLead(tenantId, phone, fullName || 'Contatto WhatsApp');
-        const conversation = await findOrCreateConversation(tenantId, lead.id);
+        const { userId, credentials } = tenantData;
 
-        // 5. Log messaggio Inbound
-        await saveMessage(conversation.id, 'inbound', text);
-
-        // 6. Recupero contesto e Bot Settings
-        const history = await getLastMessages(conversation.id);
-        const { data: botSettings } = await supabase
-            .from('settings_bot')
-            .select('*')
-            .eq('tenant_id', tenantId)
+        // 4. Controllo Limiti Tier
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('subscription_tier, is_founder, messages_used')
+            .eq('id', userId)
             .single();
 
-        const businessContext = botSettings ?
-            `Nome Bot: ${botSettings.bot_name}. Tono: ${botSettings.tone}. Info Business: ${JSON.stringify(botSettings.business_info)}` :
-            "VirtualTwin Sovereign AI - Automazione WhatsApp d'Elite";
+        if (profile) {
+            const tier = profile.subscription_tier || 'curioso';
+            const limit = profile.is_founder ? 999999 : (TIER_LIMITS[tier] || 100);
+            const used = profile.messages_used || 0;
 
-        // 7. Orchestrazione AI (Gemini 2.0)
-        const aiResponse = await processConversation(history, text || "", businessContext, mediaBuffer, mimeType);
-
-        // 8. CRM Auto-update basato su AI Insights
-        if (aiResponse.insights) {
-            const updateData: any = {};
-            if (aiResponse.insights.suggestedStage) {
-                // Logica per mappare lo stage name stringa a un UUID reale nella pipeline
-                const { data: stage } = await supabase
-                    .from('pipeline_stages')
-                    .select('id')
-                    .eq('tenant_id', tenantId)
-                    .ilike('name', `%${aiResponse.insights.suggestedStage}%`)
-                    .limit(1)
-                    .single();
-
-                if (stage) updateData.stage_id = stage.id;
+            if (used >= limit) {
+                console.warn(`[360Dialog] ⚠️ Limite messaggi raggiunto per user ${userId} (${used}/${limit})`);
+                // Invia messaggio di limite raggiunto
+                await sendWhatsAppMessage(
+                    phone,
+                    "Ci scusiamo, il nostro assistente ha raggiunto il limite mensile. Ti ricontatteremo presto! 🙏",
+                    credentials.apiKey
+                );
+                return NextResponse.json({ success: true, message: 'Limit reached' });
             }
-
-            if (Object.keys(updateData).length > 0) {
-                await supabase.from('leads').update(updateData).eq('id', lead.id);
-            }
-
-            // Aggiorna Lead Details
-            await supabase.from('lead_details').upsert({
-                lead_id: lead.id,
-                desires: aiResponse.insights.desires,
-                problems: aiResponse.insights.problems,
-                budget_range: aiResponse.insights.budgetRange,
-                updated_at: new Date().toISOString()
-            }, { onConflict: 'lead_id' });
         }
 
-        // 9. Invio risposta WhatsApp
-        await sendWhatsAppMessage(phone, aiResponse.reply);
+        // 5. Download Media (se presente)
+        let mediaBuffer: Buffer | undefined = undefined;
+        if (mediaId && (type === 'voice' || type === 'audio' || type === 'image')) {
+            const downloaded = await downloadWhatsAppMedia(mediaId, credentials.apiKey);
+            if (downloaded) mediaBuffer = downloaded as Buffer;
+        }
 
-        // 10. Log messaggio Outbound
+        // 6. Lead & Conversation management
+        const lead = await findOrCreateLead(userId, phone, fullName || 'Contatto WhatsApp');
+        const conversation = await findOrCreateConversation(userId, lead.id);
+
+        // 7. Log messaggio Inbound
+        await saveMessage(conversation.id, 'inbound', text);
+
+        // 8. Recupero contesto e AI Settings
+        const history = await getLastMessages(conversation.id);
+
+        // Recupera personalità AI e FAQs dell'utente
+        const { data: userProfile } = await supabase
+            .from('profiles')
+            .select('business_name, business_sector, ai_tone')
+            .eq('id', userId)
+            .single();
+
+        const { data: faqs } = await supabase
+            .from('clone_faqs')
+            .select('question, answer')
+            .eq('user_id', userId)
+            .eq('is_active', true);
+
+        // Costruisci contesto business personalizzato
+        let businessContext = `VirtualTwin AI Assistant`;
+        if (userProfile) {
+            businessContext = `Assistente AI di ${userProfile.business_name || 'VirtualTwin'}. `;
+            businessContext += `Settore: ${userProfile.business_sector || 'Generale'}. `;
+            businessContext += `Tono: ${userProfile.ai_tone || 'professionale'}. `;
+        }
+        if (faqs && faqs.length > 0) {
+            businessContext += `\n\nFAQ:\n`;
+            faqs.forEach(faq => {
+                businessContext += `Q: ${faq.question}\nA: ${faq.answer}\n\n`;
+            });
+        }
+
+        // 9. Orchestrazione AI (Gemini 2.0)
+        const aiResponse = await processConversation(history, text || "", businessContext, mediaBuffer, mimeType);
+
+        // 10. Invio risposta WhatsApp con API key dell'utente
+        await sendWhatsAppMessage(phone, aiResponse.reply, credentials.apiKey);
+
+        // 11. Log messaggio Outbound
         await saveMessage(conversation.id, 'outbound', aiResponse.reply, true);
 
-        // 11. Azioni Speciali (Notifiche / Automazioni)
+        // 12. Incrementa contatore messaggi usati
+        if (profile) {
+            await supabase
+                .from('profiles')
+                .update({ messages_used: (profile.messages_used || 0) + 1 })
+                .eq('id', userId);
+        }
+
+        // 13. Azioni Speciali (Notifiche Owner)
         if (aiResponse.shouldNotifyOwner) {
             console.log(`[ALERTA ELITE] Lead caldissimo rilevato: ${phone}`);
-            // Qui triggereremmo Resend o un Webhook Make.com
+            // TODO: Trigger email via Resend o webhook Make.com
         }
 
         return NextResponse.json({ success: true });
@@ -144,3 +178,4 @@ export async function GET(req: Request) {
         timestamp: new Date().toISOString()
     });
 }
+

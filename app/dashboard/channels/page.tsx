@@ -46,23 +46,23 @@ const channelConfig = {
         steps: [
             {
                 title: 'Crea account 360Dialog',
-                description: 'Registrati gratuitamente su 360dialog.com. Seleziona "Get Started" e completa la registrazione.',
+                description: '1. Vai su 360dialog.com/pricing\n2. Clicca "Get Started" (piano gratuito disponibile)\n3. Completa la registrazione con email e telefono\n4. Connetti il tuo WhatsApp Business',
                 link: 'https://www.360dialog.com/pricing',
                 linkText: 'Vai a 360Dialog →'
             },
             {
                 title: 'Ottieni le credenziali API',
-                description: 'Nel pannello 360Dialog, vai su "WABA" → "API Keys" e genera una nuova API key.',
-                tip: 'Copia l\'API key, il WABA ID e il Phone Number ID'
+                description: 'Nel pannello 360Dialog:\n1. Vai su "WABA" nella sidebar\n2. Clicca "API Keys"\n3. Genera una nuova API key\n4. Copia anche il WABA ID e Phone Number ID dalla stessa pagina',
+                tip: 'Salva queste 3 credenziali in un posto sicuro: API Key, WABA ID, Phone Number ID'
             },
             {
                 title: 'Configura il Webhook',
-                description: 'In 360Dialog, vai su "Webhooks" e inserisci questo URL:',
+                description: 'Nel pannello 360Dialog:\n1. Vai su "WABA" → "Webhooks"\n2. Clicca "Add Webhook"\n3. Incolla l\'URL qui sotto\n4. Imposta Verify Token: virtualtwin_sovereign\n5. Clicca "Save"',
                 webhookUrl: true
             },
             {
                 title: 'Inserisci le credenziali',
-                description: 'Incolla le tue credenziali qui sotto e clicca "Attiva Canale".',
+                description: 'Incolla le 3 credenziali che hai copiato dallo Step 2. Clicca "Attiva Canale" per completare.',
                 isInput: true
             }
         ]

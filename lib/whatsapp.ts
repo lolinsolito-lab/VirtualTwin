@@ -5,6 +5,77 @@ import { ChatHistoryItem } from './types';
 // 360Dialog API Configuration
 const D360_BASE_URL = 'https://waba.360dialog.io/v1';
 
+// Interface per credenziali canale
+interface ChannelCredentials {
+    apiKey: string;
+    wabaId: string;
+    phoneNumberId: string;
+}
+
+/**
+ * Recupera le credenziali WhatsApp dell'utente dal database
+ * Questo permette multi-tenancy: ogni utente ha le proprie credenziali
+ */
+export async function getUserChannelCredentials(userId: string): Promise<ChannelCredentials | null> {
+    const { data, error } = await supabase
+        .from('channels')
+        .select('api_key, page_id, phone_number')
+        .eq('user_id', userId)
+        .eq('channel_type', 'whatsapp')
+        .eq('is_active', true)
+        .single();
+
+    if (error || !data || !data.api_key) {
+        console.warn(`[360Dialog] Nessuna credenziale trovata per user ${userId}`);
+        return null;
+    }
+
+    return {
+        apiKey: data.api_key,
+        wabaId: data.page_id || '',
+        phoneNumberId: data.phone_number || ''
+    };
+}
+
+/**
+ * Recupera le credenziali a partire dal WABA ID (per webhook incoming)
+ */
+export async function getCredentialsByWabaId(wabaId: string): Promise<{ userId: string; credentials: ChannelCredentials } | null> {
+    const { data, error } = await supabase
+        .from('channels')
+        .select('user_id, api_key, page_id, phone_number')
+        .eq('page_id', wabaId)
+        .eq('channel_type', 'whatsapp')
+        .eq('is_active', true)
+        .single();
+
+    if (error || !data || !data.api_key) {
+        // Fallback: prova con env vars (per development/testing)
+        const envApiKey = process.env.D360_API_KEY;
+        if (envApiKey) {
+            console.log('[360Dialog] Usando fallback env vars');
+            return {
+                userId: 'system',
+                credentials: {
+                    apiKey: envApiKey,
+                    wabaId: process.env.D360_WABA_ID || '',
+                    phoneNumberId: process.env.D360_PHONE_NUMBER_ID || ''
+                }
+            };
+        }
+        return null;
+    }
+
+    return {
+        userId: data.user_id,
+        credentials: {
+            apiKey: data.api_key,
+            wabaId: data.page_id || '',
+            phoneNumberId: data.phone_number || ''
+        }
+    };
+}
+
 /**
  * Verifica la firma di 360dialog per sicurezza webhook
  * In produzione: validare X-Hub-Signature se configurato
@@ -40,19 +111,21 @@ export function extractMessageData(payload: any) {
 
 /**
  * Scarica un file media da 360dialog
+ * @param mediaId - ID del media da scaricare
+ * @param apiKey - (Opzionale) API key dell'utente. Se non fornita, usa env var
  */
-export async function downloadWhatsAppMedia(mediaId: string): Promise<Buffer | null> {
-    const apiKey = process.env.D360_API_KEY;
+export async function downloadWhatsAppMedia(mediaId: string, apiKey?: string): Promise<Buffer | null> {
+    const finalApiKey = apiKey || process.env.D360_API_KEY;
 
-    if (!apiKey) {
-        console.error('[360Dialog] D360_API_KEY non configurata');
+    if (!finalApiKey) {
+        console.error('[360Dialog] Nessuna API key disponibile per download media');
         return null;
     }
 
     try {
         const response = await fetch(`${D360_BASE_URL}/media/${mediaId}`, {
             headers: {
-                'D360-API-KEY': apiKey
+                'D360-API-KEY': finalApiKey
             }
         });
 
@@ -182,12 +255,16 @@ export async function getLastMessages(convId: string, limit = 10): Promise<ChatH
 
 /**
  * Invia un messaggio via 360dialog API
+ * @param phone - Numero telefono destinatario
+ * @param text - Testo del messaggio
+ * @param apiKey - (Opzionale) API key dell'utente. Se non fornita, usa env var
  */
-export async function sendWhatsAppMessage(phone: string, text: string): Promise<boolean> {
-    const apiKey = process.env.D360_API_KEY;
+export async function sendWhatsAppMessage(phone: string, text: string, apiKey?: string): Promise<boolean> {
+    // Usa l'API key fornita o fallback a env var
+    const finalApiKey = apiKey || process.env.D360_API_KEY;
 
-    if (!apiKey) {
-        console.error('[360Dialog] D360_API_KEY non configurata');
+    if (!finalApiKey) {
+        console.error('[360Dialog] Nessuna API key disponibile (né parametro né env var)');
         return false;
     }
 
@@ -198,7 +275,7 @@ export async function sendWhatsAppMessage(phone: string, text: string): Promise<
         const response = await fetch(`${D360_BASE_URL}/messages`, {
             method: 'POST',
             headers: {
-                'D360-API-KEY': apiKey,
+                'D360-API-KEY': finalApiKey,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
