@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Crown, Zap, Shield, Clock, Users, ArrowRight, Check, Star, Sparkles } from 'lucide-react';
+import { Crown, Zap, Clock, Users, ArrowRight, Check, Star, Loader2 } from 'lucide-react';
 
 export default function FounderPage() {
     const [spotsLeft, setSpotsLeft] = useState(141);
-    const [daysLeft, setDaysLeft] = useState(89);
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+    const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
     useEffect(() => {
         const calculateTimeLeft = () => {
@@ -22,7 +21,6 @@ export default function FounderPage() {
                     minutes: Math.floor((diff / (1000 * 60)) % 60),
                     seconds: Math.floor((diff / 1000) % 60),
                 });
-                setDaysLeft(Math.ceil(diff / (1000 * 60 * 60 * 24)));
             }
         };
 
@@ -33,6 +31,7 @@ export default function FounderPage() {
 
     const plans = [
         {
+            id: 'esploratore',
             name: 'Esploratore',
             icon: '⚡',
             priceFounder: 39,
@@ -42,6 +41,7 @@ export default function FounderPage() {
             features: ['1 Clone AI', '1,000 msg/mese', '1 Canale', 'Email Support <48h'],
         },
         {
+            id: 'pioniere',
             name: 'Pioniere',
             icon: '🚀',
             priceFounder: 97,
@@ -52,6 +52,7 @@ export default function FounderPage() {
             features: ['1 Clone AI', '5,000 msg/mese', '3 Canali', 'A/B Testing 20%', 'Analytics Pro'],
         },
         {
+            id: 'conquistatore',
             name: 'Conquistatore',
             icon: '💎',
             priceFounder: 197,
@@ -61,6 +62,7 @@ export default function FounderPage() {
             features: ['3 Cloni AI', '20,000 msg/mese', 'API Access (60 req/min)', 'Priority Support'],
         },
         {
+            id: 'imperatore',
             name: 'Imperatore',
             icon: '👑',
             priceFounder: 595,
@@ -68,9 +70,39 @@ export default function FounderPage() {
             pricePublic2030: 1197,
             marginPercent: 68,
             badge: 'PIÙ SCELTO',
-            features: ['10 Cloni AI', '50K msg/mese*', 'White-label', 'Account Manager', 'API Priority (300 req/min)'],
+            features: ['10 Cloni AI', '50K msg/mese*', 'White-label', 'Account Manager', 'API Priority'],
         },
     ];
+
+    // Direct checkout - no registration required!
+    const handleCheckout = async (planId: string) => {
+        setLoadingPlan(planId);
+
+        try {
+            const response = await fetch('/api/stripe/create-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ plan: planId, tier: 'founder' }),
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                alert(`Errore: ${data.error}`);
+                return;
+            }
+
+            // Redirect to Stripe Checkout
+            if (data.url) {
+                window.location.href = data.url;
+            }
+        } catch (error) {
+            console.error('Checkout error:', error);
+            alert('Errore durante il checkout. Riprova.');
+        } finally {
+            setLoadingPlan(null);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-champagne">
@@ -185,17 +217,26 @@ export default function FounderPage() {
                                 ))}
                             </ul>
 
-                            <Link
-                                href={`/auth/register?tier=founder&plan=${plan.name.toLowerCase()}`}
-                                className={`block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider ${plan.badge
+                            {/* CHECKOUT BUTTON - Direct to Stripe! */}
+                            <button
+                                onClick={() => handleCheckout(plan.id)}
+                                disabled={loadingPlan !== null}
+                                className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed ${plan.badge
                                     ? 'bg-gold text-charcoal hover:bg-gold/90'
                                     : plan.featured
                                         ? 'gold-gradient text-white shadow-lg hover:scale-105'
                                         : 'bg-charcoal/5 text-charcoal hover:bg-charcoal hover:text-white'
                                     }`}
                             >
-                                Scegli {plan.name}
-                            </Link>
+                                {loadingPlan === plan.id ? (
+                                    <span className="flex items-center justify-center gap-2">
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        Caricamento...
+                                    </span>
+                                ) : (
+                                    `Scegli ${plan.name}`
+                                )}
+                            </button>
                         </div>
                     ))}
                 </div>
@@ -296,18 +337,18 @@ export default function FounderPage() {
                         href="#pricing"
                         className="inline-flex items-center gap-3 bg-white text-gold px-12 py-5 rounded-full text-lg font-bold hover:bg-champagne transition-all transform hover:scale-105 shadow-xl"
                     >
-                        BLOCCA IL TUO PREZZO FOUNDER
+                        SCEGLI IL TUO PIANO FOUNDER
                         <ArrowRight className="w-5 h-5" />
                     </a>
 
                     <div className="mt-6 text-sm text-white/60">
-                        {spotsLeft}/153 Founder · Chiusura 31 Marzo 2026 · Zero carte richieste per trial 14gg
+                        {spotsLeft}/153 Founder · Chiusura 31 Marzo 2026 · 14 giorni trial gratuito
                     </div>
                 </div>
 
                 {/* Footer */}
                 <div className="text-center mt-12 text-charcoal/40 text-sm">
-                    <Link href="/" className="text-gold hover:underline">← Torna alla Home</Link>
+                    <a href="/" className="text-gold hover:underline">← Torna alla Home</a>
                 </div>
 
             </div>

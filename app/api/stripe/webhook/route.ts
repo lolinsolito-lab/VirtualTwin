@@ -83,44 +83,178 @@ export async function POST(req: Request) {
 
 /**
  * Handle successful checkout session
+ * Supports both:
+ * 1. Existing users (userId in metadata) - updates their subscription
+ * 2. New users (no userId) - creates account from Stripe email (Checkout-First Flow)
  */
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
-    const userId = session.client_reference_id;
+    const userId = session.client_reference_id || session.metadata?.userId;
+    const customerEmail = session.customer_email || session.customer_details?.email;
     const plan = session.metadata?.plan || 'pioniere';
-    const isFounder = session.metadata?.isFounder === 'true';
+    const tier = session.metadata?.tier || 'founder';
+    const isFounder = tier === 'founder' || session.metadata?.isFounder === 'true';
 
-    if (!userId) {
-        console.error('[Stripe] No userId in checkout session');
+    console.log(`[Stripe] Checkout completed - Email: ${customerEmail}, Plan: ${plan}, Tier: ${tier}, UserId: ${userId || 'NEW_USER'}`);
+
+    // CASE 1: Existing user (came from billing page while logged in)
+    if (userId) {
+        const { error } = await supabase
+            .from('profiles')
+            .update({
+                plan_tier: plan,
+                subscription_status: 'active',
+                is_founder: isFounder,
+                founder_joined_at: isFounder ? new Date().toISOString() : undefined,
+                stripe_customer_id: session.customer as string,
+                stripe_subscription_id: session.subscription as string,
+                trial_started_at: new Date().toISOString(),
+                trial_ends_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+                is_trial_active: true,
+                updated_at: new Date().toISOString(),
+            })
+            .eq('id', userId);
+
+        if (error) {
+            console.error('[Stripe] Failed to update existing user profile:', error);
+        } else {
+            console.log(`[Stripe] ✅ Updated existing user ${userId} to plan ${plan}`);
+        }
+
+        // Log billing event
+        await supabase.from('billing_events').insert({
+            user_id: userId,
+            event_type: 'checkout_completed',
+            stripe_event_id: session.id,
+            amount: session.amount_total ? session.amount_total / 100 : 0,
+            currency: session.currency || 'eur',
+            metadata: { plan, tier, isFounder },
+        });
+
         return;
     }
 
-    console.log(`[Stripe] Checkout completed for user ${userId}, plan: ${plan}`);
+    // CASE 2: New user - Checkout-First Flow (create account from Stripe email)
+    if (!customerEmail) {
+        console.error('[Stripe] ❌ No email in checkout session - cannot create user');
+        return;
+    }
 
-    // Update user profile
-    const { error } = await supabase
+    console.log(`[Stripe] 🆕 Creating new user from Stripe checkout: ${customerEmail}`);
+
+    // Check if user already exists by email
+    const { data: existingProfile } = await supabase
         .from('profiles')
-        .update({
-            plan_tier: plan,
-            subscription_status: 'active',
-            is_founder: isFounder,
-            stripe_customer_id: session.customer as string,
-            updated_at: new Date().toISOString(),
-        })
-        .eq('id', userId);
+        .select('id, email')
+        .eq('email', customerEmail)
+        .single();
 
-    if (error) {
-        console.error('[Stripe] Failed to update profile:', error);
+    if (existingProfile) {
+        // User exists, update their subscription
+        console.log(`[Stripe] User ${customerEmail} already exists, updating subscription...`);
+
+        await supabase
+            .from('profiles')
+            .update({
+                plan_tier: plan,
+                subscription_status: 'active',
+                is_founder: isFounder,
+                founder_joined_at: isFounder ? new Date().toISOString() : undefined,
+                stripe_customer_id: session.customer as string,
+                stripe_subscription_id: session.subscription as string,
+                trial_started_at: new Date().toISOString(),
+                trial_ends_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+                is_trial_active: true,
+                updated_at: new Date().toISOString(),
+            })
+            .eq('id', existingProfile.id);
+
+        // Send password reset email so they can access their account
+        await supabase.auth.resetPasswordForEmail(customerEmail, {
+            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/auth/reset-password`,
+        });
+
+        console.log(`[Stripe] ✅ Updated existing user and sent password reset email`);
+        return;
+    }
+
+    // Create brand new user account
+    const randomPassword = `VT${Math.random().toString(36).slice(-12)}${Date.now().toString(36)}!`;
+
+    // Create auth user using admin API
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email: customerEmail,
+        password: randomPassword,
+        email_confirm: true, // Skip email confirmation
+        user_metadata: {
+            plan,
+            tier,
+            is_founder: isFounder,
+            source: 'checkout_first_flow',
+        },
+    });
+
+    if (authError) {
+        console.error('[Stripe] ❌ Failed to create auth user:', authError);
+        return;
+    }
+
+    const newUserId = authData.user!.id;
+    console.log(`[Stripe] ✅ Created auth user: ${newUserId}`);
+
+    // Create profile
+    const { error: profileError } = await supabase.from('profiles').upsert({
+        id: newUserId,
+        email: customerEmail,
+        plan_tier: plan,
+        subscription_status: 'active',
+        is_founder: isFounder,
+        founder_joined_at: isFounder ? new Date().toISOString() : null,
+        stripe_customer_id: session.customer as string,
+        stripe_subscription_id: session.subscription as string,
+        trial_started_at: new Date().toISOString(),
+        trial_ends_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+        is_trial_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+    });
+
+    if (profileError) {
+        console.error('[Stripe] ❌ Failed to create profile:', profileError);
+        return;
+    }
+
+    // Create default clone for the user
+    await supabase.from('clones').insert({
+        user_id: newUserId,
+        name: 'Clone Principale',
+        business_name: 'La Mia Azienda',
+        business_description: 'Azienda d\'Elite',
+        product_service: 'Servizi di Lusso',
+        is_active: true,
+    });
+
+    // Send password reset email so user can set their password
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(customerEmail, {
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/auth/reset-password`,
+    });
+
+    if (resetError) {
+        console.error('[Stripe] ⚠️ Failed to send password reset email:', resetError);
+    } else {
+        console.log(`[Stripe] 📧 Password reset email sent to ${customerEmail}`);
     }
 
     // Log billing event
     await supabase.from('billing_events').insert({
-        user_id: userId,
-        event_type: 'checkout_completed',
+        user_id: newUserId,
+        event_type: 'checkout_completed_new_user',
         stripe_event_id: session.id,
         amount: session.amount_total ? session.amount_total / 100 : 0,
         currency: session.currency || 'eur',
-        metadata: { plan, isFounder },
+        metadata: { plan, tier, isFounder, email: customerEmail },
     });
+
+    console.log(`[Stripe] ✅ New user ${customerEmail} created successfully with plan ${plan} (${tier})`);
 }
 
 /**
