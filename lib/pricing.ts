@@ -115,45 +115,44 @@ export const PLAN_LIMITS = {
 } as const;
 
 // =============================================
-// 🎫 STRIPE PRICE IDs
-// ⚠️ PLACEHOLDER - Will be filled after running
-//    scripts/createImperialStripeProducts.js
+// 🎫 STRIPE PRICE IDs - IMPERIAL STRATEGY
+// Created: 2 Gennaio 2026
 // =============================================
 
 export const STRIPE_PRICES = {
     founder: {
         esploratore: {
-            monthly: 'price_IMPERIAL_FOUNDER_ESPLORATORE',  // €39
+            monthly: 'price_1Sl7lM7141DXdb9veGYbHSWE',  // €39
             yearly: 'price_IMPERIAL_FOUNDER_ESPLORATORE_Y',
         },
         pioniere: {
-            monthly: 'price_IMPERIAL_FOUNDER_PIONIERE',     // €147
+            monthly: 'price_1Sl7lN7141DXdb9vtRbfQuCs',  // €147
             yearly: 'price_IMPERIAL_FOUNDER_PIONIERE_Y',
         },
         conquistatore: {
-            monthly: 'price_IMPERIAL_FOUNDER_CONQUISTATORE', // €347
+            monthly: 'price_1Sl7lN7141DXdb9vlpkY114O',  // €347
             yearly: 'price_IMPERIAL_FOUNDER_CONQUISTATORE_Y',
         },
         imperatore: {
-            monthly: 'price_IMPERIAL_FOUNDER_IMPERATORE',    // €697
+            monthly: 'price_1Sl7lO7141DXdb9vuNgZoKKQ',  // €697
             yearly: 'price_IMPERIAL_FOUNDER_IMPERATORE_Y',
         },
     },
     public: {
         esploratore: {
-            monthly: 'price_IMPERIAL_PUBLIC_ESPLORATORE',    // €79
+            monthly: 'price_1Sl7lP7141DXdb9vru3cdm3O',  // €79
             yearly: 'price_IMPERIAL_PUBLIC_ESPLORATORE_Y',
         },
         pioniere: {
-            monthly: 'price_IMPERIAL_PUBLIC_PIONIERE',       // €297
+            monthly: 'price_1Sl7lP7141DXdb9vZKdx4eCE',  // €297
             yearly: 'price_IMPERIAL_PUBLIC_PIONIERE_Y',
         },
         conquistatore: {
-            monthly: 'price_IMPERIAL_PUBLIC_CONQUISTATORE',  // €697
+            monthly: 'price_1Sl7lQ7141DXdb9vdLOjIhXf',  // €697
             yearly: 'price_IMPERIAL_PUBLIC_CONQUISTATORE_Y',
         },
         imperatore: {
-            monthly: 'price_IMPERIAL_PUBLIC_IMPERATORE',     // €1197
+            monthly: 'price_1Sl7lQ7141DXdb9vawSyDQdV',  // €1197
             yearly: 'price_IMPERIAL_PUBLIC_IMPERATORE_Y',
         },
     },

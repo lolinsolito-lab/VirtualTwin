@@ -4,8 +4,8 @@
 
 const Stripe = require('stripe');
 
-// ⚠️ ATTENZIONE: Usa la tua chiave segreta test/live
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_XXX');
+// Stripe Secret Key (test mode)
+const stripe = new Stripe('sk_test_51SkkBn7141DXdb9vacsZFiGoEHcExpBwOVR6TUxXal04eOW36EGGS4rdF7aNZVlFZVEb9IgtJeplMTRIzPlKjDGM00Eb8qjeK5');
 
 // 💰 IMPERIAL PRICING - The €1M Revenue Path
 const IMPERIAL_PRODUCTS = [
