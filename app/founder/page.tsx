@@ -9,6 +9,7 @@ export default function FounderPage() {
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
     const [isFounderOpen, setIsFounderOpen] = useState(true);
+    const [isSoldOut, setIsSoldOut] = useState(false); // Track if sold out (not just closed)
 
     useEffect(() => {
         const calculateTimeLeft = () => {
@@ -37,6 +38,7 @@ export default function FounderPage() {
     useEffect(() => {
         if (spotsLeft <= 0) {
             setIsFounderOpen(false);
+            setIsSoldOut(true); // Mark as sold out
         }
     }, [spotsLeft]);
 
@@ -241,7 +243,15 @@ export default function FounderPage() {
                                     : 'bg-white border-charcoal/10 hover:border-gold/50'
                                 }`}
                         >
-                            {plan.badge && isFounderOpen && (
+                            {/* SOLD OUT Badge when Genesis exhausted */}
+                            {isSoldOut && (
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
+                                    🔴 SOLD OUT
+                                </div>
+                            )}
+
+                            {/* Popular Badge - only when founder open */}
+                            {plan.badge && isFounderOpen && !isSoldOut && (
                                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 gold-gradient text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
                                     {plan.badge}
                                 </div>
@@ -290,12 +300,14 @@ export default function FounderPage() {
                             {/* CHECKOUT BUTTON */}
                             <button
                                 onClick={() => handleCheckout(plan.id)}
-                                disabled={loadingPlan !== null}
-                                className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed ${plan.id === 'imperatore'
-                                    ? 'bg-gold text-charcoal hover:bg-gold/90'
-                                    : plan.featured
-                                        ? 'gold-gradient text-white shadow-lg hover:scale-105'
-                                        : 'bg-charcoal/5 text-charcoal hover:bg-charcoal hover:text-white'
+                                disabled={loadingPlan !== null || isSoldOut}
+                                className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed ${isSoldOut
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : plan.id === 'imperatore'
+                                        ? 'bg-gold text-charcoal hover:bg-gold/90'
+                                        : plan.featured
+                                            ? 'gold-gradient text-white shadow-lg hover:scale-105'
+                                            : 'bg-charcoal/5 text-charcoal hover:bg-charcoal hover:text-white'
                                     }`}
                             >
                                 {loadingPlan === plan.id ? (
@@ -303,6 +315,8 @@ export default function FounderPage() {
                                         <Loader2 className="w-4 h-4 animate-spin" />
                                         Caricamento...
                                     </span>
+                                ) : isSoldOut ? (
+                                    'ESAURITO'
                                 ) : (
                                     `Scegli ${plan.name}`
                                 )}
@@ -310,6 +324,84 @@ export default function FounderPage() {
                         </div>
                     ))}
                 </div>
+
+                {/* 🚀 PUBLIC PRICING SECTION - Only when Founder is sold out */}
+                {isSoldOut && (
+                    <div className="mb-16">
+                        <div className="text-center mb-10">
+                            <div className="inline-flex items-center gap-2 bg-green-500/10 text-green-600 px-6 py-2 rounded-full mb-4 font-black text-[10px] uppercase tracking-[0.4em]">
+                                ✅ DISPONIBILI
+                            </div>
+                            <h2 className="font-serif text-4xl text-charcoal mb-4">
+                                Prezzi <span className="italic gold-text-gradient">Pubblici</span>
+                            </h2>
+                            <p className="text-charcoal/60">
+                                I posti Genesis Founder sono esauriti. Puoi comunque iniziare con i prezzi pubblici.
+                            </p>
+                        </div>
+
+                        <div id="public-pricing" className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {plans.map((plan, i) => (
+                                <div
+                                    key={`public-${i}`}
+                                    className={`relative rounded-[1.5rem] p-6 border-2 transition-all ${plan.featured
+                                            ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-400 shadow-xl scale-[1.02]'
+                                            : plan.id === 'imperatore'
+                                                ? 'bg-charcoal text-white border-green-400 shadow-xl'
+                                                : 'bg-white border-charcoal/10 hover:border-green-400'
+                                        }`}
+                                >
+                                    {plan.featured && (
+                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
+                                            BESTSELLER
+                                        </div>
+                                    )}
+
+                                    <div className="text-4xl mb-3">{plan.icon}</div>
+                                    <h3 className="text-xl font-bold mb-4">{plan.name}</h3>
+
+                                    <div className="mb-4">
+                                        <div className="text-4xl font-bold mb-1 text-green-600">
+                                            €{plan.pricePublic}
+                                        </div>
+                                        <div className={`text-sm ${plan.id === 'imperatore' ? 'text-white/60' : 'text-charcoal/60'}`}>
+                                            /mese · Prezzo Pubblico
+                                        </div>
+                                    </div>
+
+                                    <ul className="space-y-2 mb-6">
+                                        {plan.features.map((feature, j) => (
+                                            <li key={j} className="flex items-start gap-2 text-sm">
+                                                <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.id === 'imperatore' ? 'text-green-400' : 'text-green-500'}`} />
+                                                <span className={plan.id === 'imperatore' ? 'text-white/80' : 'text-charcoal/70'}>{feature}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <button
+                                        onClick={() => handleCheckout(plan.id)}
+                                        disabled={loadingPlan !== null}
+                                        className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider disabled:opacity-50 ${plan.id === 'imperatore'
+                                                ? 'bg-green-500 text-white hover:bg-green-600'
+                                                : plan.featured
+                                                    ? 'bg-green-500 text-white shadow-lg hover:bg-green-600 hover:scale-105'
+                                                    : 'bg-green-100 text-green-700 hover:bg-green-500 hover:text-white'
+                                            }`}
+                                    >
+                                        {loadingPlan === plan.id ? (
+                                            <span className="flex items-center justify-center gap-2">
+                                                <Loader2 className="w-4 h-4 animate-spin" />
+                                                Caricamento...
+                                            </span>
+                                        ) : (
+                                            `Inizia con ${plan.name}`
+                                        )}
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Benefits Section - Only for Founder */}
                 {isFounderOpen && (
