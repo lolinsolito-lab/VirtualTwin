@@ -47,10 +47,10 @@ const plans = [
     {
         id: "pioniere",
         name: "Pioniere",
-        price: "€97",
-        publicPrice: "€197",
+        price: "€147",
+        publicPrice: "€297",
         period: "/mese",
-        description: "Per chi fa sul serio",
+        description: "Il più scelto dai Coach",
         features: [
             "1 Clone AI",
             "5K msg/mese",
@@ -61,20 +61,21 @@ const plans = [
         color: "text-gold",
         bg: "bg-gradient-to-br from-gold/5 to-gold/15",
         btn: "gold-gradient text-white shadow-lg",
-        glow: true
+        glow: true,
+        popular: true
     },
     {
         id: "conquistatore",
         name: "Conquistatore",
-        price: "€197",
-        publicPrice: "€397",
+        price: "€347",
+        publicPrice: "€697",
         period: "/mese",
-        description: "Per dominare il mercato",
+        description: "Per agenzie e power users",
         features: [
             "3 Cloni AI",
             "20K msg/mese",
             "Priority Support",
-            "API (20K req)"
+            "API Access"
         ],
         icon: Crown,
         color: "text-gold",
@@ -84,10 +85,10 @@ const plans = [
     {
         id: "imperatore",
         name: "Imperatore",
-        price: "€595",
-        publicPrice: "€797",
+        price: "€697",
+        publicPrice: "€1.197",
         period: "/mese",
-        description: "Per costruire imperi",
+        description: "Il trono digitale",
         features: [
             "10 Cloni AI",
             "50K msg/mese",

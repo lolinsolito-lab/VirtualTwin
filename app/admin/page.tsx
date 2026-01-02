@@ -59,11 +59,12 @@ export default function AdminOverview() {
                 .select('plan_tier, subscription_status')
                 .eq('subscription_status', 'active');
 
+            // 👑 IMPERIAL PRICING (Founder tier)
             const tierPricing: Record<string, number> = {
                 'esploratore': 39,
-                'pioniere': 97,
-                'conquistatore': 197,
-                'imperatore': 397
+                'pioniere': 147,
+                'conquistatore': 347,
+                'imperatore': 697
             };
 
             const totalRev = users?.reduce((acc, user) => acc + (tierPricing[user.plan_tier] || 0), 0) || 0;
