@@ -15,14 +15,26 @@ import {
     Radio,
     Menu,
     X,
-    School
+    School,
+    Crown,
+    Gift
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { supabase } from '@/lib/supabase';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
+
+// Plan display config
+const PLAN_DISPLAY: Record<string, { name: string; icon: any; color: string }> = {
+    'curioso': { name: 'Piano Gratuito', icon: Gift, color: 'text-emerald-500' },
+    'esploratore': { name: 'Esploratore', icon: Zap, color: 'text-gold' },
+    'pioniere': { name: 'Pioniere', icon: Zap, color: 'text-gold' },
+    'conquistatore': { name: 'Conquistatore', icon: Zap, color: 'text-gold' },
+    'imperatore': { name: 'Imperatore', icon: Crown, color: 'text-gold' },
+};
 
 const navItems = [
     { icon: LayoutDashboard, label: 'Overview', href: '/dashboard' },
@@ -35,10 +47,53 @@ const navItems = [
     { icon: Settings, label: 'Impostazioni', href: '/dashboard/settings' },
 ];
 
+interface UserPlanInfo {
+    tier: string;
+    isFounder: boolean;
+    messagesUsed: number;
+    messagesLimit: number;
+}
+
 export function Sidebar() {
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [userPlan, setUserPlan] = useState<UserPlanInfo>({
+        tier: 'curioso',
+        isFounder: false,
+        messagesUsed: 0,
+        messagesLimit: 100
+    });
+
+    // Fetch user plan
+    useEffect(() => {
+        async function fetchUserPlan() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+
+                if (user) {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('subscription_tier, is_founder, messages_used, messages_limit')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (profile) {
+                        setUserPlan({
+                            tier: profile.subscription_tier || 'curioso',
+                            isFounder: profile.is_founder || false,
+                            messagesUsed: profile.messages_used || 0,
+                            messagesLimit: profile.messages_limit || 100
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user plan:', error);
+            }
+        }
+
+        fetchUserPlan();
+    }, []);
 
     // Detect screen size
     useEffect(() => {
@@ -124,11 +179,40 @@ export function Sidebar() {
             <div className="p-4 lg:p-6 mt-auto">
                 <div className="bg-white/60 backdrop-blur-sm p-5 lg:p-6 rounded-2xl lg:rounded-3xl border border-gold/10 mb-4 lg:mb-8 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-16 h-16 bg-gold/5 blur-xl" />
+
+                    {/* Plan Header */}
                     <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4 relative">
-                        <Zap className="w-4 h-4 text-gold" />
-                        <span className="text-[9px] lg:text-[9px] uppercase tracking-widest text-gold font-black">Agency Plan</span>
+                        {(() => {
+                            const planConfig = PLAN_DISPLAY[userPlan.tier] || PLAN_DISPLAY['curioso'];
+                            const PlanIcon = planConfig.icon;
+                            return (
+                                <>
+                                    <PlanIcon className={`w-4 h-4 ${planConfig.color}`} />
+                                    <span className={`text-[9px] lg:text-[9px] uppercase tracking-widest font-black ${planConfig.color}`}>
+                                        {userPlan.isFounder ? 'Genesis Founder' : planConfig.name}
+                                    </span>
+                                    {userPlan.isFounder && (
+                                        <span className="text-[7px] px-1.5 py-0.5 bg-gold/20 text-gold rounded-full font-bold">
+                                            👑
+                                        </span>
+                                    )}
+                                </>
+                            );
+                        })()}
                     </div>
-                    <p className="text-[10px] lg:text-[10px] text-charcoal/50 leading-relaxed font-medium relative">943 messaggi elaborati questo mese.</p>
+
+                    {/* Usage Info */}
+                    <p className="text-[10px] lg:text-[10px] text-charcoal/50 leading-relaxed font-medium relative">
+                        {userPlan.messagesUsed} / {userPlan.messagesLimit} messaggi usati questo mese.
+                    </p>
+
+                    {/* Progress bar */}
+                    <div className="mt-2 h-1 bg-charcoal/10 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-gold transition-all duration-300"
+                            style={{ width: `${Math.min((userPlan.messagesUsed / userPlan.messagesLimit) * 100, 100)}%` }}
+                        />
+                    </div>
                 </div>
 
                 <button className="flex items-center gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 w-full text-charcoal/30 hover:text-red-400 transition-colors duration-300 text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.2em] font-bold rounded-xl hover:bg-red-50">
