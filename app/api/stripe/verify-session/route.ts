@@ -28,15 +28,16 @@ export async function GET(req: Request) {
             expand: ['subscription', 'customer'],
         });
 
-        // Check if payment was successful
-        if (session.payment_status !== 'paid' && session.status !== 'complete') {
-            // Trial subscriptions might not be 'paid' yet
-            if (session.status !== 'complete') {
-                return NextResponse.json(
-                    { error: 'Pagamento non completato' },
-                    { status: 400 }
-                );
-            }
+        // Check if payment was successful or trial started
+        // payment_status can be: 'paid', 'unpaid', 'no_payment_required'
+        // For trials, payment_status might be 'no_payment_required'
+        const validPaymentStatuses = ['paid', 'no_payment_required'];
+
+        if (!validPaymentStatuses.includes(session.payment_status || '')) {
+            return NextResponse.json(
+                { error: 'Pagamento non completato' },
+                { status: 400 }
+            );
         }
 
         const customerEmail = session.customer_email ||
