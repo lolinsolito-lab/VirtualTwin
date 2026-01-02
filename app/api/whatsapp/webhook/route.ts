@@ -69,26 +69,42 @@ export async function POST(req: Request) {
             if (used >= limit) {
                 console.warn(`[360Dialog] ⚠️ Limite messaggi raggiunto per user ${userId} (${used}/${limit})`);
 
-                // Nome del lead per personalizzazione
+                // 1. Messaggio semplice al LEAD
                 const leadName = fullName ? fullName.split(' ')[0] : '';
-                const greeting = leadName ? `Ciao ${leadName}! 👋` : 'Ciao! 👋';
+                const leadMessage = leadName
+                    ? `Ciao ${leadName}! Grazie per il messaggio. Il nostro assistente è momentaneamente in pausa ma ti risponderemo il prima possibile! 🙏`
+                    : `Grazie per il messaggio! Il nostro assistente è momentaneamente in pausa ma ti risponderemo il prima possibile! 🙏`;
 
-                // Messaggio marketing per upgrade intelligente
-                const upgradeMessage = `${greeting}
+                await sendWhatsAppMessage(phone, leadMessage, credentials.apiKey);
 
-Grazie per il tuo messaggio! 🙏
+                // 2. Notifica all'OWNER per upgrade con link Stripe
+                const { data: ownerProfile } = await supabase
+                    .from('profiles')
+                    .select('email, business_name')
+                    .eq('id', userId)
+                    .single();
 
-Il nostro assistente AI è temporaneamente in pausa per questo mese. Ma non ti lasciamo senza risposta!
+                if (ownerProfile?.email) {
+                    // Calcola prossimo tier per upgrade
+                    const tierUpgrades: Record<string, { name: string; priceId: string; price: string }> = {
+                        'curioso': { name: 'Esploratore', priceId: 'price_1QcewtKkKlvbXgKiJGXE3YtN', price: '€147/mese' },
+                        'esploratore': { name: 'Pioniere', priceId: 'price_1QcexNKkKlvbXgKiVpLj5VVS', price: '€347/mese' },
+                        'pioniere': { name: 'Conquistatore', priceId: 'price_1QcexzKkKlvbXgKihZ5h58aR', price: '€697/mese' },
+                    };
 
-🗓️ *Prenota una chiamata gratuita con Michael*, il nostro fondatore:
-👉 https://calendly.com/virtualtwin/consulenza
+                    const nextTier = tierUpgrades[tier];
+                    const upgradeUrl = nextTier
+                        ? `https://virtualtwin.vercel.app/founder?upgrade=${nextTier.priceId}`
+                        : 'https://virtualtwin.vercel.app/founder';
 
-Oppure scrivi a support@virtualtwin.app e ti risponderemo entro 24h.
+                    console.log(`[UPGRADE] 📧 Owner ${ownerProfile.email} deve fare upgrade a ${nextTier?.name || 'piano superiore'}`);
+                    console.log(`[UPGRADE] 🔗 Link: ${upgradeUrl}`);
 
-A presto! ✨`;
+                    // TODO: Inviare email con Resend
+                    // await sendUpgradeEmail(ownerProfile.email, nextTier, upgradeUrl);
+                }
 
-                await sendWhatsAppMessage(phone, upgradeMessage, credentials.apiKey);
-                return NextResponse.json({ success: true, message: 'Limit reached' });
+                return NextResponse.json({ success: true, message: 'Limit reached - upgrade notification sent' });
             }
         }
 
