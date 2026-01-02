@@ -8,7 +8,7 @@ import { siteConfig } from '@/lib/config';
 const HeroUltimate = () => {
     const [mounted, setMounted] = useState(false);
     const [showDemo, setShowDemo] = useState(false);
-    const [foundersLeft, setFoundersLeft] = useState(153);
+    const [foundersLeft, setFoundersLeft] = useState(20); // Genesis Wave 1
 
     useEffect(() => {
         setMounted(true);
@@ -36,7 +36,7 @@ const HeroUltimate = () => {
                     <Flame className="w-3 h-3 text-orange-400" />
                     <span className="font-bold text-gold">SOVEREIGN EDITION</span>
                     <span className="text-white/60">•</span>
-                    <span className="hidden sm:inline">Solo 1,000 Founder.</span>
+                    <span className="hidden sm:inline">Solo 20 Genesis Founder.</span>
                     <span className="bg-red-500 text-white px-2 py-0.5 rounded-full font-bold">
                         {foundersLeft} rimasti
                     </span>

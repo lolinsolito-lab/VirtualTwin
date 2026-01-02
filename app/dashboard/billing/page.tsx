@@ -200,10 +200,10 @@ export default function BillingPage() {
                             onMouseEnter={() => setHoveredIndex(i)}
                             onMouseLeave={() => setHoveredIndex(null)}
                             animate={{
-                                flex: isHovered ? 3.5 : isAnyHovered ? 0.7 : 1,
+                                flex: isHovered ? 2.2 : isAnyHovered ? 0.85 : 1,
                                 filter: isAnyHovered && !isHovered ? 'blur(1px) grayscale(0.6)' : 'none',
                                 opacity: isAnyHovered && !isHovered ? 0.6 : 1,
-                                scale: isHovered ? 1.01 : 1
+                                scale: isHovered ? 1.02 : 1
                             }}
                             className={`silk-card p-5 lg:p-7 rounded-[2.5rem] border border-white/60 flex flex-col relative overflow-hidden transition-all duration-500 cursor-pointer ${p.bg} shadow-luxury-sm hover:shadow-luxury`}
                         >
