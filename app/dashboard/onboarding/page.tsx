@@ -261,14 +261,63 @@ function StepBusinessProfile({ onNext, onBack }: { onNext: (data: any) => void; 
 }
 
 // =============================================
-// STEP 3: TRAIN AI
+// STEP 3: TRAIN AI (WITH SMART PRE-FILL)
 // =============================================
-function StepTrainAI({ onNext, onBack }: { onNext: (data: any) => void; onBack: () => void }) {
-    const [faqs, setFaqs] = useState([
+
+// Sector-specific FAQ templates
+const SECTOR_FAQS: Record<string, { question: string; answer: string }[]> = {
+    'Coach / Consulente': [
+        { question: 'Quanto costa una sessione di coaching?', answer: 'Il mio percorso di coaching parte da €X per sessione singola, oppure €Y per un pacchetto di 4 sessioni.' },
+        { question: 'Come posso prenotare una call conoscitiva?', answer: 'Puoi prenotare una call gratuita di 15 minuti direttamente dal mio calendario online: [link]' },
+        { question: 'Che risultati posso aspettarmi?', answer: 'I miei clienti in media ottengono [risultato specifico] entro le prime 4-6 settimane di percorso.' },
+    ],
+    'Agenzia Marketing': [
+        { question: 'Quali servizi offrite?', answer: 'Offriamo servizi di social media management, paid advertising, SEO, content marketing e brand strategy.' },
+        { question: 'Quanto costa una campagna pubblicitaria?', answer: 'Il budget minimo che consigliamo per campagne efficaci parte da €X/mese, più il nostro fee di gestione.' },
+        { question: 'Quanto tempo ci vuole per vedere risultati?', answer: 'I primi risultati sono visibili entro 30-60 giorni, con ottimizzazione continua per massimizzare il ROI.' },
+    ],
+    'E-commerce': [
+        { question: 'Quali sono i tempi di spedizione?', answer: 'Spediamo in 24-48h lavorative. La consegna avviene in 3-5 giorni lavorativi in Italia.' },
+        { question: 'Posso fare un reso?', answer: 'Sì, hai 14 giorni dalla ricezione per richiedere un reso gratuito. Il prodotto deve essere integro e non usato.' },
+        { question: 'Accettate pagamenti rateali?', answer: 'Sì, offriamo pagamenti in 3 rate senza interessi con Klarna/Scalapay per ordini sopra €X.' },
+    ],
+    'Immobiliare': [
+        { question: 'Come posso vedere un immobile?', answer: 'Puoi prenotare una visita gratuita contattandomi. Sono disponibile anche in orari serali e weekend.' },
+        { question: 'Offrite servizi di valutazione gratuita?', answer: 'Sì, offro valutazioni immobiliari gratuite e senza impegno. Contattami per fissare un appuntamento.' },
+        { question: 'Quali zone coprite?', answer: 'Operiamo principalmente nella zona di [città/provincia], ma possiamo valutare immobili anche in aree limitrofe.' },
+    ],
+    'Fitness / Wellness': [
+        { question: 'Offrite sessioni di prova?', answer: 'Sì, la prima sessione è gratuita per farti conoscere il mio metodo di allenamento.' },
+        { question: 'Fate anche programmi online?', answer: 'Sì, offro programmi di allenamento personalizzati 100% online con video-call settimanali di follow-up.' },
+        { question: 'Quanto dura un percorso tipico?', answer: 'I percorsi vanno da 4 a 12 settimane, in base ai tuoi obiettivi specifici.' },
+    ],
+    'Formazione': [
+        { question: 'Rilasciate certificazioni?', answer: 'Sì, al termine del corso riceverai un certificato di completamento riconosciuto.' },
+        { question: 'I corsi sono accessibili per sempre?', answer: 'Sì, una volta acquistato il corso hai accesso illimitato a tutti i materiali e aggiornamenti futuri.' },
+        { question: 'Offrite supporto durante il corso?', answer: 'Sì, hai accesso al gruppo privato e alle sessioni Q&A settimanali con me.' },
+    ],
+    'Altro': [
         { question: '', answer: '' },
         { question: '', answer: '' },
         { question: '', answer: '' },
-    ]);
+    ],
+};
+
+function StepTrainAI({ onNext, onBack, sector }: { onNext: (data: any) => void; onBack: () => void; sector?: string }) {
+    // Pre-fill FAQs based on sector
+    const sectorFaqs = SECTOR_FAQS[sector || 'Altro'] || SECTOR_FAQS['Altro'];
+
+    const [faqs, setFaqs] = useState(sectorFaqs);
+
+    // Update FAQs when sector changes (if user goes back and changes)
+    useEffect(() => {
+        const newFaqs = SECTOR_FAQS[sector || 'Altro'] || SECTOR_FAQS['Altro'];
+        // Only update if FAQs haven't been modified by user
+        setFaqs(prev => {
+            const isEmpty = prev.every(f => !f.question && !f.answer);
+            return isEmpty ? newFaqs : prev;
+        });
+    }, [sector]);
 
     const updateFaq = (index: number, field: 'question' | 'answer', value: string) => {
         setFaqs(prev => prev.map((faq, i) =>
@@ -276,21 +325,21 @@ function StepTrainAI({ onNext, onBack }: { onNext: (data: any) => void; onBack: 
         ));
     };
 
-    const exampleFaqs = [
-        { q: 'Quanto costa il tuo servizio?', a: '' },
-        { q: 'Come posso prenotare una call?', a: '' },
-        { q: 'Lavori anche con aziende piccole?', a: '' },
-    ];
-
     return (
         <div>
             <h2 className="text-3xl font-serif italic text-charcoal mb-4 text-center">
                 Addestra il Tuo <span className="gold-text-gradient">Clone</span>
             </h2>
 
-            <p className="text-charcoal/60 text-center mb-8">
+            <p className="text-charcoal/60 text-center mb-2">
                 Inserisci le domande più frequenti che ricevi. Il clone risponderà come te.
             </p>
+
+            {sector && sector !== 'Altro' && (
+                <p className="text-center text-gold text-sm mb-6">
+                    ✨ Abbiamo pre-compilato esempi per <strong>{sector}</strong> - personalizzali!
+                </p>
+            )}
 
             <div className="space-y-6 max-w-lg mx-auto">
                 {faqs.map((faq, i) => (
@@ -303,7 +352,7 @@ function StepTrainAI({ onNext, onBack }: { onNext: (data: any) => void; onBack: 
                                 type="text"
                                 value={faq.question}
                                 onChange={(e) => updateFaq(i, 'question', e.target.value)}
-                                placeholder={exampleFaqs[i]?.q || 'Es. Come funziona?'}
+                                placeholder="Es. Quanto costa il tuo servizio?"
                                 className="w-full px-3 py-2 rounded-lg border border-charcoal/10 text-sm focus:border-gold outline-none"
                             />
                         </div>
@@ -621,7 +670,7 @@ export default function OnboardingPage() {
             case 2:
                 return <StepBusinessProfile onNext={handleNext} onBack={handleBack} />;
             case 3:
-                return <StepTrainAI onNext={handleNext} onBack={handleBack} />;
+                return <StepTrainAI onNext={handleNext} onBack={handleBack} sector={formData.sector} />;
             case 4:
                 return <StepConnectChannels onNext={handleNext} onBack={handleBack} />;
             case 5:
