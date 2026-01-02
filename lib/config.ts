@@ -24,8 +24,8 @@ export const siteConfig = {
         twitter: "https://twitter.com/virtualtwin",
     },
 
-    // Trial Duration (in days)
-    trialDays: 7,
+    // Trial Duration (in days) - Founder Bonus
+    trialDays: 14,
 
     // Pricing (in EUR)
     pricing: {
