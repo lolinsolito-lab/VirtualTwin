@@ -501,9 +501,41 @@ function StepConnectChannels({ onNext, onBack }: { onNext: (data: any) => void; 
 }
 
 // =============================================
-// STEP 5: COMPLETION
+// STEP 5: COMPLETION (DYNAMIC STATS)
 // =============================================
-function StepComplete({ onFinish, loading }: { onFinish: () => void; loading: boolean }) {
+
+// Get tier-specific stats
+const getTierStats = (tier: string, isFounder: boolean) => {
+    if (isFounder) {
+        return [
+            { value: '24/7', label: 'Disponibilità' },
+            { value: '<2s', label: 'Tempo risposta' },
+            { value: '∞', label: 'Lead gestibili' },
+        ];
+    }
+
+    const tierLimits: Record<string, string> = {
+        'curioso': '100',
+        'esploratore': '500',
+        'pioniere': '2000',
+        'conquistatore': '5000',
+        'imperatore': '∞',
+    };
+
+    return [
+        { value: '24/7', label: 'Disponibilità' },
+        { value: '<2s', label: 'Tempo risposta' },
+        { value: tierLimits[tier] || '100', label: 'Msg/mese' },
+    ];
+};
+
+function StepComplete({ onFinish, loading, tierInfo }: {
+    onFinish: () => void;
+    loading: boolean;
+    tierInfo: UserTierInfo;
+}) {
+    const stats = getTierStats(tierInfo.tier, tierInfo.isFounder);
+
     return (
         <div className="text-center">
             {/* Badge */}
@@ -523,17 +555,25 @@ function StepComplete({ onFinish, loading }: { onFinish: () => void; loading: bo
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-10 max-w-md mx-auto">
-                {[
-                    { value: '24/7', label: 'Disponibilità' },
-                    { value: '<2s', label: 'Tempo risposta' },
-                    { value: '∞', label: 'Lead gestibili' },
-                ].map((stat, i) => (
+                {stats.map((stat, i) => (
                     <div key={i} className="p-4 bg-white rounded-xl border border-charcoal/5">
                         <div className="text-2xl font-bold gold-text-gradient">{stat.value}</div>
                         <div className="text-xs text-charcoal/50">{stat.label}</div>
                     </div>
                 ))}
             </div>
+
+            {/* Tier Badge */}
+            {tierInfo.isFounder && (
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 rounded-full mb-8">
+                    <span className="text-gold text-sm font-bold">👑 Prezzo bloccato LIFETIME</span>
+                </div>
+            )}
+            {!tierInfo.isFounder && tierInfo.tier === 'curioso' && (
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 rounded-full mb-8">
+                    <span className="text-emerald-600 text-sm font-bold">🎁 14 giorni trial gratuito</span>
+                </div>
+            )}
 
             {/* CTA */}
             <button
@@ -674,7 +714,7 @@ export default function OnboardingPage() {
             case 4:
                 return <StepConnectChannels onNext={handleNext} onBack={handleBack} />;
             case 5:
-                return <StepComplete onFinish={handleFinish} loading={loading} />;
+                return <StepComplete onFinish={handleFinish} loading={loading} tierInfo={tierInfo} />;
             default:
                 return null;
         }

@@ -34,6 +34,14 @@ export default function SettingsPage() {
         aiTone: 'professionale',
         notifications: true,
         darkMode: false,
+
+        // AI Personality
+        customPersonality: '',
+        faqs: [
+            { id: 1, question: '', answer: '' },
+            { id: 2, question: '', answer: '' },
+            { id: 3, question: '', answer: '' },
+        ],
     });
 
     const handleSave = () => {
@@ -87,8 +95,8 @@ export default function SettingsPage() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`w-full flex items-center gap-4 px-5 py-4 rounded-xl transition-all text-left ${activeTab === tab.id
-                                    ? 'bg-gold text-white shadow-lg'
-                                    : 'bg-white/50 text-charcoal/60 hover:bg-white hover:text-charcoal'
+                                ? 'bg-gold text-white shadow-lg'
+                                : 'bg-white/50 text-charcoal/60 hover:bg-white hover:text-charcoal'
                                 }`}
                         >
                             <tab.icon className="w-5 h-5" />
@@ -297,41 +305,140 @@ export default function SettingsPage() {
 
                     {/* AI Settings Tab */}
                     {activeTab === 'ai' && (
-                        <div className="silk-card p-10 rounded-[2rem] border border-white/60">
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center">
-                                    <Zap className="w-7 h-7 text-gold" />
+                        <div className="space-y-8">
+                            {/* Tone Section */}
+                            <div className="silk-card p-10 rounded-[2rem] border border-white/60">
+                                <div className="flex items-center gap-4 mb-8">
+                                    <div className="w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center">
+                                        <Zap className="w-7 h-7 text-gold" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-serif italic text-charcoal">Personalità AI</h2>
+                                        <p className="text-charcoal/40 text-sm">Configura come il tuo clone comunica con i clienti</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h2 className="text-2xl font-serif italic text-charcoal">Personalità AI</h2>
-                                    <p className="text-charcoal/40 text-sm">Configura il tono del tuo VirtualTwin</p>
+
+                                <div className="space-y-6">
+                                    {/* Tone Preset */}
+                                    <div>
+                                        <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Tono Base</label>
+                                        <select
+                                            value={settings.aiTone}
+                                            onChange={(e) => setSettings({ ...settings, aiTone: e.target.value })}
+                                            className="w-full px-5 py-4 bg-white/50 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors appearance-none cursor-pointer"
+                                        >
+                                            <option value="professionale">Professionale & Autorevole</option>
+                                            <option value="amichevole">Amichevole & Caloroso</option>
+                                            <option value="formale">Formale & Istituzionale</option>
+                                            <option value="creativo">Creativo & Dinamico</option>
+                                            <option value="commerciale">Commerciale & Persuasivo</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Custom Personality */}
+                                    <div>
+                                        <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">
+                                            Personalità Personalizzata <span className="text-gold">(Opzionale)</span>
+                                        </label>
+                                        <textarea
+                                            value={settings.customPersonality}
+                                            onChange={(e) => setSettings({ ...settings, customPersonality: e.target.value })}
+                                            placeholder="Descrivi la personalità unica del tuo clone. Es: 'Sono un coach energico che motiva i clienti con entusiasmo. Uso spesso metafore sportive e parlo come un mentore che ha vissuto le stesse sfide. Evito il linguaggio corporate e preferisco un tono diretto ma empatico.'"
+                                            rows={5}
+                                            className="w-full px-5 py-4 bg-white/50 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors resize-none"
+                                        />
+                                        <p className="text-charcoal/40 text-xs mt-2">
+                                            💡 Più dettagli inserisci, più il clone sarà fedele al tuo stile comunicativo.
+                                        </p>
+                                    </div>
+
+                                    {/* Response Preview */}
+                                    <div className="p-5 bg-champagne rounded-xl">
+                                        <p className="text-charcoal font-medium mb-2">Esempio di risposta:</p>
+                                        <p className="text-charcoal/60 text-sm italic">
+                                            {settings.aiTone === 'professionale' && '"Buongiorno, sarò lieto di assisterla nella scelta del piano più adatto alle sue esigenze professionali."'}
+                                            {settings.aiTone === 'amichevole' && '"Ciao! 👋 Sono qui per aiutarti a trovare la soluzione perfetta per te. Cosa stai cercando?"'}
+                                            {settings.aiTone === 'formale' && '"Gentile Cliente, La ringraziamo per averci contattato. Restiamo a Sua completa disposizione."'}
+                                            {settings.aiTone === 'creativo' && '"Hey! 🚀 Pronto a rivoluzionare il tuo business? Ho delle idee fantastiche per te!"'}
+                                            {settings.aiTone === 'commerciale' && '"Ottima scelta! Questo piano ti permetterà di triplicare le tue conversioni. Posso mostrarti come?"'}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Tono di Comunicazione</label>
-                                    <select
-                                        value={settings.aiTone}
-                                        onChange={(e) => setSettings({ ...settings, aiTone: e.target.value })}
-                                        className="w-full px-5 py-4 bg-white/50 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors appearance-none cursor-pointer"
+                            {/* FAQ Section */}
+                            <div className="silk-card p-10 rounded-[2rem] border border-white/60">
+                                <div className="flex items-center justify-between mb-8">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center">
+                                            <Users className="w-7 h-7 text-gold" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-serif italic text-charcoal">FAQ del Clone</h2>
+                                            <p className="text-charcoal/40 text-sm">Domande e risposte che il clone conosce</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setSettings({
+                                            ...settings,
+                                            faqs: [...settings.faqs, { id: Date.now(), question: '', answer: '' }]
+                                        })}
+                                        className="px-4 py-2 bg-gold/10 text-gold rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-gold hover:text-white transition-all"
                                     >
-                                        <option value="professionale">Professionale & Autorevole</option>
-                                        <option value="amichevole">Amichevole & Caloroso</option>
-                                        <option value="formale">Formale & Istituzionale</option>
-                                        <option value="creativo">Creativo & Dinamico</option>
-                                        <option value="commerciale">Commerciale & Persuasivo</option>
-                                    </select>
+                                        + Aggiungi FAQ
+                                    </button>
                                 </div>
 
-                                <div className="p-5 bg-champagne rounded-xl">
-                                    <p className="text-charcoal font-medium mb-2">Esempio di risposta:</p>
-                                    <p className="text-charcoal/60 text-sm italic">
-                                        {settings.aiTone === 'professionale' && '"Buongiorno, sarò lieto di assisterla nella scelta del piano più adatto alle sue esigenze professionali."'}
-                                        {settings.aiTone === 'amichevole' && '"Ciao! 👋 Sono qui per aiutarti a trovare la soluzione perfetta per te. Cosa stai cercando?"'}
-                                        {settings.aiTone === 'formale' && '"Gentile Cliente, La ringraziamo per averci contattato. Restiamo a Sua completa disposizione."'}
-                                        {settings.aiTone === 'creativo' && '"Hey! 🚀 Pronto a rivoluzionare il tuo business? Ho delle idee fantastiche per te!"'}
-                                        {settings.aiTone === 'commerciale' && '"Ottima scelta! Questo piano ti permetterà di triplicare le tue conversioni. Posso mostrarti come?"'}
+                                <div className="space-y-4">
+                                    {settings.faqs.map((faq, index) => (
+                                        <div key={faq.id} className="p-5 bg-white/50 rounded-xl border border-charcoal/5">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <span className="text-xs font-bold text-charcoal/40 uppercase tracking-wider">
+                                                    FAQ #{index + 1}
+                                                </span>
+                                                {settings.faqs.length > 1 && (
+                                                    <button
+                                                        onClick={() => setSettings({
+                                                            ...settings,
+                                                            faqs: settings.faqs.filter(f => f.id !== faq.id)
+                                                        })}
+                                                        className="text-red-400 hover:text-red-600 text-xs font-bold"
+                                                    >
+                                                        Elimina
+                                                    </button>
+                                                )}
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={faq.question}
+                                                onChange={(e) => setSettings({
+                                                    ...settings,
+                                                    faqs: settings.faqs.map(f =>
+                                                        f.id === faq.id ? { ...f, question: e.target.value } : f
+                                                    )
+                                                })}
+                                                placeholder="Es. Quanto costa il servizio?"
+                                                className="w-full px-4 py-3 bg-white border border-charcoal/10 rounded-lg text-charcoal text-sm focus:border-gold focus:outline-none mb-3"
+                                            />
+                                            <textarea
+                                                value={faq.answer}
+                                                onChange={(e) => setSettings({
+                                                    ...settings,
+                                                    faqs: settings.faqs.map(f =>
+                                                        f.id === faq.id ? { ...f, answer: e.target.value } : f
+                                                    )
+                                                })}
+                                                placeholder="La tua risposta tipica..."
+                                                rows={2}
+                                                className="w-full px-4 py-3 bg-white border border-charcoal/10 rounded-lg text-charcoal text-sm focus:border-gold focus:outline-none resize-none"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="mt-6 p-4 bg-gold/5 border border-gold/10 rounded-xl">
+                                    <p className="text-charcoal/60 text-sm">
+                                        💡 <strong>Tip:</strong> Aggiungi le domande più frequenti dei tuoi clienti. Il clone userà queste risposte per rispondere in modo coerente con il tuo stile.
                                     </p>
                                 </div>
                             </div>
@@ -361,8 +468,8 @@ export default function SettingsPage() {
                                                 key={lang.code}
                                                 onClick={() => setSettings({ ...settings, language: lang.code })}
                                                 className={`flex items-center gap-4 p-5 rounded-xl border-2 transition-all ${settings.language === lang.code
-                                                        ? 'border-gold bg-gold/10 shadow-lg'
-                                                        : 'border-charcoal/10 bg-white/50 hover:border-charcoal/20'
+                                                    ? 'border-gold bg-gold/10 shadow-lg'
+                                                    : 'border-charcoal/10 bg-white/50 hover:border-charcoal/20'
                                                     }`}
                                             >
                                                 <span className="text-3xl">{lang.flag}</span>
