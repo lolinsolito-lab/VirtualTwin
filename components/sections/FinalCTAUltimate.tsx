@@ -10,7 +10,7 @@ const FinalCTAUltimate = () => {
     const [sector, setSector] = useState('');
     const [accepted, setAccepted] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-    const [spotsLeft, setSpotsLeft] = useState(22);
+    const [spotsLeft, setSpotsLeft] = useState(20); // Genesis Wave 1
     const sectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const FinalCTAUltimate = () => {
 
                             {/* Subtitle */}
                             <p className="text-white/50 text-sm lg:text-base mb-8 max-w-sm leading-relaxed">
-                                L'opportunità Founder chiude per sempre quando raggiungiamo 1,000 membri.
+                                L'opportunità Genesis Founder chiude per sempre. Solo 20 posti disponibili.
                             </p>
 
                             {/* Scarcity Badge */}

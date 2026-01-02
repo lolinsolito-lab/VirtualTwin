@@ -5,7 +5,7 @@ import { Crown, Zap, Clock, Users, ArrowRight, Check, Star, Loader2, Shield, Loc
 import { IMPERIAL_PRICES, PLAN_LIMITS, FOUNDER_CONFIG, calculateFounderSavings, getFounderDiscount } from '@/lib/pricing';
 
 export default function FounderPage() {
-    const [spotsLeft, setSpotsLeft] = useState(141); // TODO: Fetch from Supabase
+    const [spotsLeft, setSpotsLeft] = useState(FOUNDER_CONFIG.totalSpots); // 20 Genesis Founders
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
     const [isFounderOpen, setIsFounderOpen] = useState(true);

@@ -160,17 +160,29 @@ export const STRIPE_PRICES = {
 
 // =============================================
 // 🎯 FOUNDER PROGRAM CONFIGURATION
+// Wave 1: Genesis (Ultra-Exclusive)
 // =============================================
 
 export const FOUNDER_CONFIG = {
-    totalSpots: 153,
+    // Wave 1: Genesis - Solo 20 posti
+    currentWave: 'genesis' as const,
+    totalSpots: 20,  // Ultra-exclusive Wave 1
     deadline: new Date('2026-03-31T23:59:59'),
+
+    // Future waves (for reference)
+    waves: {
+        genesis: { spots: 20, priceMultiplier: 1.0 },  // €147
+        pioneer: { spots: 30, priceMultiplier: 1.34 }, // €197 (+34%)
+        elite: { spots: 50, priceMultiplier: 1.68 },   // €247 (+26%)
+    },
+
     benefits: [
         'Prezzo bloccato LIFETIME',
-        'Badge Legacy Founder',
+        'Badge Genesis Founder 🏆',
         'Accesso a tutte le future feature',
         'Priority Support Tier 0',
         'Early Beta Testing',
+        'Gruppo Telegram VIP Esclusivo',
     ],
 };
 
