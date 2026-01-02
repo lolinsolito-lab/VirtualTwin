@@ -138,7 +138,7 @@ export default function ContactPage() {
                                 </ul>
                                 <div className="mt-8 pt-6 border-t border-white/10">
                                     <p className="text-white/40 text-sm">A partire da</p>
-                                    <p className="text-4xl font-serif text-gold">€595<span className="text-lg text-white/40">/mese</span></p>
+                                    <p className="text-4xl font-serif text-gold">€697<span className="text-lg text-white/40">/mese</span></p>
                                 </div>
                             </div>
 
