@@ -14,10 +14,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
  */
 export async function GET(
     request: NextRequest,
-    { params }: { params: { token: string } }
+    { params }: { params: Promise<{ token: string }> }
 ) {
     try {
-        const { token } = params;
+        const { token } = await params;
 
         console.log(`[Waitlist Checkout] Token: ${token}`);
 
