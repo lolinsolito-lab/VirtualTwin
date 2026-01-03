@@ -293,7 +293,6 @@ export function getLimitEmail(status: LimitStatus, params: LimitEmailParams): Em
 
 /**
  * Send limit notification email via Resend
- * (Assumes you have Resend configured)
  */
 export async function sendLimitNotificationEmail(
     status: LimitStatus,
@@ -306,18 +305,32 @@ export async function sendLimitNotificationEmail(
         return false;
     }
 
-    try {
-        // TODO: Replace with actual Resend call
-        // const resend = new Resend(process.env.RESEND_API_KEY);
-        // await resend.emails.send({
-        //     from: 'VirtualTwin <noreply@virtualtwin.app>',
-        //     to: params.userEmail,
-        //     subject: email.subject,
-        //     html: email.html
-        // });
-
-        console.log(`[Email] ✅ Sent ${status} email to ${params.userEmail}`);
+    // Check for API key
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+        console.warn('[Email] RESEND_API_KEY not configured - logging only');
+        console.log(`[Email] Would send ${status} email to ${params.userEmail}`);
         console.log(`[Email] Subject: ${email.subject}`);
+        return true; // Return true so we don't retry
+    }
+
+    try {
+        const { Resend } = await import('resend');
+        const resend = new Resend(apiKey);
+
+        const { data, error } = await resend.emails.send({
+            from: 'VirtualTwin <noreply@virtualtwin.app>',
+            to: params.userEmail,
+            subject: email.subject,
+            html: email.html
+        });
+
+        if (error) {
+            console.error('[Email] Resend error:', error);
+            return false;
+        }
+
+        console.log(`[Email] ✅ Sent ${status} email to ${params.userEmail} (ID: ${data?.id})`);
         return true;
 
     } catch (error) {
