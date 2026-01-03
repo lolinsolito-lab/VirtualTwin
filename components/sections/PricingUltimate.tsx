@@ -58,6 +58,7 @@ const PricingUltimate = () => {
     const [hoveredPlan, setHoveredPlan] = useState<number | null>(null);
     const [planAvailability, setPlanAvailability] = useState<Record<PlanName, PlanAvailability> | null>(null);
     const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
+    const [isCheckoutLoading, setIsCheckoutLoading] = useState<string | null>(null);
     const [nextWave, setNextWave] = useState<Wave | null>(null);
     const sectionRef = useRef<HTMLElement>(null);
 
@@ -141,6 +142,30 @@ const PricingUltimate = () => {
         }
     };
 
+    // Stripe Checkout Handler
+    const handleCheckout = async (planId: string, priceId: string, tier: 'public' | 'founder' = 'public') => {
+        setIsCheckoutLoading(planId);
+        try {
+            const response = await fetch('/api/stripe/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ priceId, tier })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Checkout failed');
+            }
+
+            const { url } = await response.json();
+            window.location.href = url; // Redirect to Stripe
+        } catch (error) {
+            console.error('[Checkout Error]:', error);
+            alert(error instanceof Error ? error.message : 'Errore durante il checkout. Riprova.');
+            setIsCheckoutLoading(null);
+        }
+    };
+
     const publicRef = getCurrentPublicPricing();
 
     const plans = [
@@ -154,7 +179,7 @@ const PricingUltimate = () => {
             story: "Trial gratuito",
             features: ["1 Clone AI", "100 msg", "1 Canale", "Watermark"],
             cta: "Inizia Gratis",
-            href: "/auth/register",
+            isTrial: true,
             bg: "bg-white",
             border: "border-charcoal/10",
             accent: "text-charcoal/60",
@@ -170,8 +195,9 @@ const PricingUltimate = () => {
             period: "/mese",
             story: "Per testare il potenziale",
             features: ["1 Clone AI", "1K msg/mese", "Analytics Base", "Email Support"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Esplora",
-            href: `/auth/register?plan=explorer&priceId=${displayPricing?.stripePriceIds?.esploratore}`,
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Scegli Esploratore",
+            priceId: displayPricing?.stripePriceIds?.esploratore,
+            isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-blue-50 to-indigo-50",
             border: "border-blue-200",
             accent: "text-blue-600",
@@ -186,8 +212,9 @@ const PricingUltimate = () => {
             period: "/mese",
             story: "Il più scelto dai Coach",
             features: ["1 Clone AI", "5K msg/mese", "3 Canali", "A/B Test (20%)"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Inizia Ora",
-            href: displayPricing?.tier === 'founder' ? "/founder" : `/auth/register?plan=pioneer&priceId=${displayPricing?.stripePriceIds?.pioniere}`,
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Scegli Pioniere",
+            priceId: displayPricing?.stripePriceIds?.pioniere,
+            isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-gold/5 to-gold/15",
             border: "border-gold/40",
             accent: "text-gold",
@@ -204,8 +231,9 @@ const PricingUltimate = () => {
             period: "/mese",
             story: "Per agenzie e power users",
             features: ["3 Cloni AI", "20K msg/mese", "Priority Support", "API Access"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Inizia Ora",
-            href: displayPricing?.tier === 'founder' ? "/founder" : `/auth/register?plan=agency&priceId=${displayPricing?.stripePriceIds?.conquistatore}`,
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Scegli Conquistatore",
+            priceId: displayPricing?.stripePriceIds?.conquistatore,
+            isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-champagne to-white",
             border: "border-gold/20",
             accent: "text-gold",
@@ -220,8 +248,9 @@ const PricingUltimate = () => {
             period: "/mese",
             story: "Il trono digitale",
             features: ["10 Cloni AI", "50K msg/mese", "White-label", "Account Manager"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Inizia Ora",
-            href: displayPricing?.tier === 'founder' ? "/founder" : `/auth/register?plan=imperatore&priceId=${displayPricing?.stripePriceIds?.imperatore}`,
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Scegli Imperatore",
+            priceId: displayPricing?.stripePriceIds?.imperatore,
+            isFounder: displayPricing?.tier === 'founder',
             bg: "gold-gradient",
             border: "border-transparent",
             accent: "text-white/80",
@@ -349,13 +378,32 @@ const PricingUltimate = () => {
                                 </div>
 
                                 {/* CTA */}
-                                <Link
-                                    href={plan.href}
-                                    className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
-                                >
-                                    {plan.cta}
-                                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                                </Link>
+                                {(plan as any).isTrial ? (
+                                    <Link
+                                        href="/auth/register"
+                                        className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
+                                    >
+                                        {plan.cta}
+                                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                ) : (plan as any).isFounder ? (
+                                    <Link
+                                        href="/founder"
+                                        className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
+                                    >
+                                        {plan.cta}
+                                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                ) : (
+                                    <button
+                                        onClick={() => handleCheckout(plan.id, (plan as any).priceId, 'public')}
+                                        disabled={isCheckoutLoading === plan.id}
+                                        className={`group w-full py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle} disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    >
+                                        {isCheckoutLoading === plan.id ? 'Caricamento...' : plan.cta}
+                                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}
