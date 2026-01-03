@@ -57,12 +57,12 @@ export const WAVES: Wave[] = [
         startDate: '2026-01-01',
         endDate: '2026-03-31',
         prices: {
-            esploratore: 147,
-            pioniere: 347,
-            conquistatore: 697
+            esploratore: 39,
+            pioniere: 147,
+            conquistatore: 347
         },
         stripePriceIds: {
-            esploratore: 'price_1QcewtKkKlvbXgKiJGXE3YtN',
+            esploratore: 'price_genesis_esploratore',
             pioniere: 'price_1QcexNKkKlvbXgKiVpLj5VVS',
             conquistatore: 'price_1QcexzKkKlvbXgKihZ5h58aR'
         }
@@ -71,13 +71,13 @@ export const WAVES: Wave[] = [
         id: 'pioneer',
         name: 'Pioneer',
         nameFull: 'Pioneer Founder Wave',
-        spots: 30,
+        spots: 20,
         startDate: '2026-04-01',
         endDate: '2026-06-30',
         prices: {
-            esploratore: 197,
-            pioniere: 397,
-            conquistatore: 747
+            esploratore: 59,
+            pioniere: 197,
+            conquistatore: 447
         },
         stripePriceIds: {
             // TODO: Creare prodotti Pioneer in Stripe
@@ -90,13 +90,13 @@ export const WAVES: Wave[] = [
         id: 'elite',
         name: 'Elite',
         nameFull: 'Elite Founder Wave',
-        spots: 50,
+        spots: 20,
         startDate: '2026-07-01',
         endDate: '2026-09-30',
         prices: {
-            esploratore: 247,
-            pioniere: 447,
-            conquistatore: 797
+            esploratore: 79,
+            pioniere: 247,
+            conquistatore: 547
         },
         stripePriceIds: {
             // TODO: Creare prodotti Elite in Stripe

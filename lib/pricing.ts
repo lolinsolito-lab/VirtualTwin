@@ -12,33 +12,33 @@ export type PricingTier = 'founder' | 'public';
 // =============================================
 
 export const IMPERIAL_PRICES = {
-    // FOUNDER: Lifetime locked prices (153 spots)
+    // FOUNDER GENESIS: Lifetime locked prices (20 spots per wave)
     founder: {
-        esploratore: 39,      // Entry level
-        pioniere: 147,        // ⭐ BESTSELLER (+51% margin)
+        esploratore: 39,      // Genesis Wave entry
+        pioniere: 147,        // ⭐ BESTSELLER
         conquistatore: 347,   // Agency tier
         imperatore: 697,      // 👑 Enterprise
     },
-    // PUBLIC: Post-founder prices (Apr 2026+)
+    // PUBLIC Q1 2026: Jan-Mar (current /start prices)
     public_2026: {
-        esploratore: 79,
-        pioniere: 297,        // 2× Founder
-        conquistatore: 697,   // 2× Founder
-        imperatore: 1197,     // 1.7× Founder
+        esploratore: 297,
+        pioniere: 697,        // ~5× Founder
+        conquistatore: 1197,  // ~3.5× Founder
+        imperatore: 1997,     // ~3× Founder
     },
-    // PUBLIC 2027: +15% YoY increase
+    // PUBLIC Q2 2026: Apr-Jun (+€50 each tier)
     public_2027: {
-        esploratore: 89,
-        pioniere: 347,
-        conquistatore: 797,
-        imperatore: 1347,
+        esploratore: 347,
+        pioniere: 747,
+        conquistatore: 1297,
+        imperatore: 2097,
     },
-    // PUBLIC 2030: Final target
+    // PUBLIC Q3+ 2026: Jul+ (final tier for comparison display)
     public_2030: {
-        esploratore: 119,
-        pioniere: 497,
-        conquistatore: 1097,
-        imperatore: 1797,
+        esploratore: 397,
+        pioniere: 797,
+        conquistatore: 1397,
+        imperatore: 2197,
     },
 } as const;
 

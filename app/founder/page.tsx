@@ -195,7 +195,7 @@ export default function FounderPage() {
                                 Entra nei primi <strong className="text-charcoal">{FOUNDER_CONFIG.totalSpots} Founder</strong> e blocca il prezzo
                                 a <strong className="text-gold">€{IMPERIAL_PRICES.founder.pioniere}/mese</strong> per sempre.
                                 <br className="hidden md:block" />
-                                Anche quando nel 2030 costerà €{IMPERIAL_PRICES.public_2030.pioniere}/mese.
+                                Anche quando il prezzo pubblico aumenterà a €{IMPERIAL_PRICES.public_2030.pioniere}/mese.
                             </>
                         ) : (
                             <>
@@ -285,7 +285,7 @@ export default function FounderPage() {
                                             €{plan.pricePublic} pubblico 2026
                                         </div>
                                         <div className={`text-xs ${plan.id === 'imperatore' ? 'text-white/30' : 'text-charcoal/30'}`}>
-                                            €{plan.pricePublic2030} nel 2030
+                                            ↗ Aumenta ogni trimestre
                                         </div>
                                     </>
                                 )}
