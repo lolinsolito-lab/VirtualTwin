@@ -42,12 +42,27 @@ export default function FounderPage() {
         }
     }, [spotsLeft]);
 
-    // TODO: Fetch real founder count from Supabase
-    // useEffect(() => {
-    //     fetch('/api/founder/count')
-    //         .then(res => res.json())
-    //         .then(data => setSpotsLeft(FOUNDER_CONFIG.totalSpots - data.count));
-    // }, []);
+    // Fetch real founder count from API
+    useEffect(() => {
+        async function fetchFounderCount() {
+            try {
+                const response = await fetch('/api/founder/count');
+                if (response.ok) {
+                    const data = await response.json();
+                    const remaining = FOUNDER_CONFIG.totalSpots - (data.count || 0);
+                    setSpotsLeft(Math.max(0, remaining));
+                }
+            } catch (error) {
+                console.error('Error fetching founder count:', error);
+            }
+        }
+
+        fetchFounderCount();
+
+        // Refresh every 30 seconds
+        const interval = setInterval(fetchFounderCount, 30000);
+        return () => clearInterval(interval);
+    }, []);
 
     // 👑 IMPERIAL PRICING PLANS
     const plans = [
@@ -345,10 +360,10 @@ export default function FounderPage() {
                                 <div
                                     key={`public-${i}`}
                                     className={`relative rounded-[1.5rem] p-6 border-2 transition-all ${plan.featured
-                                            ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-400 shadow-xl scale-[1.02]'
-                                            : plan.id === 'imperatore'
-                                                ? 'bg-charcoal text-white border-green-400 shadow-xl'
-                                                : 'bg-white border-charcoal/10 hover:border-green-400'
+                                        ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-400 shadow-xl scale-[1.02]'
+                                        : plan.id === 'imperatore'
+                                            ? 'bg-charcoal text-white border-green-400 shadow-xl'
+                                            : 'bg-white border-charcoal/10 hover:border-green-400'
                                         }`}
                                 >
                                     {plan.featured && (
@@ -382,10 +397,10 @@ export default function FounderPage() {
                                         onClick={() => handleCheckout(plan.id)}
                                         disabled={loadingPlan !== null}
                                         className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider disabled:opacity-50 ${plan.id === 'imperatore'
-                                                ? 'bg-green-500 text-white hover:bg-green-600'
-                                                : plan.featured
-                                                    ? 'bg-green-500 text-white shadow-lg hover:bg-green-600 hover:scale-105'
-                                                    : 'bg-green-100 text-green-700 hover:bg-green-500 hover:text-white'
+                                            ? 'bg-green-500 text-white hover:bg-green-600'
+                                            : plan.featured
+                                                ? 'bg-green-500 text-white shadow-lg hover:bg-green-600 hover:scale-105'
+                                                : 'bg-green-100 text-green-700 hover:bg-green-500 hover:text-white'
                                             }`}
                                     >
                                         {loadingPlan === plan.id ? (
