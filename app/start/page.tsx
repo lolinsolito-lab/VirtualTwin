@@ -76,11 +76,30 @@ export default function StartPage() {
                 'AI GPT-4 Turbo',
                 'White-label dashboard',
                 'API access',
-                'Dedicated success manager',
-                'Custom integrations'
+                'Dedicated success manager'
             ],
             icon: Crown,
             popular: false
+        },
+        {
+            id: 'imperatore',
+            name: 'Imperatore',
+            price: currentPricing.prices.imperatore,
+            priceId: currentPricing.stripePriceIds.imperatore,
+            nextPrice: nextPricing?.prices.imperatore,
+            messages: '50,000',
+            features: [
+                '50,000 messaggi AI/mese',
+                'Tutti i canali illimitati',
+                'AI GPT-4 Turbo Priority',
+                'White-label completo',
+                'API Priority access',
+                'Account Manager dedicato',
+                'Custom integrations'
+            ],
+            icon: Crown,
+            popular: false,
+            isEnterprise: true
         }
     ];
 
@@ -184,7 +203,7 @@ export default function StartPage() {
 
             {/* Pricing Cards */}
             <div className="relative z-10 container mx-auto px-4 pb-24">
-                <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
                     {plans.map((plan, index) => (
                         <motion.div
                             key={plan.id}
@@ -192,8 +211,8 @@ export default function StartPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 * index }}
                             className={`relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border ${plan.popular
-                                    ? 'border-gold shadow-2xl shadow-gold/10'
-                                    : 'border-white/10'
+                                ? 'border-gold shadow-2xl shadow-gold/10'
+                                : 'border-white/10'
                                 }`}
                         >
                             {/* Popular Badge */}
@@ -246,8 +265,8 @@ export default function StartPage() {
                                 onClick={() => handleCheckout(plan.priceId, plan.name)}
                                 disabled={isLoading}
                                 className={`w-full py-4 rounded-xl font-bold transition flex items-center justify-center gap-2 ${plan.popular
-                                        ? 'bg-gold text-charcoal hover:bg-gold/90'
-                                        : 'bg-white/10 text-white hover:bg-white/20'
+                                    ? 'bg-gold text-charcoal hover:bg-gold/90'
+                                    : 'bg-white/10 text-white hover:bg-white/20'
                                     } disabled:opacity-50 disabled:cursor-not-allowed`}
                             >
                                 {isLoading && selectedPlan === plan.name ? (
@@ -296,11 +315,9 @@ export default function StartPage() {
                     </h2>
 
                     <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
-                        <p className="text-white/70 leading-relaxed">
-                            I prezzi <strong className="text-gold">Founder</strong> sono riservati ai primi 100 clienti
-                            che credono nel progetto sin dall'inizio. Essendo early adopters, ottengono uno sconto
-                            del 50% a vita come ringraziamento.
-                        </p>
+                        I prezzi <strong className="text-gold">Founder</strong> sono riservati ai primi 60 clienti
+                        (20 per wave: Genesis, Pioneer, Elite) che credono nel progetto sin dall'inizio.
+                        Essendo early adopters, ottengono uno sconto del 50% a vita.
                         <p className="text-white/70 leading-relaxed mt-4">
                             I prezzi <strong className="text-white">pubblici</strong> riflettono il valore reale della
                             piattaforma. Aumentano progressivamente man mano che aggiungiamo più funzionalità.

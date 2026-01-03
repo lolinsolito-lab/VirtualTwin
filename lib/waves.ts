@@ -20,11 +20,13 @@ export interface Wave {
         esploratore: number;
         pioniere: number;
         conquistatore: number;
+        imperatore: number;
     };
     stripePriceIds: {
         esploratore: string;
         pioniere: string;
         conquistatore: string;
+        imperatore: string;
     };
 }
 
@@ -36,11 +38,13 @@ export interface PublicPricing {
         esploratore: number;
         pioniere: number;
         conquistatore: number;
+        imperatore: number;
     };
     stripePriceIds: {
         esploratore: string;
         pioniere: string;
         conquistatore: string;
+        imperatore: string;
     };
 }
 
@@ -59,12 +63,14 @@ export const WAVES: Wave[] = [
         prices: {
             esploratore: 39,
             pioniere: 147,
-            conquistatore: 347
+            conquistatore: 347,
+            imperatore: 697
         },
         stripePriceIds: {
             esploratore: 'price_genesis_esploratore',
             pioniere: 'price_1QcexNKkKlvbXgKiVpLj5VVS',
-            conquistatore: 'price_1QcexzKkKlvbXgKihZ5h58aR'
+            conquistatore: 'price_1QcexzKkKlvbXgKihZ5h58aR',
+            imperatore: 'price_genesis_imperatore'
         }
     },
     {
@@ -77,13 +83,15 @@ export const WAVES: Wave[] = [
         prices: {
             esploratore: 59,
             pioniere: 197,
-            conquistatore: 447
+            conquistatore: 447,
+            imperatore: 897
         },
         stripePriceIds: {
             // TODO: Creare prodotti Pioneer in Stripe
             esploratore: 'price_pioneer_esploratore',
             pioniere: 'price_pioneer_pioniere',
-            conquistatore: 'price_pioneer_conquistatore'
+            conquistatore: 'price_pioneer_conquistatore',
+            imperatore: 'price_pioneer_imperatore'
         }
     },
     {
@@ -96,13 +104,15 @@ export const WAVES: Wave[] = [
         prices: {
             esploratore: 79,
             pioniere: 247,
-            conquistatore: 547
+            conquistatore: 547,
+            imperatore: 1097
         },
         stripePriceIds: {
             // TODO: Creare prodotti Elite in Stripe
             esploratore: 'price_elite_esploratore',
             pioniere: 'price_elite_pioniere',
-            conquistatore: 'price_elite_conquistatore'
+            conquistatore: 'price_elite_conquistatore',
+            imperatore: 'price_elite_imperatore'
         }
     }
 ];
@@ -119,12 +129,14 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         prices: {
             esploratore: 297,
             pioniere: 697,
-            conquistatore: 1197
+            conquistatore: 1197,
+            imperatore: 1997
         },
         stripePriceIds: {
             esploratore: 'price_1Qd0i5KkKlvbXgKiXQzOhfN8',
             pioniere: 'price_1Qd0idKkKlvbXgKiAwfhLKYi',
-            conquistatore: 'price_1Qd0j6KkKlvbXgKilBW8PMOP'
+            conquistatore: 'price_1Qd0j6KkKlvbXgKilBW8PMOP',
+            imperatore: 'price_public_q1_imperatore'
         }
     },
     {
@@ -134,13 +146,15 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         prices: {
             esploratore: 347,
             pioniere: 747,
-            conquistatore: 1297
+            conquistatore: 1297,
+            imperatore: 2097
         },
         stripePriceIds: {
             // TODO: Creare prodotti Q2 in Stripe
             esploratore: 'price_q2_esploratore',
             pioniere: 'price_q2_pioniere',
-            conquistatore: 'price_q2_conquistatore'
+            conquistatore: 'price_q2_conquistatore',
+            imperatore: 'price_q2_imperatore'
         }
     },
     {
@@ -150,13 +164,15 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         prices: {
             esploratore: 397,
             pioniere: 797,
-            conquistatore: 1397
+            conquistatore: 1397,
+            imperatore: 2197
         },
         stripePriceIds: {
             // TODO: Creare prodotti Q3 in Stripe
             esploratore: 'price_q3_esploratore',
             pioniere: 'price_q3_pioniere',
-            conquistatore: 'price_q3_conquistatore'
+            conquistatore: 'price_q3_conquistatore',
+            imperatore: 'price_q3_imperatore'
         }
     }
 ];
