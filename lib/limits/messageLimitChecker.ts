@@ -209,13 +209,16 @@ async function shouldSendNotification(
  * Update notification timestamp in database
  */
 async function updateNotificationTimestamp(userId: string, status: LimitStatus): Promise<void> {
-    const timestampField = {
+    // Only update for statuses that have notification fields
+    if (status === 'ok') return;
+
+    const timestampFields: Record<'warning' | 'critical' | 'exceeded', string> = {
         warning: 'limit_warning_sent_at',
         critical: 'limit_critical_sent_at',
         exceeded: 'limit_exceeded_sent_at',
-    }[status];
+    };
 
-    if (!timestampField) return;
+    const timestampField = timestampFields[status];
 
     await supabase
         .from('profiles')
