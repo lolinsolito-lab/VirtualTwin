@@ -67,10 +67,10 @@ export const WAVES: Wave[] = [
             imperatore: 697
         },
         stripePriceIds: {
-            esploratore: 'price_genesis_esploratore',
-            pioniere: 'price_1QcexNKkKlvbXgKiVpLj5VVS',
-            conquistatore: 'price_1QcexzKkKlvbXgKihZ5h58aR',
-            imperatore: 'price_genesis_imperatore'
+            esploratore: 'price_1SlX717141DXdb9vzAEbFLdY',
+            pioniere: 'price_1SlX727141DXdb9vdgRHbxrD',
+            conquistatore: 'price_1SlX727141DXdb9vCKAM0WCi',
+            imperatore: 'price_1SlX737141DXdb9vTmQmgd9Z'
         }
     },
     {
@@ -87,11 +87,10 @@ export const WAVES: Wave[] = [
             imperatore: 897
         },
         stripePriceIds: {
-            // TODO: Creare prodotti Pioneer in Stripe
-            esploratore: 'price_pioneer_esploratore',
-            pioniere: 'price_pioneer_pioniere',
-            conquistatore: 'price_pioneer_conquistatore',
-            imperatore: 'price_pioneer_imperatore'
+            esploratore: 'price_1SlX747141DXdb9v7RaiL2FW',
+            pioniere: 'price_1SlX747141DXdb9vj97oU4F2',
+            conquistatore: 'price_1SlX757141DXdb9vVTtcw0qw',
+            imperatore: 'price_1SlX767141DXdb9vJQLtn9s2'
         }
     },
     {
@@ -108,11 +107,10 @@ export const WAVES: Wave[] = [
             imperatore: 1097
         },
         stripePriceIds: {
-            // TODO: Creare prodotti Elite in Stripe
-            esploratore: 'price_elite_esploratore',
-            pioniere: 'price_elite_pioniere',
-            conquistatore: 'price_elite_conquistatore',
-            imperatore: 'price_elite_imperatore'
+            esploratore: 'price_1SlX767141DXdb9vQ1NBwZHT',
+            pioniere: 'price_1SlX777141DXdb9vMSBYuzHB',
+            conquistatore: 'price_1SlX777141DXdb9v37XSqeR6',
+            imperatore: 'price_1SlX787141DXdb9vhn2fJpVx'
         }
     }
 ];
@@ -133,10 +131,10 @@ export const PUBLIC_PRICING: PublicPricing[] = [
             imperatore: 1997
         },
         stripePriceIds: {
-            esploratore: 'price_1Qd0i5KkKlvbXgKiXQzOhfN8',
-            pioniere: 'price_1Qd0idKkKlvbXgKiAwfhLKYi',
-            conquistatore: 'price_1Qd0j6KkKlvbXgKilBW8PMOP',
-            imperatore: 'price_public_q1_imperatore'
+            esploratore: 'price_1SlX787141DXdb9vqXSlofaP',
+            pioniere: 'price_1SlX797141DXdb9vfjEhb8Al',
+            conquistatore: 'price_1SlX7A7141DXdb9vf3zLKG2q',
+            imperatore: 'price_1SlX7A7141DXdb9vbmrUZY5i'
         }
     },
     {
@@ -150,11 +148,10 @@ export const PUBLIC_PRICING: PublicPricing[] = [
             imperatore: 2097
         },
         stripePriceIds: {
-            // TODO: Creare prodotti Q2 in Stripe
-            esploratore: 'price_q2_esploratore',
-            pioniere: 'price_q2_pioniere',
-            conquistatore: 'price_q2_conquistatore',
-            imperatore: 'price_q2_imperatore'
+            esploratore: 'price_1SlX7B7141DXdb9vI5yHtSLp',
+            pioniere: 'price_1SlX7C7141DXdb9vuq79oTiz',
+            conquistatore: 'price_1SlX7C7141DXdb9v0gpSYRNU',
+            imperatore: 'price_1SlX7D7141DXdb9vLhuoEr4g'
         }
     },
     {
@@ -168,11 +165,10 @@ export const PUBLIC_PRICING: PublicPricing[] = [
             imperatore: 2197
         },
         stripePriceIds: {
-            // TODO: Creare prodotti Q3 in Stripe
-            esploratore: 'price_q3_esploratore',
-            pioniere: 'price_q3_pioniere',
-            conquistatore: 'price_q3_conquistatore',
-            imperatore: 'price_q3_imperatore'
+            esploratore: 'price_1SlX7D7141DXdb9vjK0CGHD6',
+            pioniere: 'price_1SlX7E7141DXdb9v63Co4hK7',
+            conquistatore: 'price_1SlX7F7141DXdb9vk4Jz7Ulf',
+            imperatore: 'price_1SlX7F7141DXdb9ve9Dk9yQm'
         }
     }
 ];
