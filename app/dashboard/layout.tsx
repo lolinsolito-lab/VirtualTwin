@@ -1,6 +1,7 @@
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import TrialBanner from "@/components/dashboard/TrialBanner";
 import OnboardingGuard from "@/components/dashboard/OnboardingGuard";
+import { LimitAlertBanner } from "@/components/dashboard/LimitAlertBanner";
 
 export default function DashboardLayout({
     children,
@@ -13,6 +14,8 @@ export default function DashboardLayout({
                 <Sidebar />
                 {/* Main content - responsive margin for sidebar */}
                 <main className="flex-1 lg:ml-72 xl:ml-80 relative overflow-y-auto">
+                    {/* Limit Alert Banner for users near/at limit */}
+                    <LimitAlertBanner />
                     {/* Trial Banner for Curioso users */}
                     <TrialBanner />
                     {/* Premium Backdrop Effects */}

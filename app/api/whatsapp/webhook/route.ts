@@ -13,15 +13,13 @@ import {
 } from '@/lib/whatsapp';
 import { processConversation } from '@/lib/gemini';
 import { supabase } from '@/lib/supabase';
-
-// Limiti messaggi per tier
-const TIER_LIMITS: Record<string, number> = {
-    'curioso': 100,
-    'esploratore': 500,
-    'pioniere': 2000,
-    'conquistatore': 5000,
-    'imperatore': 50000,
-};
+import {
+    checkMessageLimit,
+    incrementMessageUsage,
+    getBlockedAutoReply,
+    LimitStatus
+} from '@/lib/limits/messageLimitChecker';
+import { sendLimitNotificationEmail } from '@/lib/emails/limitEmails';
 
 export async function POST(req: Request) {
     try {
@@ -54,59 +52,60 @@ export async function POST(req: Request) {
 
         const { userId, credentials } = tenantData;
 
-        // 4. Controllo Limiti Tier
-        const { data: profile } = await supabase
+        // 4. 🎯 CHECK MESSAGE LIMIT (Intelligent Upsell System)
+        const limitCheck = await checkMessageLimit(userId);
+
+        console.log(`[Limits] User ${userId}: ${limitCheck.status} (${limitCheck.used}/${limitCheck.limit} = ${Math.round(limitCheck.percentage)}%)`);
+
+        // 4a. Get owner profile for notifications
+        const { data: ownerProfile } = await supabase
             .from('profiles')
-            .select('subscription_tier, is_founder, messages_used')
+            .select('email, full_name, business_name, subscription_tier')
             .eq('id', userId)
             .single();
 
-        if (profile) {
-            const tier = profile.subscription_tier || 'curioso';
-            const limit = profile.is_founder ? 999999 : (TIER_LIMITS[tier] || 100);
-            const used = profile.messages_used || 0;
+        // 4b. Send notification email if needed
+        if (limitCheck.shouldNotifyOwner && ownerProfile && limitCheck.nextTier) {
+            console.log(`[Limits] 📧 Sending ${limitCheck.status} notification to ${ownerProfile.email}`);
 
-            if (used >= limit) {
-                console.warn(`[360Dialog] ⚠️ Limite messaggi raggiunto per user ${userId} (${used}/${limit})`);
-
-                // 1. Messaggio semplice al LEAD
-                const leadName = fullName ? fullName.split(' ')[0] : '';
-                const leadMessage = leadName
-                    ? `Ciao ${leadName}! Grazie per il messaggio. Il nostro assistente è momentaneamente in pausa ma ti risponderemo il prima possibile! 🙏`
-                    : `Grazie per il messaggio! Il nostro assistente è momentaneamente in pausa ma ti risponderemo il prima possibile! 🙏`;
-
-                await sendWhatsAppMessage(phone, leadMessage, credentials.apiKey);
-
-                // 2. Notifica all'OWNER per upgrade con link Stripe
-                const { data: ownerProfile } = await supabase
-                    .from('profiles')
-                    .select('email, business_name')
-                    .eq('id', userId)
-                    .single();
-
-                if (ownerProfile?.email) {
-                    // Calcola prossimo tier per upgrade
-                    const tierUpgrades: Record<string, { name: string; priceId: string; price: string }> = {
-                        'curioso': { name: 'Esploratore', priceId: 'price_1QcewtKkKlvbXgKiJGXE3YtN', price: '€147/mese' },
-                        'esploratore': { name: 'Pioniere', priceId: 'price_1QcexNKkKlvbXgKiVpLj5VVS', price: '€347/mese' },
-                        'pioniere': { name: 'Conquistatore', priceId: 'price_1QcexzKkKlvbXgKihZ5h58aR', price: '€697/mese' },
-                    };
-
-                    const nextTier = tierUpgrades[tier];
-                    const upgradeUrl = nextTier
-                        ? `https://virtualtwin.vercel.app/founder?upgrade=${nextTier.priceId}`
-                        : 'https://virtualtwin.vercel.app/founder';
-
-                    console.log(`[UPGRADE] 📧 Owner ${ownerProfile.email} deve fare upgrade a ${nextTier?.name || 'piano superiore'}`);
-                    console.log(`[UPGRADE] 🔗 Link: ${upgradeUrl}`);
-
-                    // TODO: Inviare email con Resend
-                    // await sendUpgradeEmail(ownerProfile.email, nextTier, upgradeUrl);
-                }
-
-                return NextResponse.json({ success: true, message: 'Limit reached - upgrade notification sent' });
-            }
+            await sendLimitNotificationEmail(limitCheck.status, {
+                userName: ownerProfile.full_name || 'there',
+                userEmail: ownerProfile.email,
+                used: limitCheck.used,
+                limit: limitCheck.limit,
+                remaining: limitCheck.remaining,
+                tier: ownerProfile.subscription_tier || 'curioso',
+                nextTier: limitCheck.nextTier,
+                businessName: ownerProfile.business_name
+            });
         }
+
+        // 4c. 🔴 IF EXCEEDED - Block and send pause message
+        if (limitCheck.shouldBlock) {
+            console.warn(`[Limits] ❌ BLOCKED: User ${userId} exceeded limit (${limitCheck.used}/${limitCheck.limit})`);
+
+            // Send pause message to lead
+            const leadName = fullName ? fullName.split(' ')[0] : '';
+            const pauseMessage = getBlockedAutoReply(ownerProfile?.business_name);
+
+            await sendWhatsAppMessage(phone, pauseMessage, credentials.apiKey);
+
+            // Log blocked message
+            const lead = await findOrCreateLead(userId, phone, fullName || 'Contatto WhatsApp');
+            const conversation = await findOrCreateConversation(userId, lead.id);
+
+            await saveMessage(conversation.id, 'inbound', text || '[message blocked - limit exceeded]');
+            await saveMessage(conversation.id, 'outbound', '[AUTO] Limite raggiunto - messaggio pausa inviato', true);
+
+            return NextResponse.json({
+                success: true,
+                blocked: true,
+                reason: 'Message limit exceeded',
+                status: limitCheck.status
+            });
+        }
+
+        // 🟢 UNDER LIMIT - Process normally
 
         // 5. Download Media (se presente)
         let mediaBuffer: Buffer | undefined = undefined;
@@ -161,21 +160,26 @@ export async function POST(req: Request) {
         // 11. Log messaggio Outbound
         await saveMessage(conversation.id, 'outbound', aiResponse.reply, true);
 
-        // 12. Incrementa contatore messaggi usati
-        if (profile) {
-            await supabase
-                .from('profiles')
-                .update({ messages_used: (profile.messages_used || 0) + 1 })
-                .eq('id', userId);
+        // 12. 📊 INCREMENT MESSAGE USAGE (dopo risposta riuscita)
+        await incrementMessageUsage(userId);
+        console.log(`[Limits] ✅ Incremented usage for ${userId}: ${limitCheck.used + 1}/${limitCheck.limit}`);
+
+        // 13. Log status for monitoring
+        if (limitCheck.status !== 'ok') {
+            console.log(`[Limits] ⚠️ User ${userId} in ${limitCheck.status.toUpperCase()} status after this message`);
         }
 
-        // 13. Azioni Speciali (Notifiche Owner)
+        // 14. Azioni Speciali (Notifiche Owner per lead caldi)
         if (aiResponse.shouldNotifyOwner) {
             console.log(`[ALERTA ELITE] Lead caldissimo rilevato: ${phone}`);
-            // TODO: Trigger email via Resend o webhook Make.com
+            // TODO: Trigger email via Resend
         }
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({
+            success: true,
+            limitStatus: limitCheck.status,
+            usage: `${limitCheck.used + 1}/${limitCheck.limit}`
+        });
 
     } catch (error: any) {
         console.error('Webhook Error:', error);
@@ -208,4 +212,3 @@ export async function GET(req: Request) {
         timestamp: new Date().toISOString()
     });
 }
-
