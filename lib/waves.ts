@@ -17,17 +17,20 @@ export interface Wave {
     startDate: string;
     endDate: string;
     prices: {
+        curioso: number;
         esploratore: number;
         pioniere: number;
         conquistatore: number;
         imperatore: number;
     };
     stripePriceIds: {
+        curioso: string;
         esploratore: string;
         pioniere: string;
         conquistatore: string;
         imperatore: string;
     };
+    tier: 'founder' | 'public';
 }
 
 export interface PublicPricing {
@@ -35,17 +38,20 @@ export interface PublicPricing {
     startDate: string;
     endDate: string;
     prices: {
+        curioso: number;
         esploratore: number;
         pioniere: number;
         conquistatore: number;
         imperatore: number;
     };
     stripePriceIds: {
+        curioso: string;
         esploratore: string;
         pioniere: string;
         conquistatore: string;
         imperatore: string;
     };
+    tier: 'founder' | 'public';
 }
 
 // =============================================
@@ -61,17 +67,20 @@ export const WAVES: Wave[] = [
         startDate: '2026-01-01',
         endDate: '2026-03-31',
         prices: {
+            curioso: 0,
             esploratore: 39,
             pioniere: 147,
             conquistatore: 347,
             imperatore: 697
         },
         stripePriceIds: {
+            curioso: 'free_tier_placeholder',
             esploratore: 'price_1SlX717141DXdb9vzAEbFLdY',
             pioniere: 'price_1SlX727141DXdb9vdgRHbxrD',
             conquistatore: 'price_1SlX727141DXdb9vCKAM0WCi',
             imperatore: 'price_1SlX737141DXdb9vTmQmgd9Z'
-        }
+        },
+        tier: 'founder'
     },
     {
         id: 'pioneer',
@@ -81,17 +90,20 @@ export const WAVES: Wave[] = [
         startDate: '2026-04-01',
         endDate: '2026-06-30',
         prices: {
+            curioso: 0,
             esploratore: 59,
             pioniere: 197,
             conquistatore: 447,
             imperatore: 897
         },
         stripePriceIds: {
+            curioso: 'free_tier_placeholder',
             esploratore: 'price_1SlX747141DXdb9v7RaiL2FW',
             pioniere: 'price_1SlX747141DXdb9vj97oU4F2',
             conquistatore: 'price_1SlX757141DXdb9vVTtcw0qw',
             imperatore: 'price_1SlX767141DXdb9vJQLtn9s2'
-        }
+        },
+        tier: 'founder'
     },
     {
         id: 'elite',
@@ -101,17 +113,20 @@ export const WAVES: Wave[] = [
         startDate: '2026-07-01',
         endDate: '2026-09-30',
         prices: {
+            curioso: 0,
             esploratore: 79,
             pioniere: 247,
             conquistatore: 547,
             imperatore: 1097
         },
         stripePriceIds: {
+            curioso: 'free_tier_placeholder',
             esploratore: 'price_1SlX767141DXdb9vQ1NBwZHT',
             pioniere: 'price_1SlX777141DXdb9vMSBYuzHB',
             conquistatore: 'price_1SlX777141DXdb9v37XSqeR6',
             imperatore: 'price_1SlX787141DXdb9vhn2fJpVx'
-        }
+        },
+        tier: 'founder'
     }
 ];
 
@@ -125,51 +140,60 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         startDate: '2026-01-01',
         endDate: '2026-03-31',
         prices: {
+            curioso: 0,
             esploratore: 297,
             pioniere: 697,
             conquistatore: 1197,
             imperatore: 1997
         },
         stripePriceIds: {
+            curioso: 'free_tier_placeholder',
             esploratore: 'price_1SlX787141DXdb9vqXSlofaP',
             pioniere: 'price_1SlX797141DXdb9vfjEhb8Al',
             conquistatore: 'price_1SlX7A7141DXdb9vf3zLKG2q',
             imperatore: 'price_1SlX7A7141DXdb9vbmrUZY5i'
-        }
+        },
+        tier: 'public'
     },
     {
         id: 'q2_2026',
         startDate: '2026-04-01',
         endDate: '2026-06-30',
         prices: {
+            curioso: 0,
             esploratore: 347,
             pioniere: 747,
             conquistatore: 1297,
             imperatore: 2097
         },
         stripePriceIds: {
+            curioso: 'free_tier_placeholder',
             esploratore: 'price_1SlX7B7141DXdb9vI5yHtSLp',
             pioniere: 'price_1SlX7C7141DXdb9vuq79oTiz',
             conquistatore: 'price_1SlX7C7141DXdb9v0gpSYRNU',
             imperatore: 'price_1SlX7D7141DXdb9vLhuoEr4g'
-        }
+        },
+        tier: 'public'
     },
     {
         id: 'q3_2026',
         startDate: '2026-07-01',
         endDate: '2026-12-31',
         prices: {
+            curioso: 0,
             esploratore: 397,
             pioniere: 797,
             conquistatore: 1397,
             imperatore: 2197
         },
         stripePriceIds: {
+            curioso: 'free_tier_placeholder',
             esploratore: 'price_1SlX7D7141DXdb9vjK0CGHD6',
             pioniere: 'price_1SlX7E7141DXdb9v63Co4hK7',
             conquistatore: 'price_1SlX7F7141DXdb9vk4Jz7Ulf',
             imperatore: 'price_1SlX7F7141DXdb9ve9Dk9yQm'
-        }
+        },
+        tier: 'public'
     }
 ];
 
@@ -298,6 +322,37 @@ export function getNextPublicPricing(): PublicPricing | null {
 }
 
 /**
+ * Get display pricing (Smart logic: Founder if available, else Public)
+ */
+export async function getDisplayPricing(): Promise<{
+    prices: Record<string, number>;
+    stripePriceIds: Record<string, string>;
+    tier: 'founder' | 'public';
+    waveName?: string;
+    spotsRemaining?: number;
+}> {
+    const currentWave = await getCurrentWave();
+
+    if (currentWave) {
+        return {
+            prices: currentWave.prices,
+            stripePriceIds: currentWave.stripePriceIds,
+            tier: 'founder',
+            waveName: currentWave.name,
+            spotsRemaining: await getCurrentWaveSpotsRemaining()
+        };
+    }
+
+    // Fallback to Public
+    const publicPricing = getCurrentPublicPricing();
+    return {
+        prices: publicPricing.prices,
+        stripePriceIds: publicPricing.stripePriceIds,
+        tier: 'public'
+    };
+}
+
+/**
  * Calculate days until price increase
  */
 export function getDaysUntilPriceIncrease(): number {
@@ -334,4 +389,46 @@ export async function areAllWavesSoldOut(): Promise<boolean> {
  */
 export function getTotalFounderSpots(): number {
     return WAVES.reduce((total, wave) => total + wave.spots, 0);
+}
+
+/**
+ * Detect when a new wave opens (called after each Founder purchase)
+ * Returns info about wave transition if it just happened
+ */
+export async function detectWaveOpening(): Promise<{
+    waveJustOpened: boolean;
+    prevWave: Wave | null;
+    newWave: Wave | null;
+    spotsAvailable: number;
+} | null> {
+    const foundersSold = await getFoundersSold();
+
+    // Check if we just crossed a wave boundary
+    let cumulativeSpots = 0;
+
+    for (let i = 0; i < WAVES.length; i++) {
+        const wave = WAVES[i];
+
+        // Did we just fill the previous wave?
+        // E.g., if Genesis has 20 spots and foundersSold = 20, Pioneer just opened
+        if (foundersSold === cumulativeSpots && i > 0) {
+            return {
+                waveJustOpened: true,
+                prevWave: WAVES[i - 1],
+                newWave: wave,
+                spotsAvailable: wave.spots
+            };
+        }
+
+        cumulativeSpots += wave.spots;
+    }
+
+    return null;
+}
+
+/**
+ * Get wave by ID helper
+ */
+export function getWaveByIdSafe(waveId: string): Wave | undefined {
+    return WAVES.find(w => w.id === waveId);
 }

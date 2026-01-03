@@ -15,7 +15,6 @@ import {
     Bot,
     Crown,
     Star,
-    Play,
     Users,
     Award
 } from 'lucide-react';
@@ -139,6 +138,7 @@ export default function StartPage() {
             });
 
             const { url } = await response.json();
+            // eslint-disable-next-line react-hooks/immutability
             if (url) window.location.href = url;
         } catch (error) {
             console.error('Checkout error:', error);
@@ -395,7 +395,7 @@ export default function StartPage() {
 
                         <p className="text-white/60 max-w-xl mx-auto mb-8 leading-relaxed">
                             I prezzi <strong className="text-gold">Founder</strong> sono riservati ai primi 60 clienti
-                            (20 per wave) che credono nel progetto sin dall'inizio.
+                            (20 per wave) che credono nel progetto sin dall&apos;inizio.
                             Risparmia fino al <strong className="text-gold">50%</strong> a vita.
                         </p>
 

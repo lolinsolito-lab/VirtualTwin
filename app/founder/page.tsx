@@ -1,22 +1,48 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Crown, Zap, Clock, Users, ArrowRight, Check, Star, Loader2, Shield, Lock } from 'lucide-react';
-import { IMPERIAL_PRICES, PLAN_LIMITS, FOUNDER_CONFIG, calculateFounderSavings, getFounderDiscount } from '@/lib/pricing';
+import Link from 'next/link';
+import { Crown, Users, ArrowRight, Check, Star, Loader2, Shield, Lock } from 'lucide-react';
+import { getCurrentWave, getCurrentWaveSpotsRemaining, getDisplayPricing, getCurrentPublicPricing, getTotalFounderSpots, Wave, WAVES } from '@/lib/waves';
 
 export default function FounderPage() {
-    const [spotsLeft, setSpotsLeft] = useState(FOUNDER_CONFIG.totalSpots); // 20 Genesis Founders
+    const [spotsLeft, setSpotsLeft] = useState(20);
+    const [totalSpots, setTotalSpots] = useState(60);
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
-    const [isFounderOpen, setIsFounderOpen] = useState(true);
-    const [isSoldOut, setIsSoldOut] = useState(false); // Track if sold out (not just closed)
+    const [currentWave, setCurrentWave] = useState<Wave | null>(null);
+    const [isSoldOut, setIsSoldOut] = useState(false);
+    const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
+    const [nextWave, setNextWave] = useState<Wave | null>(null);
+    const [isFounderOpen] = useState(true);
 
     useEffect(() => {
-        const calculateTimeLeft = () => {
-            const deadline = FOUNDER_CONFIG.deadline;
+        async function fetchData() {
+            const [wave, remaining, allPricing, total] = await Promise.all([
+                getCurrentWave(),
+                getCurrentWaveSpotsRemaining(),
+                getDisplayPricing(),
+                getTotalFounderSpots()
+            ]);
+
+            setCurrentWave(wave);
+            setSpotsLeft(remaining);
+            setDisplayPricing(allPricing);
+            setTotalSpots(total);
+            setSpotsLeft(remaining);
+            setIsSoldOut(remaining === 0);
+
+            // Get next wave for waitlist
+            if (wave && allPricing.tier === 'founder') {
+                const currentIndex = WAVES.findIndex(w => w.id === wave.id);
+                if (currentIndex >= 0 && currentIndex < WAVES.length - 1) {
+                    setNextWave(WAVES[currentIndex + 1]);
+                }
+            }
+            // Hardcoded deadline for UI (31 March 2026)
+            const deadline = new Date('2026-03-31T23:59:59');
             const now = new Date();
             const diff = deadline.getTime() - now.getTime();
-
             if (diff > 0) {
                 setTimeLeft({
                     days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -24,111 +50,78 @@ export default function FounderPage() {
                     minutes: Math.floor((diff / (1000 * 60)) % 60),
                     seconds: Math.floor((diff / 1000) % 60),
                 });
-            } else {
-                setIsFounderOpen(false);
-            }
-        };
-
-        calculateTimeLeft();
-        const interval = setInterval(calculateTimeLeft, 1000);
-        return () => clearInterval(interval);
-    }, []);
-
-    // Check if founder spots are still available
-    useEffect(() => {
-        if (spotsLeft <= 0) {
-            setIsFounderOpen(false);
-            setIsSoldOut(true); // Mark as sold out
-        }
-    }, [spotsLeft]);
-
-    // Fetch real founder count from API
-    useEffect(() => {
-        async function fetchFounderCount() {
-            try {
-                const response = await fetch('/api/founder/count');
-                if (response.ok) {
-                    const data = await response.json();
-                    const remaining = FOUNDER_CONFIG.totalSpots - (data.count || 0);
-                    setSpotsLeft(Math.max(0, remaining));
-                }
-            } catch (error) {
-                console.error('Error fetching founder count:', error);
             }
         }
-
-        fetchFounderCount();
-
-        // Refresh every 30 seconds
-        const interval = setInterval(fetchFounderCount, 30000);
+        fetchData();
+        const interval = setInterval(fetchData, 30000);
         return () => clearInterval(interval);
     }, []);
 
     // 👑 IMPERIAL PRICING PLANS
+    const publicPricing = getCurrentPublicPricing();
+
     const plans = [
         {
             id: 'esploratore',
             name: 'Esploratore',
             icon: '⚡',
-            priceFounder: IMPERIAL_PRICES.founder.esploratore,
-            pricePublic: IMPERIAL_PRICES.public_2026.esploratore,
-            pricePublic2030: IMPERIAL_PRICES.public_2030.esploratore,
-            discount: getFounderDiscount('esploratore'),
-            savings5yr: calculateFounderSavings('esploratore'),
+            priceFounder: displayPricing?.prices?.esploratore || 39,
+            pricePublic: publicPricing.prices.esploratore,
+            pricePublicFinal: 397,
             features: ['1 Clone AI', '1,000 msg/mese', '1 Canale', 'Email Support <48h'],
-            limits: PLAN_LIMITS.esploratore,
         },
         {
             id: 'pioniere',
             name: 'Pioniere',
             icon: '🚀',
-            priceFounder: IMPERIAL_PRICES.founder.pioniere,  // €147
-            pricePublic: IMPERIAL_PRICES.public_2026.pioniere,  // €297
-            pricePublic2030: IMPERIAL_PRICES.public_2030.pioniere,  // €497
-            discount: getFounderDiscount('pioniere'),
-            savings5yr: calculateFounderSavings('pioniere'),
+            priceFounder: displayPricing?.prices?.pioniere || 147,
+            pricePublic: publicPricing.prices.pioniere,
+            pricePublicFinal: 797,
             featured: true,
             badge: 'PIÙ SCELTO',
             features: ['1 Clone AI', '5,000 msg/mese', '3 Canali', 'A/B Testing 20%', 'Analytics Pro'],
-            limits: PLAN_LIMITS.pioniere,
         },
         {
             id: 'conquistatore',
             name: 'Conquistatore',
             icon: '💎',
-            priceFounder: IMPERIAL_PRICES.founder.conquistatore,  // €347
-            pricePublic: IMPERIAL_PRICES.public_2026.conquistatore,  // €697
-            pricePublic2030: IMPERIAL_PRICES.public_2030.conquistatore,  // €1097
-            discount: getFounderDiscount('conquistatore'),
-            savings5yr: calculateFounderSavings('conquistatore'),
+            priceFounder: displayPricing?.prices?.conquistatore || 347,
+            pricePublic: publicPricing.prices.conquistatore,
+            pricePublicFinal: 1397,
             features: ['3 Cloni AI', '20,000 msg/mese', 'API Access (60 req/min)', 'Priority Support'],
-            limits: PLAN_LIMITS.conquistatore,
         },
         {
             id: 'imperatore',
             name: 'Imperatore',
             icon: '👑',
-            priceFounder: IMPERIAL_PRICES.founder.imperatore,  // €697
-            pricePublic: IMPERIAL_PRICES.public_2026.imperatore,  // €1,197
-            pricePublic2030: IMPERIAL_PRICES.public_2030.imperatore,  // €1,797
-            discount: getFounderDiscount('imperatore'),
-            savings5yr: calculateFounderSavings('imperatore'),
+            priceFounder: displayPricing?.prices?.imperatore || 697,
+            pricePublic: publicPricing.prices.imperatore,
+            pricePublicFinal: 2197,
             features: ['10 Cloni AI', '50K msg/mese', 'White-label', 'Account Manager', 'API Priority'],
-            limits: PLAN_LIMITS.imperatore,
         },
     ];
 
+    // Function to calculate 5-year savings for Founder plans
+    const calculateFounderSavings = (planId: string) => {
+        const plan = plans.find(p => p.id === planId);
+        if (!plan) return 0;
+        return (plan.pricePublicFinal - plan.priceFounder) * 60; // 60 months in 5 years
+    };
+
     // Direct checkout - Dynamic tier based on availability
-    const handleCheckout = async (planId: string) => {
+    const handleCheckout = async (planId: string, forcePriceId?: string) => {
         setLoadingPlan(planId);
 
-        try {
-            const tier = isFounderOpen ? 'founder' : 'public';
+        const priceId = forcePriceId || displayPricing?.stripePriceIds?.[planId];
 
-            const response = await fetch('/api/stripe/create-checkout', {
+        try {
+            const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ plan: planId, tier }),
+                body: JSON.stringify({
+                    plan: planId,
+                    priceId
+                }),
             });
 
             const data = await response.json();
@@ -152,10 +145,10 @@ export default function FounderPage() {
     return (
         <div className="min-h-screen bg-champagne">
             {/* Top Banner */}
-            <div className={`${isFounderOpen ? 'gold-gradient' : 'bg-charcoal'} text-white py-3 text-center text-sm font-medium`}>
-                {isFounderOpen ? (
+            <div className="bg-charcoal text-white text-center py-3 text-sm font-medium">
+                {!isSoldOut ? (
                     <>
-                        <span className="animate-pulse">🔥</span> Solo {spotsLeft}/{FOUNDER_CONFIG.totalSpots} Founder Disponibili · Chiusura: 31 Marzo 2026 · Prezzo Bloccato LIFETIME
+                        <span className="animate-pulse">🔥</span> {currentWave?.nameFull} · Solo {spotsLeft} Posti Rimasti · Chiusura: 31 Marzo 2026 · Prezzo Bloccato LIFETIME
                     </>
                 ) : (
                     <>
@@ -192,10 +185,10 @@ export default function FounderPage() {
                     <p className="text-xl md:text-2xl text-charcoal/60 max-w-3xl mx-auto leading-relaxed">
                         {isFounderOpen ? (
                             <>
-                                Entra nei primi <strong className="text-charcoal">{FOUNDER_CONFIG.totalSpots} Founder</strong> e blocca il prezzo
-                                a <strong className="text-gold">€{IMPERIAL_PRICES.founder.pioniere}/mese</strong> per sempre.
+                                Entra nei primi <strong className="text-charcoal">{totalSpots} Founder</strong> e blocca il prezzo
+                                a <strong className="text-gold">€{displayPricing?.prices?.pioniere || 147}/mese</strong> per sempre.
                                 <br className="hidden md:block" />
-                                Anche quando il prezzo pubblico aumenterà a €{IMPERIAL_PRICES.public_2030.pioniere}/mese.
+                                Anche quando il prezzo pubblico aumenterà a €{plans[1].pricePublicFinal}/mese.
                             </>
                         ) : (
                             <>
@@ -231,7 +224,7 @@ export default function FounderPage() {
                                 <Users className="w-6 h-6 text-gold" />
                                 <div>
                                     <span className="text-3xl font-bold text-gold">{spotsLeft}</span>
-                                    <span className="text-white/60 text-lg">/{FOUNDER_CONFIG.totalSpots} posti</span>
+                                    <span className="text-white/60 text-lg">/{totalSpots} posti</span>
                                 </div>
                             </div>
                             <div className="hidden md:block w-px h-10 bg-white/20" />
@@ -293,7 +286,7 @@ export default function FounderPage() {
 
                             {isFounderOpen && (
                                 <div className="bg-green-500/10 text-green-600 text-sm font-medium px-3 py-2 rounded-lg mb-6">
-                                    {plan.discount}% OFF · Risparmio €{plan.savings5yr.toLocaleString()}
+                                    SAVE €{calculateFounderSavings(plan.id).toLocaleString()} (5 anni)
                                 </div>
                             )}
 
@@ -306,180 +299,82 @@ export default function FounderPage() {
                                 ))}
                             </ul>
 
-                            {/* Plan Limits Badge */}
                             <div className={`text-xs mb-4 ${plan.id === 'imperatore' ? 'text-white/50' : 'text-charcoal/50'}`}>
                                 <Shield className="w-3 h-3 inline mr-1" />
-                                {plan.limits.clones} clone{plan.limits.clones > 1 ? 's' : ''} · {plan.limits.messagesPerMonth.toLocaleString()} msg/mese
+                                {plan.id === 'esploratore' ? '1 Clone AI' : plan.id === 'pioniere' ? '1 Clone AI' : plan.id === 'conquistatore' ? '3 Cloni AI' : '10 Cloni AI'}
                             </div>
 
-                            {/* CHECKOUT BUTTON */}
-                            <button
-                                onClick={() => handleCheckout(plan.id)}
-                                disabled={loadingPlan !== null || isSoldOut}
-                                className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed ${isSoldOut
-                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : plan.id === 'imperatore'
-                                        ? 'bg-gold text-charcoal hover:bg-gold/90'
-                                        : plan.featured
-                                            ? 'gold-gradient text-white shadow-lg hover:scale-105'
-                                            : 'bg-charcoal/5 text-charcoal hover:bg-charcoal hover:text-white'
-                                    }`}
-                            >
-                                {loadingPlan === plan.id ? (
-                                    <span className="flex items-center justify-center gap-2">
-                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                        Caricamento...
-                                    </span>
-                                ) : isSoldOut ? (
-                                    'ESAURITO'
-                                ) : (
-                                    `Scegli ${plan.name}`
-                                )}
-                            </button>
+                            {/* CHECKOUT BUTTONS - Dual Option when Sold Out */}
+                            {!isSoldOut ? (
+                                <button
+                                    onClick={() => handleCheckout(plan.id)}
+                                    disabled={loadingPlan !== null}
+                                    className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider ${plan.featured
+                                        ? 'gold-gradient text-white shadow-xl hover:shadow-2xl hover:scale-105'
+                                        : plan.id === 'imperatore'
+                                            ? 'bg-gold text-charcoal hover:bg-champagne shadow-lg'
+                                            : 'bg-charcoal text-white hover:bg-gold hover:text-charcoal'
+                                        }`}
+                                >
+                                    {loadingPlan === plan.id ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Caricamento...
+                                        </span>
+                                    ) : (
+                                        <>Scegli {plan.name}</>
+                                    )}
+                                </button>
+                            ) : (
+                                <div className="grid grid-cols-2 gap-2">
+                                    {nextWave && (
+                                        <button
+                                            onClick={async () => {
+                                                const email = prompt("Email per waitlist:");
+                                                if (email && email.includes('@')) {
+                                                    try {
+                                                        await fetch('/api/waitlist', {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({
+                                                                email,
+                                                                name: email.split('@')[0],
+                                                                plan: plan.id,
+                                                                current_wave: currentWave?.id,
+                                                                next_wave: nextWave.id
+                                                            })
+                                                        });
+                                                        alert(`In waitlist per ${nextWave.name}!`);
+                                                    } catch (e) {
+                                                        alert("Errore");
+                                                    }
+                                                }
+                                            }}
+                                            className="bg-white/20 hover:bg-white/30 text-charcoal border border-gold/30 py-3 rounded-xl font-bold text-xs uppercase transition-all"
+                                        >
+                                            📋 Waitlist
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={async () => {
+                                            const publicPricing = getCurrentPublicPricing();
+                                            await handleCheckout(plan.id, publicPricing.stripePriceIds[plan.id as keyof typeof publicPricing.stripePriceIds]);
+                                        }}
+                                        className="gold-gradient text-white py-3 rounded-xl font-bold text-xs uppercase hover:scale-105 transition-all"
+                                    >
+                                        💳 €{plan.pricePublic} Public
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
-
-                {/* 🚀 PUBLIC PRICING SECTION - Only when Founder is sold out */}
-                {isSoldOut && (
-                    <div className="mb-16">
-                        <div className="text-center mb-10">
-                            <div className="inline-flex items-center gap-2 bg-green-500/10 text-green-600 px-6 py-2 rounded-full mb-4 font-black text-[10px] uppercase tracking-[0.4em]">
-                                ✅ DISPONIBILI
-                            </div>
-                            <h2 className="font-serif text-4xl text-charcoal mb-4">
-                                Prezzi <span className="italic gold-text-gradient">Pubblici</span>
-                            </h2>
-                            <p className="text-charcoal/60">
-                                I posti Genesis Founder sono esauriti. Puoi comunque iniziare con i prezzi pubblici.
-                            </p>
-                        </div>
-
-                        <div id="public-pricing" className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {plans.map((plan, i) => (
-                                <div
-                                    key={`public-${i}`}
-                                    className={`relative rounded-[1.5rem] p-6 border-2 transition-all ${plan.featured
-                                        ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-400 shadow-xl scale-[1.02]'
-                                        : plan.id === 'imperatore'
-                                            ? 'bg-charcoal text-white border-green-400 shadow-xl'
-                                            : 'bg-white border-charcoal/10 hover:border-green-400'
-                                        }`}
-                                >
-                                    {plan.featured && (
-                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
-                                            BESTSELLER
-                                        </div>
-                                    )}
-
-                                    <div className="text-4xl mb-3">{plan.icon}</div>
-                                    <h3 className="text-xl font-bold mb-4">{plan.name}</h3>
-
-                                    <div className="mb-4">
-                                        <div className="text-4xl font-bold mb-1 text-green-600">
-                                            €{plan.pricePublic}
-                                        </div>
-                                        <div className={`text-sm ${plan.id === 'imperatore' ? 'text-white/60' : 'text-charcoal/60'}`}>
-                                            /mese · Prezzo Pubblico
-                                        </div>
-                                    </div>
-
-                                    <ul className="space-y-2 mb-6">
-                                        {plan.features.map((feature, j) => (
-                                            <li key={j} className="flex items-start gap-2 text-sm">
-                                                <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.id === 'imperatore' ? 'text-green-400' : 'text-green-500'}`} />
-                                                <span className={plan.id === 'imperatore' ? 'text-white/80' : 'text-charcoal/70'}>{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    <button
-                                        onClick={() => handleCheckout(plan.id)}
-                                        disabled={loadingPlan !== null}
-                                        className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider disabled:opacity-50 ${plan.id === 'imperatore'
-                                            ? 'bg-green-500 text-white hover:bg-green-600'
-                                            : plan.featured
-                                                ? 'bg-green-500 text-white shadow-lg hover:bg-green-600 hover:scale-105'
-                                                : 'bg-green-100 text-green-700 hover:bg-green-500 hover:text-white'
-                                            }`}
-                                    >
-                                        {loadingPlan === plan.id ? (
-                                            <span className="flex items-center justify-center gap-2">
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                Caricamento...
-                                            </span>
-                                        ) : (
-                                            `Inizia con ${plan.name}`
-                                        )}
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Benefits Section - Only for Founder */}
-                {isFounderOpen && (
-                    <div className="bg-white rounded-[2rem] p-10 mb-16 shadow-lg border border-charcoal/5">
-                        <h2 className="text-3xl font-serif italic text-center mb-10 text-charcoal">
-                            🏆 Vantaggi <span className="gold-text-gradient">Founder</span> Esclusivi
-                        </h2>
-
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {FOUNDER_CONFIG.benefits.map((benefit, i) => {
-                                const icons = ['💎', '👑', '⚡', '🎯', '🚀'];
-                                return (
-                                    <div key={i} className="flex gap-4 p-4 rounded-xl hover:bg-champagne/50 transition-colors">
-                                        <div className="text-3xl">{icons[i % icons.length]}</div>
-                                        <div>
-                                            <h3 className="font-bold mb-1 text-charcoal">{benefit}</h3>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                )}
-
-                {/* Comparison Table */}
-                <div className="bg-gradient-to-br from-champagne to-white rounded-[2rem] p-10 mb-16 border border-charcoal/5">
-                    <h2 className="text-3xl font-serif italic text-center mb-8 text-charcoal">
-                        {isFounderOpen ? 'Founder vs Pubblico: Il Confronto' : 'Confronto Piani'}
-                    </h2>
-
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead>
-                                <tr className="border-b-2 border-charcoal/10">
-                                    <th className="text-left py-4 px-4 font-bold text-charcoal">Piano</th>
-                                    {isFounderOpen && <th className="text-center py-4 px-4 text-gold font-bold">Founder 2026</th>}
-                                    <th className="text-center py-4 px-4 text-charcoal/60">Pubblico 2026</th>
-                                    <th className="text-center py-4 px-4 text-charcoal/40">Pubblico 2030</th>
-                                    {isFounderOpen && <th className="text-center py-4 px-4 bg-green-50 font-bold text-green-700">Risparmio 5 Anni</th>}
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-charcoal/5">
-                                {plans.map((plan) => (
-                                    <tr key={plan.id} className={plan.id === 'imperatore' ? 'bg-gold/5' : ''}>
-                                        <td className="py-4 px-4 font-medium">{plan.name} {plan.icon}</td>
-                                        {isFounderOpen && <td className="text-center py-4 px-4 text-gold font-bold">€{plan.priceFounder}/mese</td>}
-                                        <td className="text-center py-4 px-4 text-charcoal/60">€{plan.pricePublic}/mese</td>
-                                        <td className="text-center py-4 px-4 text-charcoal/40">€{plan.pricePublic2030}/mese</td>
-                                        {isFounderOpen && <td className="text-center py-4 px-4 bg-green-50 font-bold text-green-700">€{plan.savings5yr.toLocaleString()}</td>}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {/* Final CTA */}
                 <div className={`text-center ${isFounderOpen ? 'gold-gradient' : 'bg-charcoal'} text-white rounded-[2rem] p-12 shadow-2xl`}>
                     <h2 className="text-3xl md:text-4xl font-serif italic mb-6">
                         {isFounderOpen ? (
                             <>
                                 Sei nel 20% che Costruisce Imperi,<br />
-                                o nell'80% che Insegue?
+                                o nell&apos;80% che Insegue?
                             </>
                         ) : (
                             <>
@@ -491,7 +386,7 @@ export default function FounderPage() {
 
                     <p className="text-xl mb-8 text-white/80">
                         {isFounderOpen
-                            ? `Solo ${FOUNDER_CONFIG.totalSpots} persone avranno questo privilegio. Per sempre.`
+                            ? `Solo ${totalSpots} persone avranno questo privilegio. Per sempre.`
                             : 'Prova VirtualTwin senza rischi. Cancella quando vuoi.'}
                     </p>
 
@@ -505,17 +400,17 @@ export default function FounderPage() {
 
                     <div className="mt-6 text-sm text-white/60">
                         {isFounderOpen
-                            ? `${spotsLeft}/${FOUNDER_CONFIG.totalSpots} Founder · Chiusura 31 Marzo 2026 · 14 giorni trial gratuito`
+                            ? `${spotsLeft}/${totalSpots} Founder · Chiusura 31 Marzo 2026 · 14 giorni trial gratuito`
                             : '14 giorni trial gratuito · Nessuna carta richiesta'}
                     </div>
                 </div>
 
                 {/* Footer */}
                 <div className="text-center mt-12 text-charcoal/40 text-sm">
-                    <a href="/" className="text-gold hover:underline">← Torna alla Home</a>
+                    <Link href="/" className="text-gold hover:underline">← Torna alla Home</Link>
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 }

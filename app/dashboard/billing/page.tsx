@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Check, Shield, Zap, Crown, Lock, Code, Headphones, Rocket, Sparkles } from 'lucide-react';
+import { Check, Zap, Crown, Lock, Code, Headphones, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
-import { getPlanAvailability, PlanAvailability, PlanName } from '@/lib/founderAvailability';
+import { getPlanAvailability, PlanAvailability } from '@/lib/founderAvailability';
+import { getDisplayPricing, getCurrentPublicPricing } from '@/lib/waves';
 
 const plans = [
     {
@@ -107,13 +108,18 @@ export default function BillingPage() {
     const [loading, setLoading] = useState<string | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [availability, setAvailability] = useState<Record<string, PlanAvailability> | null>(null);
+    const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
 
     useEffect(() => {
-        async function fetchAvailability() {
-            const data = await getPlanAvailability();
-            setAvailability(data);
+        async function fetchData() {
+            const [availData, pricingData] = await Promise.all([
+                getPlanAvailability(),
+                getDisplayPricing()
+            ]);
+            setAvailability(availData);
+            setDisplayPricing(pricingData);
         }
-        fetchAvailability();
+        fetchData();
     }, []);
 
     const handleSubscribe = async (planId: string) => {
@@ -126,10 +132,6 @@ export default function BillingPage() {
                 return;
             }
 
-            // Real-time check if still eligible for founder
-            const currentAvail = await getPlanAvailability();
-            const isSoldOut = currentAvail[planId as PlanName]?.isSoldOut || false;
-
             const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -137,7 +139,7 @@ export default function BillingPage() {
                     plan: planId,
                     userId: user.id,
                     billing: 'monthly',
-                    isFounder: !isSoldOut
+                    priceId: displayPricing?.stripePriceIds?.[planId]
                 })
             });
             const data = await response.json();
@@ -173,7 +175,7 @@ export default function BillingPage() {
                     transition={{ duration: 0.8 }}
                     className="font-serif text-3xl lg:text-7xl italic text-charcoal leading-none tracking-tight mb-6"
                 >
-                    La tua <span className="gold-text-gradient">Sovranità</span> d'Elite.
+                    La tua <span className="gold-text-gradient">Sovranità</span> d&apos;Elite.
                 </motion.h1>
 
                 <motion.p
@@ -182,7 +184,7 @@ export default function BillingPage() {
                     transition={{ delay: 0.5 }}
                     className="text-charcoal/40 font-serif italic text-base border-x border-gold/10 px-8 lg:px-12"
                 >
-                    "Il lusso non è un'opzione, è uno standard. Solo per i primi Founder."
+                    &ldquo;Il lusso non è un&apos;opzione, è uno standard. Solo per i primi Founder.&rdquo;
                 </motion.p>
             </header>
 
@@ -192,7 +194,10 @@ export default function BillingPage() {
                     const isAnyHovered = hoveredIndex !== null;
                     const planAvail = availability?.[p.id];
                     const isSoldOut = planAvail?.isSoldOut || false;
-                    const displayPrice = isSoldOut ? p.publicPrice : p.price;
+
+                    const publicPrice = getCurrentPublicPricing().prices[p.id as keyof ReturnType<typeof getCurrentPublicPricing>['prices']];
+                    const price = displayPricing?.prices?.[p.id as string] || 0;
+                    const isFounderPrice = displayPricing?.tier === 'founder';
 
                     return (
                         <motion.div
@@ -230,16 +235,16 @@ export default function BillingPage() {
 
                                 <div className="flex flex-col mb-4">
                                     <div className="flex items-baseline gap-1">
-                                        <span className={`text-3xl lg:text-5xl font-serif tracking-tighter ${p.isDark ? 'text-white' : 'text-charcoal'}`}>{displayPrice}</span>
+                                        <span className={`text-3xl lg:text-5xl font-serif tracking-tighter ${p.isDark ? 'text-white' : 'text-charcoal'}`}>€{price}</span>
                                         <span className={`text-[8px] lg:text-[9px] uppercase tracking-widest opacity-40 font-bold ${p.isDark ? 'text-white' : 'text-charcoal'}`}>{p.period}</span>
                                     </div>
-                                    {!isSoldOut && p.id !== 'curioso' && (
+                                    {!isSoldOut && p.id !== 'curioso' && isFounderPrice && (
                                         <div className="flex items-center gap-2 mt-1">
-                                            <span className={`text-[9px] line-through opacity-30 ${p.isDark ? 'text-white' : 'text-charcoal'}`}>{p.publicPrice}</span>
+                                            <span className={`text-[9px] line-through opacity-30 ${p.isDark ? 'text-white' : 'text-charcoal'}`}>€{publicPrice}</span>
                                             <span className="text-[8px] bg-gold/10 text-gold px-1.5 py-0.5 rounded-md font-bold uppercase tracking-tight">FOUNDER</span>
                                         </div>
                                     )}
-                                    {isSoldOut && (
+                                    {(!isFounderPrice || isSoldOut) && p.id !== 'curioso' && (
                                         <div className="mt-1">
                                             <span className="text-[7px] uppercase tracking-widest font-black opacity-30">Prezzo Pubblico Attivo</span>
                                         </div>

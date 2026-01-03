@@ -3,34 +3,35 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { Check, Zap, Sparkles, Crown, Star, ArrowRight, Clock, Gift } from 'lucide-react';
-import { getPlanAvailability, PlanAvailability, PlanName, FOUNDER_LIMITS } from '@/lib/founderAvailability';
+import { getPlanAvailability, PlanAvailability, PlanName } from '@/lib/founderAvailability';
+import { getDisplayPricing, getCurrentPublicPricing, Wave, WAVES, getFoundersSold } from '@/lib/waves';
+import DualOptionOverlay from '@/components/DualOptionOverlay';
 
 // Countdown Timer Component
 const CountdownTimer = () => {
-    const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 59, seconds: 59 });
+    // Calculate time until next Sunday midnight
+    const getTimeUntilSunday = () => {
+        const now = new Date();
+        const daysUntilSunday = (7 - now.getDay()) % 7 || 7;
+        const nextSunday = new Date(now);
+        nextSunday.setDate(now.getDate() + daysUntilSunday);
+        nextSunday.setHours(23, 59, 59, 999);
+
+        const diff = nextSunday.getTime() - now.getTime();
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        return { hours: hours % 48, minutes, seconds }; // Cap at 48h for display
+    };
+
+    const [timeLeft, setTimeLeft] = useState(getTimeUntilSunday);
 
     useEffect(() => {
-        // Calculate time until next Sunday midnight
-        const getTimeUntilSunday = () => {
-            const now = new Date();
-            const daysUntilSunday = (7 - now.getDay()) % 7 || 7;
-            const nextSunday = new Date(now);
-            nextSunday.setDate(now.getDate() + daysUntilSunday);
-            nextSunday.setHours(23, 59, 59, 999);
-
-            const diff = nextSunday.getTime() - now.getTime();
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            return { hours: hours % 48, minutes, seconds }; // Cap at 48h for display
-        };
-
         const timer = setInterval(() => {
             setTimeLeft(getTimeUntilSunday());
         }, 1000);
 
-        setTimeLeft(getTimeUntilSunday());
         return () => clearInterval(timer);
     }, []);
 
@@ -53,20 +54,32 @@ const CountdownTimer = () => {
 
 
 const PricingUltimate = () => {
-    const [mounted, setMounted] = useState(false);
     const [inView, setInView] = useState(false);
     const [hoveredPlan, setHoveredPlan] = useState<number | null>(null);
     const [planAvailability, setPlanAvailability] = useState<Record<PlanName, PlanAvailability> | null>(null);
+    const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
+    const [nextWave, setNextWave] = useState<Wave | null>(null);
     const sectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
-        setMounted(true);
-
         // Fetch real-time plan availability from Supabase
         const fetchAvailability = async () => {
             try {
-                const availability = await getPlanAvailability();
+                const [availability, pricing] = await Promise.all([
+                    getPlanAvailability(),
+                    getDisplayPricing()
+                ]);
                 setPlanAvailability(availability);
+                setDisplayPricing(pricing);
+
+                // Fetch next wave info for waitlist
+                if (pricing.tier === 'founder' && pricing.waveName) {
+                    const sold = await getFoundersSold();
+                    const currentWaveIndex = WAVES.findIndex(w => w.name === pricing.waveName);
+                    if (currentWaveIndex >= 0 && currentWaveIndex < WAVES.length - 1) {
+                        setNextWave(WAVES[currentWaveIndex + 1]);
+                    }
+                }
             } catch (error) {
                 console.error('Failed to fetch plan availability:', error);
             }
@@ -96,19 +109,47 @@ const PricingUltimate = () => {
         return planAvailability[normalizedName]?.isSoldOut || false;
     };
 
-    // Helper function to get remaining spots
-    const getFoundersRemaining = (planName: string): number => {
-        if (!planAvailability) return 0;
-        const normalizedName = planName.toLowerCase() as PlanName;
-        return planAvailability[normalizedName]?.foundersRemaining || 0;
+    // Waitlist handler
+    const handleWaitlistClick = async (planId: string) => {
+        const email = prompt("Inserisci la tua email per entrare in waitlist:");
+        if (!email || !email.includes('@')) {
+            alert("Email non valida");
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/waitlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email,
+                    name: email.split('@')[0],
+                    plan: planId,
+                    current_wave: displayPricing?.waveName || 'genesis',
+                    next_wave: nextWave?.id || 'pioneer'
+                })
+            });
+
+            if (response.ok) {
+                alert("Perfetto! Sei in waitlist. Riceverai un'email quando la prossima wave si apre!");
+            } else {
+                alert("Errore. Riprova o usa il prezzo pubblico.");
+            }
+        } catch (error) {
+            console.error('Waitlist error:', error);
+            alert("Errore. Riprova piu tardi.");
+        }
     };
+
+    const publicRef = getCurrentPublicPricing();
 
     const plans = [
         {
+            id: "curioso",
             name: "Curioso",
             icon: Sparkles,
-            price: "€0",
-            publicPrice: "€0",
+            price: `€${displayPricing?.prices?.curioso || 0}`,
+            publicPrice: `€${publicRef.prices.curioso}`,
             period: "14 giorni",
             story: "Trial gratuito",
             features: ["1 Clone AI", "100 msg", "1 Canale", "Watermark"],
@@ -121,30 +162,32 @@ const PricingUltimate = () => {
             soldOut: false
         },
         {
+            id: "esploratore",
             name: "Esploratore",
             icon: Zap,
-            price: "€39",
-            publicPrice: "€79",
+            price: `€${displayPricing?.prices?.esploratore || 39}`,
+            publicPrice: `€${publicRef.prices.esploratore}`,
             period: "/mese",
             story: "Per testare il potenziale",
             features: ["1 Clone AI", "1K msg/mese", "Analytics Base", "Email Support"],
-            cta: "Esplora",
-            href: "/auth/register?plan=explorer",
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Esplora",
+            href: `/auth/register?plan=explorer&priceId=${displayPricing?.stripePriceIds?.esploratore}`,
             bg: "bg-gradient-to-br from-blue-50 to-indigo-50",
             border: "border-blue-200",
             accent: "text-blue-600",
             btnStyle: "bg-blue-600 text-white hover:bg-blue-700"
         },
         {
+            id: "pioniere",
             name: "Pioniere",
             icon: Zap,
-            price: "€147",
-            publicPrice: "€297",
+            price: `€${displayPricing?.prices?.pioniere || 147}`,
+            publicPrice: `€${publicRef.prices.pioniere}`,
             period: "/mese",
             story: "Il più scelto dai Coach",
             features: ["1 Clone AI", "5K msg/mese", "3 Canali", "A/B Test (20%)"],
-            cta: "Diventa Founder",
-            href: "/founder",
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Inizia Ora",
+            href: displayPricing?.tier === 'founder' ? "/founder" : `/auth/register?plan=pioneer&priceId=${displayPricing?.stripePriceIds?.pioniere}`,
             bg: "bg-gradient-to-br from-gold/5 to-gold/15",
             border: "border-gold/40",
             accent: "text-gold",
@@ -153,30 +196,32 @@ const PricingUltimate = () => {
             glow: true
         },
         {
+            id: "conquistatore",
             name: "Conquistatore",
             icon: Crown,
-            price: "€347",
-            publicPrice: "€697",
+            price: `€${displayPricing?.prices?.conquistatore || 347}`,
+            publicPrice: `€${publicRef.prices.conquistatore}`,
             period: "/mese",
             story: "Per agenzie e power users",
             features: ["3 Cloni AI", "20K msg/mese", "Priority Support", "API Access"],
-            cta: "Diventa Founder",
-            href: "/founder",
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Inizia Ora",
+            href: displayPricing?.tier === 'founder' ? "/founder" : `/auth/register?plan=agency&priceId=${displayPricing?.stripePriceIds?.conquistatore}`,
             bg: "bg-gradient-to-br from-champagne to-white",
             border: "border-gold/20",
             accent: "text-gold",
             btnStyle: "bg-charcoal text-white hover:bg-gold"
         },
         {
+            id: "imperatore",
             name: "Imperatore",
             icon: Crown,
-            price: "€697",
-            publicPrice: "€1.197",
+            price: `€${displayPricing?.prices?.imperatore || 697}`,
+            publicPrice: `€${publicRef.prices.imperatore}`,
             period: "/mese",
             story: "Il trono digitale",
             features: ["10 Cloni AI", "50K msg/mese", "White-label", "Account Manager"],
-            cta: "Diventa Founder",
-            href: "/founder",
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder" : "Inizia Ora",
+            href: displayPricing?.tier === 'founder' ? "/founder" : `/auth/register?plan=imperatore&priceId=${displayPricing?.stripePriceIds?.imperatore}`,
             bg: "gold-gradient",
             border: "border-transparent",
             accent: "text-white/80",
@@ -239,45 +284,18 @@ const PricingUltimate = () => {
                                 <div className="absolute -inset-2 bg-gold/20 rounded-[2.5rem] blur-xl opacity-50"></div>
                             )}
 
-                            {/* SOLD OUT Overlay - Luxury Transparent (AUTOMATIC from Supabase) */}
+                            {/* DUAL OPTION Overlay - Waitlist OR Public (AUTOMATIC from Supabase) */}
                             {isPlanSoldOut(plan.name) && (
-                                <div className="absolute inset-0 z-30 rounded-[2rem] overflow-hidden">
-                                    {/* Semi-transparent Glass Overlay - can see product behind */}
-                                    <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-[2px]"></div>
-
-                                    {/* Elegant Gold Ribbon */}
-                                    <div className="absolute top-6 -right-14 w-52 transform rotate-45">
-                                        <div className="gold-gradient text-white text-center py-2.5 shadow-xl">
-                                            <span className="text-[9px] uppercase tracking-[0.4em] font-black">Esaurito</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Waitlist Content */}
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                                        {/* Show the plan name */}
-                                        <p className="text-[9px] uppercase tracking-[0.4em] text-white/50 font-bold mb-2">{plan.name}</p>
-
-                                        {/* Price crossed out */}
-                                        <div className="relative mb-4">
-                                            <span className="text-3xl font-serif text-white/40 line-through">{plan.price}</span>
-                                            <span className="text-white/30 text-sm ml-1">{plan.period}</span>
-                                        </div>
-
-                                        {/* Central Icon */}
-                                        <div className="w-14 h-14 rounded-full gold-gradient flex items-center justify-center mb-4 shadow-lg">
-                                            <Crown className="w-7 h-7 text-white" />
-                                        </div>
-
-                                        <p className="font-serif text-xl text-white italic mb-1">Lista d'Attesa</p>
-                                        <p className="text-white/50 text-xs max-w-[160px] mb-4">
-                                            Posti Founder esauriti. Prezzo pubblico: <span className="text-gold font-bold">{plan.publicPrice}/m</span>
-                                        </p>
-
-                                        <button className="px-6 py-3 gold-gradient text-white text-[9px] uppercase tracking-[0.3em] font-black rounded-full hover:scale-105 transition-all shadow-lg">
-                                            Entra in Lista →
-                                        </button>
-                                    </div>
-                                </div>
+                                <DualOptionOverlay
+                                    planId={plan.id}
+                                    planName={plan.name}
+                                    currentWaveName={displayPricing?.waveName || 'Genesis'}
+                                    nextWaveName={nextWave?.name}
+                                    nextWavePrice={nextWave?.prices[plan.id as keyof typeof nextWave.prices]}
+                                    publicPrice={parseInt(plan.publicPrice.replace('€', ''))}
+                                    publicPriceId={publicRef.stripePriceIds[plan.id as keyof typeof publicRef.stripePriceIds]}
+                                    onWaitlistClick={() => handleWaitlistClick(plan.id)}
+                                />
                             )}
 
                             {/* Card */}
@@ -313,7 +331,7 @@ const PricingUltimate = () => {
 
                                 {/* Story */}
                                 <p className={`text-sm mb-6 font-serif italic ${plan.isGold ? 'text-white/80' : 'text-charcoal/50'}`}>
-                                    "{plan.story}"
+                                    &ldquo;{plan.story}&rdquo;
                                 </p>
 
                                 {/* Features */}
@@ -346,7 +364,7 @@ const PricingUltimate = () => {
                 {/* FOOTER */}
                 <div className={`mt-20 text-center transition-all duration-1000 delay-500 ${inView ? 'opacity-100' : 'opacity-0'}`}>
                     <p className="text-charcoal/40 text-lg font-serif italic mb-6">
-                        "Il costo di non agire è più alto di qualsiasi abbonamento."
+                        &ldquo;Il costo di non agire è più alto di qualsiasi abbonamento.&rdquo;
                     </p>
                     <div className="flex flex-wrap items-center justify-center gap-8 text-charcoal/40 text-sm">
                         <span className="flex items-center gap-2">

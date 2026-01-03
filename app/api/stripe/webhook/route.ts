@@ -130,6 +130,43 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
             metadata: { plan, tier, isFounder },
         });
 
+        // ========== WAITLIST: Check if new wave just opened ==========
+        if (isFounder && session.metadata?.waitlistToken) {
+            // This purchase was from waitlist - mark token as USED
+            await supabase
+                .from('waitlist')
+                .update({
+                    token_status: 'used',
+                    stripe_customer_id: session.customer as string,
+                    stripe_payment_intent_id: session.payment_intent as string
+                })
+                .eq('checkout_token', session.metadata.waitlistToken);
+
+            console.log(`[Stripe] ✅ Waitlist token marked as used: ${session.metadata.waitlistToken}`);
+        }
+
+        // Check if a new wave just opened (Genesis full → Pioneer opens)
+        if (isFounder) {
+            const { detectWaveOpening } = await import('@/lib/waves');
+            const waveStatus = await detectWaveOpening();
+
+            if (waveStatus?.waveJustOpened) {
+                console.log(`[Stripe] 🚀 NEW WAVE DETECTED: ${waveStatus.prevWave?.name} → ${waveStatus.newWave?.name}`);
+
+                // Trigger waitlist notification (fire-and-forget)
+                fetch(`${process.env.NEXT_PUBLIC_URL}/api/waitlist/notify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prevWave: waveStatus.prevWave?.id,
+                        newWave: waveStatus.newWave?.id,
+                        spots: waveStatus.spotsAvailable
+                    })
+                }).catch(err => console.error('[Stripe] Waitlist notify failed:', err));
+            }
+        }
+        // ============================================================
+
         return;
     }
 
