@@ -158,6 +158,10 @@ export const STRIPE_PRICES = {
         },
     },
     public: {
+        aspirante: {
+            monthly: 'price_ASPIRANTE_49',  // €49 - Same as founder (no discount)
+            yearly: '',
+        },
         esploratore: {
             monthly: 'price_1Sl7lP7141DXdb9vru3cdm3O',  // €79
             yearly: 'price_IMPERIAL_PUBLIC_ESPLORATORE_Y',
