@@ -209,7 +209,7 @@ const PricingUltimate = () => {
             popular: true,
             isHero: true,
             glow: true,
-            scale: 1.1,
+            scale: 1.05,
             badge: { emoji: "🔥", text: "PIÙ SCELTO", color: "red", animate: "pulse" },
             badge2: { emoji: "⭐", text: "SCELTA #1 COACH", color: "gold" }
         },
@@ -287,8 +287,8 @@ const PricingUltimate = () => {
                     <CountdownTimer />
                 </div>
 
-                {/* PRICING GRID - 6 PLANS */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-4">
+                {/* PRICING GRID - 2 ROWS x 3 COLS */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-6 max-w-6xl mx-auto">
                     {plans.map((plan, i) => (
                         <div
                             key={i}
@@ -355,7 +355,15 @@ const PricingUltimate = () => {
                             )}
 
                             {/* Card */}
-                            <div className={`relative h-full rounded-[2rem] p-6 lg:p-8 border-2 transition-all duration-500 overflow-hidden ${plan.bg} ${plan.border} ${hoveredPlan === i ? 'scale-[1.02] shadow-2xl' : 'shadow-lg'} ${isPlanSoldOut(plan.name) ? 'pointer-events-none' : ''}`}>
+                            <div className={`
+                                relative h-[550px] lg:h-[600px] rounded-[2rem] p-6 lg:p-8 border-2 
+                                transition-all duration-500 overflow-hidden flex flex-col
+                                ${plan.bg} ${plan.border} 
+                                ${hoveredPlan === i ? 'shadow-2xl ring-4 ring-offset-2' : 'shadow-lg'} 
+                                ${plan.isHero && hoveredPlan === i ? 'ring-amber-400' : ''}
+                                ${!plan.isHero && hoveredPlan === i ? 'ring-blue-300' : ''}
+                                ${isPlanSoldOut(plan.name) ? 'pointer-events-none' : ''}
+                            `}>
 
                                 {/* Icon */}
                                 <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-xl flex items-center justify-center mb-4 ${plan.isDark ? 'bg-white/10' : plan.isGold ? 'bg-white/20' : 'bg-white/50'}`}>
@@ -412,7 +420,7 @@ const PricingUltimate = () => {
                                 )}
 
                                 {/* Features */}
-                                <div className="space-y-2 lg:space-y-3 mb-6 lg:mb-8">
+                                <div className="space-y-2 lg:space-y-3 mb-6 flex-grow">
                                     {plan.features.map((feature, j) => (
                                         <div key={j} className="flex items-center gap-2">
                                             <div className={`w-4 h-4 lg:w-5 lg:h-5 rounded-full flex items-center justify-center ${plan.isDark ? 'bg-white/10' : plan.isGold ? 'bg-white/20' : 'bg-green-100'}`}>
@@ -425,33 +433,35 @@ const PricingUltimate = () => {
                                     ))}
                                 </div>
 
-                                {/* CTA */}
-                                {(plan as any).isTrial ? (
-                                    <Link
-                                        href="/auth/register"
-                                        className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
-                                    >
-                                        {plan.cta}
-                                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                                    </Link>
-                                ) : (plan as any).isFounder ? (
-                                    <Link
-                                        href="/founder"
-                                        className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
-                                    >
-                                        {plan.cta}
-                                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                                    </Link>
-                                ) : (
-                                    <button
-                                        onClick={() => handleCheckout(plan.id, (plan as any).priceId, 'public')}
-                                        disabled={isCheckoutLoading === plan.id}
-                                        className={`group w-full py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle} disabled:opacity-50 disabled:cursor-not-allowed`}
-                                    >
-                                        {isCheckoutLoading === plan.id ? 'Caricamento...' : plan.cta}
-                                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                                    </button>
-                                )}
+                                {/* CTA - Always at bottom */}
+                                <div className="mt-auto">
+                                    {(plan as any).isTrial ? (
+                                        <Link
+                                            href="/auth/register"
+                                            className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
+                                        >
+                                            {plan.cta}
+                                            <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                        </Link>
+                                    ) : (plan as any).isFounder ? (
+                                        <Link
+                                            href="/founder"
+                                            className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
+                                        >
+                                            {plan.cta}
+                                            <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                        </Link>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleCheckout(plan.id, (plan as any).priceId, 'public')}
+                                            disabled={isCheckoutLoading === plan.id}
+                                            className={`group w-full py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle} disabled:opacity-50 disabled:cursor-not-allowed`}
+                                        >
+                                            {isCheckoutLoading === plan.id ? 'Caricamento...' : plan.cta}
+                                            <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}
