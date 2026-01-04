@@ -27,6 +27,27 @@ const plans = [
         btn: "bg-champagne border border-charcoal/10 text-charcoal hover:bg-charcoal hover:text-white"
     },
     {
+        id: "aspirante",
+        name: "Aspirante",
+        price: "€49",
+        publicPrice: "€49",
+        period: "/mese",
+        description: "Il primo passo nel tuo impero",
+        features: [
+            "1 Clone AI",
+            "500 msg/mese",
+            "1 Canale",
+            "🆕 Template",
+            "🆕 Corso",
+            "🆕 Community"
+        ],
+        icon: Sparkles,
+        color: "text-green-600",
+        bg: "bg-gradient-to-br from-green-50 to-emerald-50",
+        btn: "bg-green-600 text-white hover:bg-green-700",
+        badge: "🌱 Entry-Level"
+    },
+    {
         id: "esploratore",
         name: "Esploratore",
         price: "€39",
