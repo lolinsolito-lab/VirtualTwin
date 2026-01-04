@@ -216,9 +216,19 @@ export default function BillingPage() {
                     const planAvail = availability?.[p.id];
                     const isSoldOut = planAvail?.isSoldOut || false;
 
-                    const publicPrice = getCurrentPublicPricing().prices[p.id as keyof ReturnType<typeof getCurrentPublicPricing>['prices']];
-                    const price = displayPricing?.prices?.[p.id as string] || 0;
-                    const isFounderPrice = displayPricing?.tier === 'founder';
+                    // Aspirante is standalone, always €49 (not in waves)
+                    let price = 0;
+                    let isFounderPrice = false;
+                    let publicPrice = 0;
+
+                    if (p.id === 'aspirante') {
+                        price = 49; // Fixed price
+                        publicPrice = 49; // No discount
+                    } else {
+                        publicPrice = getCurrentPublicPricing().prices[p.id as keyof ReturnType<typeof getCurrentPublicPricing>['prices']];
+                        price = displayPricing?.prices?.[p.id as string] || 0;
+                        isFounderPrice = displayPricing?.tier === 'founder';
+                    }
 
                     return (
                         <motion.div
@@ -316,14 +326,14 @@ export default function BillingPage() {
                                         e.stopPropagation();
                                         handleSubscribe(p.id);
                                     }}
-                                    disabled={loading === p.id}
-                                    className={`w-full py-3.5 rounded-full text-[8px] lg:text-[9px] uppercase tracking-[0.4em] font-black transition-all duration-500 border overflow-hidden ${p.btn}`}
+                                    disabled={loading === p.id || p.id === currentPlan}
+                                    className={`w-full py-3.5 rounded-full text-[8px] lg:text-[9px] uppercase tracking-[0.4em] font-black transition-all duration-500 border overflow-hidden ${p.id === currentPlan ? 'opacity-50 cursor-not-allowed bg-gray-300 text-gray-600' : p.btn}`}
                                 >
                                     {loading === p.id
                                         ? '...'
-                                        : p.id === 'curioso'
-                                            ? 'ACTIVE'
-                                            : isHovered ? (isSoldOut ? 'GET ELITE ACCESS' : `ACTIVATE FOUNDER ${p.name}`) : (isSoldOut ? 'Join the Elite' : `Scegli ${p.name}`)}
+                                        : p.id === currentPlan
+                                            ? '✓ PIANO ATTIVO'
+                                            : isHovered ? (isSoldOut ? 'GET ELITE ACCESS' : `SCEGLI ${p.name.toUpperCase()}`) : (isSoldOut ? 'Join the Elite' : `Scegli ${p.name}`)}
                                 </button>
                             </motion.div>
                         </motion.div>
