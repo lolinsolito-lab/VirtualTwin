@@ -21,8 +21,56 @@ import { getFounderSpotsLeft } from '@/lib/supabaseHelpers';
 export async function POST(req: Request) {
     try {
         const stripe = getStripe();
-        const { plan, tier: requestedTier = 'founder' } = await req.json();
+        const body = await req.json();
+        const { plan, tier: requestedTier = 'founder', priceId: directPriceId, isFounder: directIsFounder } = body;
 
+        // Scenario A: Direct priceId provided (from /start page)
+        if (directPriceId) {
+            console.log(`[Create Checkout] Direct priceId mode: ${directPriceId}, tier: ${requestedTier}`);
+
+            // Validate priceId format
+            if (!directPriceId.startsWith('price_')) {
+                return NextResponse.json(
+                    { error: 'Invalid Stripe price ID format' },
+                    { status: 400 }
+                );
+            }
+
+            // Create session with direct priceId
+            const session = await stripe.checkout.sessions.create({
+                mode: 'subscription',
+                payment_method_types: ['card'],
+                line_items: [{
+                    price: directPriceId,
+                    quantity: 1,
+                }],
+                metadata: {
+                    tier: requestedTier,
+                    source: 'direct_priceId_start_page'
+                },
+                subscription_data: {
+                    trial_period_days: 14,
+                    metadata: {
+                        tier: requestedTier,
+                        isFounder: (directIsFounder || false).toString(),
+                    },
+                },
+                success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/onboarding?success=true&session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/start?canceled=true`,
+                allow_promotion_codes: true,
+                billing_address_collection: 'auto',
+            });
+
+            console.log(`[Create Checkout] ✅ Direct priceId session created: ${session.id}`);
+
+            return NextResponse.json({
+                url: session.url,
+                sessionId: session.id,
+                tier: requestedTier,
+            });
+        }
+
+        // Scenario B: Legacy format with plan lookup (backward compatibility)
         // Validate plan
         if (!plan || !PRICING[plan as PlanTier]) {
             return NextResponse.json(
