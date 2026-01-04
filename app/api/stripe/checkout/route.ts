@@ -93,10 +93,25 @@ export async function POST(req: NextRequest) {
         // Get the appropriate Stripe price ID
         const priceId = getStripePriceId(plan as PlanTier, isFounder, billing);
 
-        if (!priceId || priceId.includes('placeholder')) {
+        // TEMPORARY: Allow Aspirante placeholder during testing
+        // TODO: Replace with real Stripe Price ID after product creation
+        const isAspirantePlaceholder = plan === 'aspirante' && priceId === 'price_ASPIRANTE_49';
+
+        if (!priceId || (priceId.includes('placeholder') && !isAspirantePlaceholder)) {
             return NextResponse.json(
                 { error: 'Stripe prices not configured. Please contact support.' },
                 { status: 500 }
+            );
+        }
+
+        // TEMPORARY: Block Aspirante checkout until Stripe product created
+        if (isAspirantePlaceholder) {
+            return NextResponse.json(
+                {
+                    error: 'Piano Aspirante in configurazione. Crea prima il prodotto Stripe.',
+                    details: 'Vai su Stripe Dashboard → Products → Create Product "VirtualTwin Aspirante" (€49/mese)'
+                },
+                { status: 503 }  // Service unavailable
             );
         }
 
