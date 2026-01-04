@@ -288,7 +288,7 @@ const PricingUltimate = () => {
                 </div>
 
                 {/* PRICING GRID - 2 ROWS x 3 COLS */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-6 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-x-6 lg:gap-y-12 max-w-6xl mx-auto">
                     {plans.map((plan, i) => (
                         <div
                             key={i}
@@ -301,12 +301,12 @@ const PricingUltimate = () => {
                             onMouseEnter={() => setHoveredPlan(i)}
                             onMouseLeave={() => setHoveredPlan(null)}
                         >
-                            {/* Luxury Badge (Top-Right) */}
+                            {/* Luxury Badge (Top-Right) - BIGGER */}
                             {plan.badge && typeof plan.badge === 'object' && (
-                                <div className="absolute -top-3 -right-3 z-30">
+                                <div className="absolute -top-4 -right-4 z-30">
                                     <div className={`
-                                        px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider
-                                        flex items-center gap-1 shadow-lg
+                                        px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider
+                                        flex items-center gap-1.5 shadow-xl
                                         ${plan.badge.color === 'green' && 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'}
                                         ${plan.badge.color === 'red' && 'bg-gradient-to-r from-red-500 to-orange-500 text-white'}
                                         ${plan.badge.color === 'gold' && 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white'}
@@ -314,25 +314,25 @@ const PricingUltimate = () => {
                                         ${plan.badge.animate === 'pulse' && 'animate-pulse'}
                                         ${plan.badge.animate === 'bounce' && 'animate-bounce'}
                                     `}>
-                                        <span>{plan.badge.emoji}</span>
+                                        <span className="text-base">{plan.badge.emoji}</span>
                                         <span>{plan.badge.text}</span>
                                     </div>
                                 </div>
                             )}
 
-                            {/* Secondary Badge (if exists - Pioniere) */}
+                            {/* Secondary Badge (if exists - Pioniere) - BIGGER */}
                             {(plan as any).badge2 && (
-                                <div className="absolute -top-3 -left-3 z-30">
-                                    <div className="px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-gradient-to-r from-yellow-400 to-amber-400 text-amber-900 flex items-center gap-1 shadow-lg">
-                                        <span>{(plan as any).badge2.emoji}</span>
+                                <div className="absolute -top-4 -left-4 z-30">
+                                    <div className="px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-yellow-400 to-amber-400 text-amber-900 flex items-center gap-1.5 shadow-xl">
+                                        <span className="text-base">{(plan as any).badge2.emoji}</span>
                                         <span>{(plan as any).badge2.text}</span>
                                     </div>
                                 </div>
                             )}
 
-                            {/* Hero Glow (Pioniere) */}
+                            {/* Hero Glow (Pioniere) - DRAMATIC */}
                             {plan.isHero && (
-                                <div className="absolute -inset-3 bg-gradient-to-r from-yellow-400/30 via-amber-500/30 to-yellow-400/30 rounded-[2.5rem] blur-2xl opacity-60 animate-pulse"></div>
+                                <div className="absolute -inset-6 bg-gradient-to-r from-yellow-400/40 via-amber-500/50 to-yellow-400/40 rounded-[3rem] blur-3xl opacity-70 animate-pulse"></div>
                             )}
 
                             {/* Standard Glow for others */}
@@ -354,20 +354,20 @@ const PricingUltimate = () => {
                                 />
                             )}
 
-                            {/* Card */}
+                            {/* Card - THINNER BORDER + STRONGER SHADOW */}
                             <div className={`
-                                relative h-[550px] lg:h-[600px] rounded-[2rem] p-6 lg:p-8 border-2 
+                                relative h-[550px] lg:h-[600px] rounded-[2rem] p-6 lg:p-8 border 
                                 transition-all duration-500 overflow-hidden flex flex-col
                                 ${plan.bg} ${plan.border} 
-                                ${hoveredPlan === i ? 'shadow-2xl ring-4 ring-offset-2' : 'shadow-lg'} 
+                                ${hoveredPlan === i ? 'shadow-2xl ring-2 ring-offset-2' : 'shadow-xl'} 
                                 ${plan.isHero && hoveredPlan === i ? 'ring-amber-400' : ''}
                                 ${!plan.isHero && hoveredPlan === i ? 'ring-blue-300' : ''}
                                 ${isPlanSoldOut(plan.name) ? 'pointer-events-none' : ''}
                             `}>
 
-                                {/* Icon */}
+                                {/* Icon - COLORED */}
                                 <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-xl flex items-center justify-center mb-4 ${plan.isDark ? 'bg-white/10' : plan.isGold ? 'bg-white/20' : 'bg-white/50'}`}>
-                                    <plan.icon className={`w-6 h-6 lg:w-7 lg:h-7 ${plan.isDark || plan.isGold ? 'text-white' : plan.accent}`} />
+                                    <plan.icon className={`w-6 h-6 lg:w-7 lg:h-7 ${plan.isDark || plan.isGold ? 'text-white' : plan.id === 'aspirante' ? 'text-green-600' : plan.id === 'esploratore' ? 'text-blue-600' : plan.accent}`} />
                                 </div>
 
                                 {/* Plan Name */}
@@ -398,9 +398,9 @@ const PricingUltimate = () => {
                                     {plan.story}
                                 </p>
 
-                                {/* Subtitle (New!) */}
+                                {/* Subtitle (New!) - TRUNCATED WITH HOVER EXPAND */}
                                 {(plan as any).subtitle && (
-                                    <p className={`text-xs mb-4 leading-relaxed ${plan.isDark ? 'text-white/70' : 'text-charcoal/60'}`}>
+                                    <p className={`text-xs mb-4 leading-relaxed line-clamp-2 hover:line-clamp-none transition-all ${plan.isDark ? 'text-white/70' : 'text-charcoal/60'}`}>
                                         {(plan as any).subtitle}
                                     </p>
                                 )}
