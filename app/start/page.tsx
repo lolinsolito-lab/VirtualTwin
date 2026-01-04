@@ -188,7 +188,9 @@ export default function StartPage() {
         {
             id: 'imperatore',
             name: 'Imperatore',
-            subtitle: 'Il trono digitale',
+            subtitle: 'Il Trono Digitale. Solo per i Migliori.',
+            descLong: 'Accesso esclusivo, priorità assoluta, dominio totale. Limitato a 10 clienti/anno.',
+            scarcity: '🎖️ Solo 7 posti rimasti su 10 totali',
             price: currentPricing.prices.imperatore,
             priceId: currentPricing.stripePriceIds.imperatore,
             nextPrice: nextPricing?.prices.imperatore,
@@ -200,13 +202,19 @@ export default function StartPage() {
                 'AI GPT-4 Priority',
                 'Full white-label',
                 'API Priority',
-                'Account Manager',
+                '👑 Success Manager',
                 'Custom integrations'
             ],
             icon: Crown,
-            gradient: 'from-violet-50 via-purple-50 to-fuchsia-50',
-            accent: 'text-purple-700',
+            gradient: 'from-yellow-400 via-amber-500 to-yellow-600',
+            border: 'border-yellow-600',
+            accent: 'text-yellow-100',
+            textColor: 'text-white',
+            btnStyle: 'bg-white text-amber-700 hover:bg-amber-50 shadow-2xl font-bold border-2 border-amber-900',
+            isGold: true,
+            isDark: true,
             popular: false,
+            badge: { emoji: '👑', text: 'ELITE', color: 'gold', animate: 'bounce' },
             isEnterprise: true
         }
     ];
