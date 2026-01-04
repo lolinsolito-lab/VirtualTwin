@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
@@ -24,6 +24,29 @@ import { getCurrentPublicPricing, getNextPublicPricing, getDaysUntilPriceIncreas
 export default function StartPage() {
     const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Reset loading state when user returns from Stripe (browser back button)
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                setIsLoading(false);
+                setSelectedPlan(null);
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        // Also reset on page focus
+        window.addEventListener('focus', () => {
+            setIsLoading(false);
+            setSelectedPlan(null);
+        });
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', () => { });
+        };
+    }, []);
 
     const currentPricing = getCurrentPublicPricing();
     const nextPricing = getNextPublicPricing();
