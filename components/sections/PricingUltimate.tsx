@@ -7,6 +7,7 @@ import { getPlanAvailability, PlanAvailability, PlanName } from '@/lib/founderAv
 import { getDisplayPricing, getCurrentPublicPricing, Wave, WAVES, getFoundersSold, isPreLaunch, getDaysUntilLaunch } from '@/lib/waves';
 import DualOptionOverlay from '@/components/DualOptionOverlay';
 import CountdownTimer from '@/components/CountdownTimer';
+import { isAspiranteVisible } from '@/lib/features';
 
 
 const PricingUltimate = () => {
@@ -144,6 +145,25 @@ const PricingUltimate = () => {
             btnStyle: "bg-champagne border border-charcoal/10 text-charcoal hover:bg-charcoal hover:text-white",
             soldOut: false
         },
+        ...(isAspiranteVisible() ? [{
+            id: "aspirante",
+            name: "Aspirante",
+            icon: Sparkles,
+            price: "€49",
+            publicPrice: "€49",
+            period: "/mese",
+            story: "Il primo passo nel tuo impero",
+            features: ["1 Clone AI", "500 msg/mese", "1 Canale", "🆕 Template 15 settori", "🆕 Corso 6 video", "🆕 Community"],
+            cta: "Inizia da Aspirante",
+            priceId: 'price_ASPIRANTE_49',  // Placeholder
+            isFounder: false,
+            bg: "bg-gradient-to-br from-green-50 to-emerald-50",
+            border: "border-green-200",
+            accent: "text-green-600",
+            btnStyle: "bg-green-600 text-white hover:bg-green-700",
+            soldOut: false,
+            badge: "🌱 Entry-Level"
+        }] : []),
         {
             id: "esploratore",
             name: "Esploratore",
