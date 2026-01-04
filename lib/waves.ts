@@ -64,8 +64,8 @@ export const WAVES: Wave[] = [
         name: 'Genesis',
         nameFull: 'Genesis Founder Wave',
         spots: 20,
-        startDate: '2026-01-01',
-        endDate: '2026-03-31',
+        startDate: '2026-02-01',
+        endDate: '2026-04-30',
         prices: {
             curioso: 0,
             esploratore: 39,
@@ -87,8 +87,8 @@ export const WAVES: Wave[] = [
         name: 'Pioneer',
         nameFull: 'Pioneer Founder Wave',
         spots: 20,
-        startDate: '2026-04-01',
-        endDate: '2026-06-30',
+        startDate: '2026-05-01',
+        endDate: '2026-07-31',
         prices: {
             curioso: 0,
             esploratore: 59,
@@ -110,8 +110,8 @@ export const WAVES: Wave[] = [
         name: 'Elite',
         nameFull: 'Elite Founder Wave',
         spots: 20,
-        startDate: '2026-07-01',
-        endDate: '2026-09-30',
+        startDate: '2026-08-01',
+        endDate: '2026-10-31',
         prices: {
             curioso: 0,
             esploratore: 79,
@@ -209,6 +209,54 @@ function getCurrentDate(): Date {
 }
 
 /**
+ * Check if we are in pre-launch period (before Feb 1st 2026)
+ */
+export function isPreLaunch(): boolean {
+    const launchDate = new Date('2026-02-01T00:00:00');
+    const now = getCurrentDate();
+    return now < launchDate;
+}
+
+/**
+ * Get days remaining until launch
+ */
+export function getDaysUntilLaunch(): number {
+    const launchDate = new Date('2026-02-01T00:00:00');
+    const now = getCurrentDate();
+
+    if (now >= launchDate) return 0;
+
+    const diff = launchDate.getTime() - now.getTime();
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
+/**
+ * Get precise countdown until launch (days:hours:min:sec)
+ */
+export function getTimeUntilLaunch(): {
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+} {
+    const launchDate = new Date('2026-02-01T00:00:00');
+    const now = getCurrentDate();
+
+    if (now >= launchDate) {
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+
+    const diff = launchDate.getTime() - now.getTime();
+
+    return {
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((diff % (1000 * 60)) / 1000)
+    };
+}
+
+/**
  * Get number of founders sold (from Supabase)
  * This should be called on the server side
  */
@@ -225,22 +273,39 @@ export async function getFoundersSold(): Promise<number> {
 }
 
 /**
- * Get current active wave based on spots sold
+ * Get current active wave based on spots sold AND time
+ * Hybrid logic: Wave is ACTIVE only if:
+ * - Spots available (not full)
+ * - Within time window (started AND not expired)
  */
 export async function getCurrentWave(): Promise<Wave | null> {
     const foundersSold = await getFoundersSold();
+    const now = getCurrentDate();
 
     let cumulativeSpots = 0;
 
     for (const wave of WAVES) {
         cumulativeSpots += wave.spots;
 
-        if (foundersSold < cumulativeSpots) {
-            return wave;
+        // Check 1: Spots full?
+        const spotsFull = foundersSold >= cumulativeSpots;
+
+        // Check 2: Time expired?
+        const timeExpired = now > new Date(wave.endDate);
+
+        // Check 3: Not started yet?
+        const notStarted = now < new Date(wave.startDate);
+
+        // Wave is CLOSED if ANY condition is true
+        if (spotsFull || timeExpired || notStarted) {
+            continue; // Try next wave
         }
+
+        // This wave is ACTIVE
+        return wave;
     }
 
-    // All waves sold out
+    // All waves closed
     return null;
 }
 
