@@ -136,10 +136,6 @@ export const PLAN_LIMITS = {
 
 export const STRIPE_PRICES = {
     founder: {
-        aspirante: {
-            monthly: 'price_ASPIRANTE_49',  // €49 - TO BE CREATED
-            yearly: '',  // No yearly
-        },
         esploratore: {
             monthly: 'price_1Sl7lM7141DXdb9veGYbHSWE',  // €39
             yearly: 'price_IMPERIAL_FOUNDER_ESPLORATORE_Y',
@@ -214,12 +210,6 @@ export const PLAN_DISPLAY = {
         name: 'Curioso',
         tagline: 'Per testare il potere dell\'AI',
         icon: '🔍',
-        popular: false,
-    },
-    aspirante: {
-        name: 'Aspirante',
-        tagline: 'Il primo passo nel tuo impero',
-        icon: '🌱',
         popular: false,
     },
     esploratore: {
