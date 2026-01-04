@@ -421,6 +421,29 @@ export const PRICING: Record<PlanTier, LegacyPlanPricing> = {
             priority: 'standard'
         }
     },
+    aspirante: {
+        name: 'aspirante',
+        displayName: 'Aspirante',
+        tagline: 'Il primo passo nel tuo impero',
+        founderPrice: 49,
+        founderYearlyPrice: 490,
+        founderSpots: 0,
+        founderDiscount: 'Entry-level',
+        publicPrice: 49,
+        publicYearlyPrice: 490,
+        stripe: {
+            founder: { monthly: 'price_ASPIRANTE_49', yearly: '' },
+            public: { monthly: 'price_ASPIRANTE_49', yearly: '' },
+            productId: 'prod_aspirante'
+        },
+        features: ['1 Clone AI', '500 msg/mese', '1 Canale', '🆕 Template 15 settori', '🆕 Corso 6 video', '🆕 Community', 'Email Support'],
+        limits: PLAN_LIMITS.aspirante,
+        ai: {
+            provider: PLAN_LIMITS.aspirante.aiProvider,
+            maxTokensPerMessage: PLAN_LIMITS.aspirante.maxTokensPerMessage,
+            priority: 'standard'
+        }
+    },
     esploratore: {
         name: 'esploratore',
         displayName: 'Esploratore',
