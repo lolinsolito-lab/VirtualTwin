@@ -12,9 +12,55 @@ import { PRICING, getStripePriceId, PlanTier } from '@/lib/pricing';
 export async function POST(req: NextRequest) {
     try {
         const stripe = getStripe();
-        const { plan, billing = 'monthly', userId, isFounder = false } = await req.json();
+        const body = await req.json();
 
-        // Validate plan
+        // Support both old format {plan, billing, userId} and new format {priceId, tier}
+        const { plan, billing = 'monthly', userId, isFounder = false, priceId: directPriceId, tier } = body;
+
+        // Scenario A: Direct priceId provided (new format from homepage/start)
+        if (directPriceId) {
+            console.log(`[Checkout] Direct priceId mode: ${directPriceId}, tier: ${tier || 'public'}`);
+
+            // Validate priceId format
+            if (!directPriceId.startsWith('price_')) {
+                return NextResponse.json(
+                    { error: 'Invalid Stripe price ID format' },
+                    { status: 400 }
+                );
+            }
+
+            // Create session with direct priceId
+            const session = await stripe.checkout.sessions.create({
+                mode: 'subscription',
+                payment_method_types: ['card'],
+                line_items: [{
+                    price: directPriceId,
+                    quantity: 1,
+                }],
+                metadata: {
+                    tier: tier || 'public',
+                    source: 'direct_priceId_checkout'
+                },
+                subscription_data: {
+                    trial_period_days: 14,
+                    metadata: {
+                        tier: tier || 'public',
+                        isFounder: (tier === 'founder').toString(),
+                    },
+                },
+                success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/onboarding?success=true&session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/?canceled=true`,
+                allow_promotion_codes: true,
+                billing_address_collection: 'auto',
+            });
+
+            return NextResponse.json({
+                sessionId: session.id,
+                url: session.url,
+            });
+        }
+
+        // Scenario B: Legacy format with plan name (old format for backward compatibility)
         if (!plan || !PRICING[plan as PlanTier]) {
             return NextResponse.json(
                 { error: 'Invalid plan selected' },
