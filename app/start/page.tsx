@@ -54,6 +54,51 @@ export default function StartPage() {
 
     const plans = [
         {
+            id: 'curioso',
+            name: 'Curioso',
+            subtitle: 'Per testare il potere dell\'AI',
+            price: 0,
+            priceId: '',
+            nextPrice: 0,
+            messages: '100',
+            highlight: 'Trial gratuito',
+            features: [
+                '14 giorni trial',
+                '1 Clone AI',
+                '100 msg/mese',
+                '1 Canale',
+                'Watermark'
+            ],
+            icon: Sparkles,
+            gradient: 'from-gray-50 to-gray-100',
+            accent: 'text-gray-600',
+            popular: false,
+            isFree: true
+        },
+        {
+            id: 'aspirante',
+            name: 'Aspirante',
+            subtitle: 'Il primo passo nel tuo impero',
+            price: 49,
+            priceId: 'price_ASPIRANTE_49',
+            nextPrice: 49,
+            messages: '500',
+            highlight: 'Entry-level perfetto',
+            features: [
+                '1 Clone AI',
+                '500 msg/mese',
+                '1 Canale WhatsApp',
+                '🆕 Template 15 settori',
+                '🆕 Corso 6 video',
+                '🆕 Community'
+            ],
+            icon: Star,
+            gradient: 'from-green-50 to-emerald-50',
+            accent: 'text-green-600',
+            popular: false,
+            badge: '🌱 Entry-Level'
+        },
+        {
             id: 'esploratore',
             name: 'Esploratore',
             subtitle: 'Per chi inizia',
