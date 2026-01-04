@@ -4,53 +4,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { Check, Zap, Sparkles, Crown, Star, ArrowRight, Clock, Gift } from 'lucide-react';
 import { getPlanAvailability, PlanAvailability, PlanName } from '@/lib/founderAvailability';
-import { getDisplayPricing, getCurrentPublicPricing, Wave, WAVES, getFoundersSold } from '@/lib/waves';
+import { getDisplayPricing, getCurrentPublicPricing, Wave, WAVES, getFoundersSold, isPreLaunch, getDaysUntilLaunch } from '@/lib/waves';
 import DualOptionOverlay from '@/components/DualOptionOverlay';
-
-// Countdown Timer Component
-const CountdownTimer = () => {
-    // Calculate time until next Sunday midnight
-    const getTimeUntilSunday = () => {
-        const now = new Date();
-        const daysUntilSunday = (7 - now.getDay()) % 7 || 7;
-        const nextSunday = new Date(now);
-        nextSunday.setDate(now.getDate() + daysUntilSunday);
-        nextSunday.setHours(23, 59, 59, 999);
-
-        const diff = nextSunday.getTime() - now.getTime();
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        return { hours: hours % 48, minutes, seconds }; // Cap at 48h for display
-    };
-
-    const [timeLeft, setTimeLeft] = useState(getTimeUntilSunday);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft(getTimeUntilSunday());
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
-
-    return (
-        <div className="inline-flex flex-col sm:flex-row items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl px-6 py-4 border border-green-200">
-            <div className="flex items-center gap-2 text-green-700">
-                <Gift className="w-5 h-5" />
-                <span className="font-bold text-sm">BONUS: 14 giorni trial</span>
-                <span className="text-green-600/70 text-sm">(invece di 7)</span>
-            </div>
-            <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm">
-                <Clock className="w-4 h-4 text-red-500" />
-                <span className="text-red-600 font-mono font-bold text-sm">
-                    {String(timeLeft.hours).padStart(2, '0')}h {String(timeLeft.minutes).padStart(2, '0')}m {String(timeLeft.seconds).padStart(2, '0')}s
-                </span>
-            </div>
-        </div>
-    );
-};
+import CountdownTimer from '@/components/CountdownTimer';
 
 
 const PricingUltimate = () => {
@@ -60,6 +16,8 @@ const PricingUltimate = () => {
     const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
     const [isCheckoutLoading, setIsCheckoutLoading] = useState<string | null>(null);
     const [nextWave, setNextWave] = useState<Wave | null>(null);
+    const [prelaunch, setPrelaunch] = useState(isPreLaunch());
+    const [daysToLaunch, setDaysToLaunch] = useState(getDaysUntilLaunch());
     const sectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
