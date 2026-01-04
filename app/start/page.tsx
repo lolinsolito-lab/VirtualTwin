@@ -80,7 +80,7 @@ export default function StartPage() {
             name: 'Aspirante',
             subtitle: 'Il primo passo nel tuo impero',
             price: 49,
-            priceId: 'price_ASPIRANTE_49',
+            priceId: 'price_1SlyfV7141DXdb9v9WiLhhS0',
             nextPrice: 49,
             messages: '500',
             highlight: 'Entry-level perfetto',

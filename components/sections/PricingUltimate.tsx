@@ -155,7 +155,7 @@ const PricingUltimate = () => {
             story: "Il primo passo nel tuo impero",
             features: ["1 Clone AI", "500 msg/mese", "1 Canale", "🆕 Template 15 settori", "🆕 Corso 6 video", "🆕 Community"],
             cta: "Inizia da Aspirante",
-            priceId: 'price_ASPIRANTE_49',  // Placeholder
+            priceId: 'price_1SlyfV7141DXdb9v9WiLhhS0',  // Real Stripe ID
             isFounder: false,
             bg: "bg-gradient-to-br from-green-50 to-emerald-50",
             border: "border-green-200",

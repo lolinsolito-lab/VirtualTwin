@@ -137,7 +137,7 @@ export const PLAN_LIMITS = {
 export const STRIPE_PRICES = {
     founder: {
         aspirante: {
-            monthly: 'price_ASPIRANTE_49',  // €49 - TO BE CREATED
+            monthly: 'price_1SlyfV7141DXdb9v9WiLhhS0',  // €49 - Aspirante
             yearly: '',  // No yearly
         },
         esploratore: {
@@ -159,7 +159,7 @@ export const STRIPE_PRICES = {
     },
     public: {
         aspirante: {
-            monthly: 'price_ASPIRANTE_49',  // €49 - Same as founder (no discount)
+            monthly: 'price_1SlyfV7141DXdb9v9WiLhhS0',  // €49 - Same as founder
             yearly: '',
         },
         esploratore: {
@@ -436,8 +436,8 @@ export const PRICING: Record<PlanTier, LegacyPlanPricing> = {
         publicPrice: 49,
         publicYearlyPrice: 490,
         stripe: {
-            founder: { monthly: 'price_ASPIRANTE_49', yearly: '' },
-            public: { monthly: 'price_ASPIRANTE_49', yearly: '' },
+            founder: { monthly: 'price_1SlyfV7141DXdb9v9WiLhhS0', yearly: '' },
+            public: { monthly: 'price_1SlyfV7141DXdb9v9WiLhhS0', yearly: '' },
             productId: 'prod_aspirante'
         },
         features: ['1 Clone AI', '500 msg/mese', '1 Canale', '🆕 Template 15 settori', '🆕 Corso 6 video', '🆕 Community', 'Email Support'],
