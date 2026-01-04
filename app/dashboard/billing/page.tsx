@@ -8,24 +8,7 @@ import { getPlanAvailability, PlanAvailability } from '@/lib/founderAvailability
 import { getDisplayPricing, getCurrentPublicPricing } from '@/lib/waves';
 
 const plans = [
-    {
-        id: "curioso",
-        name: "Curioso",
-        price: "€0",
-        publicPrice: "€0",
-        period: "14 giorni",
-        description: "Trial gratuito",
-        features: [
-            "1 Clone AI",
-            "100 msg",
-            "1 Canale",
-            "Watermark"
-        ],
-        icon: Sparkles,
-        color: "text-charcoal/60",
-        bg: "bg-white",
-        btn: "bg-champagne border border-charcoal/10 text-charcoal hover:bg-charcoal hover:text-white"
-    },
+    // Curioso removed - not an upgrade option (it's free trial)
     {
         id: "aspirante",
         name: "Aspirante",
@@ -130,15 +113,32 @@ export default function BillingPage() {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [availability, setAvailability] = useState<Record<string, PlanAvailability> | null>(null);
     const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
+    const [currentPlan, setCurrentPlan] = useState<string>('curioso'); // User's current plan
 
     useEffect(() => {
         async function fetchData() {
+            const { data: { user } } = await supabase.auth.getUser();
+
             const [availData, pricingData] = await Promise.all([
                 getPlanAvailability(),
                 getDisplayPricing()
             ]);
+
             setAvailability(availData);
             setDisplayPricing(pricingData);
+
+            // Fetch user's current plan
+            if (user) {
+                const { data: profileData } = await supabase
+                    .from('profiles')
+                    .select('plan_tier')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profileData) {
+                    setCurrentPlan(profileData.plan_tier || 'curioso');
+                }
+            }
         }
         fetchData();
     }, []);
@@ -236,6 +236,11 @@ export default function BillingPage() {
                             {isSoldOut ? (
                                 <div className="absolute top-5 right-5 flex items-center gap-2 bg-charcoal/80 px-2.5 py-1 rounded-full border border-white/10 z-20">
                                     <span className="text-[6px] text-white font-black uppercase tracking-widest leading-none">SOLD OUT</span>
+                                </div>
+                            ) : p.id === currentPlan ? (
+                                <div className="absolute top-5 right-5 flex items-center gap-2 bg-green-600/90 px-2.5 py-1 rounded-full border border-white/20 z-20">
+                                    <Check className="w-2 h-2 text-white" />
+                                    <span className="text-[6px] text-white font-black uppercase tracking-widest leading-none">PIANO ATTUALE</span>
                                 </div>
                             ) : p.popular && (
                                 <div className="absolute top-5 right-5 flex items-center gap-2 bg-gold/10 px-2.5 py-1 rounded-full border border-gold/20 z-20">
