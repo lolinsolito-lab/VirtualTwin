@@ -56,12 +56,12 @@ export default function StartPage() {
         {
             id: 'curioso',
             name: 'Curioso',
-            subtitle: 'Per testare il potere dell\'AI',
+            subtitle: 'Esplora il Potere dell\'AI',
             price: 0,
             priceId: '',
             nextPrice: 0,
             messages: '100',
-            highlight: 'Trial gratuito',
+            highlight: '14 giorni per testare gratuitamente. Zero rischi.',
             features: [
                 '14 giorni trial',
                 '1 Clone AI',
@@ -71,14 +71,17 @@ export default function StartPage() {
             ],
             icon: Sparkles,
             gradient: 'from-gray-50 to-gray-100',
+            border: 'border-gray-200',
             accent: 'text-gray-600',
+            btnStyle: 'bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-200',
             popular: false,
             isFree: true
         },
         {
             id: 'aspirante',
             name: 'Aspirante',
-            subtitle: 'Il primo passo nel tuo impero',
+            subtitle: 'Il Primo Passo nel Tuo Impero',
+            descLong: 'Entry-level perfetto per chi vuole provare senza impegno. Template, corso e community inclusi.',
             price: 49,
             priceId: 'price_1SlyfV7141DXdb9v9WiLhhS0',
             nextPrice: 49,
@@ -93,15 +96,18 @@ export default function StartPage() {
                 '🆕 Community'
             ],
             icon: Star,
-            gradient: 'from-green-50 to-emerald-50',
-            accent: 'text-green-600',
+            gradient: 'from-emerald-50 via-green-50 to-teal-50',
+            border: 'border-green-400',
+            accent: 'text-green-700',
+            btnStyle: 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-md',
             popular: false,
-            badge: '🌱 Entry-Level'
+            badge: { emoji: '🌱', text: 'ENTRY-LEVEL', color: 'green' }
         },
         {
             id: 'esploratore',
             name: 'Esploratore',
-            subtitle: 'Per chi inizia',
+            subtitle: 'Per Chi Inizia a Scalare',
+            descLong: 'Strumenti professionali per testare il potenziale della tua AI.',
             price: currentPricing.prices.esploratore,
             priceId: currentPricing.stripePriceIds.esploratore,
             nextPrice: nextPricing?.prices.esploratore,
@@ -112,17 +118,22 @@ export default function StartPage() {
                 '1 canale WhatsApp',
                 'AI Gemini Flash',
                 'Dashboard analytics',
-                'Email support'
+                'Email support <48h'
             ],
             icon: Zap,
-            gradient: 'from-slate-100 to-slate-200',
-            accent: 'text-slate-600',
+            gradient: 'from-blue-50 via-indigo-50 to-blue-100',
+            border: 'border-blue-400',
+            accent: 'text-blue-700',
+            btnStyle: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-md',
             popular: false
         },
         {
             id: 'pioniere',
             name: 'Pioniere',
-            subtitle: 'Più scelto dai coach',
+            subtitle: 'La Scelta del 73% dei Coach di Successo',
+            descLong: 'Il perfetto equilibrio tra potenza e prezzo. Provato da centinaia di professionisti che hanno trasformato il loro business.',
+            socialProof: '⭐ 4.9/5 da 200+ Coach',
+            scarcity: '⚡ Ultimi 3 posti Wave Genesis',
             price: currentPricing.prices.pioniere,
             priceId: currentPricing.stripePriceIds.pioniere,
             nextPrice: nextPricing?.prices.pioniere,
@@ -137,14 +148,20 @@ export default function StartPage() {
                 'Founder Academy'
             ],
             icon: TrendingUp,
-            gradient: 'from-amber-50 via-yellow-50 to-orange-50',
-            accent: 'text-amber-700',
-            popular: true
+            gradient: 'from-amber-50 via-yellow-100 to-amber-100',
+            border: 'border-amber-400',
+            accent: 'text-amber-900',
+            btnStyle: 'bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 text-white hover:from-yellow-600 hover:via-amber-600 hover:to-yellow-700 shadow-xl font-bold',
+            popular: true,
+            isHero: true,
+            badge: { emoji: '🔥', text: 'PIÙ SCELTO', color: 'red', animate: 'pulse' },
+            badge2: { emoji: '⭐', text: 'SCELTA #1 COACH', color: 'gold' }
         },
         {
             id: 'conquistatore',
             name: 'Conquistatore',
-            subtitle: 'Per agenzie & power users',
+            subtitle: 'Per Chi Punta all\'Eccellenza',
+            descLong: 'Agenzie e power user scelgono Conquistatore per dominare il mercato.',
             price: currentPricing.prices.conquistatore,
             priceId: currentPricing.stripePriceIds.conquistatore,
             nextPrice: nextPricing?.prices.conquistatore,
@@ -159,9 +176,14 @@ export default function StartPage() {
                 'Success manager'
             ],
             icon: Crown,
-            gradient: 'from-emerald-50 to-teal-50',
-            accent: 'text-emerald-700',
-            popular: false
+            gradient: 'from-gray-900 via-purple-900 to-violet-900',
+            border: 'border-purple-500',
+            accent: 'text-purple-300',
+            textColor: 'text-white',
+            btnStyle: 'bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700 shadow-xl',
+            isDark: true,
+            popular: false,
+            badge: { emoji: '💎', text: 'MIGLIOR VALORE', color: 'purple', animate: 'shimmer' }
         },
         {
             id: 'imperatore',
