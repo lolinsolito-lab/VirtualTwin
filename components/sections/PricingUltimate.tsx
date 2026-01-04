@@ -209,7 +209,7 @@ const PricingUltimate = () => {
             popular: true,
             isHero: true,
             glow: true,
-            scale: 1.05,
+            scale: 1.0,  // Uniform with all cards
             badge: { emoji: "🔥", text: "PIÙ SCELTO", color: "red", animate: "pulse" },
             badge2: { emoji: "⭐", text: "SCELTA #1 COACH", color: "gold" }
         },
@@ -232,7 +232,7 @@ const PricingUltimate = () => {
             textColor: "text-white",
             btnStyle: "bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700 shadow-xl",
             badge: { emoji: "💎", text: "MIGLIOR VALORE", color: "purple", animate: "shimmer" },
-            scale: 1.05,
+            scale: 1.0,  // Uniform with all cards
             isDark: true
         },
         {
@@ -256,7 +256,7 @@ const PricingUltimate = () => {
             btnStyle: "bg-white text-amber-700 hover:bg-amber-50 shadow-2xl font-bold border-2 border-amber-900",
             isGold: true,
             isDark: true,
-            scale: 1.08,
+            scale: 1.0,  // Uniform with all cards
             badge: { emoji: "👑", text: "ELITE", color: "gold", animate: "bounce" }
         }
     ];
