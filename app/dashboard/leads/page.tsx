@@ -122,17 +122,22 @@ export default function LeadsPage() {
                 </div>
             ) : hasData ? (
                 <>
-                    {/* Stats Bar */}
-                    <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10 transition-all duration-1000 delay-200 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                    {/* Stats Bar - Imperial Glass Shields */}
+                    <div className={`grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12 transition-all duration-1000 delay-200 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                         {[
-                            { label: 'Totale Lead', value: statsCounts.total },
-                            { label: 'In Qualifica', value: statsCounts.qualification },
-                            { label: 'Negoziazione', value: statsCounts.negotiation },
-                            { label: 'Chiusi', value: statsCounts.closed },
+                            { label: 'Totale Lead', value: statsCounts.total, icon: Users },
+                            { label: 'In Qualifica', value: statsCounts.qualification, icon: Sparkles },
+                            { label: 'Negoziazione', value: statsCounts.negotiation, icon: ArrowRight },
+                            { label: 'Chiusi', value: statsCounts.closed, icon: ChevronRight },
                         ].map((stat, i) => (
-                            <div key={i} className="bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-charcoal/5">
-                                <p className="text-charcoal/40 text-[9px] uppercase tracking-wider font-bold">{stat.label}</p>
-                                <p className="text-3xl font-serif text-charcoal">{stat.value}</p>
+                            <div key={i} className="bg-white/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-white/60 relative group overflow-hidden shadow-luxury-sm">
+                                <div className="absolute top-0 right-0 w-24 h-24 bg-gold/[0.03] blur-2xl group-hover:bg-gold/[0.08] transition-colors" />
+                                <div className="flex justify-between items-start mb-4">
+                                    <p className="text-charcoal/40 text-[9px] uppercase tracking-[0.3em] font-black">{stat.label}</p>
+                                    <stat.icon className="w-4 h-4 text-gold/30" />
+                                </div>
+                                <p className="text-5xl font-serif italic text-charcoal group-hover:scale-110 transition-transform duration-700 origin-left">{stat.value}</p>
+                                <div className="w-8 h-[1px] bg-gold/30 mt-4 group-hover:w-16 transition-all duration-700" />
                             </div>
                         ))}
                     </div>
@@ -194,31 +199,36 @@ export default function LeadsPage() {
                     )}
                 </>
             ) : (
-                /* Empty State */
-                <div className={`flex flex-col items-center justify-center py-24 text-center transition-all duration-1000 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                    <div className="w-28 h-28 bg-gold/10 rounded-full mb-10 flex items-center justify-center">
-                        <Users className="w-14 h-14 text-gold" />
+                /* Empty State - Aspirational Luxe */
+                <div className={`flex flex-col items-center justify-center py-32 text-center transition-all duration-1000 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                    <div className="relative mb-12">
+                        <div className="w-32 h-32 bg-gold/10 rounded-full flex items-center justify-center animate-glow-pulse">
+                            <Users className="w-16 h-16 text-gold" />
+                        </div>
+                        <div className="absolute -top-4 -right-4 w-12 h-12 bg-charcoal rounded-full flex items-center justify-center border-4 border-champagne shadow-luxury">
+                            <Sparkles className="w-5 h-5 text-gold" />
+                        </div>
                     </div>
-                    <h2 className="font-serif text-4xl italic text-charcoal mb-4">
-                        Nessun Lead <span className="gold-text-gradient">Ancora.</span>
+                    <h2 className="font-serif text-4xl lg:text-5xl italic text-charcoal mb-6 tracking-tight leading-tight">
+                        Il Tuo Impero <br /> <span className="gold-text-gradient">Attende Espansione.</span>
                     </h2>
-                    <p className="text-charcoal/50 text-lg max-w-md mb-10 leading-relaxed">
-                        Il tuo impero è pronto. Inizia a ricevere lead configurando il tuo VirtualTwin su WhatsApp.
+                    <p className="text-charcoal/40 text-base max-w-md mb-12 leading-relaxed italic">
+                        "La ricchezza non è solo accumulo, ma una pipeline in costante movimento verso l'eccellenza."
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col sm:flex-row gap-6 relative z-10">
                         <Link
-                            href="/dashboard/settings"
-                            className="px-10 py-5 gold-gradient rounded-full text-white font-bold uppercase tracking-widest hover:scale-105 transition-all shadow-lg text-[11px] flex items-center gap-3"
+                            href="/dashboard/channels"
+                            className="px-12 py-5 gold-gradient rounded-full text-white font-black uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-luxury text-[10px] flex items-center gap-4"
                         >
-                            Configura WhatsApp
+                            Attiva Canale WhatsApp
                             <ArrowRight className="w-4 h-4" />
                         </Link>
                         <button
-                            onClick={() => {/* Import demo data */ }}
-                            className="px-10 py-5 bg-white border border-charcoal/10 rounded-full text-charcoal font-bold uppercase tracking-widest hover:border-gold transition-all text-[11px] flex items-center gap-3"
+                            onClick={() => fetchData()}
+                            className="px-12 py-5 bg-charcoal text-gold border border-gold/20 rounded-full font-black uppercase tracking-[0.3em] hover:bg-gold hover:text-white transition-all shadow-luxury text-[10px] flex items-center gap-4"
                         >
                             <Sparkles className="w-4 h-4" />
-                            Importa Dati Demo
+                            Aggiorna Neural Link
                         </button>
                     </div>
                 </div>

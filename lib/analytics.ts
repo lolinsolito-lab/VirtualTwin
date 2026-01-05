@@ -33,11 +33,11 @@ export async function getImperialAnalytics(tenantId: string): Promise<AnalyticsM
         const leadCount = leads.length;
         const avgValue = leadCount > 0 ? totalValue / leadCount : 0;
 
-        // Mock conversion rate for now or calculate based on 'Closed' stage
-        const closedLeads = leads.filter(l => l.pipeline_stages?.name?.toLowerCase().includes('closed')).length;
+        // Calculate conversion rate based on real 'closed' status
+        const closedLeads = leads.filter(l => l.pipeline_stages?.name?.toLowerCase().includes('closed') || l.status === 'closed').length;
         const conversionRate = leadCount > 0 ? (closedLeads / leadCount) * 100 : 0;
 
-        // Stage Distribution
+        // Stage Distribution (Real mapping)
         const stageDistribution = stages.map(stage => {
             const stageLeads = leads.filter(l => l.stage_id === stage.id);
             return {
@@ -47,13 +47,24 @@ export async function getImperialAnalytics(tenantId: string): Promise<AnalyticsM
             };
         });
 
-        // Recent Activity (Mocking some for now, ideally from a logs table)
-        const recentActivity = leads.slice(0, 5).map(l => ({
-            id: l.id,
-            name: l.full_name,
-            action: "Nuovo Lead acquisito",
-            time: "Oggi",
-            value: l.estimated_value
+        // 4. Fetch Authentic Recent Activity from conversations
+        const { data: recentConv, error: convError } = await supabase
+            .from('conversations')
+            .select('id, contact_name, status, last_message_at, conversion_value')
+            .eq('user_id', tenantId) // Assuming tenantId maps to user_id in conversations
+            .order('last_message_at', { ascending: false })
+            .limit(6);
+
+        if (convError) throw convError;
+
+        const recentActivity = (recentConv || []).map(c => ({
+            id: c.id,
+            name: c.contact_name || 'Prospect Anonimo',
+            action: c.status === 'active' ? 'Interazione in corso' :
+                c.status === 'qualified' ? 'Lead Qualificato' :
+                    c.status === 'converted' ? 'Trattativa Avanzata' : 'Conversione Chiusa',
+            time: new Date(c.last_message_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+            value: c.conversion_value
         }));
 
         return {

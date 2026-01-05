@@ -1,30 +1,34 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Bell, Shield, Palette, Globe, Save, Zap, Check, Building2, FileText, CreditCard, Users, Languages } from 'lucide-react';
+import { User, Bell, Shield, Palette, Globe, Save, Zap, Check, Building2, FileText, CreditCard, Users, Languages, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { useEffect } from 'react';
 
 export default function SettingsPage() {
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [activeTab, setActiveTab] = useState('profile');
 
     const [settings, setSettings] = useState({
         // Profile
-        businessName: 'VirtualTwin Demo',
-        email: 'demo@virtualtwin.ai',
-        phone: '+39 02 1234567',
+        businessName: '',
+        email: '',
+        phone: '',
 
         // Company B2B Data
-        companyLegalName: 'VirtualTwin S.r.l.',
-        vatNumber: 'IT12345678901',
-        fiscalCode: '12345678901',
-        sdiCode: 'ABCDEFG',
-        pecEmail: 'virtualtwin@pec.it',
+        companyLegalName: '',
+        vatNumber: '',
+        fiscalCode: '',
+        sdiCode: '',
+        pecEmail: '',
 
         // Billing Address
-        billingAddress: 'Via Roma 123',
-        billingCity: 'Milano',
-        billingZip: '20121',
-        billingProvince: 'MI',
+        billingAddress: '',
+        billingCity: '',
+        billingZip: '',
+        billingProvince: '',
         billingCountry: 'Italia',
 
         // Preferences
@@ -37,16 +41,119 @@ export default function SettingsPage() {
 
         // AI Personality
         customPersonality: '',
-        faqs: [
-            { id: 1, question: '', answer: '' },
-            { id: 2, question: '', answer: '' },
-            { id: 3, question: '', answer: '' },
-        ],
+        faqs: [] as { id: number | string; question: string; answer: string }[],
     });
 
-    const handleSave = () => {
-        setSaved(true);
-        setTimeout(() => setSaved(false), 3000);
+    useEffect(() => {
+        async function loadSettings() {
+            setLoading(true);
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                // 1. Load Profile
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+
+                // 2. Load Clone Settings
+                const { data: clone } = await supabase
+                    .from('clones')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .limit(1)
+                    .single();
+
+                if (profile) {
+                    setSettings(prev => ({
+                        ...prev,
+                        businessName: profile.full_name || '',
+                        email: user.email || '',
+                        // Mapping metadata or other fields if available
+                        companyLegalName: profile.metadata?.companyLegalName || '',
+                        vatNumber: profile.metadata?.vatNumber || '',
+                        fiscalCode: profile.metadata?.fiscalCode || '',
+                        sdiCode: profile.metadata?.sdiCode || '',
+                        pecEmail: profile.metadata?.pecEmail || '',
+                        billingAddress: profile.metadata?.billingAddress || '',
+                        billingCity: profile.metadata?.billingCity || '',
+                        billingZip: profile.metadata?.billingZip || '',
+                        billingProvince: profile.metadata?.billingProvince || '',
+                        billingCountry: profile.metadata?.billingCountry || 'Italia',
+                    }));
+                }
+
+                if (clone) {
+                    setSettings(prev => ({
+                        ...prev,
+                        aiTone: clone.personality || 'professionale',
+                        customPersonality: clone.metadata?.customPersonality || '',
+                        faqs: clone.metadata?.faqs || [
+                            { id: 1, question: '', answer: '' },
+                            { id: 2, question: '', answer: '' },
+                            { id: 3, question: '', answer: '' },
+                        ]
+                    }));
+                } else if (!clone && !profile) {
+                    // Fallback to defaults if new user
+                    setSettings(prev => ({
+                        ...prev,
+                        faqs: [
+                            { id: 1, question: '', answer: '' },
+                            { id: 2, question: '', answer: '' },
+                            { id: 3, question: '', answer: '' },
+                        ]
+                    }));
+                }
+            }
+            setLoading(false);
+        }
+        loadSettings();
+    }, []);
+
+    const handleSave = async () => {
+        setSaving(true);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+            // 1. Update Profile Metadata
+            await supabase.from('profiles').update({
+                full_name: settings.businessName,
+                metadata: {
+                    companyLegalName: settings.companyLegalName,
+                    vatNumber: settings.vatNumber,
+                    fiscalCode: settings.fiscalCode,
+                    sdiCode: settings.sdiCode,
+                    pecEmail: settings.pecEmail,
+                    billingAddress: settings.billingAddress,
+                    billingCity: settings.billingCity,
+                    billingZip: settings.billingZip,
+                    billingProvince: settings.billingProvince,
+                    billingCountry: settings.billingCountry,
+                }
+            }).eq('id', user.id);
+
+            // 2. Update Clone
+            const { data: existingClone } = await supabase.from('clones').select('id').eq('user_id', user.id).limit(1).single();
+
+            const cloneData = {
+                user_id: user.id,
+                personality: settings.aiTone,
+                metadata: {
+                    customPersonality: settings.customPersonality,
+                    faqs: settings.faqs
+                }
+            };
+
+            if (existingClone) {
+                await supabase.from('clones').update(cloneData).eq('id', existingClone.id);
+            } else {
+                await supabase.from('clones').insert(cloneData);
+            }
+
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+        }
+        setSaving(false);
     };
 
     const tabs = [
@@ -63,6 +170,15 @@ export default function SettingsPage() {
         { code: 'en', name: 'English', flag: '🇬🇧' },
         { code: 'es', name: 'Español', flag: '🇪🇸' },
     ];
+
+    if (loading) {
+        return (
+            <div className="p-12 lg:p-24 min-h-screen bg-champagne flex flex-col items-center justify-center gap-8">
+                <div className="w-20 h-20 gold-gradient rounded-full animate-pulse shadow-luxury" />
+                <p className="text-gold text-[10px] uppercase tracking-[1em] font-black animate-pulse">Neural Matrix Loading...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="p-8 lg:p-16 min-h-screen bg-champagne">
@@ -594,10 +710,20 @@ export default function SettingsPage() {
                     <div className="mt-8 flex justify-end">
                         <button
                             onClick={handleSave}
-                            className="gold-gradient px-10 py-5 rounded-xl text-white font-black text-[11px] uppercase tracking-[0.4em] flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
+                            disabled={saving}
+                            className="gold-gradient px-12 py-5 rounded-xl text-white font-black text-[11px] uppercase tracking-[0.4em] flex items-center gap-3 hover:scale-105 transition-all shadow-xl disabled:opacity-50"
                         >
-                            <Save className="w-5 h-5" />
-                            Salva Modifiche
+                            {saving ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    Salvataggio...
+                                </>
+                            ) : (
+                                <>
+                                    <Save className="w-5 h-5" />
+                                    Sincronizza Impostazioni
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>
