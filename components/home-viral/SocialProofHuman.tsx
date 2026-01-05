@@ -11,7 +11,7 @@ import { Star, TrendingUp, Clock, Heart } from 'lucide-react';
  * 
  * Usage: Homepage social proof - humanize with faces, stories, outcomes
  */
-export default function SocialProof Human() {
+export default function SocialProofHuman() {
     const testimonials = [
         {
             name: "Laura Bianchi",
