@@ -148,18 +148,21 @@ export default function AcademyPage() {
     ];
 
     const submitQuizResults = async (score: number, total: number) => {
-        if (!activeQuiz) return;
+        if (!activeQuiz) return null;
         try {
             const response = await fetch('/api/academy/submit-quiz', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ moduleId: activeQuiz.moduleId, score, totalQuestions: total })
             });
+            const data = await response.json();
             if (response.ok) {
                 await refreshProfile();
             }
+            return data;
         } catch (error) {
             console.error('Error submitting quiz:', error);
+            return null;
         }
     };
 

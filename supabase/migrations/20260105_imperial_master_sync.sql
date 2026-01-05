@@ -18,7 +18,7 @@ ADD COLUMN IF NOT EXISTS target_client TEXT,
 ADD COLUMN IF NOT EXISTS ai_tone TEXT DEFAULT 'professionale',
 ADD COLUMN IF NOT EXISTS badges JSONB DEFAULT '[]'::jsonb,
 ADD COLUMN IF NOT EXISTS streak_days INTEGER DEFAULT 0,
-ADD COLUMN IF NOT EXISTS quizzes_passed JSONB DEFAULT '[]'::jsonb;
+ADD COLUMN IF NOT EXISTS quizzes_passed JSONB DEFAULT '{}'::jsonb;
 
 -- 2. UPDATE PLAN_TIER CONSTRAINTS
 -- Ensure the check constraint includes 'aspirante' and follows the hierarchy

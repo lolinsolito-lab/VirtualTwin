@@ -27,6 +27,7 @@ export function AcademyQuiz({ moduleId, moduleName, questions, onComplete, onClo
     const [score, setScore] = useState(0);
     const [quizState, setQuizState] = useState<'intro' | 'active' | 'results'>('intro');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submissionResult, setSubmissionResult] = useState<any>(null);
 
     const currentQuestion = questions[currentStep];
 
@@ -52,8 +53,14 @@ export function AcademyQuiz({ moduleId, moduleName, questions, onComplete, onClo
     const handleFinish = async () => {
         setQuizState('results');
         setIsSubmitting(true);
-        await onComplete(score, questions.length);
-        setIsSubmitting(false);
+        try {
+            const result = await onComplete(score, questions.length);
+            setSubmissionResult(result);
+        } catch (error) {
+            console.error('Submission error:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const containerVariants = {
@@ -130,12 +137,12 @@ export function AcademyQuiz({ moduleId, moduleName, questions, onComplete, onClo
                                             onClick={() => handleAnswer(idx)}
                                             disabled={isAnswered}
                                             className={`p-6 rounded-2xl text-left border-2 transition-all duration-300 relative overflow-hidden ${!isAnswered
-                                                    ? 'bg-charcoal/5 border-transparent hover:border-gold/30 hover:bg-white'
-                                                    : idx === currentQuestion.correctIndex
-                                                        ? 'bg-green-50 border-green-500 text-green-900'
-                                                        : selectedOption === idx
-                                                            ? 'bg-red-50 border-red-500 text-red-900'
-                                                            : 'bg-charcoal/5 border-transparent opacity-50'
+                                                ? 'bg-charcoal/5 border-transparent hover:border-gold/30 hover:bg-white'
+                                                : idx === currentQuestion.correctIndex
+                                                    ? 'bg-green-50 border-green-500 text-green-900'
+                                                    : selectedOption === idx
+                                                        ? 'bg-red-50 border-red-500 text-red-900'
+                                                        : 'bg-charcoal/5 border-transparent opacity-50'
                                                 }`}
                                         >
                                             <div className="flex items-center justify-between relative z-10">
@@ -202,8 +209,17 @@ export function AcademyQuiz({ moduleId, moduleName, questions, onComplete, onClo
                                 {score === questions.length ? (
                                     <div className="bg-green-50 p-8 rounded-[2rem] border border-green-100 mb-10 max-w-sm mx-auto">
                                         <p className="text-green-800 text-sm leading-relaxed mb-4">
-                                            Hai dimostrato di avere la mentalità corretta. Ti sono stati assegnati **200 XP** e l'achievement **Apprendista Sovrano** è ora visibile nel tuo profilo.
+                                            Hai dimostrato di avere la mentalità corretta. {submissionResult?.xpEarned > 0
+                                                ? `Ti sono stati assegnati **${submissionResult.xpEarned} XP** e sei ora **Livello ${submissionResult.newLevel || 2}**!`
+                                                : isSubmitting
+                                                    ? 'Sincronizzazione imperiale in corso...'
+                                                    : 'Competenza convalidata! (XP già riscattati precedentemente).'}
                                         </p>
+                                        {submissionResult?.newBadges?.length > 0 && (
+                                            <p className="text-gold text-[10px] font-black uppercase tracking-widest mt-4">
+                                                Nuovi Achievement: {submissionResult.newBadges.join(', ')}
+                                            </p>
+                                        )}
                                     </div>
                                 ) : (
                                     <p className="text-charcoal/50 text-sm leading-relaxed mb-10 max-w-sm mx-auto">

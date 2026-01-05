@@ -35,7 +35,13 @@ export async function POST(req: Request) {
         }
 
         const userProfile = profile as UserProfile;
-        const quizzesPassed = userProfile.quizzes_passed || {};
+
+        // 1.5 Standardize quizzes_passed (ensure it's an object, not an array)
+        let quizzesPassed = userProfile.quizzes_passed;
+        if (!quizzesPassed || Array.isArray(quizzesPassed)) {
+            quizzesPassed = {};
+        }
+
         const isPerfectScore = score === totalQuestions;
         const alreadyPassed = !!quizzesPassed[moduleId];
 
