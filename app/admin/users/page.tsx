@@ -22,6 +22,7 @@ import {
     LucideIcon
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { IMPERIAL_PRICES } from '@/lib/pricing';
 
 const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(val);
 
@@ -59,33 +60,25 @@ export default function AdminUsers() {
                 .order('created_at', { ascending: false });
 
             if (data) {
-                const tierPricing: Record<string, number> = {
-                    'curioso': 0,
-                    'esploratore': 39,
-                    'pioniere': 97,
-                    'conquistatore': 197,
-                    'imperatore': 397
-                };
-
-                // Enhanced mapping with cost intelligence
+                // Enhanced mapping with real cost and revenue intelligence
                 const enhancedUsers = data.map(u => {
-                    const rev = tierPricing[u.plan_tier] || 0;
+                    const tier = u.plan_tier as keyof typeof IMPERIAL_PRICES.founder;
+                    const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
+                    const rev = prices[tier] || 0;
 
-                    // Realistic Tiered Cost Model (Economies of Scale)
+                    // Realistic Tiered Cost Model (derived from AI usage)
                     const calculateUserTieredCost = (msgCount: number) => {
                         if (msgCount <= 1000) return msgCount * 0.015;
                         if (msgCount <= 5000) return (1000 * 0.015) + (msgCount - 1000) * 0.010;
-                        if (msgCount <= 20000) return (1000 * 0.015) + (4000 * 0.010) + (msgCount - 5000) * 0.005;
-                        return (1000 * 0.015) + (4000 * 0.010) + (15000 * 0.005) + (msgCount - 20000) * 0.002;
+                        return (1000 * 0.015) + (4000 * 0.010) + (msgCount - 5000) * 0.005;
                     };
 
-                    const msgCount = u.messages_used_this_month || (u.id.length % 50);
+                    const msgCount = u.messages_used_this_month || 0;
                     const cost = calculateUserTieredCost(msgCount);
                     const profit = rev - cost;
 
-                    // Health Score: 0 to 100 based on usage/profit
-                    // High usage on low plan = Low health (candidate for upgrade)
-                    const usageRatio = msgCount / (u.messages_limit || 100);
+                    // Health Score calculation
+                    const usageRatio = u.messages_limit > 0 ? msgCount / u.messages_limit : 0;
                     const health = Math.max(0, Math.min(100, 100 - (usageRatio * 40) + (profit > 0 ? 10 : -20)));
 
                     return {
@@ -122,7 +115,7 @@ export default function AdminUsers() {
                 </h1>
             </header>
 
-            {/* Top Stat Bar */}
+            {/* Top Stat Bar (Imperial Shields) */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
                 {[
                     { label: 'Total Citizens', val: users.length, icon: Users, color: 'text-gold' },
@@ -130,12 +123,12 @@ export default function AdminUsers() {
                     { label: 'Expansion Risk', val: users.filter(u => u.health_score < 40).length, icon: ShieldAlert, color: 'text-red-400' },
                     { label: 'High-Value Clients', val: users.filter(u => u.profitability > 100).length, icon: Star, color: 'text-gold' }
                 ].map((stat, i) => (
-                    <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-2xl flex items-center justify-between group">
+                    <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-[2rem] flex items-center justify-between group backdrop-blur-xl hover:bg-white/10 transition-all">
                         <div>
-                            <p className="text-white/30 text-[8px] uppercase tracking-widest font-black mb-1">{stat.label}</p>
-                            <h3 className="text-2xl font-serif text-white">{stat.val}</h3>
+                            <p className="text-white/30 text-[8px] uppercase tracking-[0.4em] font-black mb-1">{stat.label}</p>
+                            <h3 className="text-3xl font-serif italic text-white drop-shadow-luxury tabular-nums">{stat.val}</h3>
                         </div>
-                        <stat.icon className={`w-8 h-8 ${stat.color} opacity-20 group-hover:opacity-60 transition-opacity`} />
+                        <stat.icon className={`w-8 h-8 ${stat.color} opacity-10 group-hover:opacity-40 transition-opacity`} />
                     </div>
                 ))}
             </div>

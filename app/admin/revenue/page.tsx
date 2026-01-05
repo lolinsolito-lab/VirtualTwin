@@ -13,22 +13,18 @@ import {
     AlertCircle
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { IMPERIAL_PRICES } from '@/lib/pricing';
 
 const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(val);
 
 export default function AdminRevenue() {
     const [isLoading, setIsLoading] = useState(true);
     const [stats, setStats] = useState({
-        mrr: 10880,
-        arpu: 109,
+        mrr: 0,
+        arpu: 0,
         churn: 2.1,
         failedAmount: 218,
-        planBreakdown: [
-            { name: 'Esploratore', users: 40, mrr: 1560, avg: 39 },
-            { name: 'Pioniere', users: 35, mrr: 3395, avg: 97 },
-            { name: 'Conquistatore', users: 20, mrr: 3940, avg: 197 },
-            { name: 'Imperatore', users: 5, mrr: 1985, avg: 397 },
-        ]
+        planBreakdown: [] as any[]
     });
 
     useEffect(() => {
@@ -40,40 +36,36 @@ export default function AdminRevenue() {
         try {
             const { data: users } = await supabase
                 .from('profiles')
-                .select('plan_tier, subscription_status, created_at')
+                .select('plan_tier, subscription_status, is_founder, created_at')
                 .eq('subscription_status', 'active');
 
-            const tierPricing: Record<string, number> = {
-                'esploratore': 39,
-                'pioniere': 97,
-                'conquistatore': 197,
-                'imperatore': 397
-            };
-
-            const counts: Record<string, number> = { esploratore: 0, pioniere: 0, conquistatore: 0, imperatore: 0 };
+            const counts: Record<string, number> = {};
+            const revenuePerTier: Record<string, number> = {};
             let totalMRR = 0;
 
             users?.forEach(u => {
-                if (tierPricing[u.plan_tier]) {
-                    counts[u.plan_tier]++;
-                    totalMRR += tierPricing[u.plan_tier];
-                }
+                const tier = u.plan_tier;
+                const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
+                const price = (prices as any)[tier] || 0;
+
+                counts[tier] = (counts[tier] || 0) + 1;
+                revenuePerTier[tier] = (revenuePerTier[tier] || 0) + price;
+                totalMRR += price;
             });
 
-            const breakdown = Object.keys(tierPricing).map(tier => ({
+            const breakdown = Object.keys(counts).map(tier => ({
                 name: tier.charAt(0).toUpperCase() + tier.slice(1),
                 users: counts[tier],
-                mrr: counts[tier] * tierPricing[tier],
-                avg: tierPricing[tier]
-            }));
+                mrr: revenuePerTier[tier],
+                avg: counts[tier] > 0 ? revenuePerTier[tier] / counts[tier] : 0
+            })).sort((a, b) => b.mrr - a.mrr);
 
-            setStats({
-                mrr: totalMRR || 10880,
-                arpu: totalMRR > 0 ? Math.round(totalMRR / users!.length) : 109,
-                churn: 2.1, // Mock churn
-                failedAmount: 218, // Mock failed
+            setStats(prev => ({
+                ...prev,
+                mrr: totalMRR,
+                arpu: users && users.length > 0 ? totalMRR / users.length : 0,
                 planBreakdown: breakdown
-            });
+            }));
         } catch (error) {
             console.error(error);
         } finally {
@@ -93,28 +85,28 @@ export default function AdminRevenue() {
                 </h1>
             </header>
 
-            {/* Quick Metrics Grid */}
+            {/* Quick Metrics Grid (Imperial Shields) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div className="bg-white/5 border border-white/10 p-8 rounded-3xl">
-                    <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mb-4">Current MRR</p>
+                <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] backdrop-blur-xl group hover:bg-white/10 transition-all">
+                    <p className="text-gold/40 text-[10px] uppercase tracking-[0.4em] font-black mb-4">Current Sovereign MRR</p>
                     <div className="flex items-baseline gap-4">
-                        <h3 className="text-4xl font-serif text-white tabular-nums">{formatCurrency(stats.mrr)}</h3>
-                        <div className="flex items-center text-green-500 gap-1 text-xs">
-                            <TrendingUp className="w-4 h-4" />
+                        <h3 className="text-5xl font-serif italic text-white tabular-nums drop-shadow-luxury">{formatCurrency(stats.mrr)}</h3>
+                        <div className="flex items-center text-green-500 gap-1 text-xs font-bold bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20">
+                            <TrendingUp className="w-3 h-3" />
                             <span>8.5%</span>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white/5 border border-white/10 p-8 rounded-3xl">
-                    <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mb-4">ARPU (Avg Revenue/User)</p>
-                    <h3 className="text-4xl font-serif text-white tabular-nums">{formatCurrency(stats.arpu)}</h3>
-                    <p className="text-[10px] text-white/20 mt-2 uppercase tracking-tight">Target: {formatCurrency(150)}</p>
+                <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] backdrop-blur-xl group hover:bg-white/10 transition-all">
+                    <p className="text-white/40 text-[10px] uppercase tracking-[0.4em] font-black mb-4">Average Revenue / User</p>
+                    <h3 className="text-5xl font-serif italic text-white tabular-nums">{formatCurrency(stats.arpu)}</h3>
+                    <p className="text-[10px] text-gold/20 mt-3 uppercase tracking-[0.2em] font-bold">Empire Target: {formatCurrency(150)}</p>
                 </div>
-                <div className="bg-white/5 border border-white/10 p-8 rounded-3xl">
-                    <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mb-4">Churn Rate</p>
+                <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] backdrop-blur-xl group hover:bg-white/10 transition-all border-red-500/10 hover:border-red-500/30">
+                    <p className="text-red-500/40 text-[10px] uppercase tracking-[0.4em] font-black mb-4">Attrition (Churn)</p>
                     <div className="flex items-baseline gap-4">
-                        <h3 className="text-4xl font-serif text-white tabular-nums">{stats.churn}%</h3>
-                        <span className="text-xs text-green-500">-0.2% vs last month</span>
+                        <h3 className="text-5xl font-serif italic text-white tabular-nums">{stats.churn}%</h3>
+                        <span className="text-[10px] text-green-500/60 uppercase tracking-widest font-black">-0.2% vs Nov</span>
                     </div>
                 </div>
             </div>

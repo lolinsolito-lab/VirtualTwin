@@ -18,6 +18,7 @@ import {
     HeartPulse
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { IMPERIAL_PRICES } from '@/lib/pricing';
 
 // Helper for currency formatting
 const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(val);
@@ -25,24 +26,24 @@ const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 
 export default function AdminOverview() {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [stats, setStats] = useState({
-        revenue: 10880,
-        costs: 653,
-        profit: 10227,
-        margin: 94.0,
-        activeUsers: 100,
-        messagesProcessed: 52340,
-        todayMessages: 1847,
+        revenue: 0,
+        costs: 0,
+        profit: 0,
+        margin: 0,
+        activeUsers: 0,
+        messagesProcessed: 0,
+        todayMessages: 0,
         growth: 12.5,
-        mrr: 10880,
-        arpu: 109,
-        ltv: 872,
+        mrr: 0,
+        arpu: 0,
+        ltv: 0,
         cac: 35,
-        cacLtvRatio: '1:25',
+        cacLtvRatio: '0',
         costBreakdown: {
-            ai: 210,
-            whatsapp: 250,
-            infra: 93,
-            stripe: 163
+            ai: 0,
+            whatsapp: 0,
+            infra: 0,
+            stripe: 0
         }
     });
 
@@ -56,18 +57,15 @@ export default function AdminOverview() {
             // 1. Calculate Revenue from active users (MRR)
             const { data: users } = await supabase
                 .from('profiles')
-                .select('plan_tier, subscription_status')
+                .select('plan_tier, subscription_status, is_founder')
                 .eq('subscription_status', 'active');
 
-            // 👑 IMPERIAL PRICING (Founder tier)
-            const tierPricing: Record<string, number> = {
-                'esploratore': 39,
-                'pioniere': 147,
-                'conquistatore': 347,
-                'imperatore': 697
-            };
-
-            const totalRev = users?.reduce((acc, user) => acc + (tierPricing[user.plan_tier] || 0), 0) || 0;
+            // 👑 IMPERIAL PRICING SYNC
+            const totalRev = users?.reduce((acc, user) => {
+                const tier = user.plan_tier as keyof typeof IMPERIAL_PRICES.founder;
+                const prices = user.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
+                return acc + (prices[tier] || 0);
+            }, 0) || 0;
 
             // 2. Count Messages (for AI cost estimation)
             const { count: totalMessages } = await supabase
@@ -95,27 +93,29 @@ export default function AdminOverview() {
             const totalCosts = aiWaCosts + infraCosts + stripeFees;
 
             // 4. SaaS Metrics Logic
-            const activeUserCount = users?.length || 100;
-            const arpu = activeUserCount > 0 ? totalRev / activeUserCount : 109;
+            const activeUserCount = users?.length || 0;
+            const arpu = activeUserCount > 0 ? totalRev / activeUserCount : 0;
             const ltv = arpu * 8; // Assuming 8 months retention
+            const cac = 35; // Target CAC
+            const cacLtvRatio = cac > 0 ? `1:${Math.round(ltv / cac)}` : 'N/A';
 
             setStats({
-                revenue: totalRev || 10880,
-                mrr: totalRev || 10880,
+                revenue: totalRev,
+                mrr: totalRev,
                 costs: Math.round(totalCosts),
-                profit: Math.round((totalRev || 10880) - totalCosts),
-                margin: (totalRev || 10880) > 0 ? Number((((totalRev || 10880) - totalCosts) / (totalRev || 10880) * 100).toFixed(1)) : 94.0,
+                profit: Math.round(totalRev - totalCosts),
+                margin: totalRev > 0 ? Number((((totalRev - totalCosts) / totalRev) * 100).toFixed(1)) : 0,
                 activeUsers: activeUserCount,
-                messagesProcessed: totalMessages || 52340,
-                todayMessages: todayCount || 1847,
+                messagesProcessed: totalMessages || 0,
+                todayMessages: todayCount || 0,
                 growth: 12.5,
                 arpu: Math.round(arpu),
                 ltv: Math.round(ltv),
-                cac: 35,
-                cacLtvRatio: `1:${Math.round(ltv / 35)}`,
+                cac: cac,
+                cacLtvRatio: cacLtvRatio,
                 costBreakdown: {
-                    ai: Math.round(aiWaCosts * 0.45), // Estimate 45% AI
-                    whatsapp: Math.round(aiWaCosts * 0.55), // Estimate 55% WA Windows
+                    ai: Math.round(aiWaCosts * 0.45),
+                    whatsapp: Math.round(aiWaCosts * 0.55),
                     infra: infraCosts,
                     stripe: Math.round(stripeFees)
                 }
@@ -158,63 +158,63 @@ export default function AdminOverview() {
                 </div>
             </header>
 
-            {/* Top Metrics Row - FINANCIALS */}
+            {/* Top Metrics Row - FINANCIALS (Imperial Shields) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                 {/* MRR / REVENUE CARD */}
-                <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-8">
-                        <TrendingUp className="w-10 h-10 text-green-500/20" />
+                <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] relative overflow-hidden group backdrop-blur-xl">
+                    <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-100 transition-opacity">
+                        <TrendingUp className="w-10 h-10 text-gold" />
                     </div>
                     <div className="flex items-center gap-2 mb-6">
-                        <p className="text-white/40 text-[10px] uppercase tracking-[0.3em] font-bold">Monthly Recurring Revenue</p>
-                        <span className="bg-green-500/10 text-green-500 text-[8px] font-black px-2 py-0.5 rounded">AUTO-SYNC</span>
+                        <p className="text-gold/40 text-[10px] uppercase tracking-[0.4em] font-black">Monthly Recurring Revenue</p>
+                        <span className="bg-gold/10 text-gold text-[8px] font-black px-2 py-0.5 rounded border border-gold/20">LIVE DNA</span>
                     </div>
-                    <h3 className="text-6xl font-serif text-white mb-4 tabular-nums tracking-tighter">{formatCurrency(stats.mrr)}</h3>
+                    <h3 className="text-6xl font-serif italic text-white mb-4 tabular-nums tracking-tighter drop-shadow-luxury">{formatCurrency(stats.mrr)}</h3>
                     <div className="flex items-center gap-2">
                         <ArrowUpRight className="w-4 h-4 text-green-500" />
                         <span className="text-green-500 font-bold text-sm">+{stats.growth}%</span>
-                        <span className="text-white/20 text-[10px] uppercase tracking-wider">Growth vs Nov</span>
+                        <span className="text-white/20 text-[10px] uppercase tracking-[0.2em] italic">Projection vs Q4</span>
                     </div>
                 </div>
 
                 {/* REAL COSTS CARD */}
-                <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] relative overflow-hidden group">
-                    <p className="text-white/40 text-[10px] uppercase tracking-[0.3em] font-bold mb-6">Real Operational costs</p>
-                    <h3 className="text-6xl font-serif text-white mb-4 tabular-nums tracking-tighter">{formatCurrency(stats.costs)}</h3>
+                <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] relative overflow-hidden group backdrop-blur-xl">
+                    <p className="text-white/40 text-[10px] uppercase tracking-[0.4em] font-black mb-6">Operational Costs</p>
+                    <h3 className="text-6xl font-serif italic text-white mb-4 tabular-nums tracking-tighter">{formatCurrency(stats.costs)}</h3>
 
                     <div className="grid grid-cols-2 gap-3 mt-8">
                         {[
-                            { label: 'AI', val: stats.costBreakdown.ai },
-                            { label: 'WhatsApp', val: stats.costBreakdown.whatsapp },
-                            { label: 'Infra', val: stats.costBreakdown.infra },
-                            { label: 'Stripe', val: stats.costBreakdown.stripe },
+                            { label: 'AI Intelligence', val: stats.costBreakdown.ai },
+                            { label: 'Neural Link (WA)', val: stats.costBreakdown.whatsapp },
+                            { label: 'Infrastructure', val: stats.costBreakdown.infra },
+                            { label: 'Empire Tax (Stripe)', val: stats.costBreakdown.stripe },
                         ].map((cost, idx) => (
-                            <div key={idx} className="bg-white/[0.03] border border-white/5 p-3 rounded-xl">
-                                <p className="text-[8px] text-white/30 uppercase font-black mb-1">{cost.label}</p>
-                                <p className="text-xs font-bold text-white/70">{formatCurrency(cost.val)}</p>
+                            <div key={idx} className="bg-white/[0.02] border border-white/5 p-4 rounded-2xl hover:bg-white/5 transition-all">
+                                <p className="text-[8px] text-white/30 uppercase font-black mb-1 tracking-widest">{cost.label}</p>
+                                <p className="text-xs font-bold text-white/70 tabular-nums">{formatCurrency(cost.val)}</p>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* PROFIT CARD - THE FIX */}
-                <div className="bg-gradient-to-br from-gold/20 to-transparent border border-gold/20 p-10 rounded-[2.5rem] relative overflow-hidden group shadow-[0_30px_60px_-15px_rgba(212,175,55,0.1)]">
+                {/* PROFIT CARD - THE SOVEREIGN YIELD */}
+                <div className="bg-gradient-to-br from-gold/20 via-gold/5 to-transparent border border-gold/30 p-10 rounded-[2.5rem] relative overflow-hidden group shadow-[0_30px_100px_-15px_rgba(212,175,55,0.15)] backdrop-blur-2xl">
                     <div className="absolute top-0 right-0 p-8">
-                        <Sparkles className="w-12 h-12 text-gold animate-pulse" />
+                        <Sparkles className="w-12 h-12 text-gold animate-pulse drop-shadow-[0_0_15px_rgba(212,175,55,0.5)]" />
                     </div>
-                    <p className="text-gold/60 text-[10px] uppercase tracking-[0.3em] font-bold mb-6 italic">Net Profit Sovereign</p>
-                    <h3 className="text-7xl font-serif text-white mb-4 tabular-nums tracking-tighter">
+                    <p className="text-gold text-[10px] uppercase tracking-[0.4em] font-black mb-6 italic">Sovereign Net Yield</p>
+                    <h3 className="text-7xl font-serif italic text-white mb-4 tabular-nums tracking-tighter drop-shadow-luxury">
                         {stats.profit < 0 ? '-' : ''}{formatCurrency(Math.abs(stats.profit))}
                     </h3>
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="bg-gold text-black px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                        <div className="bg-gold text-black px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-luxury">
                             Margin: {stats.margin}%
                         </div>
-                        <div className="text-gold/40 text-[10px] font-bold uppercase tracking-widest">
-                            Elite Range
+                        <div className="text-gold/60 text-[10px] font-black uppercase tracking-[0.2em] animate-pulse">
+                            Royal Target
                         </div>
                     </div>
-                    <p className="text-white/40 text-[9px] uppercase tracking-[0.2em]">Yearly Projection: <span className="text-white font-bold">{formatCurrency(stats.profit * 12)}</span></p>
+                    <p className="text-white/40 text-[9px] uppercase tracking-[0.3em] font-bold">Annual Projection: <span className="text-gold">{formatCurrency(stats.profit * 12)}</span></p>
                 </div>
             </div>
 
