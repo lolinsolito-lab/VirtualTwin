@@ -86,7 +86,8 @@ export default function FounderPage() {
             pricePublicFinal: 397,
             features: ['1 Clone AI', '1,000 msg/mese', '1 Canale', 'Email Support <48h'],
             gradient: 'from-blue-50 via-indigo-50 to-blue-50',
-            borderGradient: 'from-blue-400 to-indigo-500'
+            borderColor: 'border-blue-200',
+            borderHover: 'hover:border-blue-400',
         },
         {
             id: 'pioniere',
@@ -101,7 +102,8 @@ export default function FounderPage() {
             badge: 'PIÙ SCELTO',
             features: ['1 Clone AI', '5,000 msg/mese', '3 Canali', 'A/B Testing 20%', 'Analytics Pro'],
             gradient: 'from-amber-50 via-yellow-50 to-amber-50',
-            borderGradient: 'from-amber-400 to-yellow-500'
+            borderColor: 'border-amber-400',
+            borderHover: 'hover:border-amber-500',
         },
         {
             id: 'conquistatore',
@@ -114,7 +116,8 @@ export default function FounderPage() {
             pricePublicFinal: 1397,
             features: ['3 Cloni AI', '20,000 msg/mese', 'API Access (60 req/min)', 'Priority Support'],
             gradient: 'from-purple-50 via-violet-50 to-purple-50',
-            borderGradient: 'from-purple-500 to-violet-600'
+            borderColor: 'border-purple-200',
+            borderHover: 'hover:border-purple-500',
         },
         {
             id: 'imperatore',
@@ -126,8 +129,9 @@ export default function FounderPage() {
             pricePublic: publicPricing.prices.imperatore,
             pricePublicFinal: 2197,
             features: ['10 Cloni AI', '50K msg/mese', 'White-label', 'Account Manager', 'API Priority'],
-            gradient: 'from-orange-400 via-amber-500 to-orange-400',
-            borderGradient: 'from-orange-500 to-amber-600',
+            gradient: 'from-charcoal/95 via-charcoal to-charcoal/95',
+            borderColor: 'border-gold',
+            borderHover: 'hover:border-gold',
             dark: true
         },
     ];
@@ -240,170 +244,168 @@ export default function FounderPage() {
                 }
 
                 {/* Pricing Grid */}
-                <div id="pricing" className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16 scroll-mt-8">
-                    {plans.map((plan, i) => (
-                        <div
-                            key={i}
-                            className={`relative rounded-[1.5rem] p-6 border-2 transition-all overflow-hidden ${plan.dark
-                                    ? `bg-gradient-to-br ${plan.gradient} text-white border-gold shadow-2xl`
+                <div id="pricing" className="max-w-7xl mx-auto px-4 mb-16 scroll-mt-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {plans.map((plan, i) => (
+                            <div
+                                key={i}
+                                className={`relative rounded-[1.5rem] p-6 border-2 transition-all overflow-hidden ${plan.dark
+                                    ? `bg-gradient-to-br ${plan.gradient} text-white ${plan.borderColor} shadow-2xl`
                                     : plan.featured
-                                        ? `bg-gradient-to-br ${plan.gradient} border-2 border-${plan.borderGradient?.split(' ')[1]?.replace('to-', '')} shadow-xl scale-[1.02]`
-                                        : `bg-gradient-to-br ${plan.gradient} border-2 hover:border-${plan.borderGradient?.split(' ')[1]?.replace('to-', '')} shadow-lg hover:shadow-xl`
-                                }`}
-                        >
-                            {/* Border Gradient Effect */}
-                            {plan.borderGradient && !plan.dark && (
-                                <div className={`absolute inset-0 rounded-[1.5rem] bg-gradient-to-r ${plan.borderGradient} opacity-0 hover:opacity-10 transition-opacity pointer-events-none`} />
-                            )}
+                                        ? `bg-gradient-to-br ${plan.gradient} ${plan.borderColor} shadow-xl scale-[1.02]`
+                                        : `bg-gradient-to-br ${plan.gradient} ${plan.borderColor} ${plan.borderHover} shadow-lg hover:shadow-xl`
+                                    }`}
+                            >
 
-                            {/* SOLD OUT Badge when Genesis exhausted */}
-                            {isSoldOut && !isBeforeLaunch && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
-                                    🔴 SOLD OUT
-                                </div>
-                            )}
-
-                            {/* Pre-Launch Badge */}
-                            {isBeforeLaunch && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold to-amber-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
-                                    🚀 Launching Feb 1st
-                                </div>
-                            )}
-
-                            {/* Popular Badge - only when founder open */}
-                            {plan.badge && isFounderOpen && !isSoldOut && !isBeforeLaunch && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 gold-gradient text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
-                                    {plan.badge}
-                                </div>
-                            )}
-
-                            {/* Icon */}
-                            <div className="text-5xl mb-4">{plan.icon}</div>
-
-                            {/* Plan Name */}
-                            <h3 className={`text-xs uppercase tracking-[0.2em] font-black mb-1 ${plan.dark ? 'text-white/60' : 'text-charcoal/50'}`}>
-                                {plan.name}
-                            </h3>
-
-                            {/* Tagline */}
-                            <p className={`text-lg font-bold mb-3 ${plan.dark ? 'text-white' : 'text-charcoal'}`}>
-                                {plan.tagline}
-                            </p>
-
-                            {/* Description */}
-                            <p className={`text-xs leading-relaxed mb-4 ${plan.dark ? 'text-white/70' : 'text-charcoal/60'}`}>
-                                {plan.description}
-                            </p>
-
-                            <div className="mb-4">
-                                <div className={`text-4xl font-bold mb-1 text-gold`}>
-                                    €{isFounderOpen ? plan.priceFounder : plan.pricePublic}
-                                </div>
-                                {isFounderOpen && (
-                                    <>
-                                        <div className={`text-sm line-through ${plan.id === 'imperatore' ? 'text-white/40' : 'text-charcoal/40'}`}>
-                                            €{plan.pricePublic} pubblico 2026
-                                        </div>
-                                        <div className={`text-xs ${plan.id === 'imperatore' ? 'text-white/30' : 'text-charcoal/30'}`}>
-                                            ↗ Aumenta ogni trimestre
-                                        </div>
-                                    </>
+                                {/* SOLD OUT Badge when Genesis exhausted */}
+                                {isSoldOut && !isBeforeLaunch && (
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
+                                        🔴 SOLD OUT
+                                    </div>
                                 )}
-                            </div>
 
-                            {isFounderOpen && (
-                                <div className="bg-green-500/10 text-green-600 text-sm font-medium px-3 py-2 rounded-lg mb-6">
-                                    SAVE €{calculateFounderSavings(plan.id).toLocaleString()} (5 anni)
-                                </div>
-                            )}
+                                {/* Pre-Launch Badge */}
+                                {isBeforeLaunch && (
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold to-amber-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
+                                        🚀 Launching Feb 1st
+                                    </div>
+                                )}
 
-                            <ul className="space-y-2 mb-6">
-                                {plan.features.map((feature, j) => (
-                                    <li key={j} className="flex items-start gap-2 text-sm">
-                                        <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.id === 'imperatore' ? 'text-gold' : 'text-green-500'}`} />
-                                        <span className={plan.id === 'imperatore' ? 'text-white/80' : 'text-charcoal/70'}>{feature}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                                {/* Popular Badge - only when founder open */}
+                                {plan.badge && isFounderOpen && !isSoldOut && !isBeforeLaunch && (
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 gold-gradient text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
+                                        {plan.badge}
+                                    </div>
+                                )}
 
-                            <div className={`text-xs mb-4 ${plan.id === 'imperatore' ? 'text-white/50' : 'text-charcoal/50'}`}>
-                                <Shield className="w-3 h-3 inline mr-1" />
-                                {plan.id === 'esploratore' ? '1 Clone AI' : plan.id === 'pioniere' ? '1 Clone AI' : plan.id === 'conquistatore' ? '3 Cloni AI' : '10 Cloni AI'}
-                            </div>
+                                {/* Icon */}
+                                <div className="text-5xl mb-4">{plan.icon}</div>
 
-                            {/* CHECKOUT BUTTONS - Dual Option when Sold Out */}
-                            {!isSoldOut ? (
-                                <button
-                                    onClick={() => handleCheckout(plan.id)}
-                                    disabled={loadingPlan !== null}
-                                    className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider ${plan.featured
-                                        ? 'gold-gradient text-white shadow-xl hover:shadow-2xl hover:scale-105'
-                                        : plan.id === 'imperatore'
-                                            ? 'bg-gold text-charcoal hover:bg-champagne shadow-lg'
-                                            : 'bg-charcoal text-white hover:bg-gold hover:text-charcoal'
-                                        }`}
-                                >
-                                    {loadingPlan === plan.id ? (
-                                        <span className="flex items-center justify-center gap-2">
-                                            <Loader2 className="w-4 h-4 animate-spin" />
-                                            Caricamento...
-                                        </span>
-                                    ) : (
-                                        <>Scegli {plan.name}</>
+                                {/* Plan Name */}
+                                <h3 className={`text-xs uppercase tracking-[0.2em] font-black mb-1 ${plan.dark ? 'text-white/60' : 'text-charcoal/50'}`}>
+                                    {plan.name}
+                                </h3>
+
+                                {/* Tagline */}
+                                <p className={`text-lg font-bold mb-3 ${plan.dark ? 'text-white' : 'text-charcoal'}`}>
+                                    {plan.tagline}
+                                </p>
+
+                                {/* Description */}
+                                <p className={`text-xs leading-relaxed mb-4 ${plan.dark ? 'text-white/70' : 'text-charcoal/60'}`}>
+                                    {plan.description}
+                                </p>
+
+                                <div className="mb-4">
+                                    <div className={`text-4xl font-bold mb-1 text-gold`}>
+                                        €{isFounderOpen ? plan.priceFounder : plan.pricePublic}
+                                    </div>
+                                    {isFounderOpen && (
+                                        <>
+                                            <div className={`text-sm line-through ${plan.id === 'imperatore' ? 'text-white/40' : 'text-charcoal/40'}`}>
+                                                €{plan.pricePublic} pubblico 2026
+                                            </div>
+                                            <div className={`text-xs ${plan.id === 'imperatore' ? 'text-white/30' : 'text-charcoal/30'}`}>
+                                                ↗ Aumenta ogni trimestre
+                                            </div>
+                                        </>
                                     )}
-                                </button>
-                            ) : (
-                                <div className="grid grid-cols-2 gap-2">
-                                    {nextWave && (
+                                </div>
+
+                                {isFounderOpen && (
+                                    <div className="bg-green-500/10 text-green-600 text-sm font-medium px-3 py-2 rounded-lg mb-6">
+                                        SAVE €{calculateFounderSavings(plan.id).toLocaleString()} (5 anni)
+                                    </div>
+                                )}
+
+                                <ul className="space-y-2 mb-6">
+                                    {plan.features.map((feature, j) => (
+                                        <li key={j} className="flex items-start gap-2 text-sm">
+                                            <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.id === 'imperatore' ? 'text-gold' : 'text-green-500'}`} />
+                                            <span className={plan.id === 'imperatore' ? 'text-white/80' : 'text-charcoal/70'}>{feature}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <div className={`text-xs mb-4 ${plan.id === 'imperatore' ? 'text-white/50' : 'text-charcoal/50'}`}>
+                                    <Shield className="w-3 h-3 inline mr-1" />
+                                    {plan.id === 'esploratore' ? '1 Clone AI' : plan.id === 'pioniere' ? '1 Clone AI' : plan.id === 'conquistatore' ? '3 Cloni AI' : '10 Cloni AI'}
+                                </div>
+
+                                {/* CHECKOUT BUTTONS - Dual Option when Sold Out */}
+                                {!isSoldOut ? (
+                                    <button
+                                        onClick={() => handleCheckout(plan.id)}
+                                        disabled={loadingPlan !== null}
+                                        className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider ${plan.featured
+                                            ? 'gold-gradient text-white shadow-xl hover:shadow-2xl hover:scale-105'
+                                            : plan.id === 'imperatore'
+                                                ? 'bg-gold text-charcoal hover:bg-champagne shadow-lg'
+                                                : 'bg-charcoal text-white hover:bg-gold hover:text-charcoal'
+                                            }`}
+                                    >
+                                        {loadingPlan === plan.id ? (
+                                            <span className="flex items-center justify-center gap-2">
+                                                <Loader2 className="w-4 h-4 animate-spin" />
+                                                Caricamento...
+                                            </span>
+                                        ) : (
+                                            <>Scegli {plan.name}</>
+                                        )}
+                                    </button>
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {nextWave && (
+                                            <button
+                                                onClick={async () => {
+                                                    const email = prompt("Email per waitlist:");
+                                                    if (email && email.includes('@')) {
+                                                        try {
+                                                            await fetch('/api/waitlist', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    email,
+                                                                    name: email.split('@')[0],
+                                                                    plan: plan.id,
+                                                                    current_wave: currentWave?.id,
+                                                                    next_wave: nextWave.id
+                                                                })
+                                                            });
+                                                            alert(`In waitlist per ${nextWave.name}!`);
+                                                        } catch (e) {
+                                                            alert("Errore");
+                                                        }
+                                                    }
+                                                }}
+                                                className="bg-white/20 hover:bg-white/30 text-charcoal border border-gold/30 py-3 rounded-xl font-bold text-xs uppercase transition-all"
+                                            >
+                                                📋 Waitlist
+                                            </button>
+                                        )}
                                         <button
                                             onClick={async () => {
-                                                const email = prompt("Email per waitlist:");
-                                                if (email && email.includes('@')) {
-                                                    try {
-                                                        await fetch('/api/waitlist', {
-                                                            method: 'POST',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({
-                                                                email,
-                                                                name: email.split('@')[0],
-                                                                plan: plan.id,
-                                                                current_wave: currentWave?.id,
-                                                                next_wave: nextWave.id
-                                                            })
-                                                        });
-                                                        alert(`In waitlist per ${nextWave.name}!`);
-                                                    } catch (e) {
-                                                        alert("Errore");
-                                                    }
-                                                }
+                                                const publicPricing = getCurrentPublicPricing();
+                                                await handleCheckout(plan.id, publicPricing.stripePriceIds[plan.id as keyof typeof publicPricing.stripePriceIds]);
                                             }}
-                                            className="bg-white/20 hover:bg-white/30 text-charcoal border border-gold/30 py-3 rounded-xl font-bold text-xs uppercase transition-all"
+                                            className="relative overflow-hidden bg-gradient-to-r from-charcoal via-charcoal/95 to-charcoal/90 border-2 border-gold/40 text-white py-3 px-4 rounded-xl font-bold text-xs uppercase hover:border-gold hover:scale-105 transition-all shadow-lg group"
                                         >
-                                            📋 Waitlist
+                                            {/* Gold accent line */}
+                                            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
+
+                                            <span className="flex items-center justify-center gap-2">
+                                                <span className="text-gold font-black text-base">{plan.pricePublic}€</span>
+                                                <span className="text-white/80 text-xs">Prezzo Pubblico</span>
+                                            </span>
+
+                                            {/* Hover glow */}
+                                            <div className="absolute inset-0 bg-gradient-to-r from-gold/0 via-gold/10 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </button>
-                                    )}
-                                    <button
-                                        onClick={async () => {
-                                            const publicPricing = getCurrentPublicPricing();
-                                            await handleCheckout(plan.id, publicPricing.stripePriceIds[plan.id as keyof typeof publicPricing.stripePriceIds]);
-                                        }}
-                                        className="relative overflow-hidden bg-gradient-to-r from-charcoal via-charcoal/95 to-charcoal/90 border-2 border-gold/40 text-white py-3 px-4 rounded-xl font-bold text-xs uppercase hover:border-gold hover:scale-105 transition-all shadow-lg group"
-                                    >
-                                        {/* Gold accent line */}
-                                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
-
-                                        <span className="flex items-center justify-center gap-2">
-                                            <span className="text-gold font-black text-base">{plan.pricePublic}€</span>
-                                            <span className="text-white/80 text-xs">Prezzo Pubblico</span>
-                                        </span>
-
-                                        {/* Hover glow */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-gold/0 via-gold/10 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* SCARCITY TIMELINE - Show price escalation */}
@@ -454,14 +456,13 @@ export default function FounderPage() {
                     </div>
 
                     {/* Footer */}
-                    <div className="text-center mt-12 text-charcoal/40 text-sm">
-                        <Link href="/" className="text-gold hover:underline">← Torna alla Home</Link>
+                    <div className="text-center mt-12 mb-12 text-charcoal/40 text-sm">
+                        <Link href="/" className="text-gold hover:underline font-bold tracking-widest uppercase">← Torna alla Home</Link>
                     </div>
 
                 </div>
             </div>
 
-        </div>
         </div>
     );
 }
