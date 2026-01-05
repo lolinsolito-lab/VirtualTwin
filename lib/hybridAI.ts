@@ -175,21 +175,41 @@ export async function hybridAIResponse(
     businessContext: string,
     planTier: string,
     isFounder: boolean = false,
-    history: ChatHistoryItem[] = []
+    history: ChatHistoryItem[] = [],
+    cloneSettings?: {
+        tone?: string;
+        customPersonality?: string;
+        faqs?: { question: string; answer: string }[];
+    }
 ): Promise<ChatAIResponse> {
     const config = getAIConfig(planTier, isFounder);
 
+    // 1. Prepare dynamic personality context
+    const toneContext = cloneSettings?.tone ? `TONO COMUNICATIVO: ${cloneSettings.tone}` : '';
+    const personalityContext = cloneSettings?.customPersonality
+        ? `TUA PERSONALITÀ: ${cloneSettings.customPersonality}`
+        : 'Sei il "VirtualTwin", un\'intelligenza artificiale d\'élite progettata per gestire clienti.';
+
+    const faqsContext = cloneSettings?.faqs && cloneSettings.faqs.length > 0
+        ? `FAQ AZIENDALI (Usa queste informazioni per rispondere):
+${cloneSettings.faqs.map((f, i) => `${i + 1}. D: ${f.question}\n   R: ${f.answer}`).join('\n')}`
+        : '';
+
     const systemPrompt = `
-Sei il "VirtualTwin", un'intelligenza artificiale d'élite progettata per gestire clienti.
+${personalityContext}
+${toneContext}
 
 CONTESTO AZIENDALE:
 ${businessContext}
+
+${faqsContext}
 
 IL TUO COMPITO:
 1. Rispondi in modo sofisticato, professionale ma accessibile (Lingua: ITALIANO)
 2. Estrai informazioni chiave: nome, azienda, desideri, problemi, budget
 3. Valuta lo stadio del lead (inquiry, qualification, negotiation, closed)
 4. Mantieni le risposte BREVI (max 2-3 frasi)
+5. Rispettate fedelmente la tua personalità e il tuo tono se forniti.
 
 REGOLE:
 - Sii utile ma non pushy
@@ -203,6 +223,8 @@ RESTITUISCI UN OGGETTO JSON:
 {
   "reply": "La tua risposta",
   "insights": {
+    "fullName": "nome estratto o ...",
+    "businessName": "azienda estratta o ...",
     "suggestedStage": "inquiry|qualification|negotiation|closed",
     "budgetRange": "se menzionato",
     "desires": "cosa vuole il cliente"

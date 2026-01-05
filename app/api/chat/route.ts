@@ -85,21 +85,39 @@ export async function POST(req: Request) {
                 .eq('id', activeUserId)
                 .single();
 
+            // Fetch Clone Specific Personality
+            const { data: clone } = await supabase
+                .from('clones')
+                .select('personality, metadata')
+                .eq('user_id', activeUserId)
+                .eq('is_active', true)
+                .limit(1)
+                .single();
+
             if (profile) {
                 planTier = profile.plan_tier || 'curioso';
                 isFounder = profile.is_founder || false;
+
+                const cloneSettings = clone ? {
+                    tone: clone.personality,
+                    customPersonality: clone.metadata?.customPersonality,
+                    faqs: clone.metadata?.faqs
+                } : undefined;
+
                 aiResponse = await hybridAIResponse(
                     userInput,
                     context,
                     planTier,
                     isFounder,
-                    history as ChatHistoryItem[]
+                    history as ChatHistoryItem[],
+                    cloneSettings
                 );
                 providerName = getProviderDisplayName(planTier, isFounder);
-            } else {
-                aiResponse = await processConversation(history as ChatHistoryItem[], userInput, context);
             }
-        } else {
+        }
+
+        // 4.5 Fallback for non-authenticated or profile-less chat (e.g., public landing)
+        if (!aiResponse) {
             aiResponse = await processConversation(history as ChatHistoryItem[], userInput, context);
         }
 
