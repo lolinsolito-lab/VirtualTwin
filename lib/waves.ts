@@ -18,6 +18,7 @@ export interface Wave {
     endDate: string;
     prices: {
         curioso: number;
+        aspirante: number;
         esploratore: number;
         pioniere: number;
         conquistatore: number;
@@ -25,6 +26,7 @@ export interface Wave {
     };
     stripePriceIds: {
         curioso: string;
+        aspirante: string;
         esploratore: string;
         pioniere: string;
         conquistatore: string;
@@ -39,6 +41,7 @@ export interface PublicPricing {
     endDate: string;
     prices: {
         curioso: number;
+        aspirante: number;
         esploratore: number;
         pioniere: number;
         conquistatore: number;
@@ -46,6 +49,7 @@ export interface PublicPricing {
     };
     stripePriceIds: {
         curioso: string;
+        aspirante: string;
         esploratore: string;
         pioniere: string;
         conquistatore: string;
@@ -68,6 +72,7 @@ export const WAVES: Wave[] = [
         endDate: '2026-04-30',
         prices: {
             curioso: 0,
+            aspirante: 49,
             esploratore: 39,
             pioniere: 147,
             conquistatore: 347,
@@ -75,6 +80,7 @@ export const WAVES: Wave[] = [
         },
         stripePriceIds: {
             curioso: 'free_tier_placeholder',
+            aspirante: 'price_1SlX717141DXdb9vAspirante', // Placeholder/Actual ID
             esploratore: 'price_1SlX717141DXdb9vzAEbFLdY',
             pioniere: 'price_1SlX727141DXdb9vdgRHbxrD',
             conquistatore: 'price_1SlX727141DXdb9vCKAM0WCi',
@@ -91,6 +97,7 @@ export const WAVES: Wave[] = [
         endDate: '2026-07-31',
         prices: {
             curioso: 0,
+            aspirante: 49,
             esploratore: 59,
             pioniere: 197,
             conquistatore: 447,
@@ -98,6 +105,7 @@ export const WAVES: Wave[] = [
         },
         stripePriceIds: {
             curioso: 'free_tier_placeholder',
+            aspirante: 'price_1SlX747141DXdb9vAspirante',
             esploratore: 'price_1SlX747141DXdb9v7RaiL2FW',
             pioniere: 'price_1SlX747141DXdb9vj97oU4F2',
             conquistatore: 'price_1SlX757141DXdb9vVTtcw0qw',
@@ -114,6 +122,7 @@ export const WAVES: Wave[] = [
         endDate: '2026-10-31',
         prices: {
             curioso: 0,
+            aspirante: 49,
             esploratore: 79,
             pioniere: 247,
             conquistatore: 547,
@@ -121,6 +130,7 @@ export const WAVES: Wave[] = [
         },
         stripePriceIds: {
             curioso: 'free_tier_placeholder',
+            aspirante: 'price_1SlX767141DXdb9vAspirante',
             esploratore: 'price_1SlX767141DXdb9vQ1NBwZHT',
             pioniere: 'price_1SlX777141DXdb9vMSBYuzHB',
             conquistatore: 'price_1SlX777141DXdb9v37XSqeR6',
@@ -141,6 +151,7 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         endDate: '2026-03-31',
         prices: {
             curioso: 0,
+            aspirante: 49,
             esploratore: 297,
             pioniere: 697,
             conquistatore: 1197,
@@ -148,6 +159,7 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         },
         stripePriceIds: {
             curioso: 'free_tier_placeholder',
+            aspirante: 'price_1SlX787141DXdb9vAspirante',
             esploratore: 'price_1SlX787141DXdb9vqXSlofaP',
             pioniere: 'price_1SlX797141DXdb9vfjEhb8Al',
             conquistatore: 'price_1SlX7A7141DXdb9vf3zLKG2q',
@@ -161,6 +173,7 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         endDate: '2026-06-30',
         prices: {
             curioso: 0,
+            aspirante: 49,
             esploratore: 347,
             pioniere: 747,
             conquistatore: 1297,
@@ -168,6 +181,7 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         },
         stripePriceIds: {
             curioso: 'free_tier_placeholder',
+            aspirante: 'price_1SlX7B7141DXdb9vAspirante',
             esploratore: 'price_1SlX7B7141DXdb9vI5yHtSLp',
             pioniere: 'price_1SlX7C7141DXdb9vuq79oTiz',
             conquistatore: 'price_1SlX7C7141DXdb9v0gpSYRNU',
@@ -181,6 +195,7 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         endDate: '2026-12-31',
         prices: {
             curioso: 0,
+            aspirante: 49,
             esploratore: 397,
             pioniere: 797,
             conquistatore: 1397,
@@ -188,6 +203,7 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         },
         stripePriceIds: {
             curioso: 'free_tier_placeholder',
+            aspirante: 'price_1SlX7D7141DXdb9vAspirante',
             esploratore: 'price_1SlX7D7141DXdb9vjK0CGHD6',
             pioniere: 'price_1SlX7E7141DXdb9v63Co4hK7',
             conquistatore: 'price_1SlX7F7141DXdb9vk4Jz7Ulf',

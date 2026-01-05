@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { processConversation } from '@/lib/gemini';
 import { ChatHistoryItem } from '@/lib/types';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
     try {
@@ -24,6 +25,18 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Detect user tier for watermark
+        let userTier = 'curioso';
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        if (authUser) {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('subscription_tier')
+                .eq('id', authUser.id)
+                .single();
+            if (profile) userTier = profile.subscription_tier || 'curioso';
+        }
+
         // Default business context for demo
         const context = businessContext || `
 VirtualTwin Sovereign AI - Cloni Digitali per Vendite Automatiche
@@ -34,19 +47,17 @@ BENEFICI:
 - Risposta 24/7 (anche alle 23:47 di domenica)
 - +340% conversioni rispetto a risposta manuale
 - Setup in 5 minuti
-- Zero competenze tecniche richieste
 
-PRICING:
-- Free (€0): 1 clone, 100 msg/mese, watermark
-- Esploratore (€39/mese): 1K msg, analytics
-- Pioniere (€97/mese): 5K msg, 3 canali, PIÙ SCELTO
-- Conquistatore (€197/mese): 20K msg, priority support
-- Imperatore (€397/mese): White-label, illimitato
+PRICING (Mensile):
+- Curioso (€0): 100 msg, watermark, 14gg trial
+- Aspirante (€49): 500 msg, academy, community
+- Esploratore (€297): 1K msg, analytics, support <48h
+- Pioniere (€697): 5K msg, 3 canali, A/B Test
+- Conquistatore (€1197): 20K msg, priority support
+- Imperatore (€1997): 50K msg, White-label
 
 TARGET: Imprenditori digitali, coach, consulenti, e-commerce, agenzie
-
-OBIETTIVO: Qualificare il lead, capire le sue esigenze, e guidarlo verso il piano giusto o una demo.
-        `.trim();
+`.trim();
 
         // Call Gemini AI
         const aiResponse = await processConversation(
@@ -55,9 +66,16 @@ OBIETTIVO: Qualificare il lead, capire le sue esigenze, e guidarlo verso il pian
             context
         );
 
+        let finalReply = aiResponse.reply;
+
+        // Apply watermark for Curioso tier
+        if (userTier === 'curioso') {
+            finalReply += "\n\n---\n⚡ Risposta generata da VirtualTwin (v. Free)";
+        }
+
         return NextResponse.json({
             success: true,
-            reply: aiResponse.reply,
+            reply: finalReply,
             insights: aiResponse.insights,
             shouldNotifyOwner: aiResponse.shouldNotifyOwner,
             action_type: aiResponse.action_type,

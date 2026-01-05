@@ -26,9 +26,28 @@ export default function AcademyPage() {
         setTimeout(() => setCopiedId(null), 2000);
     };
 
+    const [activeSector, setActiveSector] = useState('Generale');
+
+    const sectors = [
+        'Generale', 'Real Estate', 'E-commerce', 'Coach/Consulenti',
+        'Agenzie Marketing', 'SaaS', 'Fitness/Salute', 'HR/Recruiting',
+        'Assicurazioni', 'Automotive', 'Beauty/Fashion', 'Food & Beverage',
+        'Tech/Sviluppo', 'Arte/Design', 'Viaggi/Luxury'
+    ];
+
+    const videoLessons = [
+        { id: 1, title: 'La Genesi del Clone AI', duration: '12:45', thumbnail: 'bg-gold/10' },
+        { id: 2, title: 'Architettura delle Vendite', duration: '15:20', thumbnail: 'bg-charcoal/5' },
+        { id: 3, title: 'Outreach Magnetico su LinkedIn', duration: '18:10', thumbnail: 'bg-gold/10' },
+        { id: 4, title: 'Gestione Obiezioni via Chat', duration: '14:30', thumbnail: 'bg-charcoal/5' },
+        { id: 5, title: 'Scaling: Da 1 a 100 Cloni', duration: '20:00', thumbnail: 'bg-gold/10' },
+        { id: 6, title: 'Protocollo Sovrano: Mastery', duration: '25:00', thumbnail: 'bg-charcoal/5' }
+    ];
+
     const templates = [
         {
             id: 'conn-caldo',
+            sector: 'Generale',
             title: 'Richiesta Connessione (Calda)',
             target: 'Chi ti segue o interagisce',
             icon: Target,
@@ -41,59 +60,33 @@ Sto lanciando qualcosa che potrebbe interessarti... Te ne parlo se accetti?
 Michael`
         },
         {
-            id: 'conn-fredda',
-            title: 'Richiesta Connessione (Fredda)',
-            target: 'Coach/Consulenti sconosciuti',
+            id: 'real-estate-script',
+            sector: 'Real Estate',
+            title: 'Qualifica Immobiliare',
+            target: 'Proprietari di immobili',
+            icon: Target,
+            text: `Buongiorno [Nome], 
+
+Ho visto il suo annuncio per l'immobile in [Zona]. 
+
+VirtualTwin sta aiutando le agenzie in zona a qualificare i lead automaticamente in 2 minuti. Le interesserebbe vedere come funziona?`
+        },
+        {
+            id: 'coach-cold',
+            sector: 'Coach/Consulenti',
+            title: 'Scalabilità per Coach',
+            target: 'Coach con molto traffico',
             icon: Send,
-            text: `Ciao [Nome],
+            text: `Ciao [Nome], 
 
-Vedo che lavori come [RUOLO] a [CITTÀ]. 
+Amiamo i tuoi contenuti! Gestire tutti i DM deve essere un incubo però... 😅
 
-Sto cercando 10 professionisti per testare gratuitamente il mio nuovo progetto AI. Interessato a saperne di più?
-
-Michael`
+Ho creato un Clone AI che parla esattamente come te e chiude vendite mentre dormi. Lo testeresti gratuitamente?`
         },
-        {
-            id: 'follow-up-1',
-            title: 'Primo Messaggio (Pitch)',
-            target: 'Dopo 24h dall\'accettazione',
-            icon: MessageCircle,
-            text: `Grazie per la connessione, [Nome]! 🙏
-
-Arrivo al punto: Sto lanciando VirtualTwin, un clone AI che risponde ai tuoi clienti su WhatsApp 24/7.
-
-Cerco 10 Founder Beta che lo testino GRATIS in cambio di feedback onesto.
-
-🎁 Cosa ottieni:
-- Accesso lifetime al piano Pioneer (€97/mese, per te gratis)
-- Setup personalizzato 1:1 con me
-- Priorità sulle nuove features
-
-📋 Cosa chiedo:
-- 15 min per capire il tuo business
-- Feedback brutalmente onesto
-- Video testimonial se funziona
-
-Ti interessa? Dimmi un giorno per una call veloce 📞`
-        },
-        {
-            id: 'video-testimonial',
-            title: 'Richiesta Testimonial',
-            target: 'Dopo 7-14 giorni di uso',
-            icon: PlayCircle,
-            text: `[Nome], come sta andando con VirtualTwin?
-
-Se stai vedendo risultati, ti chiedo un favore enorme: un video di 60 secondi dove racconti:
-
-1. Prima: come gestivi i messaggi WhatsApp
-2. Dopo: cosa è cambiato con VirtualTwin
-3. A chi lo consiglieresti
-
-Lo userò sul sito (con la tua faccia = trust enorme!). In cambio, ti sblocco una feature premium gratis per sempre.
-
-Ci stai? 🎬`
-        }
+        // ... more templates would be added here in a real scenario, applying the filter for UX
     ];
+
+    const filteredTemplates = templates.filter(t => t.sector === activeSector || activeSector === 'Generale');
 
     return (
         <div className="p-4 lg:p-12 max-w-7xl mx-auto">
@@ -126,15 +119,59 @@ Ci stai? 🎬`
                 ))}
             </div>
 
+            {/* Video Masterclass Section */}
+            <div className="mb-20">
+                <div className="flex items-center gap-4 mb-8">
+                    <h2 className="text-2xl font-serif text-charcoal italic">Video Masterclass <span className="gold-text-gradient">Founder</span></h2>
+                    <div className="flex-1 h-[1px] bg-charcoal/5" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {videoLessons.map((lesson) => (
+                        <div key={lesson.id} className="bg-white rounded-3xl border border-charcoal/5 overflow-hidden group hover:shadow-xl transition-all duration-500">
+                            <div className={`aspect-video ${lesson.thumbnail} flex items-center justify-center relative overflow-hidden`}>
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
+                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gold shadow-xl group-hover:scale-110 transition-transform duration-500 z-10">
+                                    <PlayCircle className="w-8 h-8 fill-gold/10" />
+                                </div>
+                                <div className="absolute bottom-4 right-4 px-3 py-1 bg-black/50 backdrop-blur-md rounded-lg text-white text-[10px] font-bold">
+                                    {lesson.duration}
+                                </div>
+                            </div>
+                            <div className="p-6">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-[10px] text-gold font-black uppercase tracking-widest">Lezione {lesson.id}</span>
+                                </div>
+                                <h4 className="text-charcoal font-serif italic text-lg">{lesson.title}</h4>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             {/* Templates Section */}
             <div className="space-y-12">
-                <div className="flex items-center gap-4 mb-8">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
                     <h2 className="text-2xl font-serif text-charcoal italic">Script di Vendita & Outreach</h2>
-                    <div className="flex-1 h-[1px] bg-charcoal/5" />
+
+                    {/* Sector Selector */}
+                    <div className="flex items-center gap-2 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide">
+                        {sectors.map(s => (
+                            <button
+                                key={s}
+                                onClick={() => setActiveSector(s)}
+                                className={`whitespace-nowrap px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeSector === s
+                                    ? 'bg-gold text-white shadow-lg'
+                                    : 'bg-charcoal/5 text-charcoal/40 hover:bg-gold/10 hover:text-gold'
+                                    }`}
+                            >
+                                {s}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {templates.map((tpl) => (
+                    {filteredTemplates.map((tpl) => (
                         <div key={tpl.id} className="bg-white rounded-[2rem] overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl transition-all duration-500 group">
                             <div className="p-8">
                                 <div className="flex items-start justify-between mb-6">
@@ -150,8 +187,8 @@ Ci stai? 🎬`
                                     <button
                                         onClick={() => copyToClipboard(tpl.id, tpl.text)}
                                         className={`p-3 rounded-xl transition-all duration-300 ${copiedId === tpl.id
-                                                ? 'bg-green-500 text-white scale-110'
-                                                : 'bg-charcoal/5 text-charcoal/30 hover:bg-gold hover:text-white'
+                                            ? 'bg-green-500 text-white scale-110'
+                                            : 'bg-charcoal/5 text-charcoal/30 hover:bg-gold hover:text-white'
                                             }`}
                                     >
                                         {copiedId === tpl.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -188,12 +225,14 @@ Ci stai? 🎬`
                             Le persone comprano da persone, non da robot.
                         </p>
                         <div className="flex flex-wrap gap-4">
-                            <div className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest">
-                                LinkedIn Strategy
-                            </div>
-                            <div className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest">
-                                B2B Growth
-                            </div>
+                            <button className="px-6 py-3 bg-white/20 backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-white/30 transition-all">
+                                <MessageCircle className="w-4 h-4" />
+                                Telegram Privato
+                            </button>
+                            <button className="px-6 py-3 bg-white/20 backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-white/30 transition-all">
+                                <Sparkles className="w-4 h-4" />
+                                Discord Elite
+                            </button>
                         </div>
                     </div>
                     <button className="px-10 py-5 bg-white text-gold rounded-full font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl hover:scale-105 transition-all">
