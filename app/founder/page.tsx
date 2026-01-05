@@ -421,7 +421,10 @@ export default function FounderPage() {
                         <Link href="/" className="text-gold hover:underline">← Torna alla Home</Link>
                     </div>
 
-                </div >
-            </div >
-            );
+                </div>
+            </div>
+
+        </div>
+        </div >
+    );
 }
