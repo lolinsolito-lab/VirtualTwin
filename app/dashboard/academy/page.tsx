@@ -301,74 +301,76 @@ export default function AcademyPage() {
                             </div>
                         </div>
 
-                        <ImperialGate tier={module.tier} featureName={module.name} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {module.videos.map((lesson) => {
-                                const isCompleted = user?.completed_video_ids?.includes(lesson.id);
-                                return (
-                                    <div
-                                        key={lesson.id}
-                                        className={`bg-white rounded-[2rem] border border-charcoal/5 overflow-hidden group hover:shadow-2xl transition-all duration-700 ${isCompleted ? 'ring-1 ring-green-100' : ''}`}
-                                    >
-                                        <div className={`aspect-video ${lesson.thumbnail} flex items-center justify-center relative overflow-hidden`}>
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-700" />
+                        <ImperialGate tier={module.tier} featureName={module.name} className="space-y-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {module.videos.map((lesson) => {
+                                    const isCompleted = user?.completed_video_ids?.includes(lesson.id);
+                                    return (
+                                        <div
+                                            key={lesson.id}
+                                            className={`bg-white rounded-[2rem] border border-charcoal/5 overflow-hidden group hover:shadow-2xl transition-all duration-700 ${isCompleted ? 'ring-1 ring-green-100' : ''}`}
+                                        >
+                                            <div className={`aspect-video ${lesson.thumbnail} flex items-center justify-center relative overflow-hidden`}>
+                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-700" />
 
-                                            {isCompleted ? (
-                                                <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center text-white shadow-xl z-20">
-                                                    <Check className="w-8 h-8" />
+                                                {isCompleted ? (
+                                                    <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center text-white shadow-xl z-20">
+                                                        <Check className="w-8 h-8" />
+                                                    </div>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => setSelectedVideo(lesson)}
+                                                        className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gold shadow-xl group-hover:scale-110 transition-transform duration-700 z-10"
+                                                    >
+                                                        <PlayCircle className="w-8 h-8 fill-gold/10" />
+                                                    </button>
+                                                )}
+
+                                                <div className="absolute bottom-4 right-4 px-4 py-2 bg-black/60 backdrop-blur-md rounded-xl text-white text-[10px] font-black tracking-widest shadow-lg">
+                                                    {lesson.duration}
                                                 </div>
-                                            ) : (
-                                                <button
-                                                    onClick={() => setSelectedVideo(lesson)}
-                                                    className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gold shadow-xl group-hover:scale-110 transition-transform duration-700 z-10"
-                                                >
-                                                    <PlayCircle className="w-8 h-8 fill-gold/10" />
-                                                </button>
-                                            )}
 
-                                            <div className="absolute bottom-4 right-4 px-4 py-2 bg-black/60 backdrop-blur-md rounded-xl text-white text-[10px] font-black tracking-widest shadow-lg">
-                                                {lesson.duration}
+                                                {isCompleted && (
+                                                    <div className="absolute top-4 left-4 px-3 py-1 bg-green-500/90 backdrop-blur-md rounded-lg text-white text-[8px] font-black uppercase tracking-[0.2em] shadow-lg">
+                                                        Completato +{lesson.xp} XP
+                                                    </div>
+                                                )}
                                             </div>
-
-                                            {isCompleted && (
-                                                <div className="absolute top-4 left-4 px-3 py-1 bg-green-500/90 backdrop-blur-md rounded-lg text-white text-[8px] font-black uppercase tracking-[0.2em] shadow-lg">
-                                                    Completato +{lesson.xp} XP
+                                            <div className="p-8">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-gold" />
+                                                    <span className="text-[10px] text-charcoal/30 font-black uppercase tracking-[0.3em]">{lesson.xp} XP AWARD</span>
                                                 </div>
-                                            )}
-                                        </div>
-                                        <div className="p-8">
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-gold" />
-                                                <span className="text-[10px] text-charcoal/30 font-black uppercase tracking-[0.3em]">{lesson.xp} XP AWARD</span>
+                                                <h4 className="text-charcoal font-serif italic text-xl leading-tight group-hover:text-gold transition-colors">{lesson.title}</h4>
                                             </div>
-                                            <h4 className="text-charcoal font-serif italic text-xl leading-tight group-hover:text-gold transition-colors">{lesson.title}</h4>
                                         </div>
-                                    </div>
-                                );
-                            })}
-                        </ImperialGate>
-
-                        {/* Module Progress Footer / Quiz Trigger */}
-                        <div className="mt-8 flex items-center justify-between p-8 bg-charcoal/[0.02] border border-charcoal/5 rounded-[2rem]">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gold shadow-luxury-sm">
-                                    <Award className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h4 className="text-[10px] text-charcoal/40 font-black uppercase tracking-widest">Validazione Competenze</h4>
-                                    <p className="text-sm font-serif italic text-charcoal">Completa il quiz per sbloccare il badge del modulo.</p>
-                                </div>
+                                    );
+                                })}
                             </div>
 
-                            <button
-                                onClick={() => setActiveQuiz({ moduleId: module.tier, moduleName: module.name, questions: (module as any).quizQuestions || [] })}
-                                className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${user?.quizzes_passed?.[module.tier]
-                                    ? 'bg-green-50 text-green-600 border border-green-100 cursor-default'
-                                    : 'bg-white text-charcoal shadow-luxury-sm hover:bg-charcoal hover:text-white'
-                                    }`}
-                            >
-                                {user?.quizzes_passed?.[module.tier] ? 'Modulo Convalidato ✓' : 'Inizia Quiz Modulo'}
-                            </button>
-                        </div>
+                            {/* Module Progress Footer / Quiz Trigger */}
+                            <div className="flex items-center justify-between p-8 bg-charcoal/[0.02] border border-charcoal/5 rounded-[2rem]">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gold shadow-luxury-sm">
+                                        <Award className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[10px] text-charcoal/40 font-black uppercase tracking-widest">Validazione Competenze</h4>
+                                        <p className="text-sm font-serif italic text-charcoal">Completa il quiz per sbloccare il badge del modulo.</p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={() => setActiveQuiz({ moduleId: module.tier, moduleName: module.name, questions: (module as any).quizQuestions || [] })}
+                                    className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${user?.quizzes_passed?.[module.tier]
+                                        ? 'bg-green-50 text-green-600 border border-green-100 cursor-default'
+                                        : 'bg-white text-charcoal shadow-luxury-sm hover:bg-charcoal hover:text-white'
+                                        }`}
+                                >
+                                    {user?.quizzes_passed?.[module.tier] ? 'Modulo Convalidato ✓' : 'Inizia Quiz Modulo'}
+                                </button>
+                            </div>
+                        </ImperialGate>
                     </div>
                 ))}
             </div>
