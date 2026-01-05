@@ -882,6 +882,74 @@ export default function SettingsPage() {
                         </div>
                     )}
 
+                    {activeTab === 'platform' && role === 'admin' && (
+                        <div className="silk-card p-10 rounded-[2rem] border border-gold/40 bg-gold/5 relative overflow-hidden">
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-14 h-14 rounded-2xl bg-charcoal flex items-center justify-center shadow-luxury">
+                                    <Database className="w-7 h-7 text-gold" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-serif italic text-charcoal">Amministrazione Piattaforma</h2>
+                                    <p className="text-gold text-[10px] uppercase tracking-widest font-black">Global Control Center</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="md:col-span-2">
+                                    <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Nome Titolare Piattaforma (Legal Entity)</label>
+                                    <input
+                                        type="text"
+                                        value={settings.platformOwner}
+                                        onChange={(e) => setSettings({ ...settings, platformOwner: e.target.value })}
+                                        className="w-full px-5 py-4 bg-white/80 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors"
+                                    />
+                                    <p className="text-charcoal/40 text-[10px] mt-2 italic">Questo nome apparirà nei footer e nelle email di fatturazione.</p>
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Partita IVA Piattaforma</label>
+                                    <input
+                                        type="text"
+                                        value={settings.platformVat}
+                                        onChange={(e) => setSettings({ ...settings, platformVat: e.target.value })}
+                                        className="w-full px-5 py-4 bg-white/80 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Nome Banca</label>
+                                    <input
+                                        type="text"
+                                        value={settings.platformBank}
+                                        onChange={(e) => setSettings({ ...settings, platformBank: e.target.value })}
+                                        className="w-full px-5 py-4 bg-white/80 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors"
+                                    />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">IBAN Piattaforma (per Bonifici)</label>
+                                    <input
+                                        type="text"
+                                        value={settings.platformIban}
+                                        onChange={(e) => setSettings({ ...settings, platformIban: e.target.value })}
+                                        className="w-full px-5 py-4 bg-white/80 border border-charcoal/10 rounded-xl text-charcoal font-mono focus:border-gold focus:outline-none transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Codice SWIFT / BIC</label>
+                                    <input
+                                        type="text"
+                                        value={settings.platformSwift}
+                                        onChange={(e) => setSettings({ ...settings, platformSwift: e.target.value })}
+                                        className="w-full px-5 py-4 bg-white/80 border border-charcoal/10 rounded-xl text-charcoal font-mono focus:border-gold focus:outline-none transition-colors"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mt-8 p-5 rounded-2xl bg-gold/10 border border-gold/20">
+                                <p className="text-[10px] text-gold font-bold uppercase tracking-widest mb-2">Nota di Sicurezza</p>
+                                <p className="text-charcoal/60 text-xs italic">Questi dati sono sensibili. Solo gli account con ruolo 'admin' possono visualizzare e modificare queste impostazioni. Verranno utilizzati per le istruzioni di pagamento fornite agli utenti.</p>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Save Button */}
                     <div className="mt-8 flex justify-end">
                         <button
