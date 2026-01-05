@@ -9,7 +9,7 @@ interface Message {
 }
 
 const demoResponses: Record<string, string> = {
-    "default": "Ciao! 👋 Sono Sarah, il clone demo. Chiedimi dei prezzi o come funziona!",
+    "default": "Ciao! 👋 Sono il VirtualTwin di Sarah – un clone digitale di esempio. Chiedimi qualsiasi cosa su VirtualTwin: prezzi, funzionalità, setup!",
     "prezzo": "Abbiamo piani da €39/mese! 💫 Vuoi i dettagli?",
     "funziona": "Semplice! 5 domande → AI impara → QR WhatsApp → Live! 🚀",
     "whatsapp": "Sì! WhatsApp + Instagram + Messenger. Un clone, ovunque. 📱",
@@ -104,7 +104,7 @@ const SolutionEnhanced = () => {
                         <div className="flex items-center gap-4 mb-8">
                             <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-gold/50"></div>
                             <span className="text-gold text-[9px] uppercase tracking-[0.4em] font-black bg-gold/5 px-4 py-2 rounded-full">
-                                Ecco Come Funziona
+                                Provalo Subito →
                             </span>
                         </div>
 
@@ -160,14 +160,14 @@ const SolutionEnhanced = () => {
                                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="font-medium text-charcoal text-sm">Sarah • Clone Demo</p>
+                                    <p className="font-medium text-charcoal text-sm">Il VirtualTwin di Sarah</p>
                                     <p className="text-xs text-green-600 flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
                                         Online ora
                                     </p>
                                 </div>
-                                <span className="px-2.5 py-1 bg-gold/10 text-gold text-[8px] uppercase tracking-wider font-bold rounded-full">
-                                    Prova
+                                <span className="px-2.5 py-1 bg-green-100 text-green-700 text-[8px] uppercase tracking-wider font-bold rounded-full">
+                                    Demo Live
                                 </span>
                             </div>
 
@@ -236,6 +236,15 @@ const SolutionEnhanced = () => {
                                     </button>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Explainer Note */}
+                        <div className="mt-6 bg-gradient-to-r from-gold/5 to-champagne/20 rounded-2xl p-5 border border-gold/20">
+                            <p className="text-charcoal/80 text-sm leading-relaxed">
+                                <strong className="text-gold">👆 Questo è un esempio reale.</strong><br />
+                                Sarah ha creato il <strong className="text-charcoal">suo VirtualTwin</strong> (un clone digitale) che risponde per lei 24/7.<br />
+                                <span className="text-charcoal/60 text-xs">Prova a chiedergli qualcosa! È esattamente come funzionerà il TUO clone.</span>
+                            </p>
                         </div>
 
                         {/* Floating Stats */}
