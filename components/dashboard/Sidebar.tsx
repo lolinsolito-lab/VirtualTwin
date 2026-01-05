@@ -22,7 +22,8 @@ import {
     Cpu,
     Flame,
     Send,
-    Award
+    Award,
+    ShieldCheck
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -155,6 +156,17 @@ export function Sidebar() {
                         </Link>
                     );
                 })}
+
+                {user?.role === 'admin' && (
+                    <Link
+                        href="/admin"
+                        onClick={() => isMobile && setIsOpen(false)}
+                        className="flex items-center gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 rounded-xl lg:rounded-2xl text-gold/60 hover:text-gold hover:bg-gold/10 transition-all group mt-4 border border-gold/10"
+                    >
+                        <ShieldCheck className="w-5 h-5 transition-transform group-hover:rotate-12" />
+                        <span className="text-[10px] uppercase tracking-[0.2em] font-black">Admin Cockpit</span>
+                    </Link>
+                )}
             </nav>
 
             <div className="p-4 lg:p-6 mt-auto">
@@ -247,7 +259,9 @@ export function Sidebar() {
 
                 <button
                     onClick={async () => {
+                        console.log('Logout initiative...');
                         await supabase.auth.signOut();
+                        console.log('SignOut complete, redirecting...');
                         window.location.href = '/auth/login';
                     }}
                     className="flex items-center gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 w-full text-charcoal/30 hover:text-red-400 transition-colors duration-300 text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.2em] font-bold rounded-xl hover:bg-red-50"

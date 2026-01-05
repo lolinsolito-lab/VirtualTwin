@@ -25,15 +25,17 @@ export default function AdminLayout({
                     return;
                 }
 
-                // 3. Cryptographic check for SuperAdmin status
+                // 3. Cryptographic check for Admin status
                 const { data, error } = await supabase
                     .from('profiles')
-                    .select('is_super_admin')
+                    .select('is_super_admin, role')
                     .eq('id', session.user.id)
                     .single();
 
-                if (error || !data?.is_super_admin) {
-                    console.warn("🔐 Access Denied: User is not a SuperAdmin", session.user.email);
+                const isAdmin = data?.is_super_admin || data?.role === 'admin';
+
+                if (error || !isAdmin) {
+                    console.warn("🔐 Access Denied: User is not an Admin", session.user.email);
                     // Redirect non-admins to the standard dashboard
                     router.push("/dashboard");
                     return;

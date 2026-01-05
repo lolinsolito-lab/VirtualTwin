@@ -99,6 +99,10 @@ export interface UserProfile {
   level: number;
   completed_video_ids: string[];
   badges: any[];
+  role: 'user' | 'admin' | 'moderator';
+  business_iban?: string;
+  business_vat?: string;
+  legal_address?: string;
   streak_days: number;
   last_activity_at: string;
   quizzes_passed: any;
