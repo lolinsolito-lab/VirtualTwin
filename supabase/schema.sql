@@ -16,13 +16,25 @@ CREATE TABLE public.profiles (
   avatar_url TEXT,
   
   -- Subscription info
-  plan_tier TEXT DEFAULT 'curioso' CHECK (plan_tier IN ('curioso', 'esploratore', 'pioniere', 'conquistatore', 'imperatore')),
-  stripe_customer_id TEXT UNIQUE,
-  stripe_subscription_id TEXT,
+  plan_tier TEXT DEFAULT 'curioso' CHECK (plan_tier IN ('curioso', 'aspirante', 'esploratore', 'pioniere', 'conquistatore', 'imperatore')),
   subscription_status TEXT DEFAULT 'trialing' CHECK (subscription_status IN ('trialing', 'active', 'canceled', 'past_due')),
-  trial_ends_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '7 days'),
-  subscription_ends_at TIMESTAMPTZ,
+  trial_ends_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '14 days'),
   
+  -- Sovereign metrics
+  xp INTEGER DEFAULT 0,
+  level INTEGER DEFAULT 1,
+  completed_video_ids TEXT[] DEFAULT '{}',
+  badges JSONB DEFAULT '[]'::jsonb,
+  streak_days INTEGER DEFAULT 0,
+  last_activity_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  -- Onboarding info
+  onboarding_completed BOOLEAN DEFAULT FALSE,
+  business_name TEXT,
+  business_sector TEXT,
+  target_client TEXT,
+  ai_tone TEXT DEFAULT 'professionale',
+
   -- Founder status
   is_founder BOOLEAN DEFAULT FALSE,
   founder_number INTEGER UNIQUE, -- 1 to 1000
@@ -350,7 +362,31 @@ CREATE POLICY "Users can view own analytics"
   USING (auth.uid() = user_id);
 
 -- =============================================
--- 7. BILLING_EVENTS (Stripe Webhooks)
+-- 7. CLONE_FAQS (AI Training Data)
+-- =============================================
+CREATE TABLE public.clone_faqs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- RLS for clone_faqs
+ALTER TABLE public.clone_faqs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own clone_faqs"
+  ON public.clone_faqs FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can manage own clone_faqs"
+  ON public.clone_faqs FOR ALL
+  USING (auth.uid() = user_id);
+
+-- =============================================
+-- 8. BILLING_EVENTS (Stripe Webhooks)
 -- =============================================
 CREATE TABLE public.billing_events (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -378,7 +414,7 @@ CREATE INDEX idx_billing_events_stripe ON public.billing_events(stripe_event_id)
 CREATE INDEX idx_billing_events_processed ON public.billing_events(processed);
 
 -- =============================================
--- 8. WAITLIST
+-- 9. WAITLIST
 -- =============================================
 CREATE TABLE public.waitlist (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,

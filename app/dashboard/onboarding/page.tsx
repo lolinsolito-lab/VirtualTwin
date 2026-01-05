@@ -36,56 +36,62 @@ interface UserTierInfo {
 }
 
 const getTierInfo = (tier: string, isFounder: boolean): UserTierInfo => {
+    // Import logic replaced by manual lookup to keep it simple but accurate
     // Founder users (any tier with is_founder = true)
     if (isFounder) {
+        const founderPrices: Record<string, string> = {
+            'aspirante': '€49',
+            'esploratore': '€39',
+            'pioniere': '€147',
+            'conquistatore': '€347',
+            'imperatore': '€697'
+        };
+        const price = founderPrices[tier] || '€147';
+
         return {
             tier,
             isFounder: true,
-            price: '€147/mese',
+            price: `${price}/mese`,
             badge: 'GENESIS FOUNDER',
             badgeColor: 'bg-gold/10 text-gold',
-            subtitle: 'Hai bloccato il prezzo Founder per sempre. Configuriamo il tuo clone AI in 5 minuti.',
+            subtitle: `Hai bloccato il prezzo Founder (${price}) per sempre. Configuriamo il tuo clone AI in 5 minuti.`,
             benefits: [
-                { icon: Lock, text: '€147/mese bloccato LIFETIME' },
+                { icon: Lock, text: `${price}/mese bloccato LIFETIME` },
                 { icon: Sparkles, text: 'Clone AI personalizzato' },
                 { icon: Gift, text: 'Accesso Genesis esclusivo' },
             ]
         };
     }
 
-    // Free tier (curioso)
-    if (tier === 'curioso' || !tier) {
-        return {
-            tier: 'curioso',
-            isFounder: false,
-            price: 'Gratis',
-            badge: 'PROVA GRATUITA',
-            badgeColor: 'bg-emerald-100 text-emerald-600',
-            subtitle: 'Inizia la tua prova gratuita di 14 giorni. Configuriamo il tuo clone AI!',
-            benefits: [
-                { icon: Gift, text: '14 giorni di prova gratuita' },
-                { icon: Sparkles, text: 'Clone AI personalizzato' },
-                { icon: MessageSquare, text: '100 messaggi/mese' },
-            ]
-        };
-    }
-
     // Public paid tiers
-    const tierNames: Record<string, string> = {
-        'esploratore': 'Esploratore',
-        'pioniere': 'Pioniere',
-        'conquistatore': 'Conquistatore',
-        'imperatore': 'Imperatore'
+    const publicPrices: Record<string, string> = {
+        'aspirante': '€49',
+        'esploratore': '€297',
+        'pioniere': '€697',
+        'conquistatore': '€1197',
+        'imperatore': '€1997'
     };
+
+    const price = publicPrices[tier] || '';
 
     return {
         tier,
         isFounder: false,
-        price: '',
-        badge: tierNames[tier] || tier.toUpperCase(),
-        badgeColor: 'bg-charcoal/10 text-charcoal',
-        subtitle: 'Benvenuto! Configuriamo il tuo clone AI in 5 minuti.',
-        benefits: [
+        price: tier === 'curioso' || !tier ? 'Gratis' : (price ? `${price}/mese` : 'Gratis'),
+        badge: tier === 'curioso' || !tier ? 'PROVA GRATUITA' : (tier.charAt(0).toUpperCase() + tier.slice(1)),
+        badgeColor: tier === 'curioso' || !tier ? 'bg-emerald-100 text-emerald-600' : 'bg-charcoal/10 text-charcoal',
+        subtitle: tier === 'curioso' || !tier
+            ? 'Inizia la tua prova gratuita di 14 giorni. Configuriamo il tuo clone AI!'
+            : `Benvenuto! Hai scelto il piano ${tier}. Configuriamo il tuo clone AI in 5 minuti.`,
+        benefits: tier === 'curioso' || !tier ? [
+            { icon: Gift, text: '14 giorni di prova gratuita' },
+            { icon: Sparkles, text: 'Clone AI personalizzato' },
+            { icon: MessageSquare, text: '100 messaggi/mese' },
+        ] : tier === 'aspirante' ? [
+            { icon: Sparkles, text: '1 Clone AI personalizzato' },
+            { icon: MessageSquare, text: '500 messaggi/mese' },
+            { icon: Gift, text: 'Accesso Academy & Community' },
+        ] : [
             { icon: Sparkles, text: 'Clone AI personalizzato' },
             { icon: MessageSquare, text: 'Risposte automatiche 24/7' },
             { icon: Gift, text: 'Supporto prioritario' },
@@ -139,6 +145,7 @@ function StepWelcome({ onNext, tierInfo }: { onNext: (data: any) => void; tierIn
 // =============================================
 function StepBusinessProfile({ onNext, onBack }: { onNext: (data: any) => void; onBack: () => void }) {
     const [formData, setFormData] = useState({
+        fullName: '',
         businessName: '',
         sector: '',
         targetClient: '',
@@ -162,7 +169,7 @@ function StepBusinessProfile({ onNext, onBack }: { onNext: (data: any) => void; 
         { id: 'luxury', label: 'Luxury', emoji: '✨' },
     ];
 
-    const isValid = formData.businessName && formData.sector;
+    const isValid = formData.fullName && formData.businessName && formData.sector;
 
     return (
         <div>
@@ -175,6 +182,20 @@ function StepBusinessProfile({ onNext, onBack }: { onNext: (data: any) => void; 
             </p>
 
             <div className="space-y-6 max-w-md mx-auto">
+                {/* Full Name */}
+                <div>
+                    <label className="block text-sm font-medium text-charcoal mb-2">
+                        Il Tuo Nome e Cognome
+                    </label>
+                    <input
+                        type="text"
+                        value={formData.fullName}
+                        onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
+                        placeholder="Es. Marco Rossi"
+                        className="w-full px-4 py-3 rounded-xl border border-charcoal/10 focus:border-gold focus:ring-2 focus:ring-gold/20 outline-none transition-all"
+                    />
+                </div>
+
                 {/* Business Name */}
                 <div>
                     <label className="block text-sm font-medium text-charcoal mb-2">
@@ -516,10 +537,11 @@ const getTierStats = (tier: string, isFounder: boolean) => {
 
     const tierLimits: Record<string, string> = {
         'curioso': '100',
-        'esploratore': '500',
-        'pioniere': '2000',
-        'conquistatore': '5000',
-        'imperatore': '∞',
+        'aspirante': '500',
+        'esploratore': '1000',
+        'pioniere': '5000',
+        'conquistatore': '20000',
+        'imperatore': '50000',
     };
 
     return [
@@ -617,13 +639,13 @@ export default function OnboardingPage() {
                 if (user) {
                     const { data: profile } = await supabase
                         .from('profiles')
-                        .select('subscription_tier, is_founder')
+                        .select('plan_tier, is_founder')
                         .eq('id', user.id)
                         .single();
 
                     if (profile) {
                         setTierInfo(getTierInfo(
-                            profile.subscription_tier || 'curioso',
+                            profile.plan_tier || 'curioso',
                             profile.is_founder || false
                         ));
                     }
@@ -659,6 +681,7 @@ export default function OnboardingPage() {
                 await supabase
                     .from('profiles')
                     .update({
+                        full_name: formData.fullName,
                         business_name: formData.businessName,
                         business_sector: formData.sector,
                         target_client: formData.targetClient,
@@ -680,6 +703,15 @@ export default function OnboardingPage() {
                         .from('clone_faqs')
                         .insert(faqInserts);
                 }
+
+                // Grant initial XP for completing onboarding
+                await supabase
+                    .from('profiles')
+                    .update({
+                        xp: 100, // Starting XP reward
+                        level: 1
+                    })
+                    .eq('id', user.id);
             }
 
             // Redirect to dashboard

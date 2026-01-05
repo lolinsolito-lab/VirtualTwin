@@ -12,16 +12,38 @@ import {
     ArrowRight,
     PlayCircle,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Lock,
+    Trophy,
+    Award,
+    TrendingUp
 } from 'lucide-react';
+import { useSovereign } from '@/components/providers/SovereignProvider';
+import { ImperialGate } from '@/components/dashboard/ImperialGate';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { PlanTier } from '@/lib/pricing';
 
 /**
  * Founder Academy Page
  * Private section for premium users to access growth templates
+ * Upgraded with Wave 2: The Academy Gate gating & progress tracking
  */
 export default function AcademyPage() {
+    const { user, loading, refreshProfile } = useSovereign();
+    const router = useRouter();
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [selectedVideo, setSelectedVideo] = useState<any>(null);
+    const [isCompleting, setIsCompleting] = useState(false);
+    const [activeSector, setActiveSector] = useState('Generale');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    const sectors = [
+        'Generale', 'Real Estate', 'E-commerce', 'Coach/Consulenti',
+        'Agenzie Marketing', 'SaaS', 'Fitness/Salute', 'HR/Recruiting',
+        'Assicurazioni', 'Automotive', 'Beauty/Fashion', 'Food & Beverage',
+        'Tech/Sviluppo', 'Arte/Design', 'Viaggi/Luxury'
+    ];
 
     const copyToClipboard = (id: string, text: string) => {
         navigator.clipboard.writeText(text);
@@ -31,29 +53,68 @@ export default function AcademyPage() {
 
     const scroll = (direction: 'left' | 'right') => {
         if (scrollContainerRef.current) {
-            const { scrollLeft, clientWidth } = scrollContainerRef.current;
+            const { scrollLeft } = scrollContainerRef.current;
             const scrollTo = direction === 'left' ? scrollLeft - 200 : scrollLeft + 200;
             scrollContainerRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
         }
     };
 
-    const [activeSector, setActiveSector] = useState('Generale');
-
-    const sectors = [
-        'Generale', 'Real Estate', 'E-commerce', 'Coach/Consulenti',
-        'Agenzie Marketing', 'SaaS', 'Fitness/Salute', 'HR/Recruiting',
-        'Assicurazioni', 'Automotive', 'Beauty/Fashion', 'Food & Beverage',
-        'Tech/Sviluppo', 'Arte/Design', 'Viaggi/Luxury'
+    const videoModules: { name: string; tier: PlanTier; description: string; videos: any[] }[] = [
+        {
+            name: "Fondamenta dell'Impero",
+            tier: "curioso",
+            description: "I primi passi per comprendere la potenza dei datori di lavoro digitali.",
+            videos: [
+                { id: "v1", title: 'La Genesi del Clone AI', duration: '12:45', thumbnail: 'bg-gold/10', xp: 25 },
+                { id: "v2", title: 'Mentalità Sovereign', duration: '08:20', thumbnail: 'bg-charcoal/5', xp: 25 },
+            ]
+        },
+        {
+            name: "Esecuzione Strategica",
+            tier: "aspirante",
+            description: "Trasforma le conversazioni in conversioni automatiche.",
+            videos: [
+                { id: "v3", title: 'Architettura delle Vendite', duration: '15:20', thumbnail: 'bg-charcoal/5', xp: 50 },
+                { id: "v4", title: 'Gestione Obiezioni via Chat', duration: '14:30', thumbnail: 'bg-charcoal/5', xp: 50 },
+            ]
+        },
+        {
+            name: "Dominio del Mercato",
+            tier: "pioniere",
+            description: "Tecniche avanzate di outreach e posizionamento elite.",
+            videos: [
+                { id: "v5", title: 'Outreach Magnetico su LinkedIn', duration: '18:10', thumbnail: 'bg-gold/10', xp: 100 },
+                { id: "v6", title: 'Scaling: Da 1 a 100 Cloni', duration: '20:00', thumbnail: 'bg-gold/10', xp: 100 },
+            ]
+        },
+        {
+            name: "Maestria Assoluta",
+            tier: "imperatore",
+            description: "Il protocollo finale per il dominio totale del tuo settore.",
+            videos: [
+                { id: "v7", title: 'Protocollo Sovrano: Mastery', duration: '25:00', thumbnail: 'bg-charcoal/5', xp: 250 },
+            ]
+        }
     ];
 
-    const videoLessons = [
-        { id: 1, title: 'La Genesi del Clone AI', duration: '12:45', thumbnail: 'bg-gold/10' },
-        { id: 2, title: 'Architettura delle Vendite', duration: '15:20', thumbnail: 'bg-charcoal/5' },
-        { id: 3, title: 'Outreach Magnetico su LinkedIn', duration: '18:10', thumbnail: 'bg-gold/10' },
-        { id: 4, title: 'Gestione Obiezioni via Chat', duration: '14:30', thumbnail: 'bg-charcoal/5' },
-        { id: 5, title: 'Scaling: Da 1 a 100 Cloni', duration: '20:00', thumbnail: 'bg-gold/10' },
-        { id: 6, title: 'Protocollo Sovrano: Mastery', duration: '25:00', thumbnail: 'bg-charcoal/5' }
-    ];
+    const handleVideoComplete = async (videoId: string, xp: number) => {
+        setIsCompleting(true);
+        try {
+            const response = await fetch('/api/academy/complete-video', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ videoId, xpAwarded: xp })
+            });
+            if (response.ok) {
+                await refreshProfile();
+                setSelectedVideo(null);
+            }
+        } catch (error) {
+            console.error('Error completing video:', error);
+        } finally {
+            setIsCompleting(false);
+        }
+    };
 
     const templates = [
         {
@@ -115,36 +176,115 @@ export default function AcademyPage() {
                 ))}
             </div>
 
-            {/* Video Masterclass Section */}
-            <div className="mb-20">
-                <div className="flex items-center gap-4 mb-8">
-                    <h2 className="text-2xl font-serif text-charcoal italic">Video Masterclass <span className="gold-text-gradient">Founder</span></h2>
-                    <div className="flex-1 h-[1px] bg-charcoal/5" />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {videoLessons.map((lesson) => (
-                        <div key={lesson.id} className="bg-white rounded-3xl border border-charcoal/5 overflow-hidden group hover:shadow-xl transition-all duration-500">
-                            <div className={`aspect-video ${lesson.thumbnail} flex items-center justify-center relative overflow-hidden`}>
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
-                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gold shadow-xl group-hover:scale-110 transition-transform duration-500 z-10">
-                                    <PlayCircle className="w-8 h-8 fill-gold/10" />
-                                </div>
-                                <div className="absolute bottom-4 right-4 px-3 py-1 bg-black/50 backdrop-blur-md rounded-lg text-white text-[10px] font-bold">
-                                    {lesson.duration}
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-[10px] text-gold font-black uppercase tracking-widest">Lezione {lesson.id}</span>
-                                </div>
-                                <h4 className="text-charcoal font-serif italic text-lg">{lesson.title}</h4>
-                            </div>
+            {/* Sovereign Progress Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
+                <div className="bg-charcoal p-8 rounded-[2rem] border border-gold/20 shadow-xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 blur-3xl -translate-y-1/2 translate-x-1/2" />
+                    <div className="relative z-10">
+                        <Trophy className="w-8 h-8 text-gold mb-4" />
+                        <h4 className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-black mb-1">Livello Attuale</h4>
+                        <div className="flex items-end gap-2">
+                            <span className="text-4xl font-serif italic text-gold">{user?.level || 1}</span>
+                            <span className="text-white/20 text-[10px] font-bold pb-2 uppercase tracking-widest">Sovereign Rank</span>
                         </div>
-                    ))}
+                    </div>
+                </div>
+
+                <div className="md:col-span-2 bg-white p-8 rounded-[2rem] border border-charcoal/5 shadow-luxury-sm">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <TrendingUp className="w-5 h-5 text-gold" />
+                            <h4 className="text-[10px] text-charcoal/40 uppercase tracking-[0.3em] font-black">Esperienza Totale (XP)</h4>
+                        </div>
+                        <span className="text-xs font-serif italic text-charcoal">{user?.xp || 0} / {Math.pow((user?.level || 1), 2) * 100} XP</span>
+                    </div>
+                    <div className="h-3 bg-charcoal/5 rounded-full overflow-hidden">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${Math.min(100, ((user?.xp || 0) / (Math.pow((user?.level || 1), 2) * 100)) * 100)}%` }}
+                            className="h-full gold-gradient shadow-[0_0_15px_rgba(212,175,55,0.4)]"
+                        />
+                    </div>
+                </div>
+
+                <div className="bg-white p-8 rounded-[2rem] border border-charcoal/5 shadow-luxury-sm">
+                    <Award className="w-8 h-8 text-gold mb-4" />
+                    <h4 className="text-[10px] text-charcoal/40 uppercase tracking-[0.3em] font-black mb-1">Lezioni Completate</h4>
+                    <div className="flex items-end gap-2">
+                        <span className="text-4xl font-serif italic text-charcoal">{user?.completed_video_ids?.length || 0}</span>
+                        <span className="text-charcoal/20 text-[10px] font-bold pb-2 uppercase tracking-widest">/ 21 Lezioni</span>
+                    </div>
                 </div>
             </div>
 
-            {/* Templates Section */}
+            {/* Video Masterclass Sections (Tiered) */}
+            <div className="space-y-20 mb-24">
+                {videoModules.map((module, mIndex) => (
+                    <div key={mIndex}>
+                        <div className="flex items-center gap-6 mb-10">
+                            <div className="flex-shrink-0">
+                                <h2 className="text-2xl font-serif text-charcoal italic leading-none">{module.name}</h2>
+                                <p className="text-xs text-charcoal/40 mt-2">{module.description}</p>
+                            </div>
+                            <div className="flex-1 h-[1px] bg-charcoal/5" />
+                            <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${module.tier === 'curioso' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                                    module.tier === 'aspirante' ? 'bg-green-50 text-green-600 border-green-100' :
+                                        'bg-gold/5 text-gold border-gold/20'
+                                }`}>
+                                Tier: {module.tier}
+                            </div>
+                        </div>
+
+                        <ImperialGate tier={module.tier} featureName={module.name} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {module.videos.map((lesson) => {
+                                const isCompleted = user?.completed_video_ids?.includes(lesson.id);
+                                return (
+                                    <div
+                                        key={lesson.id}
+                                        className={`bg-white rounded-[2rem] border border-charcoal/5 overflow-hidden group hover:shadow-2xl transition-all duration-700 ${isCompleted ? 'ring-1 ring-green-100' : ''}`}
+                                    >
+                                        <div className={`aspect-video ${lesson.thumbnail} flex items-center justify-center relative overflow-hidden`}>
+                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-700" />
+
+                                            {isCompleted ? (
+                                                <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center text-white shadow-xl z-20">
+                                                    <Check className="w-8 h-8" />
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    onClick={() => setSelectedVideo(lesson)}
+                                                    className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gold shadow-xl group-hover:scale-110 transition-transform duration-700 z-10"
+                                                >
+                                                    <PlayCircle className="w-8 h-8 fill-gold/10" />
+                                                </button>
+                                            )}
+
+                                            <div className="absolute bottom-4 right-4 px-4 py-2 bg-black/60 backdrop-blur-md rounded-xl text-white text-[10px] font-black tracking-widest shadow-lg">
+                                                {lesson.duration}
+                                            </div>
+
+                                            {isCompleted && (
+                                                <div className="absolute top-4 left-4 px-3 py-1 bg-green-500/90 backdrop-blur-md rounded-lg text-white text-[8px] font-black uppercase tracking-[0.2em] shadow-lg">
+                                                    Completato +{lesson.xp} XP
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="p-8">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-gold" />
+                                                <span className="text-[10px] text-charcoal/30 font-black uppercase tracking-[0.3em]">{lesson.xp} XP AWARD</span>
+                                            </div>
+                                            <h4 className="text-charcoal font-serif italic text-xl leading-tight group-hover:text-gold transition-colors">{lesson.title}</h4>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </ImperialGate>
+                    </div>
+                ))}
+            </div>
+
+            {/* Template Section with Gating */}
             <div className="flex flex-col gap-8 mb-16">
                 <div className="flex items-end justify-between">
                     <h2 className="text-3xl font-serif text-charcoal italic tracking-tight">Script di Vendita & <span className="gold-text-gradient">Outreach</span></h2>
@@ -192,7 +332,7 @@ export default function AcademyPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
+                <ImperialGate tier="aspirante" featureName="Asset di Outreach" description="Sblocca l'accesso a oltre 50 template di outreach e script di vendita pronti all'uso con il piano Aspirante." className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
                     {filteredTemplates.map((tpl) => (
                         <div key={tpl.id} className="bg-white rounded-[2.5rem] overflow-hidden border border-charcoal/5 shadow-luxury-sm hover:shadow-luxury transition-all duration-700 group">
                             <div className="p-10">
@@ -233,8 +373,62 @@ export default function AcademyPage() {
                             </div>
                         </div>
                     ))}
-                </div>
+                </ImperialGate>
             </div>
+
+            {/* Video Player Modal/Overlay (Simulated for Demo) */}
+            <AnimatePresence>
+                {selectedVideo && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-charcoal/95 backdrop-blur-xl">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            className="bg-white rounded-[2.5rem] overflow-hidden max-w-4xl w-full shadow-2xl relative"
+                        >
+                            <div className="aspect-video bg-black flex items-center justify-center relative">
+                                <PlayCircle className="w-20 h-20 text-white/20" />
+                                <div className="absolute inset-x-0 bottom-0 p-8 flex flex-col gap-4">
+                                    <div className="h-1 bg-white/20 rounded-full overflow-hidden">
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ width: "100%" }}
+                                            transition={{ duration: 5, ease: "linear" }}
+                                            onAnimationComplete={() => handleVideoComplete(selectedVideo.id, selectedVideo.xp)}
+                                            className="h-full gold-gradient"
+                                        />
+                                    </div>
+                                    <p className="text-white/50 text-[10px] uppercase tracking-widest font-black flex items-center justify-between">
+                                        <span>Simulazione Video Player...</span>
+                                        <span>XP Awarded at 100% completion</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="p-10 flex items-center justify-between">
+                                <div>
+                                    <h3 className="text-2xl font-serif italic text-charcoal">{selectedVideo.title}</h3>
+                                    <p className="text-charcoal/40 text-xs mt-2">Durerà approssimativamente {selectedVideo.duration} minuti.</p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={() => handleVideoComplete(selectedVideo.id, selectedVideo.xp)}
+                                        disabled={isCompleting}
+                                        className="px-8 py-3 gold-gradient text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg"
+                                    >
+                                        {isCompleting ? 'Salvataggio...' : 'Segna come completato'}
+                                    </button>
+                                    <button
+                                        onClick={() => setSelectedVideo(null)}
+                                        className="px-8 py-3 bg-charcoal/5 hover:bg-charcoal text-charcoal hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                                    >
+                                        Chiudi
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             {/* Footer Tip */}
             <div className="mt-16 bg-gold-gradient p-12 lg:p-20 rounded-[4rem] text-white overflow-hidden relative shadow-luxury">

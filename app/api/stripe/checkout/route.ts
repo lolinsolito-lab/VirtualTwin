@@ -38,12 +38,17 @@ export async function POST(req: NextRequest) {
                     quantity: 1,
                 }],
                 metadata: {
+                    userId,
+                    plan: tier === 'aspirante' ? 'aspirante' : (plan || tier), // Ensure plan is set
                     tier: tier || 'public',
+                    isFounder: (tier === 'founder').toString(),
                     source: 'direct_priceId_checkout'
                 },
                 subscription_data: {
                     trial_period_days: 14,
                     metadata: {
+                        userId,
+                        plan: tier === 'aspirante' ? 'aspirante' : (plan || tier),
                         tier: tier || 'public',
                         isFounder: (tier === 'founder').toString(),
                     },
@@ -90,8 +95,19 @@ export async function POST(req: NextRequest) {
             }
         }
 
+        // SMART LOGIC: If isFounder is true, check if waves are still available
+        let finalIsFounder = isFounder;
+        if (isFounder && plan !== 'aspirante') {
+            const { getCurrentWave } = await import('@/lib/waves');
+            const currentWave = await getCurrentWave();
+            if (!currentWave) {
+                console.warn(`[Checkout] User requested Founder for ${plan} but all waves sold out. Falling back to public.`);
+                finalIsFounder = false;
+            }
+        }
+
         // Get the appropriate Stripe price ID
-        const priceId = getStripePriceId(plan as PlanTier, isFounder, billing);
+        const priceId = getStripePriceId(plan as PlanTier, finalIsFounder, billing);
 
         if (!priceId || priceId.includes('placeholder')) {
             return NextResponse.json(
@@ -116,16 +132,17 @@ export async function POST(req: NextRequest) {
                 userId,
                 plan,
                 billing,
-                isFounder: isFounder.toString(),
+                isFounder: finalIsFounder.toString(),
             },
             subscription_data: {
+                trial_period_days: 14,
                 metadata: {
                     userId,
                     plan,
-                    isFounder: isFounder.toString(),
+                    isFounder: finalIsFounder.toString(),
                 },
             },
-            success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/onboarding?success=true&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/billing?canceled=true`,
             allow_promotion_codes: true,
         });

@@ -11,57 +11,23 @@ import { Loader2 } from 'lucide-react';
  * Usage: Wrap dashboard content with this component
  * Skip paths: /dashboard/onboarding (to prevent infinite loop)
  */
+import { useSovereign } from '@/components/providers/SovereignProvider';
+
 export default function OnboardingGuard({ children }: { children: React.ReactNode }) {
-    const [checking, setChecking] = useState(true);
-    const [shouldRedirect, setShouldRedirect] = useState(false);
+    const { user, loading } = useSovereign();
     const router = useRouter();
     const pathname = usePathname();
 
-    // Skip check if already on onboarding page
     const isOnboardingPage = pathname?.includes('/onboarding');
 
     useEffect(() => {
-        if (isOnboardingPage) {
-            setChecking(false);
-            return;
+        if (!loading && user && user.onboarding_completed === false && !isOnboardingPage) {
+            router.push('/dashboard/onboarding');
         }
-
-        async function checkOnboarding() {
-            try {
-                const { data: { user } } = await supabase.auth.getUser();
-
-                if (!user) {
-                    // Not logged in, let auth handle it
-                    setChecking(false);
-                    return;
-                }
-
-                // Check if onboarding is completed
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('onboarding_completed')
-                    .eq('id', user.id)
-                    .single();
-
-                // If onboarding_completed is false or null, redirect
-                if (profile && profile.onboarding_completed === false) {
-                    setShouldRedirect(true);
-                    router.push('/dashboard/onboarding');
-                } else {
-                    setChecking(false);
-                }
-
-            } catch (error) {
-                console.error('Onboarding check error:', error);
-                setChecking(false);
-            }
-        }
-
-        checkOnboarding();
-    }, [isOnboardingPage, router]);
+    }, [user, loading, isOnboardingPage, router]);
 
     // Show loading while checking
-    if (checking && !isOnboardingPage) {
+    if (loading && !isOnboardingPage) {
         return (
             <div className="min-h-screen bg-champagne flex items-center justify-center">
                 <div className="text-center">
@@ -70,11 +36,6 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
                 </div>
             </div>
         );
-    }
-
-    // If redirecting, show nothing (prevent flash)
-    if (shouldRedirect) {
-        return null;
     }
 
     return <>{children}</>;

@@ -90,7 +90,7 @@ export default function StartPage() {
             subtitle: 'Il Primo Passo nel Tuo Impero',
             descLong: 'Entry-level perfetto per chi vuole provare senza impegno. Template, corso e community inclusi.',
             price: 49,
-            priceId: 'price_1SlyfV7141DXdb9v9WiLhhS0',
+            priceId: currentPricing.stripePriceIds.aspirante,
             nextPrice: 49,
             messages: '500',
             highlight: 'Entry-level perfetto',
@@ -231,12 +231,12 @@ export default function StartPage() {
         setSelectedPlan(planName);
 
         try {
-            const response = await fetch('/api/stripe/create-checkout', {
+            const response = await fetch('/api/stripe/checkout', { // Redirect to unified endpoint
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     priceId,
-                    tier: 'public',
+                    tier: 'public', // Start page is usually public
                     plan: planName.toLowerCase(),
                     isFounder: false
                 })

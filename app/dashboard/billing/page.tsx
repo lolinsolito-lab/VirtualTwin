@@ -160,7 +160,8 @@ export default function BillingPage() {
                     plan: planId,
                     userId: user.id,
                     billing: 'monthly',
-                    priceId: displayPricing?.stripePriceIds?.[planId]
+                    priceId: displayPricing?.stripePriceIds?.[planId],
+                    tier: planId === 'aspirante' ? 'public' : displayPricing?.tier // Aspirante is always public pricing logic
                 })
             });
             const data = await response.json();

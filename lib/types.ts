@@ -80,3 +80,27 @@ export interface ChatHistoryItem {
   role: 'user' | 'assistant';
   content: string;
 }
+
+// --- SOVEREIGN PROFILES (Wave 1) ---
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  full_name?: string;
+  company_name?: string;
+  avatar_url?: string;
+  plan_tier: 'curioso' | 'aspirante' | 'esploratore' | 'pioniere' | 'conquistatore' | 'imperatore';
+  subscription_status: 'trialing' | 'active' | 'canceled' | 'past_due';
+  messages_used_this_month: number;
+  messages_limit: number;
+  is_founder: boolean;
+  onboarding_completed: boolean;
+  xp: number;
+  level: number;
+  completed_video_ids: string[];
+  badges: any[];
+  streak_days: number;
+  last_activity_at: string;
+  quizzes_passed: any;
+  created_at: string;
+}

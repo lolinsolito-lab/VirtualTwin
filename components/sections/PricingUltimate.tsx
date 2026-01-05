@@ -111,7 +111,11 @@ const PricingUltimate = () => {
             const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ priceId, tier })
+                body: JSON.stringify({
+                    priceId,
+                    tier: tier || (displayPricing?.tier === 'founder' ? 'founder' : 'public'),
+                    plan: planId
+                })
             });
 
             if (!response.ok) {
@@ -161,7 +165,7 @@ const PricingUltimate = () => {
             subtitle: "Entry-level perfetto per chi vuole provare senza impegno. Template, corso e community inclusi.",
             features: ["1 Clone AI", "500 msg/mese", "1 Canale", "🆕 Template 15 settori", "🆕 Corso 6 video", "🆕 Community"],
             cta: "Diventa Aspirante →",
-            priceId: 'price_1SlyfV7141DXdb9v9WiLhhS0',
+            priceId: displayPricing?.stripePriceIds?.aspirante || publicRef.stripePriceIds.aspirante,
             isFounder: false,
             bg: "bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50",
             border: "border-green-400",

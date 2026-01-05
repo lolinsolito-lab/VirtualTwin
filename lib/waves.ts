@@ -80,11 +80,11 @@ export const WAVES: Wave[] = [
         },
         stripePriceIds: {
             curioso: 'free_tier_placeholder',
-            aspirante: 'price_1SlX717141DXdb9vAspirante', // Placeholder/Actual ID
-            esploratore: 'price_1SlX717141DXdb9vzAEbFLdY',
-            pioniere: 'price_1SlX727141DXdb9vdgRHbxrD',
-            conquistatore: 'price_1SlX727141DXdb9vCKAM0WCi',
-            imperatore: 'price_1SlX737141DXdb9vTmQmgd9Z'
+            aspirante: 'price_1SlyfV7141DXdb9v9WiLhhS0',
+            esploratore: 'price_1Sl7lM7141DXdb9veGYbHSWE',
+            pioniere: 'price_1Sl7lN7141DXdb9vtRbfQuCs',
+            conquistatore: 'price_1Sl7lN7141DXdb9vlpkY114O',
+            imperatore: 'price_1Sl7lO7141DXdb9vuNgZoKKQ'
         },
         tier: 'founder'
     },
@@ -159,11 +159,11 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         },
         stripePriceIds: {
             curioso: 'free_tier_placeholder',
-            aspirante: 'price_1SlX787141DXdb9vAspirante',
-            esploratore: 'price_1SlX787141DXdb9vqXSlofaP',
-            pioniere: 'price_1SlX797141DXdb9vfjEhb8Al',
-            conquistatore: 'price_1SlX7A7141DXdb9vf3zLKG2q',
-            imperatore: 'price_1SlX7A7141DXdb9vbmrUZY5i'
+            aspirante: 'price_1SlyfV7141DXdb9v9WiLhhS0',
+            esploratore: 'price_1Sl7lP7141DXdb9vru3cdm3O',
+            pioniere: 'price_1Sl7lP7141DXdb9vZKdx4eCE',
+            conquistatore: 'price_1Sl7lQ7141DXdb9vdLOjIhXf',
+            imperatore: 'price_1Sl7lQ7141DXdb9vawSyDQdV'
         },
         tier: 'public'
     },
@@ -309,11 +309,15 @@ export async function getCurrentWave(): Promise<Wave | null> {
         // Check 2: Time expired?
         const timeExpired = now > new Date(wave.endDate);
 
-        // Check 3: Not started yet?
+        // Check 3: Not started yet? 
+        // SMART OVERRIDE: If we are in pre-launch and this is the FIRST wave, we allow it.
         const notStarted = now < new Date(wave.startDate);
+        const isFirstWave = wave.id === 'genesis';
+        const allowPreLaunch = isFirstWave && isPreLaunch();
 
-        // Wave is CLOSED if ANY condition is true
-        if (spotsFull || timeExpired || notStarted) {
+        // Wave is CLOSED if (Spots are full OR Time expired) 
+        // OR (It hasn't started yet AND we aren't allowing pre-launch)
+        if (spotsFull || timeExpired || (notStarted && !allowPreLaunch)) {
             continue; // Try next wave
         }
 

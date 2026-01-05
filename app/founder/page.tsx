@@ -31,24 +31,21 @@ export default function FounderPage() {
                 getTotalFounderSpots()
             ]);
 
-            // ARCHITECTURAL OVERRIDE: 
-            // On the /founder page, if we are in pre-launch, we WANT to show the Genesis Wave
-            // and the Founder prices/logic, not fallback to Public.
             const beforeLaunch = isPreLaunch();
             let activeWave = wave;
             let currentSpotsRemaining = remaining;
             let activePricing = allPricing;
 
-            if (beforeLaunch && !wave) {
-                activeWave = WAVES[0]; // Genesis
+            if (wave) {
+                activeWave = wave;
                 activePricing = {
-                    prices: activeWave.prices,
-                    stripePriceIds: activeWave.stripePriceIds,
-                    tier: 'founder',
-                    waveName: activeWave.name,
-                    spotsRemaining: activeWave.spots
+                    prices: wave.prices,
+                    stripePriceIds: wave.stripePriceIds,
+                    tier: wave.tier,
+                    waveName: wave.name,
+                    spotsRemaining: remaining
                 };
-                currentSpotsRemaining = activeWave.spots;
+                currentSpotsRemaining = remaining;
             }
 
             setCurrentWave(activeWave);
@@ -203,7 +200,8 @@ export default function FounderPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     plan: planId,
-                    priceId
+                    priceId,
+                    tier: displayPricing?.tier || 'founder' // Pass the dynamic tier
                 }),
             });
 
