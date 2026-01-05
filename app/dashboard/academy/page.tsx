@@ -628,27 +628,34 @@ export default function AcademyPage() {
                 )}
             </AnimatePresence>
 
-            {/* Footer Tip */}
-            <div className="mt-16 bg-gold-gradient p-12 lg:p-20 rounded-[4rem] text-white overflow-hidden relative shadow-luxury">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[120px] -translate-y-1/2 translate-x-1/2" />
+            {/* Footer Tip (High Contrast Upgrade) */}
+            <div className="mt-16 bg-charcoal p-12 lg:p-20 rounded-[4rem] text-white overflow-hidden relative shadow-luxury group">
+                {/* Decorative Ambient Light */}
+                <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-gold/10 blur-[120px] -translate-y-1/2 translate-x-1/2 group-hover:bg-gold/20 transition-all duration-1000" />
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-gold/5 blur-[100px] translate-y-1/2 -translate-x-1/2" />
+
                 <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
                     <div className="max-w-2xl text-center lg:text-left">
-                        <h2 className="text-4xl lg:text-5xl font-serif italic mb-8 leading-[1.1]">La Genesi del Successo è nella <span className="text-white/40">Personalizzazione.</span></h2>
-                        <p className="text-white/70 text-base font-serif italic leading-relaxed mb-10 max-w-xl">
+                        <h2 className="text-4xl lg:text-6xl font-serif italic mb-8 leading-[1.1] tracking-tight">
+                            La Genesi del Successo è nella <br />
+                            <span className="gold-text-gradient">Personalizzazione.</span>
+                        </h2>
+                        <p className="text-white/60 text-lg font-serif italic leading-relaxed mb-12 max-w-xl">
                             "Non limitarti a incollare. Cita un risultato specifico del tuo prospect o un loro post recente. Le persone comprano da persone, non da spettatori passivi."
                         </p>
-                        <div className="flex flex-wrap justify-center lg:justify-start gap-5">
-                            <button className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-3 hover:bg-white/20 transition-all shadow-xl">
-                                <MessageCircle className="w-5 h-5" />
+                        <div className="flex flex-wrap justify-center lg:justify-start gap-6">
+                            <button className="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-3 hover:bg-gold hover:text-white transition-all shadow-xl group/btn">
+                                <MessageCircle className="w-5 h-5 text-gold group-hover/btn:text-white transition-colors" />
                                 Private Access (TG)
                             </button>
-                            <button className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-3 hover:bg-white/20 transition-all shadow-xl">
-                                <Sparkles className="w-5 h-5" />
+                            <button className="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-3 hover:bg-gold hover:text-white transition-all shadow-xl group/btn">
+                                <Sparkles className="w-5 h-5 text-gold group-hover/btn:text-white transition-colors" />
                                 Discord Sovereignty
                             </button>
                         </div>
                     </div>
-                    <button className="px-14 py-7 bg-white text-gold rounded-full font-black text-[12px] uppercase tracking-[0.4em] shadow-luxury hover:scale-105 transition-all duration-700 shrink-0">
+
+                    <button className="px-14 py-8 bg-white text-charcoal rounded-full font-black text-[12px] uppercase tracking-[0.4em] shadow-2xl hover:scale-105 hover:bg-gold hover:text-white transition-all duration-700 shrink-0 border border-white/20">
                         Strategic Session 1:1
                     </button>
                 </div>
