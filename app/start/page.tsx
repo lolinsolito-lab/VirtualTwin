@@ -369,8 +369,8 @@ export default function StartPage() {
                         </p>
                     </motion.div>
 
-                    {/* Pricing Cards */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {/* Pricing Cards - LUXURY 3x2 GRID */}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-x-8 lg:gap-y-12 max-w-6xl mx-auto">
                         {plans.map((plan, index) => (
                             <motion.div
                                 key={plan.id}
@@ -380,72 +380,124 @@ export default function StartPage() {
                                 transition={{ delay: 0.1 * index }}
                                 className="group relative"
                             >
-                                {/* Popular Badge */}
-                                {plan.popular && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
-                                        <div className="px-4 py-1 bg-gold text-white text-xs font-bold rounded-full shadow-lg">
-                                            PIÙ SCELTO
+                                {/* Luxury Badge (Top-Right) */}
+                                {(plan as any).badge && typeof (plan as any).badge === 'object' && (
+                                    <div className="absolute -top-4 -right-4 z-30">
+                                        <div className={`
+                                            px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider
+                                            flex items-center gap-1.5 shadow-xl
+                                            ${(plan as any).badge.color === 'green' && 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'}
+                                            ${(plan as any).badge.color === 'red' && 'bg-gradient-to-r from-red-500 to-orange-500 text-white'}
+                                            ${(plan as any).badge.color === 'gold' && 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white'}
+                                            ${(plan as any).badge.color === 'purple' && 'bg-gradient-to-r from-purple-500 to-violet-500 text-white'}
+                                            ${(plan as any).badge.animate === 'pulse' && 'animate-pulse'}
+                                            ${(plan as any).badge.animate === 'bounce' && 'animate-bounce'}
+                                        `}>
+                                            <span className="text-base">{(plan as any).badge.emoji}</span>
+                                            <span>{(plan as any).badge.text}</span>
                                         </div>
                                     </div>
                                 )}
 
+                                {/* Secondary Badge (Pioniere) */}
+                                {(plan as any).badge2 && (
+                                    <div className="absolute -top-4 -left-4 z-30">
+                                        <div className="px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-yellow-400 to-amber-400 text-amber-900 flex items-center gap-1.5 shadow-xl">
+                                            <span className="text-base">{(plan as any).badge2.emoji}</span>
+                                            <span>{(plan as any).badge2.text}</span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Hero Glow (Pioniere) */}
+                                {(plan as any).isHero && (
+                                    <div className="absolute -inset-6 bg-gradient-to-r from-yellow-400/40 via-amber-500/50 to-yellow-400/40 rounded-[3rem] blur-3xl opacity-70 animate-pulse"></div>
+                                )}
+
                                 {/* Card */}
-                                <div className={`relative h-full bg-gradient-to-br ${plan.gradient} rounded-3xl p-8 border border-white/50 shadow-sm hover:shadow-xl transition-all duration-500 ${plan.popular ? 'ring-2 ring-gold/30' : ''
-                                    }`}>
-                                    {/* Icon */}
-                                    <div className={`w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-6`}>
-                                        <plan.icon className={`w-6 h-6 ${plan.accent}`} />
+                                <div className={`
+                                    relative h-[550px] lg:h-[600px] bg-gradient-to-br ${plan.gradient} rounded-3xl p-6 lg:p-8 border
+                                    transition-all duration-500 flex flex-col shadow-xl
+                                    ${(plan as any).border || 'border-white/50'}
+                                    ${plan.popular ? 'ring-2 ring-amber-400' : ''}
+                                `}>
+                                    {/* Icon - COLORED */}
+                                    <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-xl flex items-center justify-center mb-4 ${(plan as any).isDark ? 'bg-white/10' : (plan as any).isGold ? 'bg-white/20' : 'bg-white/50'}`}>
+                                        <plan.icon className={`w-6 h-6 lg:w-7 lg:h-7 ${(plan as any).isDark || (plan as any).isGold ? 'text-white' : plan.id === 'aspirante' ? 'text-green-600' : plan.id === 'esploratore' ? 'text-blue-600' : plan.accent}`} />
                                     </div>
 
                                     {/* Plan Name */}
-                                    <h3 className="font-serif text-2xl text-charcoal mb-1">{plan.name}</h3>
-                                    <p className="text-charcoal/40 text-sm mb-6">{plan.subtitle}</p>
+                                    <p className={`text-[10px] uppercase tracking-[0.3em] font-black mb-2 ${(plan as any).isDark ? 'text-white/60' : plan.accent}`}>
+                                        {plan.name}
+                                    </p>
 
                                     {/* Price */}
-                                    <div className="mb-6">
-                                        <div className="flex items-baseline gap-1">
-                                            <span className="font-serif text-4xl text-charcoal">€{plan.price}</span>
-                                            <span className="text-charcoal/40">/mese</span>
-                                        </div>
-                                        <p className="text-charcoal/50 text-sm mt-1">
-                                            <MessageSquare className="w-3.5 h-3.5 inline mr-1" />
-                                            {plan.messages} messaggi
-                                        </p>
+                                    <div className="mb-2">
+                                        <span className={`text-4xl lg:text-5xl font-serif tracking-tight ${(plan as any).isDark || (plan as any).isGold ? 'text-white' : (plan as any).textColor || 'text-charcoal'}`}>
+                                            €{plan.price}
+                                        </span>
+                                        <span className={`text-sm ml-1 ${(plan as any).isDark ? 'text-white/50' : (plan as any).isGold ? 'text-white/60' : 'text-charcoal/40'}`}>
+                                            /mese
+                                        </span>
                                     </div>
 
-                                    {/* Highlight */}
-                                    <div className={`mb-6 px-3 py-2 rounded-xl bg-white/60 ${plan.accent} text-sm font-medium`}>
-                                        {plan.highlight}
-                                    </div>
+                                    {/* Story (subtitle) */}
+                                    <p className={`text-sm lg:text-base font-medium mb-2 ${(plan as any).isDark || (plan as any).isGold ? 'text-white' : 'text-charcoal'}`}>
+                                        {plan.subtitle}
+                                    </p>
+
+                                    {/* Subtitle (descLong) */}
+                                    {(plan as any).descLong && (
+                                        <p className={`text-xs mb-4 leading-relaxed line-clamp-2 hover:line-clamp-none transition-all ${(plan as any).isDark ? 'text-white/70' : 'text-charcoal/60'}`}>
+                                            {(plan as any).descLong}
+                                        </p>
+                                    )}
+
+                                    {/* Social Proof */}
+                                    {(plan as any).socialProof && (
+                                        <div className="mb-3 px-3 py-1.5 bg-amber-100 text-amber-900 rounded-lg text-xs font-bold inline-block">
+                                            {(plan as any).socialProof}
+                                        </div>
+                                    )}
+
+                                    {/* Scarcity */}
+                                    {(plan as any).scarcity && (
+                                        <div className="mb-4 px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-bold animate-pulse inline-block">
+                                            {(plan as any).scarcity}
+                                        </div>
+                                    )}
 
                                     {/* Features */}
-                                    <ul className="space-y-3 mb-8">
-                                        {plan.features.map((feature, i) => (
-                                            <li key={i} className="flex items-start gap-2.5 text-charcoal/70 text-sm">
-                                                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                                                <span>{feature}</span>
-                                            </li>
+                                    <div className="space-y-2 lg:space-y-3 mb-6 flex-grow">
+                                        {plan.features.map((feature: string, j: number) => (
+                                            <div key={j} className="flex items-center gap-2">
+                                                <div className={`w-4 h-4 lg:w-5 lg:h-5 rounded-full flex items-center justify-center ${(plan as any).isDark ? 'bg-white/10' : (plan as any).isGold ? 'bg-white/20' : 'bg-green-100'}`}>
+                                                    <CheckCircle className={`w-2.5 h-2.5 lg:w-3 lg:h-3 ${(plan as any).isDark || (plan as any).isGold ? 'text-white' : 'text-green-600'}`} />
+                                                </div>
+                                                <span className={`text-xs lg:text-sm ${(plan as any).isDark || (plan as any).isGold ? 'text-white/90' : 'text-charcoal/70'}`}>
+                                                    {feature}
+                                                </span>
+                                            </div>
                                         ))}
-                                    </ul>
+                                    </div>
 
-                                    {/* CTA */}
-                                    <button
-                                        onClick={() => handleCheckout(plan.priceId, plan.name)}
-                                        disabled={isLoading}
-                                        className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${plan.popular
-                                            ? 'bg-charcoal text-white hover:bg-charcoal/90'
-                                            : 'bg-white text-charcoal hover:bg-charcoal hover:text-white border border-charcoal/10'
-                                            } disabled:opacity-50`}
-                                    >
-                                        {isLoading && selectedPlan === plan.name ? (
-                                            <div className="w-5 h-5 border-2 border-current/30 border-t-current rounded-full animate-spin" />
-                                        ) : (
-                                            <>
-                                                Inizia Ora
-                                                <ArrowRight className="w-4 h-4" />
-                                            </>
-                                        )}
-                                    </button>
+                                    {/* CTA - Always at bottom */}
+                                    <div className="mt-auto">
+                                        <button
+                                            onClick={() => handleCheckout(plan.priceId, plan.name)}
+                                            disabled={isLoading}
+                                            className={`group w-full py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${(plan as any).btnStyle || (plan.popular ? 'bg-charcoal text-white hover:bg-charcoal/90' : 'bg-white text-charcoal hover:bg-charcoal hover:text-white border border-charcoal/10')} disabled:opacity-50 disabled:cursor-not-allowed`}
+                                        >
+                                            {isLoading && selectedPlan === plan.name ? (
+                                                <div className="w-5 h-5 border-2 border-current/30 border-t-current rounded-full animate-spin" />
+                                            ) : (
+                                                <>
+                                                    Inizia Ora
+                                                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
