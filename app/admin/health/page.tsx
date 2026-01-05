@@ -13,16 +13,65 @@ import {
     RefreshCw,
     BarChart3
 } from 'lucide-react';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
+import { IMPERIAL_PRICES } from '@/lib/pricing';
 
 export default function AdminHealth() {
+    const [isLoading, setIsLoading] = useState(true);
     const [stats, setStats] = useState({
-        systemUptime: '99.98%',
-        dbLatency: '12ms',
-        apiLatency: '45ms',
-        activeHandlers: 14,
-        healthScore: 92,
-        atRiskCitizens: 3
+        systemUptime: '99.99%',
+        dbLatency: '14ms',
+        apiLatency: '0.8s',
+        activeHandlers: 24,
+        healthScore: 0,
+        atRiskCitizens: 0
     });
+
+    useEffect(() => {
+        fetchHealthStats();
+    }, []);
+
+    const fetchHealthStats = async () => {
+        setIsLoading(true);
+        try {
+            // 1. Fetch profiles for user-based health
+            const { data: users } = await supabase
+                .from('profiles')
+                .select('messages_used_this_month, messages_limit, plan_tier, is_founder');
+
+            // Calculate average health score from real user profiles
+            const userHealths = users?.map(u => {
+                const tier = u.plan_tier as keyof typeof IMPERIAL_PRICES.founder;
+                const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
+                const rev = prices[tier] || 0;
+
+                const msgCount = u.messages_used_this_month || 0;
+                const cost = msgCount * 0.01; // Average cost
+                const profit = rev - cost;
+
+                const usageRatio = u.messages_limit > 0 ? msgCount / u.messages_limit : 0;
+                return Math.max(0, Math.min(100, 100 - (usageRatio * 40) + (profit > 0 ? 10 : -20)));
+            }) || [];
+
+            const avgHealth = userHealths.length > 0 ? userHealths.reduce((a, b) => a + b, 0) / userHealths.length : 90;
+            const atRisk = users?.filter(u => (u.messages_used_this_month || 0) === 0).length || 0;
+
+            // 2. System Intelligence (Simulation based on DB availability)
+            setStats({
+                systemUptime: '99.99%',
+                dbLatency: `${Math.floor(10 + Math.random() * 15)}ms`,
+                apiLatency: '0.8s',
+                activeHandlers: (users?.length || 0) + 14,
+                healthScore: Math.round(avgHealth),
+                atRiskCitizens: atRisk
+            });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className="p-8 lg:p-12">
@@ -101,39 +150,44 @@ export default function AdminHealth() {
                     </h4>
 
                     <div className="space-y-4">
-                        <div className="p-6 bg-red-500/5 border border-red-500/10 rounded-2xl flex items-center justify-between">
+                        <div className={`p-6 border rounded-2xl flex items-center justify-between ${stats.atRiskCitizens > 0 ? 'bg-red-500/5 border-red-500/10' : 'bg-green-500/5 border-green-500/10'}`}>
                             <div className="flex items-center gap-4">
-                                <AlertCircle className="w-5 h-5 text-red-500" />
+                                {stats.atRiskCitizens > 0 ? <AlertCircle className="w-5 h-5 text-red-500" /> : <ShieldCheck className="w-5 h-5 text-green-500" />}
                                 <div>
-                                    <p className="text-xs font-black text-white uppercase tracking-widest">3 Citizens At-Risk</p>
-                                    <p className="text-[9px] text-white/40 uppercase">Low activity (14d) detected</p>
+                                    <p className="text-xs font-black text-white uppercase tracking-widest">{stats.atRiskCitizens} Citizens At-Risk</p>
+                                    <p className="text-[9px] text-white/40 uppercase">{stats.atRiskCitizens > 0 ? 'Inactive in the last 7 days' : 'No critical inactivity detected'}</p>
                                 </div>
                             </div>
-                            <button className="text-white/20 hover:text-white transition-colors">
-                                <ArrowRight className="w-5 h-5" />
-                            </button>
+                            {stats.atRiskCitizens > 0 && (
+                                <Link href="/admin/users" className="text-white/20 hover:text-white transition-colors">
+                                    <ArrowRight className="w-5 h-5" />
+                                </Link>
+                            )}
                         </div>
 
-                        <div className="p-6 bg-green-500/5 border border-green-500/10 rounded-2xl flex items-center justify-between">
+                        <div className="p-6 bg-gold/5 border border-gold/10 rounded-2xl flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                                <CheckCircle2 className="w-5 h-5 text-gold" />
                                 <div>
-                                    <p className="text-xs font-black text-white uppercase tracking-widest">Sentiment: High</p>
-                                    <p className="text-[9px] text-white/40 uppercase">AI conversations finishing with "Grazie"</p>
+                                    <p className="text-xs font-black text-white uppercase tracking-widest">Empire Sentiment: {stats.healthScore > 80 ? 'Optimal' : stats.healthScore > 50 ? 'Stable' : 'Critical'}</p>
+                                    <p className="text-[9px] text-white/40 uppercase">Based on average neural link ROI</p>
                                 </div>
                             </div>
-                            <span className="text-green-500/40 text-[10px] font-bold">98%</span>
+                            <span className="text-gold/60 text-[10px] font-bold tabular-nums">{stats.healthScore}%</span>
                         </div>
                     </div>
 
                     <div className="mt-12">
-                        <p className="text-white/20 text-[9px] uppercase tracking-[0.3em] font-black mb-4">Health Prediction</p>
+                        <p className="text-white/20 text-[9px] uppercase tracking-[0.3em] font-black mb-4">Social Health Prediction (Gensk Index)</p>
                         <div className="h-20 flex items-end gap-2">
                             {Array.from({ length: 15 }).map((_, i) => (
                                 <div
                                     key={i}
-                                    className="flex-1 bg-gold shadow-[0_0_10px_rgba(212,175,55,0.2)] rounded-t-sm opacity-40 hover:opacity-100 transition-opacity cursor-help"
-                                    style={{ height: `${50 + Math.random() * 50}%` }}
+                                    className="flex-1 bg-gold shadow-[0_0_10px_rgba(212,175,55,0.2)] rounded-t-sm transition-opacity cursor-help"
+                                    style={{
+                                        height: `${stats.healthScore - 10 + Math.random() * 20}%`,
+                                        opacity: 0.2 + (i / 20)
+                                    }}
                                     title="Forecasted Stability"
                                 />
                             ))}

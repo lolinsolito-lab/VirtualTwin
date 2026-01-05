@@ -33,7 +33,8 @@ export default function AdminOverview() {
         activeUsers: 0,
         messagesProcessed: 0,
         todayMessages: 0,
-        growth: 12.5,
+        growth: 0,
+        newRecruitments: 0,
         mrr: 0,
         arpu: 0,
         ltv: 0,
@@ -57,7 +58,7 @@ export default function AdminOverview() {
             // 1. Calculate Revenue from active users (MRR)
             const { data: users } = await supabase
                 .from('profiles')
-                .select('plan_tier, subscription_status, is_founder')
+                .select('plan_tier, subscription_status, is_founder, created_at')
                 .eq('subscription_status', 'active');
 
             // 👑 IMPERIAL PRICING SYNC
@@ -67,7 +68,15 @@ export default function AdminOverview() {
                 return acc + (prices[tier] || 0);
             }, 0) || 0;
 
-            // 2. Count Messages (for AI cost estimation)
+            // 2. GROWTH INTELLIGENCE (Real-Sync)
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+            const newRecruitments = users?.filter(u => new Date(u.created_at) > thirtyDaysAgo).length || 0;
+            const existingUsers = (users?.length || 0) - newRecruitments;
+            const growthRate = existingUsers > 0 ? (newRecruitments / existingUsers) * 100 : 0;
+
+            // 3. Count Messages (for AI cost estimation)
             const { count: totalMessages } = await supabase
                 .from('messages')
                 .select('*', { count: 'exact', head: true });
@@ -79,7 +88,7 @@ export default function AdminOverview() {
                 .select('*', { count: 'exact', head: true })
                 .gte('created_at', today.toISOString());
 
-            // 3. Tiered Cost Logic (Economies of Scale)
+            // 4. Tiered Cost Logic (Economies of Scale)
             const calculateTieredCost = (msgCount: number) => {
                 if (msgCount <= 1000) return msgCount * 0.015;
                 if (msgCount <= 5000) return (1000 * 0.015) + (msgCount - 1000) * 0.010;
@@ -92,7 +101,7 @@ export default function AdminOverview() {
             const stripeFees = totalRev * 0.015;
             const totalCosts = aiWaCosts + infraCosts + stripeFees;
 
-            // 4. SaaS Metrics Logic
+            // 5. SaaS Metrics Logic
             const activeUserCount = users?.length || 0;
             const arpu = activeUserCount > 0 ? totalRev / activeUserCount : 0;
             const ltv = arpu * 8; // Assuming 8 months retention
@@ -108,7 +117,8 @@ export default function AdminOverview() {
                 activeUsers: activeUserCount,
                 messagesProcessed: totalMessages || 0,
                 todayMessages: todayCount || 0,
-                growth: 12.5,
+                growth: Number(growthRate.toFixed(1)),
+                newRecruitments: newRecruitments,
                 arpu: Math.round(arpu),
                 ltv: Math.round(ltv),
                 cac: cac,
@@ -254,16 +264,22 @@ export default function AdminOverview() {
                         <div className="flex items-center justify-between">
                             <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">New Recruitments (30d)</span>
                             <div className="h-1.5 flex-1 mx-6 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-gold w-[23%] shadow-[0_0_10px_#d4af37]" />
+                                <div
+                                    className="h-full bg-gold shadow-[0_0_10px_#d4af37]"
+                                    style={{ width: `${Math.min(100, (stats.newRecruitments / (stats.activeUsers || 1)) * 100)}%` }}
+                                />
                             </div>
-                            <span className="text-white font-bold text-sm">23</span>
+                            <span className="text-white font-bold text-sm tabular-nums">{stats.newRecruitments}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Churn Rate (30d)</span>
+                            <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Total Citizens Index</span>
                             <div className="h-1.5 flex-1 mx-6 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-red-500/50 w-[2%]" />
+                                <div
+                                    className="h-full bg-blue-500/50"
+                                    style={{ width: '100%' }}
+                                />
                             </div>
-                            <span className="text-red-500 font-bold text-sm">2%</span>
+                            <span className="text-blue-500 font-bold text-sm tabular-nums">{stats.activeUsers}</span>
                         </div>
                     </div>
                 </div>

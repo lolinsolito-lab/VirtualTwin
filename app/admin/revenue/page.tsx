@@ -34,16 +34,19 @@ export default function AdminRevenue() {
     const fetchRevenueAnalytics = async () => {
         setIsLoading(true);
         try {
+            // 1. Calculate Revenue from active users (MRR)
             const { data: users } = await supabase
                 .from('profiles')
-                .select('plan_tier, subscription_status, is_founder, created_at')
-                .eq('subscription_status', 'active');
+                .select('plan_tier, subscription_status, is_founder, created_at');
+
+            const activeUsers = users?.filter(u => u.subscription_status === 'active') || [];
+            const canceledUsers = users?.filter(u => u.subscription_status === 'canceled') || [];
 
             const counts: Record<string, number> = {};
             const revenuePerTier: Record<string, number> = {};
             let totalMRR = 0;
 
-            users?.forEach(u => {
+            activeUsers.forEach(u => {
                 const tier = u.plan_tier;
                 const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
                 const price = (prices as any)[tier] || 0;
@@ -53,6 +56,18 @@ export default function AdminRevenue() {
                 totalMRR += price;
             });
 
+            // 2. REAL CHURN CALCULATION
+            const totalBase = activeUsers.length + canceledUsers.length;
+            const churnRate = totalBase > 0 ? (canceledUsers.length / totalBase) * 100 : 0;
+
+            // 3. REAL FAILED PAYMENTS
+            const { data: failedPayments } = await supabase
+                .from('billing_events')
+                .select('amount')
+                .eq('event_type', 'invoice.payment_failed');
+
+            const totalFailed = failedPayments?.reduce((acc, curr) => acc + (curr.amount || 0), 0) || 0;
+
             const breakdown = Object.keys(counts).map(tier => ({
                 name: tier.charAt(0).toUpperCase() + tier.slice(1),
                 users: counts[tier],
@@ -60,12 +75,13 @@ export default function AdminRevenue() {
                 avg: counts[tier] > 0 ? revenuePerTier[tier] / counts[tier] : 0
             })).sort((a, b) => b.mrr - a.mrr);
 
-            setStats(prev => ({
-                ...prev,
+            setStats({
                 mrr: totalMRR,
-                arpu: users && users.length > 0 ? totalMRR / users.length : 0,
+                arpu: activeUsers.length > 0 ? totalMRR / activeUsers.length : 0,
+                churn: Number(churnRate.toFixed(1)),
+                failedAmount: totalFailed,
                 planBreakdown: breakdown
-            }));
+            });
         } catch (error) {
             console.error(error);
         } finally {
