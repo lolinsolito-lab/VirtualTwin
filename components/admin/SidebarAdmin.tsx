@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { supabase } from '@/lib/supabase';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -119,7 +120,13 @@ export function SidebarAdmin() {
                     <span>User Realm</span>
                 </Link>
 
-                <button className="flex items-center gap-4 px-6 py-4 w-full text-white/20 hover:text-red-400 transition-all duration-500 text-[10px] uppercase tracking-[0.3em] font-black mt-2">
+                <button
+                    onClick={async () => {
+                        await supabase.auth.signOut();
+                        window.location.href = '/auth/login';
+                    }}
+                    className="flex items-center gap-4 px-6 py-4 w-full text-white/20 hover:text-red-400 transition-all duration-500 text-[10px] uppercase tracking-[0.3em] font-black mt-2"
+                >
                     <LogOut className="w-5 h-5" />
                     <span>Exit Cockpit</span>
                 </button>
