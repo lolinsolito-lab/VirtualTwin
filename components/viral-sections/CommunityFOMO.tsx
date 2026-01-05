@@ -163,9 +163,9 @@ export default function CommunityFOMO() {
                             🎬 Ad Angle - "Scarsità Intelligente"
                         </h3>
                         <p className="text-white/70 text-sm leading-relaxed">
-                            <strong className="text-gold">Hook:</strong> "Solo 20 posti per piano. Dopo? Prezzo pubblico."<br />
-                            <strong className="text-gold">Body:</strong> Spiega sistema tier/wave/tempo, mostra countdown.<br />
-                            <strong className="text-gold">CTA:</strong> "Blocca il prezzo Founder prima che scadano i 20 posti."
+                            <strong className="text-gold">Hook:</strong> "Solo 20 posti per piano. Dopo? Prezzo più alto."<br />
+                            <strong className="text-gold">Body:</strong> Mostra countdown giorni rimasti, spiega che il prezzo sale definitivamente.<br />
+                            <strong className="text-gold">CTA:</strong> "Blocca il prezzo Founder adesso, prima che scadano i 20 posti."
                         </p>
                     </motion.div>
                 </div>
