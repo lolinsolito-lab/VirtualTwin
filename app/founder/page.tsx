@@ -79,39 +79,56 @@ export default function FounderPage() {
             id: 'esploratore',
             name: 'Esploratore',
             icon: '⚡',
+            tagline: 'Per Chi Inizia a Scalare',
+            description: 'Strumenti professionali per testare il potenziale della tua AI',
             priceFounder: displayPricing?.prices?.esploratore || 39,
             pricePublic: publicPricing.prices.esploratore,
             pricePublicFinal: 397,
             features: ['1 Clone AI', '1,000 msg/mese', '1 Canale', 'Email Support <48h'],
+            gradient: 'from-blue-50 via-indigo-50 to-blue-50',
+            borderGradient: 'from-blue-400 to-indigo-500'
         },
         {
             id: 'pioniere',
             name: 'Pioniere',
             icon: '🚀',
+            tagline: 'La Scelta di 73% dei Coach',
+            description: 'Il portfolio scalato al prezzo: privata da remire di professionisti che hanno transformato il loro business',
             priceFounder: displayPricing?.prices?.pioniere || 147,
             pricePublic: publicPricing.prices.pioniere,
             pricePublicFinal: 797,
             featured: true,
             badge: 'PIÙ SCELTO',
             features: ['1 Clone AI', '5,000 msg/mese', '3 Canali', 'A/B Testing 20%', 'Analytics Pro'],
+            gradient: 'from-amber-50 via-yellow-50 to-amber-50',
+            borderGradient: 'from-amber-400 to-yellow-500'
         },
         {
             id: 'conquistatore',
             name: 'Conquistatore',
             icon: '💎',
+            tagline: 'Per Chi Punta all’Eccellenza',
+            description: 'Agenzia e power user: scalare Conquistatore per dominare il mercato',
             priceFounder: displayPricing?.prices?.conquistatore || 347,
             pricePublic: publicPricing.prices.conquistatore,
             pricePublicFinal: 1397,
             features: ['3 Cloni AI', '20,000 msg/mese', 'API Access (60 req/min)', 'Priority Support'],
+            gradient: 'from-purple-50 via-violet-50 to-purple-50',
+            borderGradient: 'from-purple-500 to-violet-600'
         },
         {
             id: 'imperatore',
             name: 'Imperatore',
             icon: '👑',
+            tagline: 'Il Trono Digitale. Solo per i Migliori',
+            description: 'Accesso verticale, potenzialità illimitata, dominio totale. Libertià e 10 cloni laburo',
             priceFounder: displayPricing?.prices?.imperatore || 697,
             pricePublic: publicPricing.prices.imperatore,
             pricePublicFinal: 2197,
             features: ['10 Cloni AI', '50K msg/mese', 'White-label', 'Account Manager', 'API Priority'],
+            gradient: 'from-orange-400 via-amber-500 to-orange-400',
+            borderGradient: 'from-orange-500 to-amber-600',
+            dark: true
         },
     ];
 
@@ -227,13 +244,18 @@ export default function FounderPage() {
                     {plans.map((plan, i) => (
                         <div
                             key={i}
-                            className={`relative rounded-[1.5rem] p-6 border-2 transition-all ${plan.featured
-                                ? 'bg-gradient-to-br from-gold/10 to-champagne border-gold shadow-xl scale-[1.02]'
-                                : plan.id === 'imperatore'
-                                    ? 'bg-charcoal text-white border-gold shadow-xl'
-                                    : 'bg-white border-charcoal/10 hover:border-gold/50'
+                            className={`relative rounded-[1.5rem] p-6 border-2 transition-all overflow-hidden ${plan.dark
+                                    ? `bg-gradient-to-br ${plan.gradient} text-white border-gold shadow-2xl`
+                                    : plan.featured
+                                        ? `bg-gradient-to-br ${plan.gradient} border-2 border-${plan.borderGradient?.split(' ')[1]?.replace('to-', '')} shadow-xl scale-[1.02]`
+                                        : `bg-gradient-to-br ${plan.gradient} border-2 hover:border-${plan.borderGradient?.split(' ')[1]?.replace('to-', '')} shadow-lg hover:shadow-xl`
                                 }`}
                         >
+                            {/* Border Gradient Effect */}
+                            {plan.borderGradient && !plan.dark && (
+                                <div className={`absolute inset-0 rounded-[1.5rem] bg-gradient-to-r ${plan.borderGradient} opacity-0 hover:opacity-10 transition-opacity pointer-events-none`} />
+                            )}
+
                             {/* SOLD OUT Badge when Genesis exhausted */}
                             {isSoldOut && !isBeforeLaunch && (
                                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
@@ -255,8 +277,23 @@ export default function FounderPage() {
                                 </div>
                             )}
 
-                            <div className="text-4xl mb-3">{plan.icon}</div>
-                            <h3 className="text-xl font-bold mb-4">{plan.name}</h3>
+                            {/* Icon */}
+                            <div className="text-5xl mb-4">{plan.icon}</div>
+
+                            {/* Plan Name */}
+                            <h3 className={`text-xs uppercase tracking-[0.2em] font-black mb-1 ${plan.dark ? 'text-white/60' : 'text-charcoal/50'}`}>
+                                {plan.name}
+                            </h3>
+
+                            {/* Tagline */}
+                            <p className={`text-lg font-bold mb-3 ${plan.dark ? 'text-white' : 'text-charcoal'}`}>
+                                {plan.tagline}
+                            </p>
+
+                            {/* Description */}
+                            <p className={`text-xs leading-relaxed mb-4 ${plan.dark ? 'text-white/70' : 'text-charcoal/60'}`}>
+                                {plan.description}
+                            </p>
 
                             <div className="mb-4">
                                 <div className={`text-4xl font-bold mb-1 text-gold`}>
@@ -425,7 +462,7 @@ export default function FounderPage() {
             </div>
 
         </div>
-        </div>
+        </div >
     );
 }
 
