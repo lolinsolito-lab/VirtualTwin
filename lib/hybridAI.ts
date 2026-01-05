@@ -179,6 +179,8 @@ export async function hybridAIResponse(
     cloneSettings?: {
         tone?: string;
         customPersonality?: string;
+        websiteUrl?: string;
+        knowledgeBase?: { name: string }[];
         faqs?: { question: string; answer: string }[];
     }
 ): Promise<ChatAIResponse> {
@@ -190,14 +192,21 @@ export async function hybridAIResponse(
         ? `TUA PERSONALITÀ: ${cloneSettings.customPersonality}`
         : 'Sei il "VirtualTwin", un\'intelligenza artificiale d\'élite progettata per gestire clienti.';
 
+    const websiteContext = cloneSettings?.websiteUrl ? `SITO WEB AZIENDALE (Fonte di Verità): ${cloneSettings.websiteUrl}` : '';
+    const kbContext = cloneSettings?.knowledgeBase && cloneSettings.knowledgeBase.length > 0
+        ? `DOCUMENTAZIONE CARICATA: ${cloneSettings.knowledgeBase.map(f => f.name).join(', ')}`
+        : '';
+
     const faqsContext = cloneSettings?.faqs && cloneSettings.faqs.length > 0
-        ? `FAQ AZIENDALI (Usa queste informazioni per rispondere):
+        ? `DEEP KNOWLEDGE (FAQ d'Addestramento):
 ${cloneSettings.faqs.map((f, i) => `${i + 1}. D: ${f.question}\n   R: ${f.answer}`).join('\n')}`
         : '';
 
     const systemPrompt = `
 ${personalityContext}
 ${toneContext}
+${websiteContext}
+${kbContext}
 
 CONTESTO AZIENDALE:
 ${businessContext}

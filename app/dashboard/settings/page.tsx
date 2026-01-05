@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Bell, Shield, Palette, Globe, Save, Zap, Check, Building2, FileText, CreditCard, Users, Languages, Loader2 } from 'lucide-react';
+import { User, Bell, Shield, Palette, Globe, Save, Zap, Check, Building2, FileText, CreditCard, Users, Languages, Loader2, Database } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useEffect } from 'react';
 
@@ -41,6 +41,8 @@ export default function SettingsPage() {
 
         // AI Personality
         customPersonality: '',
+        websiteUrl: '',
+        knowledgeBase: [] as { id: string; name: string; type: string; size: string }[],
         faqs: [] as { id: number | string; question: string; answer: string }[],
     });
 
@@ -69,7 +71,6 @@ export default function SettingsPage() {
                         ...prev,
                         businessName: profile.full_name || '',
                         email: user.email || '',
-                        // Mapping metadata or other fields if available
                         companyLegalName: profile.metadata?.companyLegalName || '',
                         vatNumber: profile.metadata?.vatNumber || '',
                         fiscalCode: profile.metadata?.fiscalCode || '',
@@ -88,14 +89,15 @@ export default function SettingsPage() {
                         ...prev,
                         aiTone: clone.personality || 'professionale',
                         customPersonality: clone.metadata?.customPersonality || '',
+                        websiteUrl: clone.metadata?.websiteUrl || '',
+                        knowledgeBase: clone.metadata?.knowledgeBase || [],
                         faqs: clone.metadata?.faqs || [
                             { id: 1, question: '', answer: '' },
                             { id: 2, question: '', answer: '' },
                             { id: 3, question: '', answer: '' },
                         ]
                     }));
-                } else if (!clone && !profile) {
-                    // Fallback to defaults if new user
+                } else {
                     setSettings(prev => ({
                         ...prev,
                         faqs: [
@@ -140,6 +142,8 @@ export default function SettingsPage() {
                 personality: settings.aiTone,
                 metadata: {
                     customPersonality: settings.customPersonality,
+                    websiteUrl: settings.websiteUrl,
+                    knowledgeBase: settings.knowledgeBase,
                     faqs: settings.faqs
                 }
             };
@@ -156,11 +160,24 @@ export default function SettingsPage() {
         setSaving(false);
     };
 
+    const applyCoachTemplate = () => {
+        setSettings(prev => ({
+            ...prev,
+            aiTone: 'commerciale',
+            customPersonality: "Sono un Transformational Coach d'élite. Il mio obiettivo è guidare il cliente attraverso un percorso di consapevolezza e crescita, usando un tono motivante, autorevole e focalizzato sul risultato. Sfido il cliente a superare i propri limiti e propongo soluzioni di automazione come strumenti di libertà assoluta.",
+            faqs: [
+                { id: 1, question: 'Qual è il segreto del successo?', answer: 'Il successo non è un segreto, è un sistema. L\'automazione è il tuo esercito digitale che ti libera dal tempo per lasciarti creare valore.' },
+                { id: 2, question: 'Come funziona il percorso?', answer: 'Partiamo da un audit del tuo tempo. Identifichiamo i colli di bottiglia e cloniamo la tua autorità per delegare l\'ordinario all\'AI.' },
+                { id: 3, question: 'È adatto a me?', answer: 'Se hai un business che scala e non hai tempo di respirare, è l\'unica soluzione per non implodere.' }
+            ]
+        }));
+    };
+
     const tabs = [
         { id: 'profile', label: 'Profilo', icon: User },
         { id: 'company', label: 'Dati Aziendali', icon: Building2 },
         { id: 'billing', label: 'Fatturazione', icon: FileText },
-        { id: 'ai', label: 'Personalità AI', icon: Zap },
+        { id: 'ai', label: 'Neural Training Hub', icon: Zap },
         { id: 'localization', label: 'Lingua & Regione', icon: Globe },
         { id: 'notifications', label: 'Notifiche', icon: Bell },
     ];
@@ -422,140 +439,182 @@ export default function SettingsPage() {
                     {/* AI Settings Tab */}
                     {activeTab === 'ai' && (
                         <div className="space-y-8">
-                            {/* Tone Section */}
-                            <div className="silk-card p-10 rounded-[2rem] border border-white/60">
-                                <div className="flex items-center gap-4 mb-8">
-                                    <div className="w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center">
-                                        <Zap className="w-7 h-7 text-gold" />
+                            {/* Header Section */}
+                            <div className="silk-card p-10 rounded-[2rem] border border-white/60 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 blur-[80px] -translate-y-1/2 translate-x-1/2" />
+
+                                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10 relative z-10">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 rounded-2xl bg-charcoal flex items-center justify-center shadow-luxury">
+                                            <Zap className="w-7 h-7 text-gold" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-serif italic text-charcoal">Neural Training Hub</h2>
+                                            <p className="text-charcoal/40 text-sm">Configura l'identità neurale e la base di conoscenza del tuo clone</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h2 className="text-2xl font-serif italic text-charcoal">Personalità AI</h2>
-                                        <p className="text-charcoal/40 text-sm">Configura come il tuo clone comunica con i clienti</p>
-                                    </div>
+
+                                    <button
+                                        onClick={applyCoachTemplate}
+                                        className="px-6 py-3 bg-gold/10 text-gold rounded-xl font-black text-[10px] uppercase tracking-widest border border-gold/20 hover:bg-gold hover:text-white transition-all shadow-luxury-sm"
+                                    >
+                                        ⚡ Applica Protocollo Coach
+                                    </button>
                                 </div>
 
-                                <div className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                                     {/* Tone Preset */}
-                                    <div>
-                                        <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Tono Base</label>
-                                        <select
-                                            value={settings.aiTone}
-                                            onChange={(e) => setSettings({ ...settings, aiTone: e.target.value })}
-                                            className="w-full px-5 py-4 bg-white/50 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors appearance-none cursor-pointer"
-                                        >
-                                            <option value="professionale">Professionale & Autorevole</option>
-                                            <option value="amichevole">Amichevole & Caloroso</option>
-                                            <option value="formale">Formale & Istituzionale</option>
-                                            <option value="creativo">Creativo & Dinamico</option>
-                                            <option value="commerciale">Commerciale & Persuasivo</option>
-                                        </select>
+                                    <div className="space-y-6">
+                                        <div>
+                                            <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Tono Comunicativo</label>
+                                            <select
+                                                value={settings.aiTone}
+                                                onChange={(e) => setSettings({ ...settings, aiTone: e.target.value })}
+                                                className="w-full px-5 py-4 bg-white/50 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors appearance-none cursor-pointer"
+                                            >
+                                                <option value="professionale">Professionale & Autorevole</option>
+                                                <option value="amichevole">Amichevole & Caloroso</option>
+                                                <option value="formale">Formale & Istituzionale</option>
+                                                <option value="creativo">Creativo & Dinamico</option>
+                                                <option value="commerciale">Commerciale & Persuasivo</option>
+                                            </select>
+                                        </div>
+
+                                        {/* Website Field */}
+                                        <div>
+                                            <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Sito Web Aziendale (Knowledge Source)</label>
+                                            <div className="relative">
+                                                <Globe className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/50" />
+                                                <input
+                                                    type="url"
+                                                    value={settings.websiteUrl}
+                                                    onChange={(e) => setSettings({ ...settings, websiteUrl: e.target.value })}
+                                                    placeholder="https://tuaazienda.com"
+                                                    className="w-full pl-12 pr-5 py-4 bg-white/50 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors"
+                                                />
+                                            </div>
+                                            <p className="text-charcoal/30 text-[10px] mt-2 italic">Il clone analizzerà il contenuto per allinearsi al tuo brand.</p>
+                                        </div>
                                     </div>
 
                                     {/* Custom Personality */}
                                     <div>
                                         <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">
-                                            Personalità Personalizzata <span className="text-gold">(Opzionale)</span>
+                                            Identità Neurale Personalizzata
                                         </label>
                                         <textarea
                                             value={settings.customPersonality}
                                             onChange={(e) => setSettings({ ...settings, customPersonality: e.target.value })}
-                                            placeholder="Descrivi la personalità unica del tuo clone. Es: 'Sono un coach energico che motiva i clienti con entusiasmo. Uso spesso metafore sportive e parlo come un mentore che ha vissuto le stesse sfide. Evito il linguaggio corporate e preferisco un tono diretto ma empatico.'"
-                                            rows={5}
-                                            className="w-full px-5 py-4 bg-white/50 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors resize-none"
+                                            placeholder="Descrivi chi è il tuo clone. Es: 'Sono un esperto di vendite motivante...'"
+                                            rows={6}
+                                            className="w-full px-5 py-4 bg-white/50 border border-charcoal/10 rounded-xl text-charcoal focus:border-gold focus:outline-none transition-colors resize-none text-sm leading-relaxed"
                                         />
-                                        <p className="text-charcoal/40 text-xs mt-2">
-                                            💡 Più dettagli inserisci, più il clone sarà fedele al tuo stile comunicativo.
-                                        </p>
-                                    </div>
-
-                                    {/* Response Preview */}
-                                    <div className="p-5 bg-champagne rounded-xl">
-                                        <p className="text-charcoal font-medium mb-2">Esempio di risposta:</p>
-                                        <p className="text-charcoal/60 text-sm italic">
-                                            {settings.aiTone === 'professionale' && '"Buongiorno, sarò lieto di assisterla nella scelta del piano più adatto alle sue esigenze professionali."'}
-                                            {settings.aiTone === 'amichevole' && '"Ciao! 👋 Sono qui per aiutarti a trovare la soluzione perfetta per te. Cosa stai cercando?"'}
-                                            {settings.aiTone === 'formale' && '"Gentile Cliente, La ringraziamo per averci contattato. Restiamo a Sua completa disposizione."'}
-                                            {settings.aiTone === 'creativo' && '"Hey! 🚀 Pronto a rivoluzionare il tuo business? Ho delle idee fantastiche per te!"'}
-                                            {settings.aiTone === 'commerciale' && '"Ottima scelta! Questo piano ti permetterà di triplicare le tue conversioni. Posso mostrarti come?"'}
-                                        </p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* FAQ Section */}
-                            <div className="silk-card p-10 rounded-[2rem] border border-white/60">
-                                <div className="flex items-center justify-between mb-8">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center">
-                                            <Users className="w-7 h-7 text-gold" />
+                            {/* Knowledge Base & FAQ Grid */}
+                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                                {/* Knowledge Base Section */}
+                                <div className="silk-card p-10 rounded-[2rem] border border-white/60">
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center">
+                                            <Database className="w-6 h-6 text-gold" />
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-serif italic text-charcoal">FAQ del Clone</h2>
-                                            <p className="text-charcoal/40 text-sm">Domande e risposte che il clone conosce</p>
+                                            <h3 className="text-xl font-serif italic text-charcoal">Knowledge Base (PDF)</h3>
+                                            <p className="text-charcoal/40 text-[10px] uppercase tracking-widest font-black">Documentazione Professionale</p>
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={() => setSettings({
-                                            ...settings,
-                                            faqs: [...settings.faqs, { id: Date.now(), question: '', answer: '' }]
-                                        })}
-                                        className="px-4 py-2 bg-gold/10 text-gold rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-gold hover:text-white transition-all"
-                                    >
-                                        + Aggiungi FAQ
-                                    </button>
-                                </div>
 
-                                <div className="space-y-4">
-                                    {settings.faqs.map((faq, index) => (
-                                        <div key={faq.id} className="p-5 bg-white/50 rounded-xl border border-charcoal/5">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <span className="text-xs font-bold text-charcoal/40 uppercase tracking-wider">
-                                                    FAQ #{index + 1}
-                                                </span>
-                                                {settings.faqs.length > 1 && (
-                                                    <button
-                                                        onClick={() => setSettings({
-                                                            ...settings,
-                                                            faqs: settings.faqs.filter(f => f.id !== faq.id)
-                                                        })}
-                                                        className="text-red-400 hover:text-red-600 text-xs font-bold"
-                                                    >
-                                                        Elimina
-                                                    </button>
-                                                )}
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={faq.question}
-                                                onChange={(e) => setSettings({
-                                                    ...settings,
-                                                    faqs: settings.faqs.map(f =>
-                                                        f.id === faq.id ? { ...f, question: e.target.value } : f
-                                                    )
-                                                })}
-                                                placeholder="Es. Quanto costa il servizio?"
-                                                className="w-full px-4 py-3 bg-white border border-charcoal/10 rounded-lg text-charcoal text-sm focus:border-gold focus:outline-none mb-3"
-                                            />
-                                            <textarea
-                                                value={faq.answer}
-                                                onChange={(e) => setSettings({
-                                                    ...settings,
-                                                    faqs: settings.faqs.map(f =>
-                                                        f.id === faq.id ? { ...f, answer: e.target.value } : f
-                                                    )
-                                                })}
-                                                placeholder="La tua risposta tipica..."
-                                                rows={2}
-                                                className="w-full px-4 py-3 bg-white border border-charcoal/10 rounded-lg text-charcoal text-sm focus:border-gold focus:outline-none resize-none"
-                                            />
+                                    <div className="border-2 border-dashed border-charcoal/10 rounded-[2rem] p-10 text-center group-hover:border-gold/30 transition-colors">
+                                        <div className="w-16 h-16 bg-gold/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                            <FileText className="w-8 h-8 text-gold/30" />
                                         </div>
-                                    ))}
+                                        <p className="text-charcoal font-serif italic mb-2">Trascina qui i tuoi manuali</p>
+                                        <p className="text-charcoal/30 text-[10px] uppercase tracking-widest font-black mb-8">Supporto PDF, DOCX (Max 10MB)</p>
+
+                                        <button className="px-6 py-3 bg-charcoal text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gold transition-all">
+                                            Seleziona File
+                                        </button>
+                                    </div>
+
+                                    <div className="mt-8 p-5 bg-gold/5 border border-gold/10 rounded-2xl">
+                                        <p className="text-charcoal/60 text-xs leading-relaxed">
+                                            💡 <strong>Sovereign Tip:</strong> Carica il tuo manuale operativo o le slide dei tuoi servizi. Il clone userà questi dati come fonte di verità assoluta.
+                                        </p>
+                                    </div>
                                 </div>
 
-                                <div className="mt-6 p-4 bg-gold/5 border border-gold/10 rounded-xl">
-                                    <p className="text-charcoal/60 text-sm">
-                                        💡 <strong>Tip:</strong> Aggiungi le domande più frequenti dei tuoi clienti. Il clone userà queste risposte per rispondere in modo coerente con il tuo stile.
-                                    </p>
+                                {/* Deep Knowledge FAQ Section */}
+                                <div className="silk-card p-10 rounded-[2rem] border border-white/60">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center">
+                                                <Users className="w-6 h-6 text-gold" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-serif italic text-charcoal">Deep Knowledge (Q&A)</h3>
+                                                <p className="text-charcoal/40 text-[10px] uppercase tracking-widest font-black">Addestramento Diretto</p>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setSettings({
+                                                ...settings,
+                                                faqs: [...settings.faqs, { id: Date.now(), question: '', answer: '' }]
+                                            })}
+                                            className="w-10 h-10 bg-gold/10 text-gold rounded-full flex items-center justify-center hover:bg-gold hover:text-white transition-all shadow-luxury-sm"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+
+                                    <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                                        {settings.faqs.map((faq, index) => (
+                                            <div key={faq.id} className="p-6 bg-white/40 rounded-2xl border border-charcoal/5 group/faq transition-all hover:border-gold/20">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <span className="text-[9px] font-black text-gold uppercase tracking-[0.3em]">
+                                                        Neural Path #{index + 1}
+                                                    </span>
+                                                    {settings.faqs.length > 1 && (
+                                                        <button
+                                                            onClick={() => setSettings({
+                                                                ...settings,
+                                                                faqs: settings.faqs.filter(f => f.id !== faq.id)
+                                                            })}
+                                                            className="text-red-400 opacity-0 group-hover/faq:opacity-100 transition-opacity text-[9px] font-black uppercase tracking-widest"
+                                                        >
+                                                            Rimuovi
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={faq.question}
+                                                    onChange={(e) => setSettings({
+                                                        ...settings,
+                                                        faqs: settings.faqs.map(f =>
+                                                            f.id === faq.id ? { ...f, question: e.target.value } : f
+                                                        )
+                                                    })}
+                                                    placeholder="Domanda del cliente..."
+                                                    className="w-full px-4 py-3 bg-white border border-charcoal/10 rounded-xl text-charcoal text-sm focus:border-gold focus:outline-none mb-3 font-medium"
+                                                />
+                                                <textarea
+                                                    value={faq.answer}
+                                                    onChange={(e) => setSettings({
+                                                        ...settings,
+                                                        faqs: settings.faqs.map(f =>
+                                                            f.id === faq.id ? { ...f, answer: e.target.value } : f
+                                                        )
+                                                    })}
+                                                    placeholder="La tua risposta d'autorità..."
+                                                    rows={2}
+                                                    className="w-full px-4 py-3 bg-white border border-charcoal/10 rounded-xl text-charcoal text-xs focus:border-gold focus:outline-none resize-none leading-relaxed"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>

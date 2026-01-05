@@ -101,6 +101,8 @@ export async function POST(req: Request) {
                 const cloneSettings = clone ? {
                     tone: clone.personality,
                     customPersonality: clone.metadata?.customPersonality,
+                    websiteUrl: clone.metadata?.websiteUrl,
+                    knowledgeBase: clone.metadata?.knowledgeBase,
                     faqs: clone.metadata?.faqs
                 } : undefined;
 
