@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
 /**
- * Wall of Hooks Component
+ * Wall of Hooks Component - LUXURY EDITION
  * 
- * PUNCH LINES: Collection of extreme emotional hooks for ads reusability
+ * ELITE DESIGN: Sophisticated palette, premium feel
  * 
  * Usage: Homepage sub-hero - headline library for Meta Ads
  */
@@ -15,28 +15,23 @@ export default function WallOfHooks() {
     const hooks = [
         {
             text: "Uno di Te Vive. L'Altro Vende 24/7.",
-            icon: "⚡",
-            gradient: "from-purple-600 to-violet-700"
+            icon: "⚡"
         },
         {
             text: "Non è un Bot. Sei TU, Duplicato.",
-            icon: "👥",
-            gradient: "from-blue-600 to-indigo-700"
+            icon: "👥"
         },
         {
             text: "La Libertà Inizia Quando Non Sei Più Schiavo dello Smartphone.",
-            icon: "🔓",
-            gradient: "from-gold to-amber-600"
+            icon: "🔓"
         },
         {
             text: "Il Tuo Venditore Più Bravo Non Dovrebbe Dormire.",
-            icon: "🌙",
-            gradient: "from-green-600 to-emerald-700"
+            icon: "🌙"
         },
         {
             text: "Vendite Mentre Sogni. Non è Magia, è VirtualTwin.",
-            icon: "✨",
-            gradient: "from-pink-600 to-rose-700"
+            icon: "✨"
         }
     ];
 
@@ -51,7 +46,7 @@ export default function WallOfHooks() {
                         viewport={{ once: true }}
                         className="text-center mb-12"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 rounded-full mb-4">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 border border-gold/40 rounded-full mb-4">
                             <Sparkles className="w-4 h-4 text-gold" />
                             <span className="text-gold text-sm font-black uppercase tracking-wider">
                                 Messaggi Chiave
@@ -59,7 +54,7 @@ export default function WallOfHooks() {
                         </div>
                     </motion.div>
 
-                    {/* Hooks Grid */}
+                    {/* Hooks Grid - LUXURY STYLE */}
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {hooks.map((hook, index) => (
                             <motion.div
@@ -70,21 +65,28 @@ export default function WallOfHooks() {
                                 transition={{ delay: index * 0.1 }}
                                 className="group relative"
                             >
-                                <div className={`bg-gradient-to-br ${hook.gradient} rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all hover:scale-105`}>
-                                    {/* Icon */}
-                                    <div className="text-6xl mb-4 opacity-20 group-hover:opacity-30 transition-opacity">
+                                {/* Luxury Card */}
+                                <div className="relative bg-gradient-to-br from-white via-champagne/20 to-champagne/40 border-2 border-charcoal/10 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all hover:scale-[1.02] overflow-hidden">
+                                    {/* Subtle top accent */}
+                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
+
+                                    {/* Icon - Subtle */}
+                                    <div className="text-5xl mb-4 opacity-20 group-hover:opacity-30 transition-opacity">
                                         {hook.icon}
                                     </div>
 
                                     {/* Hook Text */}
-                                    <p className="text-white font-serif text-xl md:text-2xl font-bold leading-tight">
+                                    <p className="text-charcoal font-serif text-xl md:text-2xl font-bold leading-tight">
                                         {hook.text}
                                     </p>
 
-                                    {/* Arrow indicator */}
-                                    <div className="absolute top-4 right-4">
-                                        <div className="w-3 h-3 bg-white/30 rounded-full" />
+                                    {/* Gold corner accent */}
+                                    <div className="absolute bottom-4 right-4">
+                                        <div className="w-2 h-2 bg-gold rounded-full opacity-40 group-hover:opacity-60 transition-opacity" />
                                     </div>
+
+                                    {/* Hover glow effect */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                                 </div>
                             </motion.div>
                         ))}
@@ -107,3 +109,4 @@ export default function WallOfHooks() {
         </section>
     );
 }
+
