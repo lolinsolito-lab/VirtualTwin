@@ -6,6 +6,10 @@ import Link from 'next/link';
 import FounderStoryTimeline from '@/components/viral-sections/FounderStoryTimeline';
 import DayInLifeTimeline from '@/components/viral-sections/DayInLifeTimeline';
 import HowItWorks3Step from '@/components/viral-sections/HowItWorks3Step';
+import MythVsReality from '@/components/viral-sections/MythVsReality';
+import FounderTestimonials from '@/components/viral-sections/FounderTestimonials';
+import FAQVideoReady from '@/components/viral-sections/FAQVideoReady';
+import CommunityFOMO from '@/components/viral-sections/CommunityFOMO';
 import {
     Zap,
     Clock,
@@ -540,6 +544,20 @@ export default function StartPage() {
                     </div>
                 </div>
             </section>
+
+            {/* VIRAL CONTENT BLOCKS - Phase 2: Post-Pricing */}
+
+            {/* Blocco 4: Myth vs Reality */}
+            <MythVsReality />
+
+            {/* Blocco 5: Founder Testimonials */}
+            <FounderTestimonials />
+
+            {/* Blocco 8: FAQ Video-Ready */}
+            <FAQVideoReady />
+
+            {/* Blocco 9: Community FOMO */}
+            <CommunityFOMO />
 
             {/* Trust Section */}
             <section className="relative z-10 py-16 bg-gradient-to-b from-transparent via-white/50 to-transparent">
