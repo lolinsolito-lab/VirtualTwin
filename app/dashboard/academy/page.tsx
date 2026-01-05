@@ -213,74 +213,168 @@ export default function AcademyPage() {
 
     return (
         <div className="p-4 lg:p-12 max-w-7xl mx-auto">
-            {/* Header */}
-            <header className="mb-12">
-                <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center">
-                        <School className="w-5 h-5 text-gold" />
-                    </div>
-                    <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-black">Founder Academy</span>
+            {/* Imperial Header */}
+            <header className="mb-20 relative">
+                {/* Decorative Ambient Light */}
+                <div className="absolute -top-40 -left-20 w-96 h-96 bg-gold/10 blur-[150px] rounded-full pointer-events-none" />
+
+                <div className="relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex items-center gap-4 mb-8"
+                    >
+                        <div className="w-12 h-12 bg-charcoal rounded-[1.2rem] flex items-center justify-center shadow-luxury-sm">
+                            <School className="w-6 h-6 text-gold" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-[9px] uppercase tracking-[0.4em] text-gold font-black">Private Knowledge Base</span>
+                            <span className="text-[7px] uppercase tracking-[0.5em] text-charcoal/30 font-bold">Imperial Protocol v2.1</span>
+                        </div>
+                    </motion.div>
+
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-4xl lg:text-7xl font-serif text-charcoal mb-8 italic leading-[1.1] tracking-tight"
+                    >
+                        Il Tuo Arsenale di <br />
+                        <span className="gold-text-gradient">Crescita Sovrana</span>
+                    </motion.h1>
+
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                        className="text-charcoal/40 max-w-2xl text-lg font-serif italic leading-relaxed"
+                    >
+                        "Le armi segrete non si condividono, si dominano. Benvenuto nell'Elite dei Founder, dove l'ambizione incontra l'automazione assoluta."
+                    </motion.p>
                 </div>
-                <h1 className="text-3xl lg:text-5xl font-serif text-charcoal mb-4 italic">Il Tuo Arsenale di <span className="gold-text-gradient">Crescita</span></h1>
-                <p className="text-charcoal/50 max-w-2xl leading-relaxed">
-                    Benvenuto nel club dei Founder. Qui trovi le armi segrete per acquisire i tuoi primi 10 clienti e scalare il tuo impero digitale.
-                </p>
             </header>
 
-            {/* Steps Guide */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-                {[
-                    { step: '01', title: 'Outreach LinkedIn', desc: 'Usa i template qui sotto per connetterti con lead di alta qualità.' },
-                    { step: '02', title: 'Demo Call', desc: 'Portali in call e mostra come il clone AI può liberare il loro tempo.' },
-                    { step: '03', title: 'Beta Test', desc: 'Offri l\'accesso Founder gratuito in cambio di un video testimonial.' }
-                ].map((item, i) => (
-                    <div key={i} className="bg-white/50 backdrop-blur-sm p-8 rounded-3xl border border-charcoal/5 group hover:border-gold/20 transition-all duration-500">
-                        <span className="text-4xl font-serif text-gold/20 mb-4 block group-hover:text-gold/40 transition-colors italic">{item.step}</span>
-                        <h3 className="text-sm uppercase tracking-widest font-black text-charcoal mb-2">{item.title}</h3>
-                        <p className="text-xs text-charcoal/40 leading-relaxed">{item.desc}</p>
-                    </div>
-                ))}
+            {/* Steps Guide (Luxe Redesign) */}
+            <div className="relative mb-24">
+                {/* Background Decor */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gold/5 blur-[120px] rounded-full pointer-events-none" />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                    {[
+                        { step: '01', title: 'Outreach LinkedIn', desc: 'Sfrutta algoritmi e script proprietari per connetterti con lead pronti all\'acquisto.', icon: Target },
+                        { step: '02', title: 'Demo Call d\'Elite', desc: 'Protocolli di conversione per trasformare lo scetticismo in autorità assoluta.', icon: MessageCircle },
+                        { step: '03', title: 'Beta Test Expansion', desc: 'Scala l\'impero raccogliendo prove sociali e dominando la tua nicchia.', icon: Sparkles }
+                    ].map((item, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.2 }}
+                            className="group relative"
+                        >
+                            <div className="absolute inset-0 bg-white/40 backdrop-blur-md rounded-[3rem] border border-white/60 shadow-luxury-sm group-hover:shadow-luxury transition-all duration-700" />
+                            <div className="absolute inset-x-0 bottom-0 h-1 gold-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-b-[3rem]" />
+
+                            <div className="relative p-10 h-full flex flex-col">
+                                <span className="absolute top-8 right-10 text-6xl font-serif italic text-gold/10 group-hover:text-gold/20 transition-colors duration-700 select-none">
+                                    {item.step}
+                                </span>
+
+                                <div className="w-14 h-14 bg-charcoal text-white rounded-2xl flex items-center justify-center mb-10 shadow-xl group-hover:scale-110 transition-transform duration-700">
+                                    <item.icon className="w-6 h-6 text-gold" />
+                                </div>
+
+                                <h3 className="text-xl font-serif italic text-charcoal mb-4 group-hover:text-gold transition-colors duration-500">{item.title}</h3>
+                                <p className="text-xs text-charcoal/40 leading-relaxed font-sans font-medium">
+                                    {item.desc}
+                                </p>
+
+                                <div className="mt-auto pt-8 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gold opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0 text-left">
+                                    Mastery Protocol <ArrowRight className="w-3 h-3" />
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
             </div>
 
-            {/* Sovereign Progress Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
-                <div className="bg-charcoal p-8 rounded-[2rem] border border-gold/20 shadow-xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 blur-3xl -translate-y-1/2 translate-x-1/2" />
+            {/* Sovereign Progress Stats (Unified Luxe) */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-24">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    className="bg-charcoal p-10 rounded-[3rem] border border-gold/30 shadow-luxury relative overflow-hidden group"
+                >
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-gold/10 blur-[60px] -translate-y-1/2 translate-x-1/2 group-hover:bg-gold/20 transition-colors duration-700" />
                     <div className="relative z-10">
-                        <Trophy className="w-8 h-8 text-gold mb-4" />
-                        <h4 className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-black mb-1">Livello Attuale</h4>
-                        <div className="flex items-end gap-2">
-                            <span className="text-4xl font-serif italic text-gold">{user?.level || 1}</span>
-                            <span className="text-white/20 text-[10px] font-bold pb-2 uppercase tracking-widest">Sovereign Rank</span>
+                        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-6 border border-white/10">
+                            <Trophy className="w-6 h-6 text-gold" />
+                        </div>
+                        <h4 className="text-[10px] text-white/30 uppercase tracking-[0.4em] font-black mb-2">Sovereign Rank</h4>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-5xl font-serif italic text-gold leading-none">{user?.level || 1}</span>
+                            <span className="text-white/20 text-[8px] font-bold uppercase tracking-[0.3em]">Empire Level</span>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="md:col-span-2 bg-white p-8 rounded-[2rem] border border-charcoal/5 shadow-luxury-sm">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                            <TrendingUp className="w-5 h-5 text-gold" />
-                            <h4 className="text-[10px] text-charcoal/40 uppercase tracking-[0.3em] font-black">Esperienza Totale (XP)</h4>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="md:col-span-2 bg-white/40 backdrop-blur-md p-10 rounded-[3rem] border border-white/60 shadow-luxury-sm flex flex-col justify-between"
+                >
+                    <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-gold/5 rounded-xl flex items-center justify-center">
+                                <TrendingUp className="w-5 h-5 text-gold" />
+                            </div>
+                            <div>
+                                <h4 className="text-[10px] text-charcoal/40 uppercase tracking-[0.4em] font-black">Esperienza Totale (XP)</h4>
+                                <p className="text-[9px] text-charcoal/20 font-bold uppercase tracking-widest mt-0.5">Potenziale Evolutivo</p>
+                            </div>
                         </div>
-                        <span className="text-xs font-serif italic text-charcoal">{user?.xp || 0} / {Math.pow((user?.level || 1), 2) * 100} XP</span>
+                        <span className="text-sm font-serif italic text-charcoal">{user?.xp || 0} <span className="text-charcoal/20">/ {Math.pow((user?.level || 1), 2) * 100} XP</span></span>
                     </div>
-                    <div className="h-3 bg-charcoal/5 rounded-full overflow-hidden">
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${Math.min(100, ((user?.xp || 0) / (Math.pow((user?.level || 1), 2) * 100)) * 100)}%` }}
-                            className="h-full gold-gradient shadow-[0_0_15px_rgba(212,175,55,0.4)]"
-                        />
-                    </div>
-                </div>
 
-                <div className="bg-white p-8 rounded-[2rem] border border-charcoal/5 shadow-luxury-sm">
-                    <Award className="w-8 h-8 text-gold mb-4" />
-                    <h4 className="text-[10px] text-charcoal/40 uppercase tracking-[0.3em] font-black mb-1">Lezioni Completate</h4>
-                    <div className="flex items-end gap-2">
-                        <span className="text-4xl font-serif italic text-charcoal">{user?.completed_video_ids?.length || 0}</span>
-                        <span className="text-charcoal/20 text-[10px] font-bold pb-2 uppercase tracking-widest">/ 21 Lezioni</span>
+                    <div className="relative pt-4">
+                        <div className="h-4 bg-charcoal/5 rounded-full overflow-hidden p-0.5 border border-charcoal/[0.03]">
+                            <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${Math.min(100, ((user?.xp || 0) / (Math.pow((user?.level || 1), 2) * 100)) * 100)}%` }}
+                                className="h-full gold-gradient rounded-full shadow-[0_0_15px_rgba(212,175,55,0.3)] relative overflow-hidden"
+                            >
+                                <div className="absolute inset-0 bg-white/20 w-full animate-shimmer" />
+                            </motion.div>
+                        </div>
+                        <div className="flex justify-between mt-3 text-[8px] text-charcoal/30 font-black uppercase tracking-widest">
+                            <span>RANK {(user?.level || 1)}</span>
+                            <span>PROSSIMO {(user?.level || 1) + 1}</span>
+                        </div>
                     </div>
-                </div>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-white/40 backdrop-blur-md p-10 rounded-[3rem] border border-white/60 shadow-luxury-sm group"
+                >
+                    <div className="w-12 h-12 bg-gold/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors">
+                        <Award className="w-6 h-6 text-gold" />
+                    </div>
+                    <h4 className="text-[10px] text-charcoal/40 uppercase tracking-[0.4em] font-black mb-2">Mastery Progress</h4>
+                    <div className="flex items-baseline gap-2">
+                        <span className="text-5xl font-serif italic text-charcoal leading-none group-hover:text-gold transition-colors">{user?.completed_video_ids?.length || 0}</span>
+                        <span className="text-charcoal/20 text-[8px] font-bold uppercase tracking-[0.3em]">/ 21 Lezioni</span>
+                    </div>
+                    <div className="mt-4 flex gap-1">
+                        {[1, 2, 3, 4, 5].map(i => (
+                            <div key={i} className={`h-1 flex-1 rounded-full ${i <= (user?.completed_video_ids?.length || 0) / 4 ? 'bg-gold' : 'bg-charcoal/5'}`} />
+                        ))}
+                    </div>
+                </motion.div>
             </div>
 
             {/* Video Masterclass Sections (Tiered) */}
