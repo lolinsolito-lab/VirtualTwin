@@ -278,37 +278,59 @@ export default function StartPage() {
             {/* Hero - Editorial Style */}
             <section className="relative z-10 container mx-auto px-6 pt-12 pb-20">
                 <div className="max-w-5xl mx-auto text-center">
-                    {/* Category Tag */}
+                    {/* Scarcity Tag - PSYCHOLOGICAL TRIGGER */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/80 backdrop-blur-sm border border-charcoal/5 rounded-full mb-8"
+                        className="inline-flex items-center gap-2 px-5 py-2 bg-red-50 border-2 border-red-200 rounded-full mb-6 animate-pulse"
                     >
-                        <Sparkles className="w-4 h-4 text-gold" />
-                        <span className="text-charcoal/60 text-sm tracking-widest uppercase">Accesso Immediato</span>
+                        <Clock className="w-4 h-4 text-red-600" />
+                        <span className="text-red-700 text-sm font-black tracking-wider uppercase">Solo {daysUntilIncrease} giorni a questo prezzo</span>
                     </motion.div>
 
-                    {/* Main Headline - Magazine Style */}
+                    {/* Main Headline - EMOTIONAL HOOK */}
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="font-serif text-5xl md:text-7xl lg:text-8xl text-charcoal mb-8 leading-[0.95]"
+                        className="font-serif text-5xl md:text-7xl lg:text-8xl text-charcoal mb-6 leading-[0.95]"
                     >
-                        Il Tuo Clone AI<br />
-                        <span className="italic text-gold">Ti Aspetta</span>
+                        Altri Lavorano 12h/giorno.
+                        <br />
+                        <span className="italic text-gold">Tu Hai un Clone AI.</span>
                     </motion.h1>
 
-                    {/* Subheadline */}
+                    {/* Social Proof - TRUST BUILDING */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="flex items-center justify-center gap-2 mb-8"
+                    >
+                        <div className="flex -space-x-2">
+                            {[...Array(5)].map((_, i) => (
+                                <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amber-600 border-2 border-white flex items-center justify-center">
+                                    <Star className="w-4 h-4 text-white fill-white" />
+                                </div>
+                            ))}
+                        </div>
+                        <span className="text-charcoal/70 font-medium text-sm">
+                            <strong className="text-gold font-black">200+ imprenditori</strong> hanno già attivato il loro Clone
+                        </span>
+                    </motion.div>
+
+                    {/* Subheadline - PAIN & SOLUTION */}
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-lg md:text-xl text-charcoal/60 max-w-2xl mx-auto mb-12 leading-relaxed"
+                        transition={{ delay: 0.3 }}
+                        className="text-lg md:text-xl text-charcoal/70 max-w-3xl mx-auto mb-10 leading-relaxed"
                     >
-                        Inizia oggi stesso. Nessuna attesa, nessuna approvazione.
+                        Mentre la tua concorrenza perde <strong className="text-red-600">3-5 ore al giorno</strong> in risposte manuali,
                         <br className="hidden md:block" />
-                        Attiva il tuo assistente AI in meno di 10 minuti.
+                        tu <strong className="text-gold">scala il business</strong>, chiudi più clienti, e vivi la tua vita.
+                        <br className="hidden md:block" />
+                        <span className="text-charcoal/50 italic text-base">Attivazione in 10 minuti. Zero approvazioni. Zero attese.</span>
                     </motion.p>
 
                     {/* Urgency Banner */}
@@ -316,15 +338,15 @@ export default function StartPage() {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.3 }}
-                            className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-50 to-orange-50 border border-red-100 rounded-2xl"
+                            transition={{ delay: 0.4 }}
+                            className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-2 border-amber-200 rounded-2xl shadow-xl mb-4"
                         >
-                            <div className="flex items-center justify-center w-10 h-10 bg-red-500 rounded-xl text-white">
-                                <Clock className="w-5 h-5" />
+                            <div className="flex items-center justify-center w-14 h-14 bg-red-500 rounded-xl text-white">
+                                <Clock className="w-7 h-7" />
                             </div>
                             <div className="text-left">
-                                <p className="text-red-600 font-semibold">Prezzo aumenta tra {daysUntilIncrease} giorni</p>
-                                <p className="text-red-500/70 text-sm">Blocca il prezzo attuale oggi</p>
+                                <p className="text-red-700 font-black text-lg uppercase tracking-wide">Prezzo aumenta tra {daysUntilIncrease} giorni</p>
+                                <p className="text-amber-700 text-sm font-medium">Blocca il prezzo Founder OGGI o paghi +50% domani</p>
                             </div>
                         </motion.div>
                     )}
