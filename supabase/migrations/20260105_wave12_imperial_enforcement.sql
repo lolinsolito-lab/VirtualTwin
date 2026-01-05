@@ -8,6 +8,9 @@ ALTER TABLE public.clones
 ADD COLUMN IF NOT EXISTS api_key UUID DEFAULT gen_random_uuid(),
 ADD COLUMN IF NOT EXISTS white_label_active BOOLEAN DEFAULT FALSE;
 
+-- BACKFILL: Ensure existing clones get an API key
+UPDATE public.clones SET api_key = gen_random_uuid() WHERE api_key IS NULL;
+
 -- 2. Add Quota Reset logic metadata to Profiles
 ALTER TABLE public.profiles
 ADD COLUMN IF NOT EXISTS quota_reset_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days');
