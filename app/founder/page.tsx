@@ -425,6 +425,7 @@ export default function FounderPage() {
             </div>
 
         </div>
-        </div >
+        </div>
     );
 }
+
