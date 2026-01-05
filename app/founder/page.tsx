@@ -307,7 +307,7 @@ export default function FounderPage() {
                         {plans.map((plan, i) => (
                             <div
                                 key={i}
-                                className={`relative rounded-[2.5rem] p-8 border transition-all duration-500 overflow-hidden group ${plan.dark
+                                className={`relative rounded-[2.5rem] p-8 border transition-all duration-500 group ${plan.dark
                                     ? `bg-gradient-to-br ${plan.gradient} text-white ${plan.borderColor} shadow-2xl hover:scale-[1.02]`
                                     : plan.featured
                                         ? `bg-gradient-to-br ${plan.gradient} ${plan.borderColor} shadow-xl scale-[1.03] animate-pulse-slow`
@@ -329,9 +329,9 @@ export default function FounderPage() {
                                     </div>
                                 )}
 
-                                {/* Popular Badge - only when founder open */}
-                                {plan.badge && isFounderOpen && !isSoldOut && !isBeforeLaunch && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 gold-gradient text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
+                                {/* Popular Badge - show if founder is open or it's pre-launch */}
+                                {plan.badge && (isFounderOpen || isBeforeLaunch) && !isSoldOut && (
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 gold-gradient text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-20 shadow-lg">
                                         {plan.badge}
                                     </div>
                                 )}
