@@ -111,21 +111,6 @@ export default function FAQVideoReady() {
                                                     {line}
                                                 </p>
                                             ))}
-
-                                            {/* Video Script Hook */}
-                                            <div className="mt-6 pt-6 border-t border-gold/20 bg-gold/5 -mx-6 -mb-6 px-6 py-4">
-                                                <div className="flex items-start gap-3">
-                                                    <Video className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                                                    <div>
-                                                        <p className="text-xs uppercase font-black text-gold mb-1 tracking-wider">
-                                                            🎬 Hook Video
-                                                        </p>
-                                                        <p className="text-charcoal/80 text-sm italic">
-                                                            "{faq.videoHook}"
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </motion.div>
                                 )}
