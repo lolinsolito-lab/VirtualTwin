@@ -38,7 +38,7 @@ export default function AdminLogs() {
             // 1. Fetch Billing Events (Real synchronized logs)
             const { data: billing } = await supabase
                 .from('billing_events')
-                .select('id, event_type, amount, created_at, profiles(email)')
+                .select('id, event_type, amount, user_email, created_at')
                 .order('created_at', { ascending: false })
                 .limit(10);
 
@@ -55,7 +55,7 @@ export default function AdminLogs() {
                 level: 'success',
                 category: 'BILLING',
                 message: `Stripe Event: ${b.event_type} - Amount: €${b.amount}`,
-                user: (b.profiles as any)?.email || 'System'
+                user: b.user_email || 'System'
             }));
 
             const messageLogs: LogEntry[] = (messages || []).map(m => ({
@@ -63,7 +63,7 @@ export default function AdminLogs() {
                 timestamp: new Date(m.created_at).toLocaleTimeString(),
                 level: 'info',
                 category: 'NEURAL_LINK',
-                message: `Message ${m.sender_type === 'ai' ? 'SENT' : 'RECEIVED'} - Interacting with: ${(m.conversations as any)?.lead_name || 'Prospect'}`,
+                message: `Message ${m.sender_type === 'ai' ? 'SENT' : 'RECEIVED'} - Interacting with: ${(m.conversations as any)?.contact_name || 'Prospect'}`,
                 user: m.sender_type === 'ai' ? 'Sensei AI' : 'External Lead'
             }));
 
