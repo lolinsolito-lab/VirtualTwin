@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import FounderStoryTimeline from '@/components/viral-sections/FounderStoryTimeline';
+import DayInLifeTimeline from '@/components/viral-sections/DayInLifeTimeline';
+import HowItWorks3Step from '@/components/viral-sections/HowItWorks3Step';
 import {
     Zap,
     Clock,
@@ -372,6 +375,17 @@ export default function StartPage() {
                     </div>
                 </div>
             </section>
+
+            {/* VIRAL CONTENT BLOCKS - Optimized for Meta Ads */}
+
+            {/* Blocco 2: Founder Story Timeline */}
+            <FounderStoryTimeline />
+
+            {/* Blocco 3: Day in Life Timeline */}
+            <DayInLifeTimeline />
+
+            {/* Blocco 6: How It Works 3-Step */}
+            <HowItWorks3Step />
 
             {/* Pricing Section - Magazine Grid */}
             <section className="relative z-10 container mx-auto px-6 py-20">
