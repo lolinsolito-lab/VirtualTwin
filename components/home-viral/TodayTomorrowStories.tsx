@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 import { X, Check, TrendingUp, Clock } from 'lucide-react';
 
 /**
- * Today Tomorrow Stories Component
+ * Today Tomorrow Stories Component - LUXURY EDITION
  * 
- * EMOTIONAL: 4 dramatic before/after scenarios - outcome-focused
+ * ELITE DESIGN: Sophisticated before/after scenarios with elegant palette
  * 
  * Usage: Homepage transformation section - relatable pain → solution stories
  */
@@ -30,8 +30,7 @@ export default function TodayTomorrowStories() {
                 action: "Il tuo gemello digitale risponde, qualifica, invia preventivo.",
                 result: "Tu godi la serata. Lui lavora. Notifica mattina: +€347 vendita notturna.",
                 emotion: "Libertà"
-            },
-            color: "from-purple-500 to-violet-600"
+            }
         },
         {
             title: "Le 3 di Notte",
@@ -50,8 +49,7 @@ export default function TodayTomorrowStories() {
                 action: "Il tuo gemello risponde in 2 secondi. Qualifica. Manda link pagamento.",
                 result: "Tu dormi tranquillo. Lui chiude. Al risveglio: +€197 vendita.",
                 emotion: "Vendite mentre sogni"
-            },
-            color: "from-indigo-600 to-blue-600"
+            }
         },
         {
             title: "Il Lunedì Infernale",
@@ -70,8 +68,7 @@ export default function TodayTomorrowStories() {
                 action: "80% qualificati. 12 call fissate. Solo lead caldi ti aspettano.",
                 result: "Lavori SUL business, non NEL business. 15h/settimana recuperate.",
                 emotion: "Controllo e focus"
-            },
-            color: "from-orange-500 to-red-600"
+            }
         },
         {
             title: "Il 'Mi Penso' Eterno",
@@ -90,13 +87,12 @@ export default function TodayTomorrowStories() {
                 action: "Gemello: FAQ personalizzate, pricing, case study, testimonianze in 2 minuti.",
                 result: "Cliente: 'Perfetto, procedo!' Tu intervieni solo per chiudere deal caldi.",
                 emotion: "Efficienza pura"
-            },
-            color: "from-green-500 to-emerald-600"
+            }
         }
     ];
 
     return (
-        <section className="relative z-10 py-20 bg-gradient-to-b from-white via-gray-50 to-white">
+        <section className="relative z-10 py-20 bg-gradient-to-b from-white via-champagne/10 to-white">
             <div className="container mx-auto px-6">
                 <div className="max-w-7xl mx-auto">
                     {/* Section Header */}
@@ -110,11 +106,11 @@ export default function TodayTomorrowStories() {
                             La Tua Giornata <span className="text-gold italic">Trasformata</span>
                         </h2>
                         <p className="text-xl text-charcoal/60 max-w-3xl mx-auto">
-                            Non sono promesse. Sono scenari reali che vivono <strong>500+ professionisti</strong> ogni giorno.
+                            Non sono promesse. Sono scenari reali che vivono <strong className="text-charcoal">500+ professionisti</strong> ogni giorno.
                         </p>
                     </motion.div>
 
-                    {/* Story Cards */}
+                    {/* Story Cards - LUXURY GRID */}
                     <div className="grid md:grid-cols-2 gap-8">
                         {stories.map((story, index) => (
                             <motion.div
@@ -123,12 +119,15 @@ export default function TodayTomorrowStories() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="bg-white rounded-3xl overflow-hidden shadow-xl border-2 border-charcoal/10"
+                                className="bg-white rounded-3xl overflow-hidden shadow-xl border-2 border-charcoal/10 hover:shadow-2xl transition-all"
                             >
-                                {/* Story Title */}
-                                <div className={`bg-gradient-to-r ${story.color} px-8 py-6`}>
-                                    <div className="flex items-center gap-4">
-                                        <span className="text-5xl">{story.icon}</span>
+                                {/* Story Title - LUXURY HEADER */}
+                                <div className="bg-gradient-to-r from-charcoal to-charcoal/90 px-8 py-6 relative overflow-hidden">
+                                    {/* Subtle gold accent */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent" />
+
+                                    <div className="flex items-center gap-4 relative z-10">
+                                        <span className="text-5xl opacity-80">{story.icon}</span>
                                         <div>
                                             <h3 className="text-2xl font-serif text-white font-bold">
                                                 {story.title}
@@ -137,22 +136,22 @@ export default function TodayTomorrowStories() {
                                     </div>
                                 </div>
 
-                                {/* TODAY (Red/Problem) */}
-                                <div className="p-8 bg-red-50 border-b-4 border-red-200">
+                                {/* TODAY (Problem) - Subtle red accents */}
+                                <div className="p-8 bg-gradient-to-br from-red-50/50 to-rose-50/30 border-b-2 border-red-200/40">
                                     <div className="flex items-start gap-3 mb-4">
-                                        <X className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
+                                        <X className="w-6 h-6 text-red-700 flex-shrink-0 mt-1" />
                                         <div className="flex-1">
-                                            <h4 className="text-sm uppercase font-black text-red-600 tracking-wider mb-2">
+                                            <h4 className="text-sm uppercase font-black text-red-800 tracking-wider mb-2">
                                                 OGGI (senza gemello)
                                             </h4>
                                             <p className="text-charcoal/80 font-medium mb-2">
-                                                <Clock className="w-4 h-4 inline mr-2 text-red-500" />
+                                                <Clock className="w-4 h-4 inline mr-2 text-red-600" />
                                                 {story.today.time}
                                             </p>
                                             <p className="text-charcoal/70 leading-relaxed mb-3">
                                                 {story.today.scene}
                                             </p>
-                                            <div className="bg-white rounded-xl p-3 mb-3 border-l-4 border-red-400">
+                                            <div className="bg-white/80 rounded-xl p-3 mb-3 border-l-4 border-red-400/60 shadow-sm">
                                                 <p className="text-charcoal/60 italic text-sm">
                                                     {story.today.message}
                                                 </p>
@@ -160,38 +159,38 @@ export default function TodayTomorrowStories() {
                                             <p className="text-charcoal/70 leading-relaxed mb-3">
                                                 {story.today.dilemma}
                                             </p>
-                                            <p className="text-red-700 font-bold">
+                                            <p className="text-red-800 font-bold">
                                                 → {story.today.result}
                                             </p>
-                                            <p className="text-red-500 text-sm italic mt-2">
+                                            <p className="text-red-600 text-sm italic mt-2">
                                                 Emozione: {story.today.emotion}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* TOMORROW (Green/Solution) */}
-                                <div className="p-8 bg-green-50">
+                                {/* TOMORROW (Solution) - Subtle green accents */}
+                                <div className="p-8 bg-gradient-to-br from-green-50/50 to-emerald-50/30">
                                     <div className="flex items-start gap-3">
-                                        <Check className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                                        <Check className="w-6 h-6 text-green-700 flex-shrink-0 mt-1" />
                                         <div className="flex-1">
-                                            <h4 className="text-sm uppercase font-black text-green-700 tracking-wider mb-2">
+                                            <h4 className="text-sm uppercase font-black text-green-800 tracking-wider mb-2">
                                                 DOMANI (con il tuo gemello)
                                             </h4>
                                             <p className="text-charcoal/80 font-medium mb-2">
-                                                <TrendingUp className="w-4 h-4 inline mr-2 text-green-600" />
+                                                <TrendingUp className="w-4 h-4 inline mr-2 text-green-700" />
                                                 {story.tomorrow.time}
                                             </p>
                                             <p className="text-charcoal/70 leading-relaxed mb-3">
                                                 {story.tomorrow.scene}
                                             </p>
                                             <p className="text-charcoal/70 leading-relaxed mb-3">
-                                                <strong className="text-green-700">Il gemello:</strong> {story.tomorrow.action}
+                                                <strong className="text-green-800">Il gemello:</strong> {story.tomorrow.action}
                                             </p>
-                                            <p className="text-green-700 font-bold">
+                                            <p className="text-green-800 font-bold">
                                                 → {story.tomorrow.result}
                                             </p>
-                                            <p className="text-green-600 text-sm italic mt-2">
+                                            <p className="text-green-700 text-sm italic mt-2">
                                                 Emozione: {story.tomorrow.emotion}
                                             </p>
                                         </div>
@@ -218,3 +217,4 @@ export default function TodayTomorrowStories() {
         </section>
     );
 }
+
