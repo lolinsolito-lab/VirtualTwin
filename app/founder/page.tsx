@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Crown, Users, ArrowRight, Check, Star, Loader2, Shield, Lock } from 'lucide-react';
 import { getCurrentWave, getCurrentWaveSpotsRemaining, getDisplayPricing, getCurrentPublicPricing, getTotalFounderSpots, Wave, WAVES, isPreLaunch } from '@/lib/waves';
+import FounderHeroEmotional from '@/components/founder-viral/FounderHeroEmotional';
+import ScarcityTimeline from '@/components/founder-viral/ScarcityTimeline';
+import FounderTestimonials from '@/components/founder-viral/FounderTestimonials';
+import FounderFAQ from '@/components/founder-viral/FounderFAQ';
 
 export default function FounderPage() {
     const [spotsLeft, setSpotsLeft] = useState(20);
@@ -169,46 +173,14 @@ export default function FounderPage() {
             </div>
 
             {/* Main Container */}
-            <div className="max-w-6xl mx-auto px-4 py-12 lg:py-20">
+            <div className="">
 
-                {/* Hero Section */}
-                <div className="text-center mb-16">
-                    <div className={`inline-flex items-center gap-2 ${isFounderOpen ? 'bg-gold/10 text-gold' : 'bg-charcoal/10 text-charcoal'} px-6 py-2 rounded-full mb-8 font-black text-[10px] uppercase tracking-[0.4em]`}>
-                        <Crown className="w-4 h-4" />
-                        {isFounderOpen ? 'Founder Program Sovereign Edition' : 'VirtualTwin Public Pricing'}
-                    </div>
-
-                    <h1 className="font-serif text-5xl md:text-7xl mb-6 leading-tight text-charcoal">
-                        {isFounderOpen ? (
-                            <>
-                                Blocca il Prezzo<br />
-                                <span className="italic gold-text-gradient">Per Sempre.</span>
-                            </>
-                        ) : (
-                            <>
-                                Il Tuo Clone AI<br />
-                                <span className="italic text-charcoal/70">Ti Aspetta.</span>
-                            </>
-                        )}
-                    </h1>
-
-                    <p className="text-xl md:text-2xl text-charcoal/60 max-w-3xl mx-auto leading-relaxed">
-                        {isFounderOpen ? (
-                            <>
-                                Entra nei primi <strong className="text-charcoal">{totalSpots} Founder</strong> e blocca il prezzo
-                                a <strong className="text-gold">€{displayPricing?.prices?.pioniere || 147}/mese</strong> per sempre.
-                                <br className="hidden md:block" />
-                                Anche quando il prezzo pubblico aumenterà a €{plans[1].pricePublicFinal}/mese.
-                            </>
-                        ) : (
-                            <>
-                                Scegli il piano perfetto per il tuo business.
-                                <br className="hidden md:block" />
-                                Inizia con <strong className="text-charcoal">14 giorni di trial gratuito</strong>.
-                            </>
-                        )}
-                    </p>
-                </div>
+                {/* HERO EMOTIONAL - NEW VIRAL COMPONENT */}
+                <FounderHeroEmotional
+                    spotsLeft={spotsLeft}
+                    totalSpots={totalSpots}
+                    isBeforeLaunch={isBeforeLaunch}
+                />
 
                 {/* Countdown Section - Only show if Founder open */}
                 {isFounderOpen && (
@@ -247,7 +219,8 @@ export default function FounderPage() {
                             </div>
                         </div>
                     </div>
-                )}
+                )
+                }
 
                 {/* Pricing Grid */}
                 <div id="pricing" className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16 scroll-mt-8">
@@ -395,48 +368,60 @@ export default function FounderPage() {
                         </div>
                     ))}
                 </div>
-                <div className={`text-center ${isFounderOpen ? 'gold-gradient' : 'bg-charcoal'} text-white rounded-[2rem] p-12 shadow-2xl`}>
-                    <h2 className="text-3xl md:text-4xl font-serif italic mb-6">
-                        {isFounderOpen ? (
-                            <>
-                                Sei nel 20% che Costruisce Imperi,<br />
-                                o nell&apos;80% che Insegue?
-                            </>
-                        ) : (
-                            <>
-                                Inizia Oggi con<br />
-                                14 Giorni Gratuiti
-                            </>
-                        )}
-                    </h2>
 
-                    <p className="text-xl mb-8 text-white/80">
-                        {isFounderOpen
-                            ? `Solo ${totalSpots} persone avranno questo privilegio. Per sempre.`
-                            : 'Prova VirtualTwin senza rischi. Cancella quando vuoi.'}
-                    </p>
+                {/* SCARCITY TIMELINE - Show price escalation */}
+                <ScarcityTimeline />
 
-                    <a
-                        href="#pricing"
-                        className="inline-flex items-center gap-3 bg-white text-gold px-12 py-5 rounded-full text-lg font-bold hover:bg-champagne transition-all transform hover:scale-105 shadow-xl"
-                    >
-                        {isFounderOpen ? 'SCEGLI IL TUO PIANO FOUNDER' : 'INIZIA ORA'}
-                        <ArrowRight className="w-5 h-5" />
-                    </a>
+                {/* FOUNDER TESTIMONIALS - Social proof */}
+                <FounderTestimonials />
 
-                    <div className="mt-6 text-sm text-white/60">
-                        {isFounderOpen
-                            ? `${spotsLeft}/${totalSpots} Founder · Chiusura 31 Marzo 2026 · 14 giorni trial gratuito`
-                            : '14 giorni trial gratuito · Nessuna carta richiesta'}
+                {/* FAQ - Handle objections */}
+                <FounderFAQ />
+
+                {/* FINAL CTA */}
+                <div className="max-w-6xl mx-auto px-4">
+                    <div className={`text-center ${isFounderOpen ? 'gold-gradient' : 'bg-charcoal'} text-white rounded-[2rem] p-12 shadow-2xl`}>
+                        <h2 className="text-3xl md:text-4xl font-serif italic mb-6">
+                            {isFounderOpen ? (
+                                <>
+                                    Sei nel 20% che Costruisce Imperi,<br />
+                                    o nell&apos;80% che Insegue?
+                                </>
+                            ) : (
+                                <>
+                                    Inizia Oggi con<br />
+                                    14 Giorni Gratuiti
+                                </>
+                            )}
+                        </h2>
+
+                        <p className="text-xl mb-8 text-white/80">
+                            {isFounderOpen
+                                ? `Solo ${totalSpots} persone avranno questo privilegio. Per sempre.`
+                                : 'Prova VirtualTwin senza rischi. Cancella quando vuoi.'}
+                        </p>
+
+                        <a
+                            href="#pricing"
+                            className="inline-flex items-center gap-3 bg-white text-gold px-12 py-5 rounded-full text-lg font-bold hover:bg-champagne transition-all transform hover:scale-105 shadow-xl"
+                        >
+                            {isFounderOpen ? 'SCEGLI IL TUO PIANO FOUNDER' : 'INIZIA ORA'}
+                            <ArrowRight className="w-5 h-5" />
+                        </a>
+
+                        <div className="mt-6 text-sm text-white/60">
+                            {isFounderOpen
+                                ? `${spotsLeft}/${totalSpots} Founder · Chiusura 31 Marzo 2026 · 14 giorni trial gratuito`
+                                : '14 giorni trial gratuito · Nessuna carta richiesta'}
+                        </div>
                     </div>
-                </div>
 
-                {/* Footer */}
-                <div className="text-center mt-12 text-charcoal/40 text-sm">
-                    <Link href="/" className="text-gold hover:underline">← Torna alla Home</Link>
-                </div>
+                    {/* Footer */}
+                    <div className="text-center mt-12 text-charcoal/40 text-sm">
+                        <Link href="/" className="text-gold hover:underline">← Torna alla Home</Link>
+                    </div>
 
-            </div>
-        </div >
-    );
+                </div >
+            </div >
+            );
 }
