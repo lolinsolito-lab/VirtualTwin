@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Crown, Users, ArrowRight, Check, Star, Loader2, Shield, Lock } from 'lucide-react';
+import { Crown, Users, ArrowRight, Check, Star, Loader2, Shield, Lock, Zap, Rocket } from 'lucide-react';
 import { getCurrentWave, getCurrentWaveSpotsRemaining, getDisplayPricing, getCurrentPublicPricing, getTotalFounderSpots, Wave, WAVES, isPreLaunch } from '@/lib/waves';
 import FounderHeroEmotional from '@/components/founder-viral/FounderHeroEmotional';
 import ScarcityTimeline from '@/components/founder-viral/ScarcityTimeline';
@@ -31,25 +31,42 @@ export default function FounderPage() {
                 getTotalFounderSpots()
             ]);
 
-            setCurrentWave(wave);
-            setSpotsLeft(remaining);
-            setDisplayPricing(allPricing);
-            setTotalSpots(total);
-
-            // Check if we're before launch (Feb 1st)
+            // ARCHITECTURAL OVERRIDE: 
+            // On the /founder page, if we are in pre-launch, we WANT to show the Genesis Wave
+            // and the Founder prices/logic, not fallback to Public.
             const beforeLaunch = isPreLaunch();
+            let activeWave = wave;
+            let currentSpotsRemaining = remaining;
+            let activePricing = allPricing;
+
+            if (beforeLaunch && !wave) {
+                activeWave = WAVES[0]; // Genesis
+                activePricing = {
+                    prices: activeWave.prices,
+                    stripePriceIds: activeWave.stripePriceIds,
+                    tier: 'founder',
+                    waveName: activeWave.name,
+                    spotsRemaining: activeWave.spots
+                };
+                currentSpotsRemaining = activeWave.spots;
+            }
+
+            setCurrentWave(activeWave);
+            setSpotsLeft(currentSpotsRemaining);
+            setDisplayPricing(activePricing);
+            setTotalSpots(total);
             setIsBeforeLaunch(beforeLaunch);
 
             // Founder is open if wave exists AND is founder tier
-            const founderOpen = wave !== null && wave.tier === 'founder';
+            const founderOpen = activeWave !== null && activeWave.tier === 'founder';
             setIsFounderOpen(founderOpen);
 
             // SOLD OUT only if NOT pre-launch AND remaining = 0
-            setIsSoldOut(!beforeLaunch && remaining === 0);
+            setIsSoldOut(!beforeLaunch && currentSpotsRemaining === 0);
 
             // Get next wave for waitlist
-            if (wave && allPricing.tier === 'founder') {
-                const currentIndex = WAVES.findIndex(w => w.id === wave.id);
+            if (activeWave && activePricing.tier === 'founder') {
+                const currentIndex = WAVES.findIndex(w => w.id === activeWave.id);
                 if (currentIndex >= 0 && currentIndex < WAVES.length - 1) {
                     setNextWave(WAVES[currentIndex + 1]);
                 }
@@ -81,9 +98,11 @@ export default function FounderPage() {
             name: 'Esploratore',
             tagline: 'Per chi Inizia a Scalare',
             description: 'Il punto di ingresso per testare il potenziale della tua AI.',
-            priceFounder: 297,
-            pricePublic: 697,
-            icon: '⚡',
+            priceFounder: displayPricing?.prices?.esploratore || 39,
+            pricePublic: publicPricing.prices.esploratore,
+            icon: <Zap className="w-7 h-7" />,
+            accentIcon: 'text-blue-500',
+            bgIcon: 'bg-blue-50',
             gradient: 'from-[#F8FAFC] to-[#F1F5F9]',
             borderColor: 'border-slate-200',
             borderHover: 'hover:border-slate-300',
@@ -100,9 +119,11 @@ export default function FounderPage() {
             name: 'Pioniere',
             tagline: 'Per chi vuole Dominare',
             description: 'La soluzione completa per scalare la tua presenza digitale.',
-            priceFounder: 697,
-            pricePublic: 1197,
-            icon: '🚀',
+            priceFounder: displayPricing?.prices?.pioniere || 147,
+            pricePublic: publicPricing.prices.pioniere,
+            icon: <Rocket className="w-7 h-7" />,
+            accentIcon: 'text-amber-600',
+            bgIcon: 'bg-amber-50',
             badge: 'PIÙ SCELTO',
             featured: true,
             gradient: 'from-[#FAFAF9] to-[#F5F5F4]',
@@ -122,9 +143,11 @@ export default function FounderPage() {
             name: 'Conquistatore',
             tagline: 'L\'Agenzia nell\'Ombra',
             description: 'Potenza e velocità per chi non accetta compromessi.',
-            priceFounder: 1197,
-            pricePublic: 1997,
-            icon: '💎',
+            priceFounder: displayPricing?.prices?.conquistatore || 347,
+            pricePublic: publicPricing.prices.conquistatore,
+            icon: <Shield className="w-7 h-7" />,
+            accentIcon: 'text-purple-400',
+            bgIcon: 'bg-white/10',
             gradient: 'from-charcoal via-[#1C1C1C] to-charcoal',
             borderColor: 'border-white/10',
             borderHover: 'hover:border-white/20',
@@ -142,9 +165,11 @@ export default function FounderPage() {
             name: 'Imperatore',
             tagline: 'Il Trono Digitale',
             description: 'Controllo totale, dominio assoluto. Solo per i migliori.',
-            priceFounder: 1997,
-            pricePublic: 4997,
-            icon: '👑',
+            priceFounder: displayPricing?.prices?.imperatore || 697,
+            pricePublic: publicPricing.prices.imperatore,
+            icon: <Crown className="w-7 h-7" />,
+            accentIcon: 'text-gold',
+            bgIcon: 'bg-white/20',
             gradient: 'from-[#0F0F0F] via-[#141414] to-[#0F0F0F]',
             borderColor: 'border-gold/40',
             borderHover: 'hover:border-gold/60 shadow-[0_0_30px_rgba(212,175,55,0.1)]',
@@ -312,8 +337,8 @@ export default function FounderPage() {
                                 )}
 
                                 {/* Icon */}
-                                <div className="w-14 h-14 bg-stone-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:rotate-12 transition-transform duration-500">
-                                    {plan.icon}
+                                <div className={`w-14 h-14 ${plan.bgIcon} rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:rotate-12 transition-all duration-500 shadow-sm border border-black/5`}>
+                                    <div className={plan.accentIcon}>{plan.icon}</div>
                                 </div>
 
                                 {/* Plan Name */}
@@ -332,12 +357,12 @@ export default function FounderPage() {
                                 </p>
 
                                 <div className="mb-6">
-                                    <div className={`text-5xl font-bold mb-1 tracking-tighter ${plan.dark ? 'text-white' : 'text-charcoal'}`}>
+                                    <div className={`text-5xl lg:text-6xl font-serif font-black mb-1 tracking-tighter ${plan.dark ? 'text-white' : 'text-charcoal'}`}>
                                         €{isFounderOpen ? plan.priceFounder : plan.pricePublic}<span className="text-sm font-normal text-current/40">/mo</span>
                                     </div>
                                     {isFounderOpen && (
                                         <div className="flex flex-col gap-1">
-                                            <div className={`text-xs font-bold uppercase tracking-widest ${plan.id === 'imperatore' ? 'text-white/30' : 'text-charcoal/30'}`}>
+                                            <div className={`text-xs font-bold uppercase tracking-widest ${plan.dark ? 'text-white/30' : 'text-charcoal/30'}`}>
                                                 Public: <span className="line-through">€{plan.pricePublic}</span>
                                             </div>
                                             <div className="text-[9px] uppercase font-black tracking-widest text-gold animate-pulse">
@@ -348,7 +373,8 @@ export default function FounderPage() {
                                 </div>
 
                                 {isFounderOpen && (
-                                    <div className="bg-gold/5 border border-gold/10 text-gold text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl mb-8 text-center">
+                                    <div className={`border text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl mb-8 text-center shadow-inner ${plan.dark ? 'bg-white/5 border-white/10 text-gold' : 'bg-gold/5 border-gold/10 text-gold'
+                                        }`}>
                                         Risparmio: €{calculateFounderSavings(plan.id).toLocaleString()}
                                     </div>
                                 )}
