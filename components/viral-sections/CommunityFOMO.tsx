@@ -132,17 +132,9 @@ export default function CommunityFOMO() {
                                 <p className="text-white text-3xl md:text-4xl font-serif mb-2">
                                     <strong className="text-gold">20 posti per piano</strong>
                                 </p>
-                                <p className="text-white/60 text-sm mb-4">
-                                    Quando finiscono → prezzo aumenta + passaggio a prezzi pubblici
+                                <p className="text-white/60 text-base">
+                                    Quando finiscono i posti al prezzo attuale, il prezzo aumenta definitivamente.
                                 </p>
-                                <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-                                    <p className="text-white text-xs font-mono">
-                                        Sistema: <strong className="text-gold">Tier + Wave + Tempo</strong>
-                                    </p>
-                                    <p className="text-white/50 text-xs mt-1">
-                                        Prezzi Founder → Prezzi Pubblici (dinamici)
-                                    </p>
-                                </div>
                             </div>
 
                             <a
@@ -154,7 +146,7 @@ export default function CommunityFOMO() {
                             </a>
 
                             <p className="text-white/40 text-xs italic">
-                                Scaduti i 20 posti? Passa a prezzo pubblico (+ caro)
+                                Una volta esauriti i 20 posti, il prezzo sale e non torna mai più al livello precedente
                             </p>
                         </div>
                     </motion.div>
