@@ -383,13 +383,13 @@ export default function FounderPage() {
                                 <ul className="space-y-2 mb-6">
                                     {plan.features.map((feature, j) => (
                                         <li key={j} className="flex items-start gap-2 text-sm">
-                                            <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.id === 'imperatore' ? 'text-gold' : 'text-green-500'}`} />
-                                            <span className={plan.id === 'imperatore' ? 'text-white/80' : 'text-charcoal/70'}>{feature}</span>
+                                            <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.dark ? 'text-gold' : 'text-green-500'}`} />
+                                            <span className={plan.dark ? 'text-white/80' : 'text-charcoal/70'}>{feature}</span>
                                         </li>
                                     ))}
                                 </ul>
 
-                                <div className={`text-xs mb-4 ${plan.id === 'imperatore' ? 'text-white/50' : 'text-charcoal/50'}`}>
+                                <div className={`text-xs mb-4 ${plan.dark ? 'text-white/50' : 'text-charcoal/50'}`}>
                                     <Shield className="w-3 h-3 inline mr-1" />
                                     {plan.id === 'esploratore' ? '1 Clone AI' : plan.id === 'pioniere' ? '1 Clone AI' : plan.id === 'conquistatore' ? '3 Cloni AI' : '10 Cloni AI'}
                                 </div>
