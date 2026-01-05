@@ -16,7 +16,18 @@ import {
     Lock,
     Trophy,
     Award,
-    TrendingUp
+    TrendingUp,
+    ShoppingBag,
+    Briefcase,
+    Cpu,
+    HeartPulse,
+    Users,
+    Shield,
+    Car,
+    Utensils,
+    Code,
+    Palette,
+    Globe
 } from 'lucide-react';
 import { useSovereign } from '@/components/providers/SovereignProvider';
 import { ImperialGate } from '@/components/dashboard/ImperialGate';
@@ -211,29 +222,125 @@ export default function AcademyPage() {
 
     const templates = [
         {
-            id: 'conn-caldo',
-            sector: 'Generale',
+            id: 't1',
             title: 'Richiesta Connessione (Calda)',
             target: 'Chi ti segue o interagisce',
+            text: 'Ciao [Nome]! 👋\n\nHo notato il tuo lavoro su [TOPIC/POST]. Impressionante.\n\nSto lanciando qualcosa che potrebbe interessarti... Te ne parlo se accetti?\n\nMichael',
             icon: Target,
-            text: `Ciao [Nome]! 👋\n\nHo notato il tuo lavoro su [TOPIC/POST]. Impressionante.\n\nSto lanciando qualcosa che potrebbe interessarti... Te ne parlo se accetti?\n\nMichael`
+            sector: 'Generale'
         },
         {
-            id: 'real-estate-script',
-            sector: 'Real Estate',
+            id: 't2',
             title: 'Qualifica Immobiliare',
-            target: 'Proprietari di immobili',
+            target: 'Proprietari di Immobili',
+            text: 'Buongiorno [Nome],\n\nHo visto il suo annuncio per l\'immobile in [Zona].\n\nVirtualTwin sta aiutando le agenzie in zona a qualificare i lead automaticamente in 2 minuti. Le interesserebbe vedere come funziona?',
             icon: Target,
-            text: `Buongiorno [Nome], \n\nHo visto il suo annuncio per l'immobile in [Zona]. \n\nVirtualTwin sta aiutando le agenzie in zona a qualificare i lead automaticamente in 2 minuti. Le interesserebbe vedere come funziona?`
+            sector: 'Real Estate'
         },
         {
-            id: 'coach-cold',
-            sector: 'Coach/Consulenti',
+            id: 't3',
             title: 'Scalabilità per Coach',
             target: 'Coach con molto traffico',
+            text: 'Ciao [Nome],\n\nAmiamo i tuoi contenuti! Gestire tutti i DM deve essere un incubo per la scalabilità.\n\nVirtualTwin clona la tua voce e gestisce i prospect 24/7 per te. Ti mando un demo?',
             icon: Send,
-            text: `Ciao [Nome], \n\nAmiamo i tuoi contenuti! Gestire tutti i DM deve essere un incubo però... 😅\n\nHo creato un Clone AI che parla esattamente come te e chiude vendite mentre dormi. Lo testeresti gratuitamente?`
+            sector: 'Coach/Consulenti'
         },
+        {
+            id: 't4',
+            title: 'Recupero Carrello VIP',
+            target: 'Clienti E-commerce',
+            text: 'Ciao [Nome], ho visto che avevi occhio su [Prodotto]! 💎\n\nSolo per oggi ti ho riservato un accesso prioritario. Vuoi che ti mandi il link riservato?\n\nIl tuo Digital Twin',
+            icon: ShoppingBag,
+            sector: 'E-commerce'
+        },
+        {
+            id: 't5',
+            title: 'Performance Outreach',
+            target: 'Direttori Marketing',
+            text: 'Ciao [Nome], ho visto la vostra campagna su [Canale]. Ottima, ma sento che potreste convertire il 30% in più senza aumentare il budget.\n\nHo un sistema che automatizza la chiusura dei lead in chat. Ti mostro i dati?\n\nMichael',
+            icon: Briefcase,
+            sector: 'Agenzie Marketing'
+        },
+        {
+            id: 't6',
+            title: 'Trial-to-Paid Blitz',
+            target: 'Utenti in Trial SaaS',
+            text: 'Ciao [Nome], spero che [App] ti stia aiutando con [Obiettivo]!\n\nHo notato che non hai ancora attivato [Feature X]. È quella che garantisce il ROI massimo. Vuoi una breve guida?\n\nDigital Assistant',
+            icon: Cpu,
+            sector: 'SaaS'
+        },
+        {
+            id: 't7',
+            title: 'Inquiry per Health',
+            target: 'Pazienti/Clienti Fitness',
+            text: 'Ciao [Nome], grazie per aver scaricato la guida! 💪\n\nPer darti il consiglio migliore: qual è il tuo obiettivo principale per i prossimi 90 giorni? Rispondi qui e ti dico il percorso migliore.\n\nIl tuo AI Coach',
+            icon: HeartPulse,
+            sector: 'Fitness/Salute'
+        },
+        {
+            id: 't8',
+            title: 'Headhunting Chirurgico',
+            target: 'C-Level / Top Talent',
+            text: 'Buongiorno [Nome], non sono un recruiter generico.\n\nSto curando una posizione imperiale in [Settore] e il suo profilo rispecchia la nostra visione. Un caffè virtuale di 10 minuti per i dettagli?\n\nSovereign Recruiting',
+            icon: Users,
+            sector: 'HR/Recruiting'
+        },
+        {
+            id: 't9',
+            title: 'Fiducia Assicurativa',
+            target: 'Liberi Professionisti',
+            text: 'Buongiorno [Nome], la maggior parte dei consulenti vende paura. Io proteggo la libertà.\n\nHo un report su come i cambiamenti di questo mese impattano [Settore]. Glielo invio senza impegni?',
+            icon: Shield,
+            sector: 'Assicurazioni'
+        },
+        {
+            id: 't10',
+            title: 'Test-Drive Experience',
+            target: 'Lead Automobilistici',
+            text: 'Ciao [Nome]! La nuova [Modello] è arrivata in showroom. 🏎️\n\nHo uno slot libero domani alle 15:00 per un\'esperienza di guida dedicata. Lo blocco a tuo nome?\n\nConcierge Digitale',
+            icon: Car,
+            sector: 'Automotive'
+        },
+        {
+            id: 't11',
+            title: 'Influencer Collab',
+            target: 'Content Creators',
+            text: 'Ciao [Nome], il tuo stile su [Post] è esattamente quello che cerchiamo per la nostra nuova capsule.\n\nNon il solito scambio merce. Ti mando la proposta commerciale?\n\nBrand Manager AI',
+            icon: Sparkles,
+            sector: 'Beauty/Fashion'
+        },
+        {
+            id: 't12',
+            title: 'Corporate Catering',
+            target: 'Responsabili Eventi',
+            text: 'Buongiorno [Nome], state pianificando l\'evento di [Mese]? 🍷\n\nAbbiamo un nuovo menu pensato per massimizzare il networking dei vostri ospiti. Vi mando il menu in anteprima?\n\nMaître Digitale',
+            icon: Utensils,
+            sector: 'Food & Beverage'
+        },
+        {
+            id: 't13',
+            title: 'Technical Scoping',
+            target: 'CTO / Product Owners',
+            text: 'Ciao [Nome], ho visto la vostra architettura su [GitHub/Tech Blog]. Interessante come gestite [Tecnologia].\n\nStiamo risolvendo [Problema] con un approccio nuovo. Vi interesserebbe un confronto tecnico?\n\nTech Lead AI',
+            icon: Code,
+            sector: 'Tech/Sviluppo'
+        },
+        {
+            id: 't14',
+            title: 'Commission Inquiry',
+            target: 'Collezionisti d\'Arte',
+            text: 'Buongiorno [Nome], ho visto che segue le opere di [Artista].\n\nAbbiamo una nuova selezione "Sovereign" in arrivo che non sarà pubblica. Vuole essere inserito nella lista privata?\n\nCuratore Virtuale',
+            icon: Palette,
+            sector: 'Arte/Design'
+        },
+        {
+            id: 't15',
+            title: 'Exclusive Travel VIP',
+            target: 'High Net Worth Clients',
+            text: 'Buongiorno [Nome], abbiamo sbloccato l\'accesso a una villa privata in [Destinazione] non presente sui cataloghi.\n\nSarebbe la soluzione ideale per il suo periodo di [Data]. Le mando il video tour riservato?\n\nElite Concierge',
+            icon: Globe,
+            sector: 'Viaggi/Luxury'
+        }
     ];
 
     const filteredTemplates = templates.filter(t => t.sector === activeSector || activeSector === 'Generale');
