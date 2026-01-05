@@ -46,6 +46,9 @@ export default function AdminUsers() {
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState<CitizenStat[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedUser, setSelectedUser] = useState<CitizenStat | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         fetchUsers();
@@ -95,6 +98,48 @@ export default function AdminUsers() {
             console.error(error);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleUpdateUser = async (updates: Partial<CitizenStat>) => {
+        if (!selectedUser) return;
+        setIsSaving(true);
+        try {
+            const { error } = await supabase
+                .from('profiles')
+                .update(updates)
+                .eq('id', selectedUser.id);
+
+            if (error) throw error;
+            await fetchUsers();
+            setIsEditModalOpen(false);
+        } catch (error) {
+            console.error('Error updating citizen:', error);
+            alert('Errore imperiale: impossibile aggiornare il cittadino.');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleDeleteUser = async () => {
+        if (!selectedUser) return;
+        if (!confirm('ATTENZIONE: Stai per cancellare questo cittadino dall\'Impero. Questa azione è irreversibile. Procedere?')) return;
+
+        setIsSaving(true);
+        try {
+            const { error } = await supabase
+                .from('profiles')
+                .delete()
+                .eq('id', selectedUser.id);
+
+            if (error) throw error;
+            await fetchUsers();
+            setIsEditModalOpen(false);
+        } catch (error) {
+            console.error('Error deleting citizen:', error);
+            alert('Errore imperiale: il cittadino oppone resistenza alla cancellazione.');
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -211,16 +256,25 @@ export default function AdminUsers() {
                                     <td className="px-8 py-6 text-right">
                                         <div className="flex items-center justify-end gap-3">
                                             {(citizen.messages_used_this_month / citizen.messages_limit > 0.8 || citizen.health_score < 50) ? (
-                                                <button className="flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/20 text-gold text-[8px] font-black uppercase tracking-widest rounded-lg hover:bg-gold hover:text-black transition-all">
+                                                <button
+                                                    onClick={() => { setSelectedUser(citizen); setIsEditModalOpen(true); }}
+                                                    className="flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/20 text-gold text-[8px] font-black uppercase tracking-widest rounded-lg hover:bg-gold hover:text-black transition-all"
+                                                >
                                                     <Zap className="w-3 h-3 animate-pulse" />
                                                     Push Upgrade
                                                 </button>
                                             ) : (
-                                                <button className="p-3 text-white/10 hover:text-white transition-colors">
-                                                    <Mail className="w-4 h-4" />
+                                                <button
+                                                    onClick={() => { setSelectedUser(citizen); setIsEditModalOpen(true); }}
+                                                    className="p-3 text-white/10 hover:text-gold transition-colors"
+                                                >
+                                                    <Zap className="w-4 h-4" />
                                                 </button>
                                             )}
-                                            <button className="p-3 bg-white/5 border border-white/5 rounded-xl hover:text-white transition-all">
+                                            <button
+                                                onClick={() => { setSelectedUser(citizen); setIsEditModalOpen(true); }}
+                                                className="p-3 bg-white/5 border border-white/5 rounded-xl hover:text-white transition-all"
+                                            >
                                                 <ChevronRight className="w-4 h-4" />
                                             </button>
                                         </div>
@@ -232,25 +286,100 @@ export default function AdminUsers() {
                 </div>
             </div>
 
-            {/* Manual Override Zone */}
-            <div className="mt-12 p-10 bg-gradient-to-br from-red-500/5 to-transparent border border-red-500/10 rounded-[2.5rem]">
-                <h4 className="font-serif text-2xl italic text-red-400 mb-4 flex items-center gap-3">
-                    <ShieldAlert className="w-6 h-6" />
-                    Sovereign Intervention
-                </h4>
-                <p className="text-white/30 text-sm max-w-2xl mb-8 leading-relaxed italic">
-                    Utilizza questi strumenti con saggezza. Qui puoi forzare lo stato del sistema,
-                    resettare limiti di utilizzo per singoli cittadini o gestire crisi di profitto in tempo reale.
-                </p>
-                <div className="flex flex-wrap gap-4">
-                    <button className="px-8 py-4 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-red-500 hover:text-white transition-all">
-                        Bulk Reset Usage
-                    </button>
-                    <button className="px-8 py-4 bg-white/5 border border-white/10 text-white/50 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all">
-                        Export Usage Logs
-                    </button>
+            {/* Sovereign Command Modal */}
+            {isEditModalOpen && selectedUser && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-12">
+                    <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={() => setIsEditModalOpen(false)} />
+                    <div className="w-full max-w-2xl bg-[#020202] border border-white/10 rounded-[3rem] p-10 relative z-10 shadow-[0_0_100px_rgba(0,0,0,1)] overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 blur-[100px] -z-10" />
+
+                        <header className="mb-10">
+                            <div className="flex items-center gap-3 mb-4">
+                                <Zap className="w-5 h-5 text-gold animate-pulse" />
+                                <span className="text-[10px] uppercase tracking-[0.4em] text-gold font-black">Imperial Command Unit</span>
+                            </div>
+                            <h2 className="font-serif text-4xl italic text-white leading-tight">
+                                Citizen: <span className="gold-text-gradient">{selectedUser.full_name || selectedUser.email}</span>
+                            </h2>
+                        </header>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                            {/* Tier Selection */}
+                            <div className="space-y-4">
+                                <label className="text-[10px] uppercase tracking-widest text-white/40 font-black px-2">Access Tier (Testing Academy)</label>
+                                <div className="grid grid-cols-1 gap-2">
+                                    {['esploratore', 'pioniere', 'conquistatore', 'imperatore'].map((tier) => (
+                                        <button
+                                            key={tier}
+                                            onClick={() => handleUpdateUser({ plan_tier: tier })}
+                                            disabled={isSaving}
+                                            className={`px-6 py-4 rounded-2xl border text-[10px] uppercase tracking-[0.2em] font-black transition-all flex items-center justify-between group ${selectedUser.plan_tier === tier
+                                                    ? 'bg-gold text-black border-gold shadow-[0_0_30px_rgba(212,175,55,0.3)]'
+                                                    : 'bg-white/5 border-white/10 text-white/40 hover:border-gold/40 hover:text-white'
+                                                }`}
+                                        >
+                                            {tier}
+                                            {selectedUser.plan_tier === tier && <CheckCircle2 className="w-4 h-4" />}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Status & Founders */}
+                            <div className="space-y-6">
+                                <div className="space-y-4">
+                                    <label className="text-[10px] uppercase tracking-widest text-white/40 font-black px-2">Social Status</label>
+                                    <div className="flex gap-2">
+                                        {['active', 'paused', 'canceled'].map((status) => (
+                                            <button
+                                                key={status}
+                                                onClick={() => handleUpdateUser({ subscription_status: status })}
+                                                disabled={isSaving}
+                                                className={`flex-1 py-4 rounded-2xl border text-[9px] uppercase tracking-widest font-black transition-all ${selectedUser.subscription_status === status
+                                                        ? 'bg-white/20 border-white/40 text-white'
+                                                        : 'bg-white/5 border-white/10 text-white/20 hover:border-white/20'
+                                                    }`}
+                                            >
+                                                {status}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={() => handleUpdateUser({ is_founder: !selectedUser.is_founder })}
+                                    disabled={isSaving}
+                                    className={`w-full py-5 rounded-2xl border text-[10px] uppercase tracking-[0.3em] font-black transition-all flex items-center justify-center gap-3 ${selectedUser.is_founder
+                                            ? 'bg-gold/10 border-gold/40 text-gold'
+                                            : 'bg-white/5 border-white/10 text-white/20'
+                                        }`}
+                                >
+                                    <Star className={`w-4 h-4 ${selectedUser.is_founder ? 'fill-gold' : ''}`} />
+                                    Founder Rights: {selectedUser.is_founder ? 'Active' : 'Missing'}
+                                </button>
+
+                                <button
+                                    onClick={handleDeleteUser}
+                                    disabled={isSaving}
+                                    className="w-full py-5 rounded-2xl border border-red-500/10 bg-red-500/5 text-red-500/40 text-[10px] uppercase tracking-[0.3em] font-black hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-3 mt-4"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                    Purge Citizen
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end pt-8 border-t border-white/5">
+                            <button
+                                onClick={() => setIsEditModalOpen(false)}
+                                className="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] uppercase tracking-[0.3em] font-black text-white/40 hover:text-white hover:bg-white/10 transition-all"
+                            >
+                                Close Command Center
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

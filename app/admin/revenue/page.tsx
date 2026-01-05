@@ -17,6 +17,14 @@ import { IMPERIAL_PRICES } from '@/lib/pricing';
 
 const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(val);
 
+interface BillingEvent {
+    id: string;
+    event_type: string;
+    amount: number;
+    user_email: string;
+    created_at: string;
+}
+
 export default function AdminRevenue() {
     const [isLoading, setIsLoading] = useState(true);
     const [stats, setStats] = useState({
@@ -26,6 +34,7 @@ export default function AdminRevenue() {
         failedAmount: 218,
         planBreakdown: [] as any[]
     });
+    const [recentEvents, setRecentEvents] = useState<BillingEvent[]>([]);
 
     useEffect(() => {
         fetchRevenueAnalytics();
@@ -75,6 +84,13 @@ export default function AdminRevenue() {
                 avg: counts[tier] > 0 ? revenuePerTier[tier] / counts[tier] : 0
             })).sort((a, b) => b.mrr - a.mrr);
 
+            // 4. REAL LEDGER EVENTS
+            const { data: events } = await supabase
+                .from('billing_events')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(20);
+
             setStats({
                 mrr: totalMRR,
                 arpu: activeUsers.length > 0 ? totalMRR / activeUsers.length : 0,
@@ -82,6 +98,7 @@ export default function AdminRevenue() {
                 failedAmount: totalFailed,
                 planBreakdown: breakdown
             });
+            setRecentEvents(events || []);
         } catch (error) {
             console.error(error);
         } finally {
@@ -185,16 +202,47 @@ export default function AdminRevenue() {
                             <h4 className="font-bold text-[10px] uppercase tracking-widest">Failed Payments</h4>
                         </div>
                         <p className="text-3xl font-serif text-white mb-2">{formatCurrency(stats.failedAmount)}</p>
-                        <p className="text-[10px] text-white/40 uppercase tracking-tighter mb-6 underline cursor-pointer hover:text-white transition-colors">View 2 affected users →</p>
+                        <p className="text-[10px] text-white/40 uppercase tracking-tighter mb-6 underline cursor-pointer hover:text-white transition-colors">Total unresolved arrears</p>
 
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-3 bg-red-500/5 border border-red-500/10 rounded-xl">
-                                <div>
-                                    <p className="text-xs font-bold text-white/80">giovanni@consult.com</p>
-                                    <p className="text-[8px] text-red-400 uppercase font-black tracking-widest">System Suspending...</p>
+                            {/* Failed items would show up here if we filter ledger for failures */}
+                            <p className="text-[10px] text-white/20 italic">Monitor the Imperial Ledger for specific failed signals.</p>
+                        </div>
+                    </div>
+
+                    {/* Imperial Ledger */}
+                    <div className="bg-[#050505] border border-white/5 rounded-[2.5rem] p-8 flex flex-col h-[500px]">
+                        <div className="flex items-center justify-between mb-8">
+                            <h4 className="font-serif text-xl italic text-white flex items-center gap-3">
+                                <TrendingUp className="w-5 h-5 text-gold" />
+                                Imperial Ledger
+                            </h4>
+                            <span className="text-[8px] bg-gold/10 text-gold px-2 py-0.5 rounded-full font-black uppercase tracking-widest">Live Signals</span>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                            {recentEvents.length > 0 ? recentEvents.map((event, i) => (
+                                <div key={i} className="p-4 bg-white/5 border border-white/5 rounded-2xl group hover:border-white/20 transition-all">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${event.event_type.includes('success') || event.event_type.includes('paid')
+                                            ? 'bg-green-500/10 text-green-500'
+                                            : 'bg-red-500/10 text-red-500'
+                                            }`}>
+                                            {event.event_type.split('.').pop()}
+                                        </span>
+                                        <span className="text-[10px] font-bold text-white tabular-nums">{formatCurrency(event.amount)}</span>
+                                    </div>
+                                    <p className="text-[9px] text-white/60 truncate mb-1">{event.user_email || 'System Event'}</p>
+                                    <span className="text-[8px] text-white/20 uppercase tracking-tighter">
+                                        {new Date(event.created_at).toLocaleString('it-IT', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' })}
+                                    </span>
                                 </div>
-                                <span className="text-xs font-bold text-white/40">{formatCurrency(121)}</span>
-                            </div>
+                            )) : (
+                                <div className="flex-1 flex flex-col items-center justify-center text-center opacity-20">
+                                    <AlertCircle className="w-10 h-10 mb-4" />
+                                    <p className="text-[10px] uppercase tracking-widest">No Recent Signals</p>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -202,7 +250,7 @@ export default function AdminRevenue() {
                     <div className="bg-gradient-to-br from-gold/10 to-transparent border border-gold/10 rounded-[2rem] p-8">
                         <TrendingUp className="w-8 h-8 text-gold mb-6" />
                         <h4 className="font-serif text-2xl text-white mb-2 italic">Expansion.</h4>
-                        <p className="text-white/40 text-xs leading-relaxed">Il tuo impero sta crescendo del 12% in più rispetto alle proiezioni conservative di Gensk Park.</p>
+                        <p className="text-white/40 text-xs leading-relaxed uppercase tracking-tighter">Your Empire is exceeding the growth projections for this cycle.</p>
                     </div>
                 </div>
             </div>
