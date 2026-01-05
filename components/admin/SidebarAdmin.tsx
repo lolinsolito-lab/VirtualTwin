@@ -122,7 +122,9 @@ export function SidebarAdmin() {
 
                 <button
                     onClick={async () => {
+                        console.log('SidebarAdmin: Exit Cockpit initiate...');
                         await supabase.auth.signOut();
+                        console.log('SidebarAdmin: Logged out, redirecting...');
                         window.location.href = '/auth/login';
                     }}
                     className="flex items-center gap-4 px-6 py-4 w-full text-white/20 hover:text-red-400 transition-all duration-500 text-[10px] uppercase tracking-[0.3em] font-black mt-2"
