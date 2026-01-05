@@ -315,23 +315,24 @@ export default function FounderPage() {
                                     }`}
                             >
 
-                                {/* SOLD OUT Badge when Genesis exhausted */}
+                                {/* SOLD OUT Badge - Top right when exhausted */}
                                 {isSoldOut && !isBeforeLaunch && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
+                                    <div className="absolute -top-3 right-6 bg-red-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-20 shadow-lg">
                                         🔴 SOLD OUT
                                     </div>
                                 )}
 
-                                {/* Pre-Launch Badge */}
+                                {/* Launching Badge - Positioned to the left */}
                                 {isBeforeLaunch && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold to-amber-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
+                                    <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10 shadow-md">
                                         🚀 Launching Feb 1st
                                     </div>
                                 )}
 
-                                {/* Popular Badge - show if founder is open or it's pre-launch */}
+                                {/* Popular / Tier Badge - Positioned to the right with high contrast */}
                                 {plan.badge && (isFounderOpen || isBeforeLaunch) && !isSoldOut && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 gold-gradient text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-20 shadow-lg">
+                                    <div className={`absolute -top-3 right-6 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-20 shadow-xl border border-white/20 ${plan.id === 'pioniere' ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white' : 'gold-gradient text-white'
+                                        }`}>
                                         {plan.badge}
                                     </div>
                                 )}
