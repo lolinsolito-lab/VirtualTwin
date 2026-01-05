@@ -48,6 +48,7 @@ export function SovereignProvider({ children }: { children: React.ReactNode }) {
 
             if (error) throw error;
 
+            console.log('SovereignProvider: Profile loaded', { id: profile.id, email: profile.email, role: profile.role });
             setUser(profile as UserProfile);
         } catch (error) {
             console.error('Error fetching sovereign profile:', error);
