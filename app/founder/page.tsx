@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Crown, Users, ArrowRight, Check, Star, Loader2, Shield, Lock } from 'lucide-react';
-import { getCurrentWave, getCurrentWaveSpotsRemaining, getDisplayPricing, getCurrentPublicPricing, getTotalFounderSpots, Wave, WAVES } from '@/lib/waves';
+import { getCurrentWave, getCurrentWaveSpotsRemaining, getDisplayPricing, getCurrentPublicPricing, getTotalFounderSpots, Wave, WAVES, isPreLaunch } from '@/lib/waves';
 
 export default function FounderPage() {
     const [spotsLeft, setSpotsLeft] = useState(20);
@@ -14,7 +14,8 @@ export default function FounderPage() {
     const [isSoldOut, setIsSoldOut] = useState(false);
     const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
     const [nextWave, setNextWave] = useState<Wave | null>(null);
-    const [isFounderOpen] = useState(true);
+    const [isFounderOpen, setIsFounderOpen] = useState(false);
+    const [isBeforeLaunch, setIsBeforeLaunch] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
@@ -29,8 +30,17 @@ export default function FounderPage() {
             setSpotsLeft(remaining);
             setDisplayPricing(allPricing);
             setTotalSpots(total);
-            setSpotsLeft(remaining);
-            setIsSoldOut(remaining === 0);
+
+            // Check if we're before launch (Feb 1st)
+            const beforeLaunch = isPreLaunch();
+            setIsBeforeLaunch(beforeLaunch);
+
+            // Founder is open if wave exists AND is founder tier
+            const founderOpen = wave !== null && wave.tier === 'founder';
+            setIsFounderOpen(founderOpen);
+
+            // SOLD OUT only if NOT pre-launch AND remaining = 0
+            setIsSoldOut(!beforeLaunch && remaining === 0);
 
             // Get next wave for waitlist
             if (wave && allPricing.tier === 'founder') {
@@ -252,14 +262,21 @@ export default function FounderPage() {
                                 }`}
                         >
                             {/* SOLD OUT Badge when Genesis exhausted */}
-                            {isSoldOut && (
+                            {isSoldOut && !isBeforeLaunch && (
                                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
                                     🔴 SOLD OUT
                                 </div>
                             )}
 
+                            {/* Pre-Launch Badge */}
+                            {isBeforeLaunch && (
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold to-amber-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10">
+                                    🚀 Launching Feb 1st
+                                </div>
+                            )}
+
                             {/* Popular Badge - only when founder open */}
-                            {plan.badge && isFounderOpen && !isSoldOut && (
+                            {plan.badge && isFounderOpen && !isSoldOut && !isBeforeLaunch && (
                                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 gold-gradient text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
                                     {plan.badge}
                                 </div>
@@ -360,9 +377,18 @@ export default function FounderPage() {
                                             const publicPricing = getCurrentPublicPricing();
                                             await handleCheckout(plan.id, publicPricing.stripePriceIds[plan.id as keyof typeof publicPricing.stripePriceIds]);
                                         }}
-                                        className="gold-gradient text-white py-3 rounded-xl font-bold text-xs uppercase hover:scale-105 transition-all"
+                                        className="relative overflow-hidden bg-gradient-to-r from-charcoal via-charcoal/95 to-charcoal/90 border-2 border-gold/40 text-white py-3 px-4 rounded-xl font-bold text-xs uppercase hover:border-gold hover:scale-105 transition-all shadow-lg group"
                                     >
-                                        💳 €{plan.pricePublic} Public
+                                        {/* Gold accent line */}
+                                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
+
+                                        <span className="flex items-center justify-center gap-2">
+                                            <span className="text-gold font-black text-base">{plan.pricePublic}€</span>
+                                            <span className="text-white/80 text-xs">Prezzo Pubblico</span>
+                                        </span>
+
+                                        {/* Hover glow */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-gold/0 via-gold/10 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </button>
                                 </div>
                             )}
