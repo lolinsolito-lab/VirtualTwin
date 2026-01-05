@@ -54,8 +54,8 @@ export default function WallOfHooks() {
                         </div>
                     </motion.div>
 
-                    {/* Hooks Grid - LUXURY STYLE */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                    {/* Hooks Grid - LUXURY STYLE (Flexbox for centering) */}
+                    <div className="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto">
                         {hooks.map((hook, index) => (
                             <motion.div
                                 key={index}
@@ -63,7 +63,7 @@ export default function WallOfHooks() {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="group relative w-full max-w-sm"
+                                className="group relative w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-sm"
                             >
                                 {/* Luxury Card */}
                                 <div className="relative bg-gradient-to-br from-white via-champagne/20 to-champagne/40 border-2 border-charcoal/10 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all hover:scale-[1.02] overflow-hidden">
