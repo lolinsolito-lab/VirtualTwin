@@ -49,6 +49,14 @@ export const ALL_BADGES: Record<string, Badge> = {
         icon: 'Send',
         category: 'academy',
         color: 'from-emerald-400 to-emerald-600'
+    },
+    'maestro_assoluto': {
+        id: 'maestro_assoluto',
+        name: 'Maestro Assoluto',
+        description: 'Ha convalidato l\'ultimo modulo Mastery dell\'Academy.',
+        icon: 'Trophy',
+        category: 'academy',
+        color: 'from-gold to-amber-600'
     }
 };
 
@@ -77,6 +85,11 @@ export function calculateEligibleBadges(user: UserProfile): string[] {
     // 4. Streak logic (if streak_days >= 3)
     if (user.streak_days >= 3) {
         earned.push('sovereign_streak');
+    }
+
+    // 5. Absolute Mastery (Passed the 'imperatore' quiz)
+    if (user.quizzes_passed && user.quizzes_passed['imperatore']) {
+        earned.push('maestro_assoluto');
     }
 
     return earned;

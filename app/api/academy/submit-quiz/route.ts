@@ -45,27 +45,38 @@ export async function POST(req: Request) {
         const isPerfectScore = score === totalQuestions;
         const alreadyPassed = !!quizzesPassed[moduleId];
 
+        const TIER_ORDER: UserProfile['plan_tier'][] = ['curioso', 'aspirante', 'esploratore', 'pioniere', 'conquistatore', 'imperatore'];
+        const currentTierIndex = TIER_ORDER.indexOf(moduleId as any);
+
         let xpToAdd = 0;
-        let newBadgesEarned: string[] = [];
+        let newTiersValidated: string[] = [];
 
-        // 2. Only award XP and check badges if first time passing or perfect score
-        if (!alreadyPassed && isPerfectScore) {
-            xpToAdd = 200; // 200 XP for passing a quiz with 100%
-            quizzesPassed[moduleId] = {
-                score,
-                total: totalQuestions,
-                passed_at: new Date().toISOString()
-            };
+        // 2. Propagation Logic: If passing a higher tier, validate all previous ones
+        if (isPerfectScore && currentTierIndex !== -1) {
+            for (let i = 0; i <= currentTierIndex; i++) {
+                const tierId = TIER_ORDER[i];
+                if (!quizzesPassed[tierId]) {
+                    quizzesPassed[tierId] = {
+                        score: i === currentTierIndex ? score : (moduleId === tierId ? score : 1), // Pseudo-pass for propagated ones
+                        total: i === currentTierIndex ? totalQuestions : 1,
+                        passed_at: new Date().toISOString(),
+                        propagated: i !== currentTierIndex
+                    };
+                    xpToAdd += 200;
+                    newTiersValidated.push(tierId);
+                }
+            }
+        }
 
-            // Calculate new badges
+        // 3. Update Profile if progress was made
+        if (xpToAdd > 0) {
             const currentBadges = userProfile.badges || [];
             const eligibleBadges = calculateEligibleBadges({
                 ...userProfile,
                 quizzes_passed: quizzesPassed
             });
-            newBadgesEarned = detectNewBadges(currentBadges, eligibleBadges);
+            const newBadgesEarned = detectNewBadges(currentBadges, eligibleBadges);
 
-            // 3. Update Profile
             const newXP = (userProfile.xp || 0) + xpToAdd;
             const newLevel = Math.floor(Math.sqrt(newXP / 100)) + 1;
             const updatedBadges = [...currentBadges, ...newBadgesEarned];
@@ -92,6 +103,7 @@ export async function POST(req: Request) {
                 xpEarned: xpToAdd,
                 newLevel,
                 newBadges: newBadgesEarned,
+                validatedTiers: newTiersValidated,
                 firstTime: true
             });
         }

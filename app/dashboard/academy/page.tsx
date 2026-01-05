@@ -69,7 +69,15 @@ export default function AcademyPage() {
             videos: [
                 { id: "v1", title: 'La Genesi del Clone AI', duration: '12:45', thumbnail: 'bg-gold/10', xp: 25 },
                 { id: "v2", title: 'Mentalità Sovereign', duration: '08:20', thumbnail: 'bg-charcoal/5', xp: 25 },
-            ]
+            ],
+            quizQuestions: [
+                {
+                    id: 1, text: "Cosa distingue un Datore di Lavoro Digitale da un semplice Bot?",
+                    options: ["La velocità di risposta", "La capacità di proiettare la tua autorità e chiudere vendite", "Il costo mensile", "Il numero di lingue parlate"],
+                    correctIndex: 1,
+                    explanation: "Un Sovrano non usa bot; addestra cloni che portano la sua visione e chiudono accordi 24/7."
+                }
+            ] as any
         },
         {
             name: "Esecuzione Strategica",
@@ -78,7 +86,15 @@ export default function AcademyPage() {
             videos: [
                 { id: "v3", title: 'Architettura delle Vendite', duration: '15:20', thumbnail: 'bg-charcoal/5', xp: 50 },
                 { id: "v4", title: 'Gestione Obiezioni via Chat', duration: '14:30', thumbnail: 'bg-charcoal/5', xp: 50 },
-            ]
+            ],
+            quizQuestions: [
+                {
+                    id: 1, text: "Qual è la chiave per superare le obiezioni in chat?",
+                    options: ["Rispondere immediatamente", "Anticipare il dubbio prima ancora che venga espresso", "Chiedere di chiamare", "Inviare un PDF lungo"],
+                    correctIndex: 1,
+                    explanation: "La maestria nella vendita via chat risiede nell'eliminazione sequenziale del rischio percepito dal prospect."
+                }
+            ] as any
         },
         {
             name: "Ottimizzazione Imperiale",
@@ -104,7 +120,15 @@ export default function AcademyPage() {
             videos: [
                 { id: "v5", title: 'Outreach Magnetico su LinkedIn', duration: '18:10', thumbnail: 'bg-gold/10', xp: 100 },
                 { id: "v6", title: 'Scaling: Da 1 a 100 Cloni', duration: '20:00', thumbnail: 'bg-gold/10', xp: 100 },
-            ]
+            ],
+            quizQuestions: [
+                {
+                    id: 1, text: "Perché l'Outreach LinkedIn fallisce per la maggior parte dei Founder?",
+                    options: ["Mancanza di automazione", "Messaggi generici e poco autoritari", "Account troppo recenti", "LinkedIn è saturo"],
+                    correctIndex: 1,
+                    explanation: "Il dominio del mercato si ottiene con la personalizzazione chirurgica unita a un posizionamento di autorità assoluta."
+                }
+            ] as any
         },
         {
             name: "Espansione Dominante",

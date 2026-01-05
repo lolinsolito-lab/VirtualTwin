@@ -47,6 +47,7 @@ CREATE INDEX IF NOT EXISTS idx_clone_faqs_user_id ON public.clone_faqs(user_id);
 -- RLS Security for clone_faqs
 ALTER TABLE public.clone_faqs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can manage own faqs" ON public.clone_faqs;
 CREATE POLICY "Users can manage own faqs" ON public.clone_faqs
     FOR ALL USING (auth.uid() = user_id);
 
