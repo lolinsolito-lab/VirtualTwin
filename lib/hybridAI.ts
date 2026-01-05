@@ -16,9 +16,9 @@ interface PlanAIConfig {
     priority: 'standard' | 'high' | 'priority';
 }
 
-// AI Provider configuration per plan tier
+// AI Provider configuration per plan tier (Sync with lib/pricing.ts)
 export const PLAN_AI_CONFIG: Record<string, PlanAIConfig> = {
-    // FREE TIER - Gemini Flash (fastest, cheapest)
+    // FREE TIER
     curioso: {
         provider: 'gemini-flash',
         modelName: 'gemini-1.5-flash',
@@ -27,7 +27,16 @@ export const PLAN_AI_CONFIG: Record<string, PlanAIConfig> = {
         priority: 'standard'
     },
 
-    // STARTER - Gemini Flash with more tokens
+    // ENTRY-LEVEL
+    aspirante: {
+        provider: 'gemini-flash',
+        modelName: 'gemini-1.5-flash',
+        maxTokens: 400,
+        temperature: 0.7,
+        priority: 'standard'
+    },
+
+    // GROWTH
     esploratore: {
         provider: 'gemini-flash',
         modelName: 'gemini-1.5-flash',
@@ -36,29 +45,29 @@ export const PLAN_AI_CONFIG: Record<string, PlanAIConfig> = {
         priority: 'standard'
     },
 
-    // PRO - Gemini Pro (better quality)
+    // PRO - Gemini Pro
     pioniere: {
         provider: 'gemini-pro',
         modelName: 'gemini-1.5-pro',
-        maxTokens: 800,
+        maxTokens: 1000,
         temperature: 0.6,
         priority: 'high'
     },
 
-    // PREMIUM - GPT-4 (best for complex conversations)
+    // PREMIUM - GPT-4o
     conquistatore: {
         provider: 'gpt-4o',
-        modelName: 'gpt-4o-mini',
-        maxTokens: 1000,
+        modelName: 'gpt-4o',
+        maxTokens: 2000,
         temperature: 0.6,
         priority: 'priority'
     },
 
-    // AGENCY - GPT-4 Full (maximum quality)
+    // AGENCY - GPT-4 Turbo
     imperatore: {
         provider: 'gpt-4',
         modelName: 'gpt-4-turbo',
-        maxTokens: 1500,
+        maxTokens: 4000,
         temperature: 0.5,
         priority: 'priority'
     },

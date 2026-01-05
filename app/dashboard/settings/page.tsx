@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Bell, Shield, Palette, Globe, Save, Zap, Check, Building2, FileText, CreditCard, Users, Languages, Loader2, Database } from 'lucide-react';
+import { User, Bell, Shield, Palette, Globe, Save, Zap, Check, Building2, FileText, CreditCard, Users, Languages, Loader2, Database, Key } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useEffect } from 'react';
 
@@ -44,6 +44,11 @@ export default function SettingsPage() {
         websiteUrl: '',
         knowledgeBase: [] as { id: string; name: string; type: string; size: string }[],
         faqs: [] as { id: number | string; question: string; answer: string }[],
+
+        // Internal State
+        planTier: 'curioso',
+        apiKey: '',
+        whiteLabelActive: false
     });
 
     useEffect(() => {
@@ -81,6 +86,7 @@ export default function SettingsPage() {
                         billingZip: profile.metadata?.billingZip || '',
                         billingProvince: profile.metadata?.billingProvince || '',
                         billingCountry: profile.metadata?.billingCountry || 'Italia',
+                        planTier: profile.plan_tier || 'curioso'
                     }));
                 }
 
@@ -91,11 +97,13 @@ export default function SettingsPage() {
                         customPersonality: clone.metadata?.customPersonality || '',
                         websiteUrl: clone.metadata?.websiteUrl || '',
                         knowledgeBase: clone.metadata?.knowledgeBase || [],
-                        faqs: clone.metadata?.faqs || [
+                        faqs: (clone.metadata?.faqs && clone.metadata.faqs.length > 0) ? clone.metadata.faqs : [
                             { id: 1, question: '', answer: '' },
                             { id: 2, question: '', answer: '' },
                             { id: 3, question: '', answer: '' },
-                        ]
+                        ],
+                        apiKey: clone.api_key || '',
+                        whiteLabelActive: clone.white_label_active || false
                     }));
                 } else {
                     setSettings(prev => ({
@@ -207,9 +215,15 @@ export default function SettingsPage() {
                 <h1 className="font-serif text-5xl lg:text-6xl italic text-charcoal leading-[1.1] tracking-tight">
                     Impostazioni <span className="gold-text-gradient">Imperiali.</span>
                 </h1>
-                <p className="mt-4 text-charcoal/40 font-medium text-sm tracking-wide max-w-xl">
-                    Personalizza il comportamento del tuo VirtualTwin e gestisci i dati aziendali.
-                </p>
+                <div className="mt-4 flex items-center gap-3">
+                    <p className="text-charcoal/40 font-medium text-sm tracking-wide">
+                        Personalizza il comportamento del tuo VirtualTwin e gestisci i dati aziendali.
+                    </p>
+                    <span className="px-3 py-1 bg-charcoal text-white rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse" />
+                        Piano {settings.planTier === 'curioso' ? 'Trial' : settings.planTier}
+                    </span>
+                </div>
             </header>
 
             {/* Save Success Toast */}
@@ -512,6 +526,62 @@ export default function SettingsPage() {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Elite Control Mode (Only for Conquistatore/Imperatore) */}
+                            {['conquistatore', 'imperatore'].includes(settings.planTier) && (
+                                <div className="silk-card p-10 rounded-[2rem] border border-gold/40 bg-gold/5 relative overflow-hidden">
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className="w-12 h-12 rounded-xl bg-gold flex items-center justify-center shadow-luxury">
+                                            <Shield className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-serif italic text-charcoal">Controllo Elite & API</h3>
+                                            <p className="text-gold text-[10px] uppercase tracking-widest font-black">Funzionalità Enterprise Attive</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        {/* API Key Section */}
+                                        <div className="space-y-4">
+                                            <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Chiave API Privata</label>
+                                            <div className="relative group">
+                                                <Key className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+                                                <input
+                                                    type="password"
+                                                    value={settings.apiKey}
+                                                    readOnly
+                                                    className="w-full pl-12 pr-12 py-4 bg-white/80 border border-gold/20 rounded-xl text-charcoal font-mono text-xs focus:outline-none"
+                                                />
+                                                <button
+                                                    onClick={() => {
+                                                        navigator.clipboard.writeText(settings.apiKey);
+                                                        setSaved(true);
+                                                        setTimeout(() => setSaved(false), 2000);
+                                                    }}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-black text-gold uppercase tracking-widest hover:text-charcoal transition-colors"
+                                                >
+                                                    Copia
+                                                </button>
+                                            </div>
+                                            <p className="text-charcoal/40 text-[10px] italic">Usa questa chiave per integrare il clone in software esterni (Zapier, Make, CRM).</p>
+                                        </div>
+
+                                        {/* White Label Status */}
+                                        <div className="space-y-4">
+                                            <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">Stato White-Label</label>
+                                            <div className={`p-4 rounded-xl border flex items-center gap-4 ${settings.whiteLabelActive ? 'bg-green-50 border-green-200' : 'bg-charcoal/5 border-charcoal/10'}`}>
+                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${settings.whiteLabelActive ? 'bg-green-500 text-white' : 'bg-charcoal/20 text-charcoal/40'}`}>
+                                                    <Shield className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-bold text-charcoal">{settings.whiteLabelActive ? 'ATTIVO' : 'NON ATTIVO'}</p>
+                                                    <p className="text-[10px] text-charcoal/40 uppercase tracking-widest font-black">Rimosso Watermark "Powered by VirtualTwin"</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Knowledge Base & FAQ Grid */}
                             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">

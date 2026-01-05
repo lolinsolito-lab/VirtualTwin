@@ -81,9 +81,18 @@ export async function POST(req: Request) {
         if (activeUserId) {
             const { data: profile } = await supabase
                 .from('profiles')
-                .select('plan_tier, is_founder')
+                .select('plan_tier, is_founder, messages_used_this_month, messages_limit')
                 .eq('id', activeUserId)
                 .single();
+
+            // QUOTA CHECK: Deny if limit reached
+            if (profile && profile.messages_used_this_month >= (profile.messages_limit || 100)) {
+                return NextResponse.json({
+                    reply: "Hai raggiunto il limite di messaggi del tuo piano. 🛑 Effettua l'upgrade per continuare a parlare con il tuo clone!",
+                    insights: { suggestedStage: 'closed' },
+                    quotaExceeded: true
+                });
+            }
 
             // Fetch Clone Specific Personality
             const { data: clone } = await supabase
@@ -165,6 +174,12 @@ export async function POST(req: Request) {
             }
 
             await supabase.from('conversations').update(updatePayload).eq('id', conversationId);
+
+            // 6. Increment Usage Counters (Imperial Enforcement)
+            await supabase.rpc('increment_message_usage', {
+                p_user_id: activeUserId,
+                p_clone_id: activeCloneId
+            });
         }
 
         return NextResponse.json({
