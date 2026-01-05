@@ -245,7 +245,13 @@ export function Sidebar() {
                     </div>
                 </div>
 
-                <button className="flex items-center gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 w-full text-charcoal/30 hover:text-red-400 transition-colors duration-300 text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.2em] font-bold rounded-xl hover:bg-red-50">
+                <button
+                    onClick={async () => {
+                        await supabase.auth.signOut();
+                        window.location.href = '/auth/login';
+                    }}
+                    className="flex items-center gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 w-full text-charcoal/30 hover:text-red-400 transition-colors duration-300 text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.2em] font-bold rounded-xl hover:bg-red-50"
+                >
                     <LogOut className="w-5 h-5 flex-shrink-0" />
                     <span>Logout</span>
                 </button>
