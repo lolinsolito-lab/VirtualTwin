@@ -17,7 +17,12 @@ import {
     X,
     School,
     Crown,
-    Gift
+    Gift,
+    GraduationCap,
+    Cpu,
+    Flame,
+    Send,
+    Award
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -177,6 +182,37 @@ export function Sidebar() {
                             style={{ width: `${(userPlan.xp % 1000) / 10}%` }} // Simplified XP/Level logic
                         />
                     </div>
+
+                    {/* Badge Wall */}
+                    {user?.badges && user.badges.length > 0 && (
+                        <div className="mb-6">
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-[8px] uppercase tracking-widest text-charcoal/30 font-black">Achievements</span>
+                                <span className="text-[9px] font-bold text-gold">{user.badges.length}</span>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {user.badges.map((badgeId: string) => {
+                                    const iconMap: any = {
+                                        'pioniere_fondatore': Crown,
+                                        'apprendista_sovrano': GraduationCap,
+                                        'architetto_ai': Cpu,
+                                        'sovereign_streak': Flame,
+                                        'maestro_outreach': Send
+                                    };
+                                    const Icon = iconMap[badgeId] || Award;
+                                    return (
+                                        <div
+                                            key={badgeId}
+                                            className="w-7 h-7 rounded-lg bg-gold/5 border border-gold/10 flex items-center justify-center group relative cursor-help"
+                                            title={badgeId.replace('_', ' ')}
+                                        >
+                                            <Icon className="w-3.5 h-3.5 text-gold/60 group-hover:text-gold transition-colors" />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Plan Header */}
                     <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4 relative pt-4 border-t border-charcoal/5">

@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useSovereign } from '@/components/providers/SovereignProvider';
 import { ImperialGate } from '@/components/dashboard/ImperialGate';
+import { AcademyQuiz } from '@/components/dashboard/AcademyQuiz';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { PlanTier } from '@/lib/pricing';
@@ -34,6 +35,7 @@ export default function AcademyPage() {
     const router = useRouter();
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [selectedVideo, setSelectedVideo] = useState<any>(null);
+    const [activeQuiz, setActiveQuiz] = useState<any>(null);
     const [isCompleting, setIsCompleting] = useState(false);
     const [activeSector, setActiveSector] = useState('Generale');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +61,7 @@ export default function AcademyPage() {
         }
     };
 
-    const videoModules: { name: string; tier: PlanTier; description: string; videos: any[] }[] = [
+    const videoModules: { name: string; tier: PlanTier; description: string; videos: any[]; quizQuestions?: any[] }[] = [
         {
             name: "Fondamenta dell'Impero",
             tier: "curioso",
@@ -79,6 +81,23 @@ export default function AcademyPage() {
             ]
         },
         {
+            name: "Ottimizzazione Imperiale",
+            tier: "esploratore",
+            description: "Affina i tuoi sistemi AI per velocità e precisione chirugica.",
+            videos: [
+                { id: "v10", title: 'Fine-Tuning delle FAQ d\'Elite', duration: '11:15', thumbnail: 'bg-gold/5', xp: 75 },
+                { id: "v11", title: 'Analisi dei Pattern di Conversione', duration: '13:40', thumbnail: 'bg-gold/5', xp: 75 },
+            ],
+            quizQuestions: [
+                {
+                    id: 1, text: "Qual è l'obiettivo del Fine-Tuning nelle FAQ?",
+                    options: ["Dare risposte lunghe", "Eliminare ambiguità e frizioni", "Avere più FAQ degli altri", "Confondere il competitor"],
+                    correctIndex: 1,
+                    explanation: "La precisione è potere. FAQ affilate eliminano i dubbi del prospect prima ancora che diventino obiezioni."
+                }
+            ] as any
+        },
+        {
             name: "Dominio del Mercato",
             tier: "pioniere",
             description: "Tecniche avanzate di outreach e posizionamento elite.",
@@ -88,14 +107,61 @@ export default function AcademyPage() {
             ]
         },
         {
+            name: "Espansione Dominante",
+            tier: "conquistatore",
+            description: "Gestisci team, deleghe e API per una scalata senza limiti.",
+            videos: [
+                { id: "v12", title: 'Delega Strategica alle Macchine', duration: '19:20', thumbnail: 'bg-charcoal/5', xp: 150 },
+                { id: "v13", title: 'Integrazioni API: Il Cervello Centralizzato', duration: '22:15', thumbnail: 'bg-charcoal/5', xp: 150 },
+            ],
+            quizQuestions: [
+                {
+                    id: 1, text: "Come si scala un impero digitale senza perdere qualità?",
+                    options: ["Assumendo più persone", "Integrazione API e Sistemi Autonomi", "Lavorando di domenica", "Abbassando i prezzi"],
+                    correctIndex: 1,
+                    explanation: "La scalabilità atomica si ottiene attraverso sistemi che non dormono e non sbagliano: le API sono i tuoi generali digitali."
+                }
+            ] as any
+        },
+        {
             name: "Maestria Assoluta",
             tier: "imperatore",
             description: "Il protocollo finale per il dominio totale del tuo settore.",
             videos: [
                 { id: "v7", title: 'Protocollo Sovrano: Mastery', duration: '25:00', thumbnail: 'bg-charcoal/5', xp: 250 },
-            ]
+            ],
+            quizQuestions: [
+                {
+                    id: 1, text: "Qual è il pilastro fondamentale della mentalità Sovereign?",
+                    options: ["Risparmio massimo", "Automazione & Autorità", "Lavorare più ore", "Delegare tutto ad umani"],
+                    correctIndex: 1,
+                    explanation: "Un Sovrano non scambia tempo per denaro; costruisce asset automatici che proiettano la sua autorità 24/7."
+                },
+                {
+                    id: 2, text: "Cosa definisce un 'Clone AI' efficace?",
+                    options: ["Usa parole tecniche", "Parla come te e converte", "Risponde solo con FAQ", "Sostituisce il customer care"],
+                    correctIndex: 1,
+                    explanation: "L'efficacia si misura nella perfetta aderenza al tuo tono di voce unito alla capacità di chiudere vendite."
+                }
+            ] as any
         }
     ];
+
+    const submitQuizResults = async (score: number, total: number) => {
+        if (!activeQuiz) return;
+        try {
+            const response = await fetch('/api/academy/submit-quiz', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ moduleId: activeQuiz.moduleId, score, totalQuestions: total })
+            });
+            if (response.ok) {
+                await refreshProfile();
+            }
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
+        }
+    };
 
     const handleVideoComplete = async (videoId: string, xp: number) => {
         setIsCompleting(true);
@@ -228,8 +294,8 @@ export default function AcademyPage() {
                             </div>
                             <div className="flex-1 h-[1px] bg-charcoal/5" />
                             <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${module.tier === 'curioso' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                                    module.tier === 'aspirante' ? 'bg-green-50 text-green-600 border-green-100' :
-                                        'bg-gold/5 text-gold border-gold/20'
+                                module.tier === 'aspirante' ? 'bg-green-50 text-green-600 border-green-100' :
+                                    'bg-gold/5 text-gold border-gold/20'
                                 }`}>
                                 Tier: {module.tier}
                             </div>
@@ -280,6 +346,29 @@ export default function AcademyPage() {
                                 );
                             })}
                         </ImperialGate>
+
+                        {/* Module Progress Footer / Quiz Trigger */}
+                        <div className="mt-8 flex items-center justify-between p-8 bg-charcoal/[0.02] border border-charcoal/5 rounded-[2rem]">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gold shadow-luxury-sm">
+                                    <Award className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h4 className="text-[10px] text-charcoal/40 font-black uppercase tracking-widest">Validazione Competenze</h4>
+                                    <p className="text-sm font-serif italic text-charcoal">Completa il quiz per sbloccare il badge del modulo.</p>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={() => setActiveQuiz({ moduleId: module.tier, moduleName: module.name, questions: (module as any).quizQuestions || [] })}
+                                className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${user?.quizzes_passed?.[module.tier]
+                                    ? 'bg-green-50 text-green-600 border border-green-100 cursor-default'
+                                    : 'bg-white text-charcoal shadow-luxury-sm hover:bg-charcoal hover:text-white'
+                                    }`}
+                            >
+                                {user?.quizzes_passed?.[module.tier] ? 'Modulo Convalidato ✓' : 'Inizia Quiz Modulo'}
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -427,6 +516,19 @@ export default function AcademyPage() {
                             </div>
                         </motion.div>
                     </div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {/* Quiz Overlay */}
+                {activeQuiz && (
+                    <AcademyQuiz
+                        moduleId={activeQuiz.moduleId}
+                        moduleName={activeQuiz.moduleName}
+                        questions={activeQuiz.questions}
+                        onComplete={submitQuizResults}
+                        onClose={() => setActiveQuiz(null)}
+                    />
                 )}
             </AnimatePresence>
 
