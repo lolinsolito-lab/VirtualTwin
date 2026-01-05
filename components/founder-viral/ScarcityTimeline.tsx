@@ -61,7 +61,7 @@ export default function ScarcityTimeline() {
     };
 
     return (
-        <section className="relative py-20 bg-gradient-to-b from-champagne/20 via-red-50/20 to-champagne/20">
+        <section className="relative py-16 bg-gradient-to-b from-champagne/10 via-white to-champagne/10">
             <div className="container mx-auto px-6">
                 <div className="max-w-6xl mx-auto">
                     {/* Section Header */}
@@ -69,72 +69,74 @@ export default function ScarcityTimeline() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-center mb-16"
+                        className="text-center mb-12"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 border-2 border-red-300 rounded-full mb-6">
-                            <AlertTriangle className="w-5 h-5 text-red-700" />
-                            <span className="text-red-800 text-sm font-black uppercase tracking-wider">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gold/5 border border-gold/20 rounded-full mb-6">
+                            <TrendingUp className="w-4 h-4 text-gold" />
+                            <span className="text-gold text-[10px] font-black uppercase tracking-[0.2em]">
                                 Price Escalation
                             </span>
                         </div>
 
-                        <h2 className="font-serif text-4xl md:text-6xl text-charcoal mb-6">
-                            Ogni Trimestre Il Prezzo <span className="text-red-700 italic">Sale</span>
+                        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal mb-4">
+                            Il Valore <span className="text-gold italic">Cresce</span>, <br />
+                            La Finestra si <span className="text-gold italic">Chiude</span>
                         </h2>
-                        <p className="text-xl text-charcoal/60 max-w-3xl mx-auto">
-                            Chi aspetta paga di più. <strong className="text-charcoal">Per sempre.</strong>
+                        <p className="text-lg text-charcoal/50 max-w-2xl mx-auto font-medium">
+                            Il tempo è l&apos;unico asset che non puoi ricomprare. Agisci ora per proteggere il tuo investimento.
                         </p>
                     </motion.div>
 
                     {/* Timeline */}
-                    <div className="grid md:grid-cols-4 gap-6 mb-12">
+                    <div className="grid md:grid-cols-4 gap-4 mb-12">
                         {timeline.map((phase, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className={`relative rounded-2xl overflow-hidden ${phase.status === 'current'
-                                        ? 'ring-4 ring-gold shadow-2xl scale-105'
-                                        : 'shadow-xl'
+                                className={`relative rounded-2xl overflow-hidden transition-all duration-500 ${phase.status === 'current'
+                                    ? 'ring-2 ring-gold shadow-2xl scale-105 z-10'
+                                    : 'opacity-80 hover:opacity-100 grayscale-[0.5] hover:grayscale-0 shadow-lg'
                                     }`}
                             >
-                                {/* Badge */}
+                                {/* Active Indicator */}
                                 {phase.status === 'current' && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold text-white px-3 py-1 rounded-full text-xs font-black uppercase z-10">
-                                        {phase.badge}
+                                    <div className="absolute top-0 right-0 bg-gold text-white px-3 py-1 rounded-bl-xl text-[10px] font-black uppercase z-10">
+                                        ATTIVA
                                     </div>
                                 )}
 
                                 {/* Header */}
-                                <div className={`bg-gradient-to-r ${phase.gradient} p-6 text-white text-center`}>
-                                    <div className="text-5xl mb-2">{phase.icon}</div>
-                                    <h3 className="text-2xl font-bold mb-1">{phase.phase}</h3>
-                                    <p className="text-white/80 text-xs uppercase tracking-wider">{phase.dates}</p>
+                                <div className={`h-32 flex flex-col items-center justify-center ${phase.status === 'current' ? 'bg-charcoal text-white' : 'bg-stone-100 text-charcoal/60'
+                                    }`}>
+                                    <div className="text-4xl mb-1">{phase.icon}</div>
+                                    <h3 className="text-xl font-bold uppercase tracking-widest">{phase.phase}</h3>
+                                    <p className="text-[10px] opacity-60 font-black uppercase tracking-widest">{phase.dates}</p>
                                 </div>
 
                                 {/* Content */}
-                                <div className="bg-white p-6">
+                                <div className="bg-white p-6 border-x border-b border-stone-200">
                                     <div className="text-center mb-4">
-                                        <div className="text-4xl font-bold text-charcoal mb-1">
+                                        <div className="text-3xl font-bold text-charcoal mb-1">
                                             €{phase.price}
                                         </div>
-                                        <div className="text-sm text-charcoal/60">per mese</div>
+                                        <div className="text-[10px] text-charcoal/40 uppercase font-black tracking-widest">per mese</div>
                                     </div>
 
-                                    <div className="bg-charcoal/5 rounded-lg p-3 mb-3">
-                                        <p className="text-xs font-bold text-charcoal/70 text-center">
-                                            {phase.spots === "∞" ? "Posti Illimitati" : `${phase.spots} Posti Totali`}
+                                    <div className="bg-stone-50 rounded-xl p-3 mb-4">
+                                        <p className="text-[10px] font-black text-charcoal/50 text-center uppercase tracking-widest">
+                                            {phase.spots === "∞" ? "Accesso Pubblico" : `${phase.spots} Posti Limitati`}
                                         </p>
                                     </div>
 
                                     {index > 0 && (
                                         <div className="text-center">
-                                            <p className="text-red-600 font-bold text-sm mb-1">
+                                            <p className="text-amber-600 font-black text-[10px] uppercase tracking-widest mb-1">
                                                 {phase.badge}
                                             </p>
-                                            <p className="text-charcoal/50 text-xs">
+                                            <p className="text-charcoal/30 text-[9px] uppercase font-black tracking-widest">
                                                 vs Genesis
                                             </p>
                                         </div>
@@ -150,58 +152,62 @@ export default function ScarcityTimeline() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.6 }}
-                        className="bg-gradient-to-br from-red-50 via-orange-50 to-red-50 border-2 border-red-200 rounded-3xl p-10 shadow-2xl"
+                        className="bg-charcoal rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden"
                     >
-                        <div className="text-center mb-8">
-                            <h3 className="text-3xl font-serif text-charcoal mb-4">
-                                Il Costo di <span className="text-red-700 italic">Aspettare</span>
+                        {/* Background Decor */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
+
+                        <div className="relative z-10 text-center mb-10">
+                            <h3 className="text-2xl md:text-3xl font-serif text-white mb-2">
+                                Il Costo dell&apos;<span className="text-gold italic">Esitazione</span>
                             </h3>
+                            <p className="text-white/40 text-sm uppercase tracking-widest font-black">Proiezione di Perdita Economica (5 Anni)</p>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-6">
+                        <div className="grid md:grid-cols-3 gap-6 relative z-10">
                             {/* 3 months wait */}
-                            <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
-                                <p className="text-sm uppercase font-black text-orange-600 mb-2 tracking-wider">
-                                    Aspetti 3 Mesi (Pioneer)
+                            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:border-gold/30 transition-colors">
+                                <p className="text-[10px] uppercase font-black text-white/40 mb-3 tracking-widest">
+                                    Ritardo 3 Mesi (Pioneer)
                                 </p>
-                                <p className="text-4xl font-bold text-orange-700 mb-2">
-                                    +€12,000
+                                <p className="text-3xl font-bold text-gold mb-1">
+                                    - €12,000
                                 </p>
-                                <p className="text-charcoal/60 text-sm">
-                                    persi in 5 anni vs Genesis
+                                <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">
+                                    capitale disperso
                                 </p>
                             </div>
 
                             {/* 6 months wait */}
-                            <div className="bg-white rounded-2xl p-6 border-2 border-purple-200">
-                                <p className="text-sm uppercase font-black text-purple-600 mb-2 tracking-wider">
-                                    Aspetti 6 Mesi (Elite)
+                            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:border-gold/30 transition-colors">
+                                <p className="text-[10px] uppercase font-black text-white/40 mb-3 tracking-widest">
+                                    Ritardo 6 Mesi (Elite)
                                 </p>
-                                <p className="text-4xl font-bold text-purple-700 mb-2">
-                                    +€24,000
+                                <p className="text-3xl font-bold text-gold mb-1">
+                                    - €24,000
                                 </p>
-                                <p className="text-charcoal/60 text-sm">
-                                    persi in 5 anni vs Genesis
+                                <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">
+                                    capitale disperso
                                 </p>
                             </div>
 
                             {/* 1 year wait */}
-                            <div className="bg-white rounded-2xl p-6 border-2 border-red-300 shadow-lg ring-2 ring-red-200">
-                                <p className="text-sm uppercase font-black text-red-700 mb-2 tracking-wider">
-                                    Aspetti 1 Anno (Public)
+                            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-gold/30 bg-gold/5 shadow-inner">
+                                <p className="text-[10px] uppercase font-black text-gold mb-3 tracking-widest">
+                                    Ritardo 1 Anno (Public)
                                 </p>
-                                <p className="text-4xl font-bold text-red-700 mb-2">
-                                    +€78,000
+                                <p className="text-3xl font-bold text-gold mb-1">
+                                    - €78,000
                                 </p>
-                                <p className="text-charcoal/60 text-sm">
-                                    persi in 5 anni vs Genesis
+                                <p className="text-gold/50 text-[10px] uppercase font-black tracking-widest">
+                                    capitale disperso
                                 </p>
                             </div>
                         </div>
 
-                        <div className="mt-8 text-center">
-                            <p className="text-xl text-charcoal/80 italic">
-                                "Ogni giorno che aspetti è denaro bruciato. <span className="text-red-700 font-bold not-italic">Per sempre.</span>"
+                        <div className="mt-10 text-center pt-8 border-t border-white/10">
+                            <p className="text-lg text-white/60 italic font-serif">
+                                &ldquo;L&apos;indecisione è la ladra del futuro. <span className="text-gold font-bold not-italic font-sans uppercase text-sm tracking-widest">Proteggi il tuo ingresso.</span>&rdquo;
                             </p>
                         </div>
                     </motion.div>
