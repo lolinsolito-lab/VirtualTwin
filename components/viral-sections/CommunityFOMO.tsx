@@ -53,18 +53,18 @@ export default function CommunityFOMO() {
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 border border-gold/40 rounded-full mb-6">
                             <Lock className="w-4 h-4 text-gold" />
                             <span className="text-gold text-sm font-black uppercase tracking-wider">
-                                Solo 500 posti disponibili
+                                20 posti per piano - Prezzi Founder limitati
                             </span>
                         </div>
 
                         <h2 className="font-serif text-4xl md:text-6xl text-white mb-6">
                             Non Compri Solo un Tool.
                             <br />
-                            <span className="text-gold italic">Entri in un Club.</span>
+                            <span className="text-gold italic">Entri in un Club Esclusivo.</span>
                         </h2>
 
                         <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
-                            VirtualTwin non è solo software. È la community di founder che hanno scelto di vendere con l'AI invece che passare la vita in chat.
+                            VirtualTwin non è solo software. È la community di founder che hanno scelto di <strong className="text-gold">bloccare il prezzo Founder</strong> prima che scadano i 20 posti per tier.
                         </p>
                     </motion.div>
 
@@ -127,26 +127,34 @@ export default function CommunityFOMO() {
                         <div className="inline-flex flex-col items-center gap-6 bg-gradient-to-br from-gold/20 to-amber-500/20 border-2 border-gold/40 rounded-3xl p-10">
                             <div>
                                 <p className="text-gold font-black text-sm uppercase tracking-wider mb-2">
-                                    🔥 Posti Limitati
+                                    🔥 Posti Limitati per Tier
                                 </p>
                                 <p className="text-white text-3xl md:text-4xl font-serif mb-2">
-                                    <strong className="text-gold">347</strong> / 500 Founder già dentro
+                                    <strong className="text-gold">20 posti per piano</strong>
                                 </p>
-                                <p className="text-white/60 text-sm">
-                                    Rimangono <strong className="text-white">153 posti</strong> prima di chiudere l'accesso
+                                <p className="text-white/60 text-sm mb-4">
+                                    Quando finiscono → prezzo aumenta + passaggio a prezzi pubblici
                                 </p>
+                                <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+                                    <p className="text-white text-xs font-mono">
+                                        Sistema: <strong className="text-gold">Tier + Wave + Tempo</strong>
+                                    </p>
+                                    <p className="text-white/50 text-xs mt-1">
+                                        Prezzi Founder → Prezzi Pubblici (dinamici)
+                                    </p>
+                                </div>
                             </div>
 
                             <a
                                 href="#pricing"
                                 className="group inline-flex items-center gap-3 px-8 py-4 bg-gold text-charcoal rounded-xl font-black text-lg uppercase tracking-wider hover:bg-amber-400 transition-all shadow-2xl hover:shadow-gold/50 hover:scale-105"
                             >
-                                Entra nella Community
+                                Blocca il Prezzo Founder
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                             </a>
 
                             <p className="text-white/40 text-xs italic">
-                                Accesso a vita | Zero costi nascosti | Cancelli quando vuoi
+                                Scaduti i 20 posti? Passa a prezzo pubblico (+ caro)
                             </p>
                         </div>
                     </motion.div>
@@ -160,12 +168,12 @@ export default function CommunityFOMO() {
                         className="mt-16 bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-lg"
                     >
                         <h3 className="text-white font-black text-sm uppercase tracking-wider mb-3">
-                            🎬 Ad Angle - "Club Esclusivo"
+                            🎬 Ad Angle - "Scarsità Intelligente"
                         </h3>
                         <p className="text-white/70 text-sm leading-relaxed">
-                            <strong className="text-gold">Hook:</strong> "Non vendere più solo software, vendi appartenenza."<br />
-                            <strong className="text-gold">Body:</strong> Mostra screenshot community, testimonianze, live session.<br />
-                            <strong className="text-gold">CTA:</strong> "Solo 153 posti disponibili. Entra ora o rimani fuori."
+                            <strong className="text-gold">Hook:</strong> "Solo 20 posti per piano. Dopo? Prezzo pubblico."<br />
+                            <strong className="text-gold">Body:</strong> Spiega sistema tier/wave/tempo, mostra countdown.<br />
+                            <strong className="text-gold">CTA:</strong> "Blocca il prezzo Founder prima che scadano i 20 posti."
                         </p>
                     </motion.div>
                 </div>
