@@ -468,6 +468,18 @@ const PricingUltimate = () => {
                                         </button>
                                     )}
                                 </div>
+
+                                {/* Imperial Payment Options (Bonifico) */}
+                                {['pioniere', 'conquistatore', 'imperatore'].includes(plan.id) && (
+                                    <div className="mt-6 pt-4 border-t border-charcoal/5 text-center">
+                                        <Link
+                                            href={`/contact?reason=bonifico&plan=${plan.id}`}
+                                            className={`text-[9px] font-black uppercase tracking-[0.2em] transition-all hover:text-gold ${plan.isDark || plan.isGold ? 'text-white/30' : 'text-charcoal/30'}`}
+                                        >
+                                            Richiedi Pagamento con Bonifico (Sconto 15% Annuale)
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}

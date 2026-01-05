@@ -14,7 +14,7 @@ const Footer = () => {
             icon: <Shield className="w-6 h-6 text-gold" />,
             content: (
                 <div className="space-y-6 text-charcoal/70 text-sm leading-relaxed">
-                    <p><strong className="text-charcoal">Titolare:</strong> VirtualTwin S.r.l., Italia.</p>
+                    <p><strong className="text-charcoal">Titolare:</strong> Insolito Experiences di Michael Jara, Italia.</p>
                     <p><strong className="text-charcoal">Dati raccolti:</strong> Nome, email, informazioni aziendali, dati di navigazione.</p>
                     <p><strong className="text-charcoal">Finalità:</strong> Erogazione servizio, comunicazioni account, miglioramento prodotto.</p>
                     <p><strong className="text-charcoal">Base giuridica:</strong> Contratto, legittimo interesse, consenso.</p>
@@ -99,7 +99,7 @@ const Footer = () => {
                         <nav className="flex flex-wrap items-center justify-center gap-6 lg:gap-10 text-white/40 text-sm">
                             <a href="#solution" className="hover:text-gold transition-colors">Come Funziona</a>
                             <a href="#pricing" className="hover:text-gold transition-colors">Prezzi</a>
-                            <Link href="/auth/register" className="hover:text-gold transition-colors">Prova Gratis</Link>
+                            <Link href="/vision" className="hover:text-gold transition-colors">La Nostra Visione</Link>
                             <Link href="/contact" className="hover:text-gold transition-colors">Contatti</Link>
                         </nav>
 
@@ -116,8 +116,9 @@ const Footer = () => {
 
                     {/* Bottom Row - Legal Links as Popups */}
                     <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <p className="text-white/30 text-xs">
-                            © {currentYear} <span className="text-gold">VirtualTwin</span> · Made with ♥ in 🇮🇹 Italy
+                        <p className="text-white/30 text-[10px] uppercase tracking-widest text-center md:text-left leading-relaxed">
+                            © {currentYear} <span className="text-gold">VirtualTwin</span> · Un progetto di <span className="text-white/60">Insolito Experiences di Michael Jara</span><br />
+                            P.IVA: IT00000000000 (Placeholder) · Made with ♥ in 🇮🇹 Italy
                         </p>
                         <div className="flex items-center gap-6 text-white/30 text-xs">
                             <button onClick={() => setActiveModal('privacy')} className="hover:text-gold transition-colors">Privacy</button>

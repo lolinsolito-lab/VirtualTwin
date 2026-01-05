@@ -180,6 +180,20 @@ export async function POST(req: Request) {
                 p_user_id: activeUserId,
                 p_clone_id: activeCloneId
             });
+
+            // 7. UPSELL LOGIC: Check if > 70% of quota used
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('messages_used_this_month, messages_limit, plan_tier')
+                .eq('id', activeUserId)
+                .single();
+
+            if (profile && profile.messages_limit && profile.plan_tier !== 'imperatore') {
+                const usagePercent = (profile.messages_used_this_month / profile.messages_limit) * 100;
+                if (usagePercent >= 70) {
+                    (aiResponse as any).upsellHint = true;
+                }
+            }
         }
 
         return NextResponse.json({

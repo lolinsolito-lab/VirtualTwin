@@ -10,6 +10,7 @@ export default function SettingsPage() {
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [activeTab, setActiveTab] = useState('profile');
+    const [role, setRole] = useState('user');
 
     const [settings, setSettings] = useState({
         // Profile
@@ -48,7 +49,14 @@ export default function SettingsPage() {
         // Internal State
         planTier: 'curioso',
         apiKey: '',
-        whiteLabelActive: false
+        whiteLabelActive: false,
+
+        // Platform Admin Settings (Only for God Mode)
+        platformIban: '',
+        platformVat: '',
+        platformOwner: '',
+        platformBank: '',
+        platformSwift: ''
     });
 
     useEffect(() => {
@@ -72,6 +80,28 @@ export default function SettingsPage() {
                     .single();
 
                 if (profile) {
+                    setRole(profile.role || 'user');
+
+                    // If Admin, load Platform Settings
+                    if (profile.role === 'admin') {
+                        const { data: systemData } = await supabase
+                            .from('system_settings')
+                            .select('data')
+                            .eq('id', 'platform_billing')
+                            .single();
+
+                        if (systemData?.data) {
+                            setSettings(prev => ({
+                                ...prev,
+                                platformIban: systemData.data.iban || '',
+                                platformVat: systemData.data.vat_number || '',
+                                platformOwner: systemData.data.owner_name || '',
+                                platformBank: systemData.data.bank_name || '',
+                                platformSwift: systemData.data.swift_bic || ''
+                            }));
+                        }
+                    }
+
                     setSettings(prev => ({
                         ...prev,
                         businessName: profile.full_name || '',
@@ -162,6 +192,22 @@ export default function SettingsPage() {
                 await supabase.from('clones').insert(cloneData);
             }
 
+            // 3. Update Platform Settings (Only if Admin)
+            if (role === 'admin') {
+                await supabase.from('system_settings').upsert({
+                    id: 'platform_billing',
+                    data: {
+                        iban: settings.platformIban,
+                        vat_number: settings.platformVat,
+                        owner_name: settings.platformOwner,
+                        bank_name: settings.platformBank,
+                        swift_bic: settings.platformSwift
+                    },
+                    updated_at: new Date().toISOString(),
+                    updated_by: user.id
+                });
+            }
+
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);
         }
@@ -188,6 +234,7 @@ export default function SettingsPage() {
         { id: 'ai', label: 'Neural Training Hub', icon: Zap },
         { id: 'localization', label: 'Lingua & Regione', icon: Globe },
         { id: 'notifications', label: 'Notifiche', icon: Bell },
+        ...(role === 'admin' ? [{ id: 'platform', label: 'Admin Piattaforma', icon: Database }] : []),
     ];
 
     const languages = [

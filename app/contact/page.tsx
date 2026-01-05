@@ -16,8 +16,28 @@ export default function ContactPage() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        // In a real app, this would send an email or save to Supabase
         setSubmitted(true);
     };
+
+    // Auto-detect plan and reason from URL
+    React.useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const plan = params.get('plan');
+            const reason = params.get('reason');
+
+            if (plan) {
+                setFormData(prev => ({ ...prev, plan: plan }));
+                if (reason === 'bonifico') {
+                    setFormData(prev => ({
+                        ...prev,
+                        message: `Richiesta coordinate per pagamento con Bonifico Bancario per il piano: ${plan.toUpperCase()}. Desidero attivare l'abbonamento annuale con sconto 15%.`
+                    }));
+                }
+            }
+        }
+    }, []);
 
     return (
         <div className="min-h-screen bg-champagne">
