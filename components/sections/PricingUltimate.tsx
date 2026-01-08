@@ -519,18 +519,17 @@ const PricingUltimate = () => {
                                     ))}
                                 </div>
 
-                                {/* Vedi Dettagli */}
-                                <button
-                                    onClick={() => setOpenModal(plan.id)}
-                                    className={`mb-4 text-[9px] uppercase tracking-[0.2em] font-bold flex items-center gap-1.5 transition-all hover:gap-2.5 ${plan.isDark || plan.isGold ? 'text-white/50 hover:text-white' : `${plan.accent} opacity-60 hover:opacity-100`}`}
-                                >
-                                    <Info className="w-3 h-3" />
-                                    Vedi tutti i dettagli
-                                    <ArrowRight className="w-3 h-3" />
-                                </button>
-
-                                {/* CTA */}
+                                {/* CTA Container - Always at bottom */}
                                 <div className="mt-auto">
+                                    {/* Vedi Dettagli */}
+                                    <button
+                                        onClick={() => setOpenModal(plan.id)}
+                                        className={`mb-4 text-[9px] uppercase tracking-[0.2em] font-bold flex items-center gap-1.5 transition-all hover:gap-2.5 ${plan.isDark || plan.isGold ? 'text-white/50 hover:text-white' : `${plan.accent} opacity-60 hover:opacity-100`}`}
+                                    >
+                                        <Info className="w-3 h-3" />
+                                        Vedi tutti i dettagli
+                                        <ArrowRight className="w-3 h-3" />
+                                    </button>
                                     {(plan as any).isTrial ? (
                                         <Link
                                             href="/auth/register"
