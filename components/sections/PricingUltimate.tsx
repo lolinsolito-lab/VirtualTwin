@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { Check, Zap, Sparkles, Crown, Star, ArrowRight, Clock, Gift } from 'lucide-react';
+import { Check, Zap, Sparkles, Crown, Star, ArrowRight, Clock, Gift, Info, Handshake } from 'lucide-react';
 import { getPlanAvailability, PlanAvailability, PlanName } from '@/lib/founderAvailability';
 import { getDisplayPricing, getCurrentPublicPricing, Wave, WAVES, getFoundersSold, isPreLaunch, getDaysUntilLaunch } from '@/lib/waves';
 import DualOptionOverlay from '@/components/DualOptionOverlay';
 import CountdownTimer from '@/components/CountdownTimer';
 import { isAspiranteVisible } from '@/lib/features';
+import PlanDetailModal from '@/components/PlanDetailModal';
 
 
 const PricingUltimate = () => {
@@ -19,6 +20,7 @@ const PricingUltimate = () => {
     const [nextWave, setNextWave] = useState<Wave | null>(null);
     const [prelaunch, setPrelaunch] = useState(isPreLaunch());
     const [daysToLaunch, setDaysToLaunch] = useState(getDaysUntilLaunch());
+    const [openModal, setOpenModal] = useState<string | null>(null);
     const sectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
@@ -53,7 +55,7 @@ const PricingUltimate = () => {
                 }
             },
             {
-                threshold: 0.05, // Lowered from 0.2 to trigger earlier on mobile
+                threshold: 0.05,
                 rootMargin: '0px'
             }
         );
@@ -124,7 +126,7 @@ const PricingUltimate = () => {
             }
 
             const { url } = await response.json();
-            window.location.href = url; // Redirect to Stripe
+            window.location.href = url;
         } catch (error) {
             console.error('[Checkout Error]:', error);
             alert(error instanceof Error ? error.message : 'Errore durante il checkout. Riprova.');
@@ -139,12 +141,12 @@ const PricingUltimate = () => {
             id: "curioso",
             name: "Curioso",
             icon: Sparkles,
-            price: `€${displayPricing?.prices?.curioso || 0}`,
-            publicPrice: `€${publicRef.prices.curioso}`,
+            price: "€0",
+            publicPrice: "€0",
             period: "14 giorni",
             story: "Esplora il Potere dell'AI",
-            subtitle: "14 giorni per testare gratuitamente. Zero rischi.",
-            features: ["1 Clone AI", "100 msg", "1 Canale", "Watermark"],
+            subtitle: "Zero rischio, zero carta di credito. Scopri se l'AI funziona per te.",
+            features: ["1 Clone AI (demo)", "100 msg lifetime", "PDF Gratuito", "Community", "3 Template"],
             cta: "Inizia Gratis →",
             isTrial: true,
             bg: "bg-gradient-to-br from-gray-50 to-gray-100",
@@ -158,15 +160,15 @@ const PricingUltimate = () => {
             id: "aspirante",
             name: "Aspirante",
             icon: Sparkles,
-            price: "€49",
-            publicPrice: "€49",
+            price: `€${displayPricing?.prices?.aspirante || 49}`,
+            publicPrice: `€${publicRef.prices.aspirante}`,
             period: "/mese",
-            story: "Il Primo Passo nel Tuo Impero",
-            subtitle: "Entry-level perfetto per chi vuole provare senza impegno. Template, corso e community inclusi.",
-            features: ["1 Clone AI", "500 msg/mese", "1 Canale", "🆕 Template 15 settori", "🆕 Corso 6 video", "🆕 Community"],
-            cta: "Diventa Aspirante →",
+            story: "Per Solopreneur con P.IVA",
+            subtitle: "Freelancer, coach, consulenti. 1 Clone AI per iniziare a scalare.",
+            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Support <48h"],
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Diventa Aspirante →",
             priceId: displayPricing?.stripePriceIds?.aspirante || publicRef.stripePriceIds.aspirante,
-            isFounder: false,
+            isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50",
             border: "border-green-400",
             accent: "text-green-700",
@@ -176,36 +178,17 @@ const PricingUltimate = () => {
             scale: 1.0
         }] : []),
         {
-            id: "esploratore",
-            name: "Esploratore",
-            icon: Zap,
-            price: `€${displayPricing?.prices?.esploratore || 39}`,
-            publicPrice: `€${publicRef.prices.esploratore}`,
-            period: "/mese",
-            story: "Per Chi Inizia a Scalare",
-            subtitle: "Strumenti professionali per testare il potenziale della tua AI.",
-            features: ["1 Clone AI", "1K msg/mesе", "Analytics Base", "Email Support <48h"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scegli Esploratore →",
-            priceId: displayPricing?.stripePriceIds?.esploratore,
-            isFounder: displayPricing?.tier === 'founder',
-            bg: "bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100",
-            border: "border-blue-400",
-            accent: "text-blue-700",
-            btnStyle: "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-md",
-            scale: 1.0
-        },
-        {
             id: "pioniere",
             name: "Pioniere",
             icon: Zap,
             price: `€${displayPricing?.prices?.pioniere || 147}`,
             publicPrice: `€${publicRef.prices.pioniere}`,
             period: "/mese",
-            story: "La Scelta del 73% dei Coach di Successo",
-            subtitle: "Il perfetto equilibrio tra potenza e prezzo. Provato da centinaia di professionisti che hanno trasformato il loro business.",
-            socialProof: "⭐ 4.9/5 da 200+ Coach",
-            scarcity: "⚡ Ultimi 3 posti Wave Genesis",
-            features: ["1 Clone AI", "5K msg/mese", "3 Canali", "A/B Test (20%)", "Priority Support"],
+            story: "⭐ Scelto dal 68% dei Clienti",
+            subtitle: "Startup 2-5 persone. 3 Cloni specializzati per ruolo.",
+            socialProof: "ROI 4.2:1 • Payback 34gg",
+            scarcity: "⚡ Ultimi posti Wave Genesis",
+            features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2", "War Room"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scala con Pioniere →",
             priceId: displayPricing?.stripePriceIds?.pioniere,
             isFounder: displayPricing?.tier === 'founder',
@@ -216,9 +199,9 @@ const PricingUltimate = () => {
             popular: true,
             isHero: true,
             glow: true,
-            scale: 1.0,  // Uniform with all cards
+            scale: 1.0,
             badge: { emoji: "🔥", text: "PIÙ SCELTO", color: "red", animate: "pulse" },
-            badge2: { emoji: "⭐", text: "SCELTA #1 COACH", color: "gold" }
+            badge2: { emoji: "⭐", text: "68% CLIENTI", color: "gold" }
         },
         {
             id: "conquistatore",
@@ -227,9 +210,9 @@ const PricingUltimate = () => {
             price: `€${displayPricing?.prices?.conquistatore || 347}`,
             publicPrice: `€${publicRef.prices.conquistatore}`,
             period: "/mese",
-            story: "Per Chi Punta all'Eccellenza",
-            subtitle: "Agenzie e power user scelgono Conquistatore per dominare il mercato.",
-            features: ["3 Cloni AI", "20K msg/mese", "Priority Support", "API Access", "9 Canali"],
+            story: "Per PMI e Agenzie 5-20 persone",
+            subtitle: "Riduci costi operativi del 40%. CRM, API, Success Manager.",
+            features: ["5 Cloni AI", "20K msg/mese", "Canali ∞", "API + CRM", "Academy Full", "CSM Dedicato"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Conquista il Mercato →",
             priceId: displayPricing?.stripePriceIds?.conquistatore,
             isFounder: displayPricing?.tier === 'founder',
@@ -238,8 +221,8 @@ const PricingUltimate = () => {
             accent: "text-purple-300",
             textColor: "text-white",
             btnStyle: "bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700 shadow-xl",
-            badge: { emoji: "💎", text: "MIGLIOR VALORE", color: "purple", animate: "shimmer" },
-            scale: 1.0,  // Uniform with all cards
+            badge: { emoji: "💎", text: "SCALE-UP", color: "purple", animate: "shimmer" },
+            scale: 1.0,
             isDark: true
         },
         {
@@ -249,11 +232,11 @@ const PricingUltimate = () => {
             price: `€${displayPricing?.prices?.imperatore || 697}`,
             publicPrice: `€${publicRef.prices.imperatore}`,
             period: "/mese",
-            story: "Il Trono Digitale. Solo per i Migliori.",
-            subtitle: "Accesso esclusivo, priorità assoluta, dominio totale. Limitato a 10 clienti/anno.",
-            scarcity: "🎖️ Solo 7 posti rimasti su 10 totali",
-            features: ["10 Cloni AI", "50K msg/mese", "White-label", "Account Manager", "👑 Success Manager"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso Elite →",
+            story: "Enterprise White-Label",
+            subtitle: "20+ dipendenti, €500k+ fatturato. On-premise, SLA 99.9%.",
+            scarcity: "🔒 12 slot totali disponibili",
+            features: ["15 Cloni AI", "100K msg/mese", "White-label", "Team Dedicato", "SLA 99.9%", "Revenue Share"],
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
             priceId: displayPricing?.stripePriceIds?.imperatore,
             isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600",
@@ -263,8 +246,29 @@ const PricingUltimate = () => {
             btnStyle: "bg-white text-amber-700 hover:bg-amber-50 shadow-2xl font-bold border-2 border-amber-900",
             isGold: true,
             isDark: true,
-            scale: 1.0,  // Uniform with all cards
-            badge: { emoji: "👑", text: "ELITE", color: "gold", animate: "bounce" }
+            scale: 1.0,
+            badge: { emoji: "👑", text: "ENTERPRISE", color: "gold", animate: "bounce" }
+        },
+        {
+            id: "sovereignty",
+            name: "Sovereignty",
+            icon: Handshake,
+            price: "CUSTOM",
+            publicPrice: "CUSTOM",
+            period: "",
+            story: "Partnership Strategica",
+            subtitle: "Non è un piano. È un accordo con Insolito Experiences.",
+            features: ["Licensing Perpetuo", "Equity Partnership", "Profit Share 70/30", "Co-sviluppo", "Board Seat"],
+            cta: "Richiedi Application →",
+            isPartnership: true,
+            bg: "bg-gradient-to-br from-black via-gray-900 to-black",
+            border: "border-gold/50",
+            accent: "text-gold",
+            textColor: "text-white",
+            btnStyle: "gold-gradient text-white hover:opacity-90 shadow-2xl font-bold",
+            isDark: true,
+            scale: 1.0,
+            badge: { emoji: "🤝", text: "INVITE ONLY", color: "gold", animate: "pulse" }
         }
     ];
 
@@ -307,7 +311,7 @@ const PricingUltimate = () => {
                             onMouseEnter={() => setHoveredPlan(i)}
                             onMouseLeave={() => setHoveredPlan(null)}
                         >
-                            {/* Luxury Badge (Top-Right) - BIGGER */}
+                            {/* Luxury Badge (Top-Right) */}
                             {plan.badge && typeof plan.badge === 'object' && (
                                 <div className="absolute -top-4 -right-4 z-30">
                                     <div className={`
@@ -326,7 +330,7 @@ const PricingUltimate = () => {
                                 </div>
                             )}
 
-                            {/* Secondary Badge (if exists - Pioniere) - BIGGER */}
+                            {/* Secondary Badge (Pioniere) */}
                             {(plan as any).badge2 && (
                                 <div className="absolute -top-4 -left-4 z-30">
                                     <div className="px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-yellow-400 to-amber-400 text-amber-900 flex items-center gap-1.5 shadow-xl">
@@ -336,17 +340,17 @@ const PricingUltimate = () => {
                                 </div>
                             )}
 
-                            {/* Hero Glow (Pioniere) - DRAMATIC */}
+                            {/* Hero Glow (Pioniere) */}
                             {plan.isHero && (
                                 <div className="absolute -inset-6 bg-gradient-to-r from-yellow-400/40 via-amber-500/50 to-yellow-400/40 rounded-[3rem] blur-3xl opacity-70 animate-pulse"></div>
                             )}
 
-                            {/* Standard Glow for others */}
+                            {/* Standard Glow */}
                             {plan.glow && !plan.isHero && (
                                 <div className="absolute -inset-2 bg-gold/20 rounded-[2.5rem] blur-xl opacity-50"></div>
                             )}
 
-                            {/* DUAL OPTION Overlay - Waitlist OR Public (AUTOMATIC from Supabase) */}
+                            {/* DUAL OPTION Overlay - Waitlist OR Public */}
                             {isPlanSoldOut(plan.name) && (
                                 <DualOptionOverlay
                                     planId={plan.id}
@@ -354,15 +358,15 @@ const PricingUltimate = () => {
                                     currentWaveName={displayPricing?.waveName || 'Genesis'}
                                     nextWaveName={nextWave?.name}
                                     nextWavePrice={nextWave?.prices[plan.id as keyof typeof nextWave.prices]}
-                                    publicPrice={parseInt(plan.publicPrice.replace('€', ''))}
+                                    publicPrice={parseInt(plan.publicPrice.replace('€', '')) || 0}
                                     publicPriceId={publicRef.stripePriceIds[plan.id as keyof typeof publicRef.stripePriceIds]}
                                     onWaitlistClick={() => handleWaitlistClick(plan.id)}
                                 />
                             )}
 
-                            {/* Card - THINNER BORDER + STRONGER SHADOW */}
+                            {/* Card */}
                             <div className={`
-                                relative h-[550px] lg:h-[600px] rounded-[2rem] p-6 lg:p-8 border 
+                                relative h-[550px] lg:h-[580px] rounded-[2rem] p-6 lg:p-8 border 
                                 transition-all duration-500 overflow-hidden flex flex-col
                                 ${plan.bg} ${plan.border} 
                                 ${hoveredPlan === i ? 'shadow-2xl ring-2 ring-offset-2' : 'shadow-xl'} 
@@ -371,9 +375,9 @@ const PricingUltimate = () => {
                                 ${isPlanSoldOut(plan.name) ? 'pointer-events-none' : ''}
                             `}>
 
-                                {/* Icon - COLORED */}
+                                {/* Icon */}
                                 <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-xl flex items-center justify-center mb-4 ${plan.isDark ? 'bg-white/10' : plan.isGold ? 'bg-white/20' : 'bg-white/50'}`}>
-                                    <plan.icon className={`w-6 h-6 lg:w-7 lg:h-7 ${plan.isDark || plan.isGold ? 'text-white' : plan.id === 'aspirante' ? 'text-green-600' : plan.id === 'esploratore' ? 'text-blue-600' : plan.accent}`} />
+                                    <plan.icon className={`w-6 h-6 lg:w-7 lg:h-7 ${plan.isDark || plan.isGold ? 'text-white' : plan.id === 'aspirante' ? 'text-green-600' : plan.accent}`} />
                                 </div>
 
                                 {/* Plan Name */}
@@ -383,7 +387,7 @@ const PricingUltimate = () => {
 
                                 {/* Price */}
                                 <div className="mb-2">
-                                    <span className={`text-4xl lg:text-5xl font-serif tracking-tight ${plan.isDark || plan.isGold ? 'text-white' : plan.textColor || 'text-charcoal'}`}>
+                                    <span className={`text-4xl lg:text-5xl font-serif tracking-tight ${plan.isDark || plan.isGold ? 'text-white' : (plan as any).textColor || 'text-charcoal'}`}>
                                         {plan.price}
                                     </span>
                                     <span className={`text-sm ml-1 ${plan.isDark ? 'text-white/50' : plan.isGold ? 'text-white/60' : 'text-charcoal/40'}`}>
@@ -391,8 +395,8 @@ const PricingUltimate = () => {
                                     </span>
                                 </div>
 
-                                {/* Public Price (Crossed Out) - Only show if different from Founder price */}
-                                {plan.publicPrice && plan.publicPrice !== plan.price && (
+                                {/* Public Price (Crossed Out) */}
+                                {plan.publicPrice && plan.publicPrice !== plan.price && plan.publicPrice !== "CUSTOM" && (
                                     <p className={`text-xs mb-3 ${plan.isDark || plan.isGold ? 'text-white/50' : 'text-charcoal/40'}`}>
                                         <span className="line-through">{plan.publicPrice}/m</span>
                                         <span className="ml-2 text-green-500 font-bold">FOUNDER</span>
@@ -404,9 +408,9 @@ const PricingUltimate = () => {
                                     {plan.story}
                                 </p>
 
-                                {/* Subtitle (New!) - TRUNCATED WITH HOVER EXPAND */}
+                                {/* Subtitle */}
                                 {(plan as any).subtitle && (
-                                    <p className={`text-xs mb-4 leading-relaxed line-clamp-2 hover:line-clamp-none transition-all ${plan.isDark ? 'text-white/70' : 'text-charcoal/60'}`}>
+                                    <p className={`text-xs mb-4 leading-relaxed line-clamp-2 ${plan.isDark ? 'text-white/70' : 'text-charcoal/60'}`}>
                                         {(plan as any).subtitle}
                                     </p>
                                 )}
@@ -418,16 +422,16 @@ const PricingUltimate = () => {
                                     </div>
                                 )}
 
-                                {/* Scarcity (Pioniere, Imperatore) */}
+                                {/* Scarcity */}
                                 {(plan as any).scarcity && (
-                                    <div className="mb-4 px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-bold animate-pulse inline-block">
+                                    <div className={`mb-4 px-3 py-1.5 rounded-lg text-xs font-bold animate-pulse inline-block ${plan.isDark || plan.isGold ? 'bg-red-500/20 text-red-300' : 'bg-red-100 text-red-700'}`}>
                                         {(plan as any).scarcity}
                                     </div>
                                 )}
 
                                 {/* Features */}
-                                <div className="space-y-2 lg:space-y-3 mb-6 flex-grow">
-                                    {plan.features.map((feature, j) => (
+                                <div className="space-y-2 lg:space-y-3 mb-4 flex-grow">
+                                    {plan.features.slice(0, 5).map((feature, j) => (
                                         <div key={j} className="flex items-center gap-2">
                                             <div className={`w-4 h-4 lg:w-5 lg:h-5 rounded-full flex items-center justify-center ${plan.isDark ? 'bg-white/10' : plan.isGold ? 'bg-white/20' : 'bg-green-100'}`}>
                                                 <Check className={`w-2.5 h-2.5 lg:w-3 lg:h-3 ${plan.isDark || plan.isGold ? 'text-white' : 'text-green-600'}`} />
@@ -439,11 +443,29 @@ const PricingUltimate = () => {
                                     ))}
                                 </div>
 
-                                {/* CTA - Always at bottom */}
+                                {/* Vedi Dettagli Link */}
+                                <button
+                                    onClick={() => setOpenModal(plan.id)}
+                                    className={`mb-4 text-[9px] uppercase tracking-[0.2em] font-bold flex items-center gap-1.5 transition-all hover:gap-2.5 ${plan.isDark || plan.isGold ? 'text-white/50 hover:text-white' : `${plan.accent} opacity-60 hover:opacity-100`}`}
+                                >
+                                    <Info className="w-3 h-3" />
+                                    Vedi tutti i dettagli
+                                    <ArrowRight className="w-3 h-3" />
+                                </button>
+
+                                {/* CTA */}
                                 <div className="mt-auto">
                                     {(plan as any).isTrial ? (
                                         <Link
                                             href="/auth/register"
+                                            className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
+                                        >
+                                            {plan.cta}
+                                            <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                        </Link>
+                                    ) : (plan as any).isPartnership ? (
+                                        <Link
+                                            href="/contact?reason=sovereignty"
                                             className={`group block w-full text-center py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle}`}
                                         >
                                             {plan.cta}
@@ -471,18 +493,125 @@ const PricingUltimate = () => {
 
                                 {/* Imperial Payment Options (Bonifico) */}
                                 {['pioniere', 'conquistatore', 'imperatore'].includes(plan.id) && (
-                                    <div className="mt-6 pt-4 border-t border-charcoal/5 text-center">
+                                    <div className="mt-4 pt-3 border-t border-charcoal/5 text-center">
                                         <Link
                                             href={`/contact?reason=bonifico&plan=${plan.id}`}
                                             className={`text-[9px] font-black uppercase tracking-[0.2em] transition-all hover:text-gold ${plan.isDark || plan.isGold ? 'text-white/30' : 'text-charcoal/30'}`}
                                         >
-                                            Richiedi Pagamento con Bonifico (Sconto 15% Annuale)
+                                            Bonifico Annuale (-15%)
                                         </Link>
                                     </div>
                                 )}
                             </div>
                         </div>
                     ))}
+                </div>
+
+                {/* COMPARISON TABLE */}
+                <div className={`mt-24 transition-all duration-1000 delay-300 ${inView ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="text-center mb-12">
+                        <h3 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">
+                            Confronta i <span className="italic gold-text-gradient">Piani</span>
+                        </h3>
+                        <p className="text-charcoal/50">Trova il tier perfetto per il tuo business</p>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-[800px] border-collapse">
+                            <thead>
+                                <tr className="border-b-2 border-charcoal/10">
+                                    <th className="text-left py-4 px-4 text-xs uppercase tracking-widest text-charcoal/40 font-black">Feature</th>
+                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-gray-600 font-black">Curioso</th>
+                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-green-700 font-black">Aspirante</th>
+                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-amber-700 font-black bg-amber-50/50 rounded-t-xl">Pioniere ⭐</th>
+                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-purple-600 font-black">Conquistatore</th>
+                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-gold font-black">Imperatore</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-sm">
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">Cloni AI</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">1 (demo)</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">1</td>
+                                    <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">3</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">5</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">15</td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">Conversazioni/mese</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">100 totali</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">1.000</td>
+                                    <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">5.000</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">20.000</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">100.000</td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">Canali</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">0</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">1</td>
+                                    <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">3</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">∞</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">∞</td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">Knowledge Base</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">10 doc</td>
+                                    <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">50 doc</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">∞</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">∞</td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">A/B Testing</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30"><Check className="w-4 h-4 mx-auto text-green-500" /></td>
+                                    <td className="text-center py-4 px-3"><Check className="w-4 h-4 mx-auto text-green-500" /></td>
+                                    <td className="text-center py-4 px-3"><Check className="w-4 h-4 mx-auto text-green-500" /></td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">API Access</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40 bg-amber-50/30">—</td>
+                                    <td className="text-center py-4 px-3"><Check className="w-4 h-4 mx-auto text-green-500" /></td>
+                                    <td className="text-center py-4 px-3"><Check className="w-4 h-4 mx-auto text-green-500" /></td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">White-Label</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40 bg-amber-50/30">—</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3"><Check className="w-4 h-4 mx-auto text-green-500" /></td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">Academy</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40">—</td>
+                                    <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">Mod 1-2</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">Full + Cert</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">Full + Cert</td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">Support</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">Community</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">&lt;48h</td>
+                                    <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">&lt;24h + Call</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">CSM + Slack</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">24/5 Dedicato</td>
+                                </tr>
+                                <tr className="hover:bg-charcoal/[0.02]">
+                                    <td className="py-4 px-4 font-medium text-charcoal">Prezzo Genesis</td>
+                                    <td className="text-center py-4 px-3 font-bold text-charcoal">€0</td>
+                                    <td className="text-center py-4 px-3 font-bold text-green-700">€49/m</td>
+                                    <td className="text-center py-4 px-3 font-black text-amber-700 bg-amber-50/30 text-lg">€147/m</td>
+                                    <td className="text-center py-4 px-3 font-bold text-purple-600">€347/m</td>
+                                    <td className="text-center py-4 px-3 font-bold text-gold">€697/m</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 {/* FOOTER */}
@@ -506,6 +635,22 @@ const PricingUltimate = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Modal for Plan Details */}
+            {openModal && (
+                <PlanDetailModal
+                    isOpen={!!openModal}
+                    onClose={() => setOpenModal(null)}
+                    planId={openModal}
+                    planStyle={{
+                        bg: plans.find(p => p.id === openModal)?.bg || 'bg-white',
+                        border: plans.find(p => p.id === openModal)?.border || 'border-gray-200',
+                        accent: plans.find(p => p.id === openModal)?.accent || 'text-gray-600',
+                        isDark: plans.find(p => p.id === openModal)?.isDark,
+                        isGold: plans.find(p => p.id === openModal)?.isGold
+                    }}
+                />
+            )}
         </section>
     );
 };
