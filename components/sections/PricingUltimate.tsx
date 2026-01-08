@@ -220,8 +220,6 @@ const PricingUltimate = () => {
             period: "/mese",
             story: "⭐ PIÙ SCELTO (68%)",
             idealePer: "Startup 2-5 persone",
-            subtitle: "3 Cloni AI specializzati per ruolo. ROI 4.2:1.",
-            socialProof: "ROI 4.2:1 • Payback 34gg",
             scarcity: "⚡ Ultimi posti Wave Genesis",
             wavePricing: [
                 { wave: "Pioneer", price: 197, date: "Apr 2026" },
