@@ -226,7 +226,7 @@ const PricingUltimate = () => {
                 { wave: "Elite", price: 247, date: "Lug 2026" },
                 { wave: "Public", price: 797, date: "Ott 2026" }
             ],
-            features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2", "War Room mensile"],
+            features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scala con Entrepreneur →",
             priceId: getPriceIdForPlan('entrepreneur'),
             isFounder: displayPricing?.tier === 'founder',
@@ -285,7 +285,7 @@ const PricingUltimate = () => {
                 { wave: "Elite", price: 1097, date: "Lug 2026" },
                 { wave: "Public", price: 2197, date: "Ott 2026" }
             ],
-            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "SLA 99.9%"],
+            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
             priceId: getPriceIdForPlan('imperatore'),
             isFounder: displayPricing?.tier === 'founder',
