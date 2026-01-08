@@ -98,7 +98,8 @@ export const PLAN_LIMITS = {
     conquistatore: {
         clones: 5,
         messagesPerMonth: 20000,
-        channels: 999,
+        channels: 10,           // Base limit (max 30 with overage)
+        maxChannels: 30,        // Hard cap
         teamMembers: 10,
         analyticsRetentionDays: 365,
         apiAccess: true,
@@ -111,7 +112,9 @@ export const PLAN_LIMITS = {
     imperatore: {
         clones: 15,
         messagesPerMonth: 100000,
-        channels: -1,
+        channels: 25,           // Base limit (max 50 with overage)
+        maxChannels: 50,        // Hard cap
+        maxClones: 25,          // Hard cap for clones
         teamMembers: 50,
         analyticsRetentionDays: 730,
         apiAccess: true,

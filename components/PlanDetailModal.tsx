@@ -113,7 +113,10 @@ export const TIER_FULL_DATA = {
             "• Lead Qualifier • Sales Closer • Customer Support L1",
             "• Onboarding Specialist • Custom (definisci tu)",
             "20.000 conversazioni/mese",
-            "Tutti i canali + integrazioni CRM/ERP",
+            "10 Canali simultanei inclusi:",
+            "• Email, WhatsApp, Instagram, Telegram, Web Chat, LinkedIn, SMS",
+            "• +5 canali extra: €20/mese (max 30 canali totali)",
+            "Integrazioni CRM/ERP: Zapier, Make, Webhook",
             "• Zapier/Make native • Webhook custom",
             "Knowledge Base privata illimitata",
             "API Access per workflow custom",
@@ -133,7 +136,8 @@ export const TIER_FULL_DATA = {
         limitiTecnici: [
             "5 Cloni attivi",
             "20.000 conversazioni/mese",
-            "Canali illimitati",
+            "10 Canali inclusi (max 30 con overage)",
+            "+5 canali extra: €20/mese",
             "Support: Dedicated CSM + Slack <4h"
         ],
         casoReale: "Agenzia automotive a Bologna: -€23.000/anno in costi customer service, +58% customer satisfaction score, team ridotto da 7 a 4 persone mantenendo stesso output."
@@ -173,9 +177,9 @@ export const TIER_FULL_DATA = {
         ],
         disponibilita: "12 slot totali: Genesis 4 (2 occupati) • Pioneer 4 (1 occupato) • Elite 4",
         limitiTecnici: [
-            "15 Cloni (+ overage disponibile)",
-            "100.000 conversazioni/mese (+ overage)",
-            "Canali illimitati",
+            "15 Cloni (max 25 con overage: +€50 per 5 cloni)",
+            "100.000 conversazioni/mese (overage disponibile)",
+            "25 Canali inclusi (max 50: +€50 per 10 canali)",
             "Support: Dedicato 24/5 + Slack real-time"
         ],
         casoReale: null
