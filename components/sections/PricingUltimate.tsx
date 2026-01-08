@@ -24,7 +24,6 @@ const PricingUltimate = () => {
     const sectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
-        // Fetch real-time plan availability from Supabase
         const fetchAvailability = async () => {
             try {
                 const [availability, pricing] = await Promise.all([
@@ -34,7 +33,6 @@ const PricingUltimate = () => {
                 setPlanAvailability(availability);
                 setDisplayPricing(pricing);
 
-                // Fetch next wave info for waitlist
                 if (pricing.tier === 'founder' && pricing.waveName) {
                     const sold = await getFoundersSold();
                     const currentWaveIndex = WAVES.findIndex(w => w.name === pricing.waveName);
@@ -54,10 +52,7 @@ const PricingUltimate = () => {
                     setInView(true);
                 }
             },
-            {
-                threshold: 0.05,
-                rootMargin: '0px'
-            }
+            { threshold: 0.05, rootMargin: '0px' }
         );
 
         if (sectionRef.current) {
@@ -67,14 +62,12 @@ const PricingUltimate = () => {
         return () => observer.disconnect();
     }, []);
 
-    // Helper function to check if a plan is sold out
     const isPlanSoldOut = (planName: string): boolean => {
         if (!planAvailability) return false;
         const normalizedName = planName.toLowerCase() as PlanName;
         return planAvailability[normalizedName]?.isSoldOut || false;
     };
 
-    // Waitlist handler
     const handleWaitlistClick = async (planId: string) => {
         const email = prompt("Inserisci la tua email per entrare in waitlist:");
         if (!email || !email.includes('@')) {
@@ -106,7 +99,6 @@ const PricingUltimate = () => {
         }
     };
 
-    // Stripe Checkout Handler
     const handleCheckout = async (planId: string, priceId: string, tier: 'public' | 'founder' = 'public') => {
         setIsCheckoutLoading(planId);
         try {
@@ -136,6 +128,43 @@ const PricingUltimate = () => {
 
     const publicRef = getCurrentPublicPricing();
 
+    // Map new IDs to old wave keys for price lookup
+    const getPriceForPlan = (newId: string) => {
+        const mapping: Record<string, string> = {
+            'curioso': 'curioso',
+            'solopreneur': 'aspirante',
+            'entrepreneur': 'pioniere',
+            'conquistatore': 'conquistatore',
+            'imperatore': 'imperatore'
+        };
+        const oldKey = mapping[newId] || newId;
+        return displayPricing?.prices?.[oldKey as keyof typeof displayPricing.prices] || 0;
+    };
+
+    const getPublicPriceForPlan = (newId: string) => {
+        const mapping: Record<string, string> = {
+            'curioso': 'curioso',
+            'solopreneur': 'aspirante',
+            'entrepreneur': 'pioniere',
+            'conquistatore': 'conquistatore',
+            'imperatore': 'imperatore'
+        };
+        const oldKey = mapping[newId] || newId;
+        return publicRef.prices[oldKey as keyof typeof publicRef.prices] || 0;
+    };
+
+    const getPriceIdForPlan = (newId: string) => {
+        const mapping: Record<string, string> = {
+            'curioso': 'curioso',
+            'solopreneur': 'aspirante',
+            'entrepreneur': 'pioniere',
+            'conquistatore': 'conquistatore',
+            'imperatore': 'imperatore'
+        };
+        const oldKey = mapping[newId] || newId;
+        return displayPricing?.stripePriceIds?.[oldKey as keyof typeof displayPricing.stripePriceIds];
+    };
+
     const plans = [
         {
             id: "curioso",
@@ -144,9 +173,9 @@ const PricingUltimate = () => {
             price: "€0",
             publicPrice: "€0",
             period: "14 giorni",
-            story: "Esplora il Potere dell'AI",
+            story: "Prova Gratuita",
             subtitle: "Zero rischio, zero carta di credito. Scopri se l'AI funziona per te.",
-            features: ["1 Clone AI (demo)", "100 msg lifetime", "PDF Gratuito", "Community", "3 Template"],
+            features: ["1 Clone AI (demo)", "100 msg totali", "PDF Gratuito", "Community", "3 Template"],
             cta: "Inizia Gratis →",
             isTrial: true,
             bg: "bg-gradient-to-br from-gray-50 to-gray-100",
@@ -156,18 +185,18 @@ const PricingUltimate = () => {
             soldOut: false,
             scale: 1.0
         },
-        ...(isAspiranteVisible() ? [{
-            id: "aspirante",
-            name: "Aspirante",
+        {
+            id: "solopreneur",
+            name: "Solopreneur",
             icon: Sparkles,
-            price: `€${displayPricing?.prices?.aspirante || 49}`,
-            publicPrice: `€${publicRef.prices.aspirante}`,
+            price: `€${getPriceForPlan('solopreneur') || 49}`,
+            publicPrice: `€${getPublicPriceForPlan('solopreneur')}`,
             period: "/mese",
-            story: "Per Solopreneur con P.IVA",
-            subtitle: "Freelancer, coach, consulenti. 1 Clone AI per iniziare a scalare.",
-            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Support <48h"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Diventa Aspirante →",
-            priceId: displayPricing?.stripePriceIds?.aspirante || publicRef.stripePriceIds.aspirante,
+            story: "Per Chi Lavora in Autonomia",
+            subtitle: "Freelancer, coach, consulenti in P.IVA. 1 Clone AI per iniziare.",
+            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scegli Solopreneur →",
+            priceId: getPriceIdForPlan('solopreneur'),
             isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50",
             border: "border-green-400",
@@ -176,21 +205,21 @@ const PricingUltimate = () => {
             soldOut: false,
             badge: { emoji: "🌱", text: "ENTRY-LEVEL", color: "green" },
             scale: 1.0
-        }] : []),
+        },
         {
-            id: "pioniere",
-            name: "Pioniere",
+            id: "entrepreneur",
+            name: "Entrepreneur",
             icon: Zap,
-            price: `€${displayPricing?.prices?.pioniere || 147}`,
-            publicPrice: `€${publicRef.prices.pioniere}`,
+            price: `€${getPriceForPlan('entrepreneur') || 147}`,
+            publicPrice: `€${getPublicPriceForPlan('entrepreneur')}`,
             period: "/mese",
-            story: "⭐ Scelto dal 68% dei Clienti",
-            subtitle: "Startup 2-5 persone. 3 Cloni specializzati per ruolo.",
+            story: "⭐ PIÙ SCELTO (68%)",
+            subtitle: "Startup 2-5 persone. 3 Cloni AI specializzati per ruolo.",
             socialProof: "ROI 4.2:1 • Payback 34gg",
             scarcity: "⚡ Ultimi posti Wave Genesis",
-            features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2", "War Room"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scala con Pioniere →",
-            priceId: displayPricing?.stripePriceIds?.pioniere,
+            features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2", "War Room mensile"],
+            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scala con Entrepreneur →",
+            priceId: getPriceIdForPlan('entrepreneur'),
             isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-amber-50 via-yellow-100 to-amber-100",
             border: "border-amber-400",
@@ -207,14 +236,14 @@ const PricingUltimate = () => {
             id: "conquistatore",
             name: "Conquistatore",
             icon: Crown,
-            price: `€${displayPricing?.prices?.conquistatore || 347}`,
-            publicPrice: `€${publicRef.prices.conquistatore}`,
+            price: `€${getPriceForPlan('conquistatore') || 347}`,
+            publicPrice: `€${getPublicPriceForPlan('conquistatore')}`,
             period: "/mese",
-            story: "Per PMI e Agenzie 5-20 persone",
-            subtitle: "Riduci costi operativi del 40%. CRM, API, Success Manager.",
-            features: ["5 Cloni AI", "20K msg/mese", "Canali ∞", "API + CRM", "Academy Full", "CSM Dedicato"],
+            story: "Scale-Up",
+            subtitle: "PMI e Agenzie 5-20 persone. Riduci costi operativi del 40%.",
+            features: ["5 Cloni AI", "20K msg/mese", "Tutti i canali", "API + CRM", "Academy Full", "CSM Dedicato"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Conquista il Mercato →",
-            priceId: displayPricing?.stripePriceIds?.conquistatore,
+            priceId: getPriceIdForPlan('conquistatore'),
             isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900",
             border: "border-purple-500",
@@ -229,15 +258,15 @@ const PricingUltimate = () => {
             id: "imperatore",
             name: "Imperatore",
             icon: Crown,
-            price: `€${displayPricing?.prices?.imperatore || 697}`,
-            publicPrice: `€${publicRef.prices.imperatore}`,
+            price: `€${getPriceForPlan('imperatore') || 697}`,
+            publicPrice: `€${getPublicPriceForPlan('imperatore')}`,
             period: "/mese",
-            story: "Enterprise White-Label",
-            subtitle: "20+ dipendenti, €500k+ fatturato. On-premise, SLA 99.9%.",
+            story: "Enterprise",
+            subtitle: "20+ dipendenti, €500k+ fatturato. White-label, On-premise, SLA 99.9%.",
             scarcity: "🔒 12 slot totali disponibili",
-            features: ["15 Cloni AI", "100K msg/mese", "White-label", "Team Dedicato", "SLA 99.9%", "Revenue Share"],
+            features: ["15 Cloni AI", "100K msg/mese", "White-label", "Team Dedicato", "SLA 99.9%", "Revenue Share 30%"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
-            priceId: displayPricing?.stripePriceIds?.imperatore,
+            priceId: getPriceIdForPlan('imperatore'),
             isFounder: displayPricing?.tier === 'founder',
             bg: "bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600",
             border: "border-yellow-600",
@@ -257,8 +286,8 @@ const PricingUltimate = () => {
             publicPrice: "CUSTOM",
             period: "",
             story: "Partnership Strategica",
-            subtitle: "Non è un piano. È un accordo con Insolito Experiences.",
-            features: ["Licensing Perpetuo", "Equity Partnership", "Profit Share 70/30", "Co-sviluppo", "Board Seat"],
+            subtitle: "Non è un piano. È un accordo. Solo su invito.",
+            features: ["Licensing Perpetuo", "Equity Partnership", "Profit Share 70/30", "Strategic Alliance", "Influenza Roadmap"],
             cta: "Richiedi Application →",
             isPartnership: true,
             bg: "bg-gradient-to-br from-black via-gray-900 to-black",
@@ -294,11 +323,10 @@ const PricingUltimate = () => {
                         14 giorni per provare. Nessuna carta. <span className="text-charcoal font-medium">Zero rischi.</span>
                     </p>
 
-                    {/* COUNTDOWN BONUS */}
                     <CountdownTimer />
                 </div>
 
-                {/* PRICING GRID - 2 ROWS x 3 COLS */}
+                {/* PRICING GRID */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-x-8 lg:gap-y-12 max-w-6xl mx-auto">
                     {plans.map((plan, i) => (
                         <div
@@ -311,7 +339,7 @@ const PricingUltimate = () => {
                             onMouseEnter={() => setHoveredPlan(i)}
                             onMouseLeave={() => setHoveredPlan(null)}
                         >
-                            {/* Luxury Badge (Top-Right) */}
+                            {/* Badge */}
                             {plan.badge && typeof plan.badge === 'object' && (
                                 <div className="absolute -top-4 -right-4 z-30">
                                     <div className={`
@@ -330,7 +358,7 @@ const PricingUltimate = () => {
                                 </div>
                             )}
 
-                            {/* Secondary Badge (Pioniere) */}
+                            {/* Secondary Badge */}
                             {(plan as any).badge2 && (
                                 <div className="absolute -top-4 -left-4 z-30">
                                     <div className="px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-yellow-400 to-amber-400 text-amber-900 flex items-center gap-1.5 shadow-xl">
@@ -340,17 +368,16 @@ const PricingUltimate = () => {
                                 </div>
                             )}
 
-                            {/* Hero Glow (Pioniere) */}
+                            {/* Hero Glow */}
                             {plan.isHero && (
                                 <div className="absolute -inset-6 bg-gradient-to-r from-yellow-400/40 via-amber-500/50 to-yellow-400/40 rounded-[3rem] blur-3xl opacity-70 animate-pulse"></div>
                             )}
 
-                            {/* Standard Glow */}
                             {plan.glow && !plan.isHero && (
                                 <div className="absolute -inset-2 bg-gold/20 rounded-[2.5rem] blur-xl opacity-50"></div>
                             )}
 
-                            {/* DUAL OPTION Overlay - Waitlist OR Public */}
+                            {/* Sold Out Overlay */}
                             {isPlanSoldOut(plan.name) && (
                                 <DualOptionOverlay
                                     planId={plan.id}
@@ -366,7 +393,7 @@ const PricingUltimate = () => {
 
                             {/* Card */}
                             <div className={`
-                                relative h-[550px] lg:h-[580px] rounded-[2rem] p-6 lg:p-8 border 
+                                relative h-[560px] lg:h-[600px] rounded-[2rem] p-6 lg:p-8 border 
                                 transition-all duration-500 overflow-hidden flex flex-col
                                 ${plan.bg} ${plan.border} 
                                 ${hoveredPlan === i ? 'shadow-2xl ring-2 ring-offset-2' : 'shadow-xl'} 
@@ -377,10 +404,10 @@ const PricingUltimate = () => {
 
                                 {/* Icon */}
                                 <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-xl flex items-center justify-center mb-4 ${plan.isDark ? 'bg-white/10' : plan.isGold ? 'bg-white/20' : 'bg-white/50'}`}>
-                                    <plan.icon className={`w-6 h-6 lg:w-7 lg:h-7 ${plan.isDark || plan.isGold ? 'text-white' : plan.id === 'aspirante' ? 'text-green-600' : plan.accent}`} />
+                                    <plan.icon className={`w-6 h-6 lg:w-7 lg:h-7 ${plan.isDark || plan.isGold ? 'text-white' : plan.accent}`} />
                                 </div>
 
-                                {/* Plan Name */}
+                                {/* Name */}
                                 <p className={`text-[10px] uppercase tracking-[0.3em] font-black mb-2 ${plan.isDark ? 'text-white/60' : plan.accent}`}>
                                     {plan.name}
                                 </p>
@@ -395,7 +422,7 @@ const PricingUltimate = () => {
                                     </span>
                                 </div>
 
-                                {/* Public Price (Crossed Out) */}
+                                {/* Public Price */}
                                 {plan.publicPrice && plan.publicPrice !== plan.price && plan.publicPrice !== "CUSTOM" && (
                                     <p className={`text-xs mb-3 ${plan.isDark || plan.isGold ? 'text-white/50' : 'text-charcoal/40'}`}>
                                         <span className="line-through">{plan.publicPrice}/m</span>
@@ -415,7 +442,7 @@ const PricingUltimate = () => {
                                     </p>
                                 )}
 
-                                {/* Social Proof (Pioniere) */}
+                                {/* Social Proof */}
                                 {(plan as any).socialProof && (
                                     <div className="mb-3 px-3 py-1.5 bg-amber-100 text-amber-900 rounded-lg text-xs font-bold inline-block">
                                         {(plan as any).socialProof}
@@ -431,7 +458,7 @@ const PricingUltimate = () => {
 
                                 {/* Features */}
                                 <div className="space-y-2 lg:space-y-3 mb-4 flex-grow">
-                                    {plan.features.slice(0, 5).map((feature, j) => (
+                                    {plan.features.slice(0, 6).map((feature, j) => (
                                         <div key={j} className="flex items-center gap-2">
                                             <div className={`w-4 h-4 lg:w-5 lg:h-5 rounded-full flex items-center justify-center ${plan.isDark ? 'bg-white/10' : plan.isGold ? 'bg-white/20' : 'bg-green-100'}`}>
                                                 <Check className={`w-2.5 h-2.5 lg:w-3 lg:h-3 ${plan.isDark || plan.isGold ? 'text-white' : 'text-green-600'}`} />
@@ -443,7 +470,7 @@ const PricingUltimate = () => {
                                     ))}
                                 </div>
 
-                                {/* Vedi Dettagli Link */}
+                                {/* Vedi Dettagli */}
                                 <button
                                     onClick={() => setOpenModal(plan.id)}
                                     className={`mb-4 text-[9px] uppercase tracking-[0.2em] font-bold flex items-center gap-1.5 transition-all hover:gap-2.5 ${plan.isDark || plan.isGold ? 'text-white/50 hover:text-white' : `${plan.accent} opacity-60 hover:opacity-100`}`}
@@ -491,8 +518,8 @@ const PricingUltimate = () => {
                                     )}
                                 </div>
 
-                                {/* Imperial Payment Options (Bonifico) */}
-                                {['pioniere', 'conquistatore', 'imperatore'].includes(plan.id) && (
+                                {/* Bonifico */}
+                                {['entrepreneur', 'conquistatore', 'imperatore'].includes(plan.id) && (
                                     <div className="mt-4 pt-3 border-t border-charcoal/5 text-center">
                                         <Link
                                             href={`/contact?reason=bonifico&plan=${plan.id}`}
@@ -522,8 +549,8 @@ const PricingUltimate = () => {
                                 <tr className="border-b-2 border-charcoal/10">
                                     <th className="text-left py-4 px-4 text-xs uppercase tracking-widest text-charcoal/40 font-black">Feature</th>
                                     <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-gray-600 font-black">Curioso</th>
-                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-green-700 font-black">Aspirante</th>
-                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-amber-700 font-black bg-amber-50/50 rounded-t-xl">Pioniere ⭐</th>
+                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-green-700 font-black">Solopreneur</th>
+                                    <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-amber-700 font-black bg-amber-50/50 rounded-t-xl">Entrepreneur ⭐</th>
                                     <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-purple-600 font-black">Conquistatore</th>
                                     <th className="text-center py-4 px-3 text-xs uppercase tracking-widest text-gold font-black">Imperatore</th>
                                 </tr>
@@ -550,16 +577,16 @@ const PricingUltimate = () => {
                                     <td className="text-center py-4 px-3 text-charcoal/60">0</td>
                                     <td className="text-center py-4 px-3 text-charcoal/60">1</td>
                                     <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">3</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/60">∞</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/60">∞</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">Tutti</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">Tutti</td>
                                 </tr>
                                 <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
                                     <td className="py-4 px-4 font-medium text-charcoal">Knowledge Base</td>
                                     <td className="text-center py-4 px-3 text-charcoal/40">—</td>
                                     <td className="text-center py-4 px-3 text-charcoal/60">10 doc</td>
                                     <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">50 doc</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/60">∞</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/60">∞</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">Illimitato</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">Illimitato</td>
                                 </tr>
                                 <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
                                     <td className="py-4 px-4 font-medium text-charcoal">A/B Testing</td>
@@ -636,7 +663,7 @@ const PricingUltimate = () => {
                 </div>
             </div>
 
-            {/* Modal for Plan Details */}
+            {/* Modal */}
             {openModal && (
                 <PlanDetailModal
                     isOpen={!!openModal}
