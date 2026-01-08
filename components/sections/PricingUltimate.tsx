@@ -199,7 +199,7 @@ const PricingUltimate = () => {
                 { wave: "Elite", price: 89, date: "Lug 2026" },
                 { wave: "Public", price: 347, date: "Ott 2026" }
             ],
-            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
+            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scegli Solopreneur →",
             priceId: getPriceIdForPlan('solopreneur'),
             isFounder: displayPricing?.tier === 'founder',
