@@ -292,12 +292,12 @@ const PricingUltimate = () => {
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
             priceId: getPriceIdForPlan('imperatore'),
             isFounder: displayPricing?.tier === 'founder',
-            bg: "bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600",
-            border: "border-yellow-600",
-            accent: "text-yellow-100",
+            bg: "bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800",
+            border: "border-amber-500",
+            accent: "text-amber-200",
             textColor: "text-white",
-            btnStyle: "bg-white text-amber-700 hover:bg-amber-50 shadow-2xl font-bold border-2 border-amber-900",
-            isGold: true,
+            btnStyle: "bg-white text-amber-800 hover:bg-amber-50 shadow-2xl font-bold",
+            isGold: false,
             isDark: true,
             scale: 1.0,
             badge: { emoji: "👑", text: "ENTERPRISE", color: "gold", animate: "bounce" }
@@ -310,12 +310,13 @@ const PricingUltimate = () => {
             publicPrice: "CUSTOM",
             period: "",
             story: "Partnership Strategica",
-            subtitle: "Non è un piano. È un accordo. Solo su invito.",
-            features: ["Licensing Perpetuo", "Equity Partnership", "Profit Share 70/30", "Strategic Alliance", "Influenza Roadmap"],
+            idealePer: "Aziende che vogliono co-ownership o licensing",
+            subtitle: "Non è un piano. È un accordo su misura. Solo su invito o application.",
+            features: ["Licensing Perpetuo €50k", "Equity Partnership", "Profit Share 70/30", "Strategic Alliance", "Influenza Roadmap", "Priority Access"],
             cta: "Richiedi Application →",
             isPartnership: true,
-            bg: "bg-gradient-to-br from-black via-gray-900 to-black",
-            border: "border-gold/50",
+            bg: "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900",
+            border: "border-gold/40",
             accent: "text-gold",
             textColor: "text-white",
             btnStyle: "gold-gradient text-white hover:opacity-90 shadow-2xl font-bold",
@@ -461,7 +462,7 @@ const PricingUltimate = () => {
 
                                 {/* Ideale Per */}
                                 {(plan as any).idealePer && (
-                                    <p className={`text-xs font-bold mb-2 ${plan.isDark ? 'text-green-400' : plan.isGold ? 'text-green-200' : 'text-green-600'}`}>
+                                    <p className={`text-xs font-bold mb-2 ${plan.isDark ? 'text-cyan-300' : plan.isGold ? 'text-yellow-100' : 'text-green-600'}`}>
                                         👤 Ideale per: {(plan as any).idealePer}
                                     </p>
                                 )}
