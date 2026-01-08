@@ -199,7 +199,7 @@ const PricingUltimate = () => {
                 { wave: "Elite", price: 89, date: "Lug 2026" },
                 { wave: "Public", price: 347, date: "Ott 2026" }
             ],
-            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc"],
+            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scegli Solopreneur →",
             priceId: getPriceIdForPlan('solopreneur'),
             isFounder: displayPricing?.tier === 'founder',
@@ -226,7 +226,7 @@ const PricingUltimate = () => {
                 { wave: "Elite", price: 247, date: "Lug 2026" },
                 { wave: "Public", price: 797, date: "Ott 2026" }
             ],
-            features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2"],
+            features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2", "War Room mensile"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scala con Entrepreneur →",
             priceId: getPriceIdForPlan('entrepreneur'),
             isFounder: displayPricing?.tier === 'founder',
@@ -256,7 +256,7 @@ const PricingUltimate = () => {
                 { wave: "Elite", price: 547, date: "Lug 2026" },
                 { wave: "Public", price: 1397, date: "Ott 2026" }
             ],
-            features: ["5 Cloni AI", "20K msg/mese", "10 Canali inclusi", "API + CRM", "Academy Full"],
+            features: ["5 Cloni AI", "20K msg/mese", "10 Canali inclusi", "API + CRM", "Academy Full", "CSM Dedicato"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Conquista il Mercato →",
             priceId: getPriceIdForPlan('conquistatore'),
             isFounder: displayPricing?.tier === 'founder',
@@ -277,13 +277,13 @@ const PricingUltimate = () => {
             publicPrice: `€${getPublicPriceForPlan('imperatore')}`,
             period: "/mese",
             story: "Enterprise",
-            idealePer: "Aziende 20+ dipendenti",
+            idealePer: "Aziende 20+ dipendenti, €500k+ fatturato",
             wavePricing: [
                 { wave: "Pioneer", price: 897, date: "Apr 2026" },
                 { wave: "Elite", price: 1097, date: "Lug 2026" },
                 { wave: "Public", price: 2197, date: "Ott 2026" }
             ],
-            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "SLA 99.9%"],
+            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "Team Dedicato", "SLA 99.9%"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
             priceId: getPriceIdForPlan('imperatore'),
             isFounder: displayPricing?.tier === 'founder',
@@ -349,7 +349,7 @@ const PricingUltimate = () => {
                 </div>
 
                 {/* PRICING GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-x-8 lg:gap-y-12 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-x-8 lg:gap-y-16 max-w-6xl mx-auto auto-rows-fr">
                     {plans.map((plan, i) => (
                         <div
                             key={i}
@@ -415,7 +415,7 @@ const PricingUltimate = () => {
 
                             {/* Card */}
                             <div className={`
-                                relative h-[560px] lg:h-[600px] rounded-[2rem] p-6 lg:p-8 border 
+                                relative h-full rounded-[2rem] p-6 lg:p-8 border 
                                 transition-all duration-500 overflow-hidden flex flex-col
                                 ${plan.bg} ${plan.border} 
                                 ${hoveredPlan === i ? 'shadow-2xl ring-2 ring-offset-2' : 'shadow-xl'} 
