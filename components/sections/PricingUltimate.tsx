@@ -192,8 +192,14 @@ const PricingUltimate = () => {
             price: `€${getPriceForPlan('solopreneur') || 49}`,
             publicPrice: `€${getPublicPriceForPlan('solopreneur')}`,
             period: "/mese",
-            story: "Ideale per: Freelancer in P.IVA",
-            subtitle: "Freelancer, coach, consulenti in P.IVA. 1 Clone AI per iniziare.",
+            story: "Entry-Level",
+            idealePer: "Freelancer, coach, consulenti in P.IVA",
+            subtitle: "1 Clone AI professionale per iniziare. 15 Template inclusi.",
+            wavePricing: [
+                { wave: "Pioneer", price: 69, date: "Apr 2026" },
+                { wave: "Elite", price: 89, date: "Lug 2026" },
+                { wave: "Public", price: 347, date: "Ott 2026" }
+            ],
             features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scegli Solopreneur →",
             priceId: getPriceIdForPlan('solopreneur'),
@@ -213,10 +219,16 @@ const PricingUltimate = () => {
             price: `€${getPriceForPlan('entrepreneur') || 147}`,
             publicPrice: `€${getPublicPriceForPlan('entrepreneur')}`,
             period: "/mese",
-            story: "⭐ Ideale per: Startup 2-5 persone",
-            subtitle: "Startup 2-5 persone. 3 Cloni AI specializzati per ruolo.",
+            story: "⭐ PIÙ SCELTO (68%)",
+            idealePer: "Startup 2-5 persone",
+            subtitle: "3 Cloni AI specializzati per ruolo. ROI 4.2:1.",
             socialProof: "ROI 4.2:1 • Payback 34gg",
             scarcity: "⚡ Ultimi posti Wave Genesis",
+            wavePricing: [
+                { wave: "Pioneer", price: 197, date: "Apr 2026" },
+                { wave: "Elite", price: 247, date: "Lug 2026" },
+                { wave: "Public", price: 797, date: "Ott 2026" }
+            ],
             features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2", "War Room mensile"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scala con Entrepreneur →",
             priceId: getPriceIdForPlan('entrepreneur'),
@@ -239,8 +251,14 @@ const PricingUltimate = () => {
             price: `€${getPriceForPlan('conquistatore') || 347}`,
             publicPrice: `€${getPublicPriceForPlan('conquistatore')}`,
             period: "/mese",
-            story: "Ideale per: PMI 5-20 persone",
-            subtitle: "PMI e Agenzie 5-20 persone. Riduci costi operativi del 40%.",
+            story: "Scale-Up",
+            idealePer: "PMI e Agenzie 5-20 persone",
+            subtitle: "Riduci costi operativi del 40%. API + CRM integrati.",
+            wavePricing: [
+                { wave: "Pioneer", price: 447, date: "Apr 2026" },
+                { wave: "Elite", price: 547, date: "Lug 2026" },
+                { wave: "Public", price: 1397, date: "Ott 2026" }
+            ],
             features: ["5 Cloni AI", "20K msg/mese", "10 Canali inclusi", "API + CRM", "Academy Full", "CSM Dedicato"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Conquista il Mercato →",
             priceId: getPriceIdForPlan('conquistatore'),
@@ -261,9 +279,15 @@ const PricingUltimate = () => {
             price: `€${getPriceForPlan('imperatore') || 697}`,
             publicPrice: `€${getPublicPriceForPlan('imperatore')}`,
             period: "/mese",
-            story: "Ideale per: Aziende 20+ dipendenti",
-            subtitle: "20+ dipendenti, €500k+ fatturato. White-label, On-premise, SLA 99.9%.",
+            story: "Enterprise",
+            idealePer: "Aziende 20+ dipendenti, €500k+ fatturato",
+            subtitle: "White-label, On-premise, SLA 99.9%. Team dedicato.",
             scarcity: "🔒 12 slot totali disponibili",
+            wavePricing: [
+                { wave: "Pioneer", price: 897, date: "Apr 2026" },
+                { wave: "Elite", price: 1097, date: "Lug 2026" },
+                { wave: "Public", price: 2197, date: "Ott 2026" }
+            ],
             features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "Team Dedicato", "SLA 99.9%"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
             priceId: getPriceIdForPlan('imperatore'),
@@ -431,15 +455,38 @@ const PricingUltimate = () => {
                                 )}
 
                                 {/* Story */}
-                                <p className={`text-sm lg:text-base font-medium mb-2 ${plan.isDark || plan.isGold ? 'text-white' : 'text-charcoal'}`}>
+                                <p className={`text-sm lg:text-base font-medium mb-1 ${plan.isDark || plan.isGold ? 'text-white' : 'text-charcoal'}`}>
                                     {plan.story}
                                 </p>
 
+                                {/* Ideale Per */}
+                                {(plan as any).idealePer && (
+                                    <p className={`text-xs font-bold mb-2 ${plan.isDark ? 'text-green-400' : plan.isGold ? 'text-green-200' : 'text-green-600'}`}>
+                                        👤 Ideale per: {(plan as any).idealePer}
+                                    </p>
+                                )}
+
                                 {/* Subtitle */}
                                 {(plan as any).subtitle && (
-                                    <p className={`text-xs mb-4 leading-relaxed line-clamp-2 ${plan.isDark ? 'text-white/70' : 'text-charcoal/60'}`}>
+                                    <p className={`text-xs mb-3 leading-relaxed line-clamp-2 ${plan.isDark ? 'text-white/70' : 'text-charcoal/60'}`}>
                                         {(plan as any).subtitle}
                                     </p>
+                                )}
+
+                                {/* Wave Pricing */}
+                                {(plan as any).wavePricing && (plan as any).wavePricing.length > 0 && (
+                                    <div className={`mb-3 p-2 rounded-lg text-[10px] ${plan.isDark ? 'bg-white/5' : plan.isGold ? 'bg-white/10' : 'bg-charcoal/5'}`}>
+                                        <p className={`font-bold mb-1 ${plan.isDark || plan.isGold ? 'text-white/70' : 'text-charcoal/50'}`}>
+                                            📈 Prossimi aumenti:
+                                        </p>
+                                        <div className="flex flex-wrap gap-x-3 gap-y-0.5">
+                                            {(plan as any).wavePricing.map((wp: any, idx: number) => (
+                                                <span key={idx} className={`${plan.isDark || plan.isGold ? 'text-white/60' : 'text-charcoal/40'}`}>
+                                                    €{wp.price} <span className="text-red-400">{wp.date}</span>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
                                 )}
 
                                 {/* Social Proof */}
@@ -448,6 +495,7 @@ const PricingUltimate = () => {
                                         {(plan as any).socialProof}
                                     </div>
                                 )}
+
 
                                 {/* Scarcity */}
                                 {(plan as any).scarcity && (
