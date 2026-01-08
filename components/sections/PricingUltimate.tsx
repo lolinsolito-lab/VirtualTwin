@@ -691,6 +691,77 @@ const PricingUltimate = () => {
                     </div>
                 </div>
 
+                {/* WAVE PRICING TABLE */}
+                <div className={`mt-16 transition-all duration-1000 delay-400 ${inView ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="text-center mb-8">
+                        <h3 className="font-serif text-2xl md:text-3xl text-charcoal mb-2">
+                            Pricing <span className="italic gold-text-gradient">Dinamico per Wave</span>
+                        </h3>
+                        <p className="text-charcoal/50 text-sm">I Founder bloccano il prezzo LIFETIME. I pubblici aumentano ogni quarter.</p>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-[700px] border-collapse">
+                            <thead>
+                                <tr className="border-b-2 border-charcoal/10">
+                                    <th className="text-left py-3 px-4 text-xs uppercase tracking-widest text-charcoal/40 font-black">Wave</th>
+                                    <th className="text-center py-3 px-4 text-xs uppercase tracking-widest text-amber-700 font-black">Entrepreneur</th>
+                                    <th className="text-center py-3 px-4 text-xs uppercase tracking-widest text-purple-600 font-black">Conquistatore</th>
+                                    <th className="text-center py-3 px-4 text-xs uppercase tracking-widest text-gold font-black">Imperatore</th>
+                                    <th className="text-center py-3 px-4 text-xs uppercase tracking-widest text-charcoal/40 font-black">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-sm">
+                                <tr className="border-b border-charcoal/5 bg-green-50/30">
+                                    <td className="py-3 px-4 font-bold text-green-700">🌱 Genesis (1-20)</td>
+                                    <td className="text-center py-3 px-4 font-bold text-green-700">€147/m</td>
+                                    <td className="text-center py-3 px-4 font-bold text-green-700">€347/m</td>
+                                    <td className="text-center py-3 px-4 font-bold text-green-700">€697/m</td>
+                                    <td className="text-center py-3 px-4"><span className="px-2 py-1 bg-green-500 text-white text-[9px] font-black uppercase rounded-full">🔒 Lock Lifetime</span></td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 bg-blue-50/30">
+                                    <td className="py-3 px-4 font-bold text-blue-700">🚀 Pioneer (21-40)</td>
+                                    <td className="text-center py-3 px-4 font-bold text-blue-700">€197/m</td>
+                                    <td className="text-center py-3 px-4 font-bold text-blue-700">€447/m</td>
+                                    <td className="text-center py-3 px-4 font-bold text-blue-700">€897/m</td>
+                                    <td className="text-center py-3 px-4"><span className="px-2 py-1 bg-blue-500 text-white text-[9px] font-black uppercase rounded-full">🔒 Lock Lifetime</span></td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5 bg-purple-50/30">
+                                    <td className="py-3 px-4 font-bold text-purple-700">💎 Elite (41-60)</td>
+                                    <td className="text-center py-3 px-4 font-bold text-purple-700">€247/m</td>
+                                    <td className="text-center py-3 px-4 font-bold text-purple-700">€547/m</td>
+                                    <td className="text-center py-3 px-4 font-bold text-purple-700">€1.097/m</td>
+                                    <td className="text-center py-3 px-4"><span className="px-2 py-1 bg-purple-500 text-white text-[9px] font-black uppercase rounded-full">🔒 Lock Lifetime</span></td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5">
+                                    <td className="py-3 px-4 font-medium text-charcoal/60">📅 Public Q1 2026</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€697/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€1.197/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€1.997/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/40 text-xs">No lock-in</td>
+                                </tr>
+                                <tr className="border-b border-charcoal/5">
+                                    <td className="py-3 px-4 font-medium text-charcoal/60">📅 Public Q2 2026</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€747/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€1.297/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€2.097/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/40 text-xs">No lock-in</td>
+                                </tr>
+                                <tr className="bg-charcoal/[0.03]">
+                                    <td className="py-3 px-4 font-medium text-charcoal/60">📅 Public Q3+ 2026</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€797/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€1.397/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/60">€2.197/m</td>
+                                    <td className="text-center py-3 px-4 text-charcoal/40 text-xs">No lock-in</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p className="text-center text-charcoal/40 text-xs mt-4 italic">
+                        ⚡ I Founder pagano il prezzo bloccato per sempre, anche quando i prezzi pubblici aumentano.
+                    </p>
+                </div>
+
                 {/* FOOTER */}
                 <div className={`mt-20 text-center transition-all duration-1000 delay-500 ${inView ? 'opacity-100' : 'opacity-0'}`}>
                     <p className="text-charcoal/40 text-lg font-serif italic mb-6">
