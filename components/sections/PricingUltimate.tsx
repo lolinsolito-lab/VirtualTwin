@@ -278,8 +278,6 @@ const PricingUltimate = () => {
             period: "/mese",
             story: "Enterprise",
             idealePer: "Aziende 20+ dipendenti, €500k+ fatturato",
-            subtitle: "White-label, On-premise, SLA 99.9%. Team dedicato.",
-            scarcity: "🔒 12 slot totali disponibili",
             wavePricing: [
                 { wave: "Pioneer", price: 897, date: "Apr 2026" },
                 { wave: "Elite", price: 1097, date: "Lug 2026" },
@@ -298,7 +296,8 @@ const PricingUltimate = () => {
             isDark: false,
             isChampagne: true,
             scale: 1.0,
-            badge: { emoji: "👑", text: "ENTERPRISE", color: "gold", animate: "bounce" }
+            badge: { emoji: "👑", text: "ENTERPRISE", color: "gold", animate: "bounce" },
+            badge2: { emoji: "🔒", text: "12 SLOT", color: "red" }
         },
         {
             id: "sovereignty",
