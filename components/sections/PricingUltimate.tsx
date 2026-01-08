@@ -670,22 +670,6 @@ const PricingUltimate = () => {
                                     <td className="text-center py-4 px-3 text-charcoal/60">CSM + Slack</td>
                                     <td className="text-center py-4 px-3 text-charcoal/60">24/5 Dedicato</td>
                                 </tr>
-                                <tr className="hover:bg-charcoal/[0.02]">
-                                    <td className="py-4 px-4 font-medium text-charcoal">Prezzo Genesis</td>
-                                    <td className="text-center py-4 px-3 font-bold text-charcoal">€0</td>
-                                    <td className="text-center py-4 px-3 font-bold text-green-700">€49/m</td>
-                                    <td className="text-center py-4 px-3 font-black text-amber-700 bg-amber-50/30 text-lg">€147/m</td>
-                                    <td className="text-center py-4 px-3 font-bold text-purple-600">€347/m</td>
-                                    <td className="text-center py-4 px-3 font-bold text-gold">€697/m</td>
-                                </tr>
-                                <tr className="bg-charcoal/[0.02] border-t border-charcoal/10">
-                                    <td className="py-4 px-4 font-medium text-charcoal/60 text-sm">Prezzo Pubblico (Ott 2026)</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/40">€0</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/40 line-through">€59/m</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/40 line-through bg-amber-50/20">€797/m</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/40 line-through">€1.397/m</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/40 line-through">€2.197/m</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
