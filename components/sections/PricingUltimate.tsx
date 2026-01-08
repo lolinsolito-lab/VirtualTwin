@@ -563,14 +563,14 @@ const PricingUltimate = () => {
                                     )}
                                 </div>
 
-                                {/* Annual Discount */}
-                                {!((plan as any).isTrial || (plan as any).isPartnership) && (
-                                    <div className="mt-3 text-center">
+                                {/* Annual Discount OR Spacer for Alignment */}
+                                <div className="mt-3 text-center h-[18px]">
+                                    {!((plan as any).isTrial || (plan as any).isPartnership) && (
                                         <p className={`text-[10px] font-bold ${plan.isDark ? 'text-green-400' : (plan as any).isChampagne ? 'text-[#6b5845]' : 'text-green-600'}`}>
                                             💰 Sconto 10% se paghi annualmente
                                         </p>
-                                    </div>
-                                )}
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}
