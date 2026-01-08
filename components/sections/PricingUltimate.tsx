@@ -566,15 +566,12 @@ const PricingUltimate = () => {
                                     )}
                                 </div>
 
-                                {/* Bonifico */}
-                                {['entrepreneur', 'conquistatore', 'imperatore'].includes(plan.id) && (
-                                    <div className="mt-4 pt-3 border-t border-charcoal/5 text-center">
-                                        <Link
-                                            href={`/contact?reason=bonifico&plan=${plan.id}`}
-                                            className={`text-[9px] font-black uppercase tracking-[0.2em] transition-all hover:text-gold ${plan.isDark || plan.isGold ? 'text-white/30' : 'text-charcoal/30'}`}
-                                        >
-                                            Bonifico Annuale (-15%)
-                                        </Link>
+                                {/* Annual Discount */}
+                                {!((plan as any).isTrial || (plan as any).isPartnership) && (
+                                    <div className="mt-3 text-center">
+                                        <p className={`text-[10px] font-bold ${plan.isDark ? 'text-green-400' : (plan as any).isChampagne ? 'text-[#6b5845]' : 'text-green-600'}`}>
+                                            💰 Sconto 10% se paghi annualmente
+                                        </p>
                                     </div>
                                 )}
                             </div>
