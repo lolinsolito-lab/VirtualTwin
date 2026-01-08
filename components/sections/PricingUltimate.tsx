@@ -681,7 +681,7 @@ const PricingUltimate = () => {
                                 <tr className="bg-charcoal/[0.02] border-t border-charcoal/10">
                                     <td className="py-4 px-4 font-medium text-charcoal/60 text-sm">Prezzo Pubblico (Ott 2026)</td>
                                     <td className="text-center py-4 px-3 text-charcoal/40">€0</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/40 line-through">€347/m</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/40 line-through">€59/m</td>
                                     <td className="text-center py-4 px-3 text-charcoal/40 line-through bg-amber-50/20">€797/m</td>
                                     <td className="text-center py-4 px-3 text-charcoal/40 line-through">€1.397/m</td>
                                     <td className="text-center py-4 px-3 text-charcoal/40 line-through">€2.197/m</td>
