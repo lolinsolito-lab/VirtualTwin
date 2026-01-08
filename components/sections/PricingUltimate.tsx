@@ -277,13 +277,13 @@ const PricingUltimate = () => {
             publicPrice: `€${getPublicPriceForPlan('imperatore')}`,
             period: "/mese",
             story: "Enterprise",
-            idealePer: "Aziende 20+ dipendenti, €500k+ fatturato",
+            idealePer: "Aziende 20+ dipendenti",
             wavePricing: [
                 { wave: "Pioneer", price: 897, date: "Apr 2026" },
                 { wave: "Elite", price: 1097, date: "Lug 2026" },
                 { wave: "Public", price: 2197, date: "Ott 2026" }
             ],
-            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label"],
+            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "SLA 99.9%"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
             priceId: getPriceIdForPlan('imperatore'),
             isFounder: displayPricing?.tier === 'founder',
