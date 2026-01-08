@@ -218,7 +218,7 @@ const PricingUltimate = () => {
             price: `€${getPriceForPlan('entrepreneur') || 147}`,
             publicPrice: `€${getPublicPriceForPlan('entrepreneur')}`,
             period: "/mese",
-            story: "⭐ PIÙ SCELTO (68%)",
+            story: "",
             idealePer: "Startup 2-5 persone",
             scarcity: "⚡ Ultimi posti Wave Genesis",
             wavePricing: [
@@ -256,7 +256,7 @@ const PricingUltimate = () => {
                 { wave: "Elite", price: 547, date: "Lug 2026" },
                 { wave: "Public", price: 1397, date: "Ott 2026" }
             ],
-            features: ["5 Cloni AI", "20K msg/mese", "10 Canali inclusi", "API + CRM", "Academy Full", "CSM Dedicato"],
+            features: ["5 Cloni AI", "20K msg/mese", "10 Canali inclusi", "API + CRM", "Academy Full"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Conquista il Mercato →",
             priceId: getPriceIdForPlan('conquistatore'),
             isFounder: displayPricing?.tier === 'founder',
@@ -285,7 +285,7 @@ const PricingUltimate = () => {
                 { wave: "Elite", price: 1097, date: "Lug 2026" },
                 { wave: "Public", price: 2197, date: "Ott 2026" }
             ],
-            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "Team Dedicato", "SLA 99.9%"],
+            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "SLA 99.9%"],
             cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
             priceId: getPriceIdForPlan('imperatore'),
             isFounder: displayPricing?.tier === 'founder',
