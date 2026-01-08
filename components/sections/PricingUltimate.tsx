@@ -353,7 +353,7 @@ const PricingUltimate = () => {
                     {plans.map((plan, i) => (
                         <div
                             key={i}
-                            className={`relative rounded-[2rem] transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 md:translate-y-12'}`}
+                            className={`relative h-full rounded-[2rem] transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 md:translate-y-12'}`}
                             style={{
                                 transitionDelay: `${i * 100}ms`,
                                 zIndex: plan.isHero ? 20 : plan.scale > 1.0 ? 15 : 10
