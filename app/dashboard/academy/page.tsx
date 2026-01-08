@@ -92,7 +92,7 @@ export default function AcademyPage() {
         },
         {
             name: "Esecuzione Strategica",
-            tier: "aspirante",
+            tier: "solopreneur",
             description: "Trasforma le conversazioni in conversioni automatiche.",
             videos: [
                 { id: "v3", title: 'Architettura delle Vendite', duration: '15:20', thumbnail: 'bg-charcoal/5', xp: 50 },
@@ -109,7 +109,7 @@ export default function AcademyPage() {
         },
         {
             name: "Ottimizzazione Imperiale",
-            tier: "esploratore",
+            tier: "solopreneur",
             description: "Affina i tuoi sistemi AI per velocità e precisione chirugica.",
             videos: [
                 { id: "v10", title: 'Fine-Tuning delle FAQ d\'Elite', duration: '11:15', thumbnail: 'bg-gold/5', xp: 75 },
@@ -126,7 +126,7 @@ export default function AcademyPage() {
         },
         {
             name: "Dominio del Mercato",
-            tier: "pioniere",
+            tier: "entrepreneur",
             description: "Tecniche avanzate di outreach e posizionamento elite.",
             videos: [
                 { id: "v5", title: 'Outreach Magnetico su LinkedIn', duration: '18:10', thumbnail: 'bg-gold/10', xp: 100 },
@@ -522,7 +522,7 @@ export default function AcademyPage() {
                             </div>
                             <div className="flex-1 h-[1px] bg-charcoal/5" />
                             <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${module.tier === 'curioso' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                                module.tier === 'aspirante' ? 'bg-green-50 text-green-600 border-green-100' :
+                                module.tier === 'solopreneur' ? 'bg-green-50 text-green-600 border-green-100' :
                                     'bg-gold/5 text-gold border-gold/20'
                                 }`}>
                                 Tier: {module.tier}
@@ -651,7 +651,7 @@ export default function AcademyPage() {
                     </div>
                 </div>
 
-                <ImperialGate tier="aspirante" featureName="Asset di Outreach" description="Sblocca l'accesso a oltre 50 template di outreach e script di vendita pronti all'uso con il piano Aspirante." className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
+                <ImperialGate tier="solopreneur" featureName="Asset di Outreach" description="Sblocca l'accesso a oltre 50 template di outreach e script di vendita pronti all'uso con il piano Solopreneur." className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
                     {filteredTemplates.map((tpl) => (
                         <div key={tpl.id} className="bg-white rounded-[2.5rem] overflow-hidden border border-charcoal/5 shadow-luxury-sm hover:shadow-luxury transition-all duration-700 group">
                             <div className="p-10">

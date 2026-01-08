@@ -35,7 +35,7 @@ export interface LandingPageData {
   };
   solution: {
     sectionTitle: string;
-    pains?: { title: string; description: string }[]; // Added optional for legacy compatibility
+    pains?: { title: string; description: string }[];
     features: { title: string; description: string; icon: string }[];
   };
   socialProof: {
@@ -69,9 +69,9 @@ export interface LeadInsight {
 }
 
 export interface ChatAIResponse {
-  reply: string; // La risposta da inviare all'utente (Linguaggio d'Elite)
-  insights: Partial<LeadInsight>; // Dati estratti dalla conversazione
-  shouldNotifyOwner: boolean; // Se l'IA rileva un lead caldissimo
+  reply: string;
+  insights: Partial<LeadInsight>;
+  shouldNotifyOwner: boolean;
   action_type?: 'UPDATE_STAGE' | 'CREATE_TASK' | 'SEND_PAYMENT_LINK' | 'NONE';
   updated_fields?: Record<string, any>;
 }
@@ -81,7 +81,7 @@ export interface ChatHistoryItem {
   content: string;
 }
 
-// --- SOVEREIGN PROFILES (Wave 1) ---
+// --- SOVEREIGN PROFILES ---
 
 export interface UserProfile {
   id: string;
@@ -89,7 +89,7 @@ export interface UserProfile {
   full_name?: string;
   company_name?: string;
   avatar_url?: string;
-  plan_tier: 'curioso' | 'aspirante' | 'esploratore' | 'pioniere' | 'conquistatore' | 'imperatore';
+  plan_tier: 'curioso' | 'solopreneur' | 'entrepreneur' | 'conquistatore' | 'imperatore' | 'sovereignty';
   subscription_status: 'trialing' | 'active' | 'canceled' | 'past_due';
   messages_used_this_month: number;
   messages_limit: number;

@@ -18,11 +18,11 @@ const SovereignContext = createContext<SovereignContextType | undefined>(undefin
 
 const TIER_HIERARCHY: Record<UserProfile['plan_tier'], number> = {
     'curioso': 0,
-    'aspirante': 1,
-    'esploratore': 2,
-    'pioniere': 3,
-    'conquistatore': 4,
-    'imperatore': 5
+    'solopreneur': 1,
+    'entrepreneur': 2,
+    'conquistatore': 3,
+    'imperatore': 4,
+    'sovereignty': 5
 };
 
 export function SovereignProvider({ children }: { children: React.ReactNode }) {
@@ -84,7 +84,7 @@ export function SovereignProvider({ children }: { children: React.ReactNode }) {
             .from('profiles')
             .update({
                 completed_video_ids: updatedVideos,
-                xp: (user.xp || 0) + 50 // 50 XP per video
+                xp: (user.xp || 0) + 50
             })
             .eq('id', user.id);
 

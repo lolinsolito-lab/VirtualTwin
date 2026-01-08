@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         const isPerfectScore = score === totalQuestions;
         const alreadyPassed = !!quizzesPassed[moduleId];
 
-        const TIER_ORDER: UserProfile['plan_tier'][] = ['curioso', 'aspirante', 'esploratore', 'pioniere', 'conquistatore', 'imperatore'];
+        const TIER_ORDER: UserProfile['plan_tier'][] = ['curioso', 'solopreneur', 'entrepreneur', 'conquistatore', 'imperatore', 'sovereignty'];
         const currentTierIndex = TIER_ORDER.indexOf(moduleId as any);
 
         let xpToAdd = 0;
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
                 const tierId = TIER_ORDER[i];
                 if (!quizzesPassed[tierId]) {
                     quizzesPassed[tierId] = {
-                        score: i === currentTierIndex ? score : (moduleId === tierId ? score : 1), // Pseudo-pass for propagated ones
+                        score: i === currentTierIndex ? score : (moduleId === tierId ? score : 1),
                         total: i === currentTierIndex ? totalQuestions : 1,
                         passed_at: new Date().toISOString(),
                         propagated: i !== currentTierIndex

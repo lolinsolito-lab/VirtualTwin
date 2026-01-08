@@ -9,19 +9,21 @@ import { createClient } from '@supabase/supabase-js';
 // Rate limits by plan (per minute)
 export const RATE_LIMITS = {
     curioso: 0,          // No API access
-    esploratore: 0,      // No API access
-    pioniere: 0,         // No API access
+    solopreneur: 0,      // No API access
+    entrepreneur: 0,     // No API access
     conquistatore: 60,   // 60 req/min
-    imperatore: 300      // 300 req/min (5 req/sec)
+    imperatore: 300,     // 300 req/min (5 req/sec)
+    sovereignty: 1000    // Custom partnership
 } as const;
 
 // Monthly message limits
 export const MONTHLY_LIMITS = {
     curioso: 100,
-    esploratore: 1000,
-    pioniere: 5000,
+    solopreneur: 1000,
+    entrepreneur: 5000,
     conquistatore: 20000,
-    imperatore: 50000
+    imperatore: 100000,
+    sovereignty: 999999
 } as const;
 
 export type PlanTier = keyof typeof RATE_LIMITS;
