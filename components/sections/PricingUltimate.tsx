@@ -691,75 +691,122 @@ const PricingUltimate = () => {
                     </div>
                 </div>
 
-                {/* WAVE PRICING TABLE */}
+                {/* WAVE PRICING - DYNAMIC & INTERACTIVE */}
                 <div className={`mt-16 transition-all duration-1000 delay-400 ${inView ? 'opacity-100' : 'opacity-0'}`}>
-                    <div className="text-center mb-8">
-                        <h3 className="font-serif text-2xl md:text-3xl text-charcoal mb-2">
-                            Pricing <span className="italic gold-text-gradient">Dinamico per Wave</span>
+                    <div className="text-center mb-10">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 rounded-full mb-4">
+                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            <span className="text-red-600 text-xs font-black uppercase tracking-widest">Prezzi in aumento</span>
+                        </div>
+                        <h3 className="font-serif text-2xl md:text-4xl text-charcoal mb-3">
+                            Il Prezzo <span className="italic gold-text-gradient">Aumenta</span> Ogni Mese
                         </h3>
-                        <p className="text-charcoal/50 text-sm">I Founder bloccano il prezzo LIFETIME. I pubblici aumentano ogni quarter.</p>
+                        <p className="text-charcoal/60 text-base max-w-2xl mx-auto">
+                            Chi entra <strong className="text-charcoal">prima</strong> paga <strong className="text-charcoal">meno per sempre</strong>.
+                            Il tuo prezzo resta bloccato a vita.
+                        </p>
                     </div>
 
-                    <div className="overflow-x-auto">
-                        <table className="w-full min-w-[700px] border-collapse">
-                            <thead>
-                                <tr className="border-b-2 border-charcoal/10">
-                                    <th className="text-left py-3 px-4 text-xs uppercase tracking-widest text-charcoal/40 font-black">Wave</th>
-                                    <th className="text-center py-3 px-4 text-xs uppercase tracking-widest text-amber-700 font-black">Entrepreneur</th>
-                                    <th className="text-center py-3 px-4 text-xs uppercase tracking-widest text-purple-600 font-black">Conquistatore</th>
-                                    <th className="text-center py-3 px-4 text-xs uppercase tracking-widest text-gold font-black">Imperatore</th>
-                                    <th className="text-center py-3 px-4 text-xs uppercase tracking-widest text-charcoal/40 font-black">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-sm">
-                                <tr className="border-b border-charcoal/5 bg-green-50/30">
-                                    <td className="py-3 px-4 font-bold text-green-700">🌱 Genesis (1-20)</td>
-                                    <td className="text-center py-3 px-4 font-bold text-green-700">€147/m</td>
-                                    <td className="text-center py-3 px-4 font-bold text-green-700">€347/m</td>
-                                    <td className="text-center py-3 px-4 font-bold text-green-700">€697/m</td>
-                                    <td className="text-center py-3 px-4"><span className="px-2 py-1 bg-green-500 text-white text-[9px] font-black uppercase rounded-full">🔒 Lock Lifetime</span></td>
-                                </tr>
-                                <tr className="border-b border-charcoal/5 bg-blue-50/30">
-                                    <td className="py-3 px-4 font-bold text-blue-700">🚀 Pioneer (21-40)</td>
-                                    <td className="text-center py-3 px-4 font-bold text-blue-700">€197/m</td>
-                                    <td className="text-center py-3 px-4 font-bold text-blue-700">€447/m</td>
-                                    <td className="text-center py-3 px-4 font-bold text-blue-700">€897/m</td>
-                                    <td className="text-center py-3 px-4"><span className="px-2 py-1 bg-blue-500 text-white text-[9px] font-black uppercase rounded-full">🔒 Lock Lifetime</span></td>
-                                </tr>
-                                <tr className="border-b border-charcoal/5 bg-purple-50/30">
-                                    <td className="py-3 px-4 font-bold text-purple-700">💎 Elite (41-60)</td>
-                                    <td className="text-center py-3 px-4 font-bold text-purple-700">€247/m</td>
-                                    <td className="text-center py-3 px-4 font-bold text-purple-700">€547/m</td>
-                                    <td className="text-center py-3 px-4 font-bold text-purple-700">€1.097/m</td>
-                                    <td className="text-center py-3 px-4"><span className="px-2 py-1 bg-purple-500 text-white text-[9px] font-black uppercase rounded-full">🔒 Lock Lifetime</span></td>
-                                </tr>
-                                <tr className="border-b border-charcoal/5">
-                                    <td className="py-3 px-4 font-medium text-charcoal/60">📅 Public Q1 2026</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€697/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€1.197/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€1.997/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/40 text-xs">No lock-in</td>
-                                </tr>
-                                <tr className="border-b border-charcoal/5">
-                                    <td className="py-3 px-4 font-medium text-charcoal/60">📅 Public Q2 2026</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€747/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€1.297/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€2.097/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/40 text-xs">No lock-in</td>
-                                </tr>
-                                <tr className="bg-charcoal/[0.03]">
-                                    <td className="py-3 px-4 font-medium text-charcoal/60">📅 Public Q3+ 2026</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€797/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€1.397/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/60">€2.197/m</td>
-                                    <td className="text-center py-3 px-4 text-charcoal/40 text-xs">No lock-in</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    {/* Timeline Visual */}
+                    <div className="max-w-5xl mx-auto">
+                        {/* FOUNDER WAVES - Highlighted */}
+                        <div className="mb-8">
+                            <div className="flex items-center gap-3 mb-4">
+                                <span className="text-[10px] uppercase tracking-[0.3em] font-black text-green-600">🔒 Founder Waves</span>
+                                <span className="flex-1 h-px bg-green-200"></span>
+                                <span className="text-[10px] text-green-600 font-bold">Prezzo bloccato LIFETIME</span>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-4">
+                                {/* Genesis Wave - CURRENT */}
+                                <div className="relative bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-400 rounded-2xl p-5 shadow-lg">
+                                    <div className="absolute -top-3 left-4 px-3 py-1 bg-green-500 text-white text-[8px] font-black uppercase rounded-full animate-pulse">
+                                        ⚡ Ora Disponibile
+                                    </div>
+                                    <div className="flex items-center gap-2 mb-3 mt-2">
+                                        <span className="text-2xl">🌱</span>
+                                        <div>
+                                            <h4 className="font-bold text-green-800">Genesis Wave</h4>
+                                            <p className="text-green-600 text-[10px] font-bold">Spot 1-20 • Gen-Mar 2026</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between"><span className="text-green-700">Entrepreneur</span><span className="font-black text-green-800">€147/m</span></div>
+                                        <div className="flex justify-between"><span className="text-green-700">Conquistatore</span><span className="font-black text-green-800">€347/m</span></div>
+                                        <div className="flex justify-between"><span className="text-green-700">Imperatore</span><span className="font-black text-green-800">€697/m</span></div>
+                                    </div>
+                                </div>
+
+                                {/* Pioneer Wave */}
+                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 opacity-80 hover:opacity-100 transition-opacity">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <span className="text-2xl">🚀</span>
+                                        <div>
+                                            <h4 className="font-bold text-blue-800">Pioneer Wave</h4>
+                                            <p className="text-blue-600 text-[10px] font-bold">Spot 21-40 • Apr-Giu 2026</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between"><span className="text-blue-700">Entrepreneur</span><span className="font-black text-blue-800">€197/m</span></div>
+                                        <div className="flex justify-between"><span className="text-blue-700">Conquistatore</span><span className="font-black text-blue-800">€447/m</span></div>
+                                        <div className="flex justify-between"><span className="text-blue-700">Imperatore</span><span className="font-black text-blue-800">€897/m</span></div>
+                                    </div>
+                                </div>
+
+                                {/* Elite Wave */}
+                                <div className="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-2xl p-5 opacity-60 hover:opacity-100 transition-opacity">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <span className="text-2xl">💎</span>
+                                        <div>
+                                            <h4 className="font-bold text-purple-800">Elite Wave</h4>
+                                            <p className="text-purple-600 text-[10px] font-bold">Spot 41-60 • Lug-Set 2026</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between"><span className="text-purple-700">Entrepreneur</span><span className="font-black text-purple-800">€247/m</span></div>
+                                        <div className="flex justify-between"><span className="text-purple-700">Conquistatore</span><span className="font-black text-purple-800">€547/m</span></div>
+                                        <div className="flex justify-between"><span className="text-purple-700">Imperatore</span><span className="font-black text-purple-800">€1.097/m</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* PUBLIC PRICING - Greyed out */}
+                        <div className="opacity-50">
+                            <div className="flex items-center gap-3 mb-4">
+                                <span className="text-[10px] uppercase tracking-[0.3em] font-black text-charcoal/40">📅 Prezzi Pubblici</span>
+                                <span className="flex-1 h-px bg-charcoal/10"></span>
+                                <span className="text-[10px] text-red-500 font-bold">Nessun lock-in</span>
+                            </div>
+
+                            <div className="bg-charcoal/[0.03] rounded-2xl p-6 border border-charcoal/5">
+                                <div className="grid md:grid-cols-3 gap-6 text-sm">
+                                    <div>
+                                        <p className="text-charcoal/40 text-xs font-bold mb-2">Da Ottobre 2026</p>
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between"><span className="text-charcoal/50">Entrepreneur</span><span className="text-charcoal/40 line-through">€697-797/m</span></div>
+                                            <div className="flex justify-between"><span className="text-charcoal/50">Conquistatore</span><span className="text-charcoal/40 line-through">€1.197-1.397/m</span></div>
+                                            <div className="flex justify-between"><span className="text-charcoal/50">Imperatore</span><span className="text-charcoal/40 line-through">€1.997-2.197/m</span></div>
+                                        </div>
+                                    </div>
+                                    <div className="md:col-span-2 flex items-center justify-center">
+                                        <div className="text-center">
+                                            <p className="text-charcoal/60 text-sm mb-2">⚠️ <strong>Pagherai 3-5x di più</strong> se aspetti i prezzi pubblici</p>
+                                            <p className="text-charcoal/40 text-xs">I prezzi pubblici aumentano ogni trimestre e non sono mai bloccati.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* CTA Urgency */}
+                        <div className="mt-8 text-center">
+                            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full shadow-lg">
+                                <span className="text-lg">💰</span>
+                                <span className="text-sm font-bold">Risparmia fino a €18.000 in 5 anni entrando ora nella Genesis Wave</span>
+                            </div>
+                        </div>
                     </div>
-                    <p className="text-center text-charcoal/40 text-xs mt-4 italic">
-                        ⚡ I Founder pagano il prezzo bloccato per sempre, anche quando i prezzi pubblici aumentano.
-                    </p>
                 </div>
 
                 {/* FOOTER */}
