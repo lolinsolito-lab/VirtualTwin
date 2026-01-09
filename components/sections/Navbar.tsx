@@ -2,11 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const pathname = usePathname();
+    const router = useRouter();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -38,16 +41,29 @@ const Navbar = () => {
     }, [menuOpen]);
 
     const navLinks = [
-        { id: 'problem', label: 'La Tua Sfida' },
-        { id: 'solution', label: 'Zero Stress' },
-        { id: 'pricing', label: 'Inizia Gratis' },
+        { id: 'problem', label: 'La Tua Sfida', type: 'anchor' },
+        { id: 'solution', label: 'Zero Stress', type: 'anchor' },
+        { id: 'vision', label: 'Vision', href: '/vision', type: 'link' },
+        { id: 'pricing', label: 'Inizia Gratis', type: 'anchor' },
     ];
 
-    const scrollToSection = (e: React.MouseEvent, id: string) => {
+    const handleNavClick = (e: React.MouseEvent, link: any) => {
+        if (link.type === 'link') {
+            setMenuOpen(false);
+            return;
+        }
+
         e.preventDefault();
-        const element = document.getElementById(id);
+
+        if (pathname !== '/') {
+            router.push(`/#${link.id}`);
+            setMenuOpen(false);
+            return;
+        }
+
+        const element = document.getElementById(link.id);
         if (element) {
-            const offset = 80; // Offset for navbar height
+            const offset = 80;
             const bodyRect = document.body.getBoundingClientRect().top;
             const elementRect = element.getBoundingClientRect().top;
             const elementPosition = elementRect - bodyRect;
@@ -57,6 +73,7 @@ const Navbar = () => {
                 top: offsetPosition,
                 behavior: 'smooth'
             });
+            setMenuOpen(false);
         }
     };
 
@@ -75,14 +92,25 @@ const Navbar = () => {
                 {/* Desktop Navigation */}
                 <div className="hidden lg:flex gap-12 xl:gap-16 text-[10px] uppercase tracking-[0.4em] font-black text-charcoal/40">
                     {navLinks.map((link) => (
-                        <button
-                            key={link.id}
-                            onClick={(e) => scrollToSection(e, link.id)}
-                            className="hover:text-gold transition-all duration-300 relative group cursor-pointer"
-                        >
-                            {link.label}
-                            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gold group-hover:w-full transition-all duration-300"></span>
-                        </button>
+                        link.type === 'anchor' ? (
+                            <button
+                                key={link.id}
+                                onClick={(e) => handleNavClick(e, link)}
+                                className="hover:text-gold transition-all duration-300 relative group cursor-pointer"
+                            >
+                                {link.label}
+                                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gold group-hover:w-full transition-all duration-300"></span>
+                            </button>
+                        ) : (
+                            <Link
+                                key={link.id}
+                                href={link.href || '#'}
+                                className={`hover:text-gold transition-all duration-300 relative group cursor-pointer ${pathname === link.href ? 'text-gold' : ''}`}
+                            >
+                                {link.label}
+                                <span className={`absolute -bottom-1 left-0 h-[1px] bg-gold transition-all duration-300 ${pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+                            </Link>
+                        )
                     ))}
                 </div>
 
@@ -118,16 +146,24 @@ const Navbar = () => {
                         {/* Mobile Nav Links */}
                         <nav className="flex flex-col items-center gap-8 mb-12">
                             {navLinks.map((link) => (
-                                <button
-                                    key={link.id}
-                                    onClick={(e) => {
-                                        scrollToSection(e, link.id);
-                                        setMenuOpen(false);
-                                    }}
-                                    className="font-serif text-3xl italic text-charcoal hover:text-gold transition-colors"
-                                >
-                                    {link.label}
-                                </button>
+                                link.type === 'anchor' ? (
+                                    <button
+                                        key={link.id}
+                                        onClick={(e) => handleNavClick(e, link)}
+                                        className="font-serif text-3xl italic text-charcoal hover:text-gold transition-colors"
+                                    >
+                                        {link.label}
+                                    </button>
+                                ) : (
+                                    <Link
+                                        key={link.id}
+                                        href={link.href || '#'}
+                                        onClick={() => setMenuOpen(false)}
+                                        className={`font-serif text-3xl italic hover:text-gold transition-colors ${pathname === link.href ? 'text-gold' : 'text-charcoal'}`}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                )
                             ))}
                         </nav>
 

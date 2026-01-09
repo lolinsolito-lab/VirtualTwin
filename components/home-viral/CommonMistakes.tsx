@@ -56,7 +56,7 @@ export default function CommonMistakes() {
     ];
 
     return (
-        <section className="relative z-10 py-20 bg-gradient-to-b from-champagne/20 via-champagne/10 to-white">
+        <section id="problem" className="relative z-10 py-20 bg-gradient-to-b from-champagne/20 via-champagne/10 to-white">
             <div className="container mx-auto px-6">
                 <div className="max-w-6xl mx-auto">
                     {/* Section Header */}
