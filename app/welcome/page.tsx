@@ -72,10 +72,14 @@ function WelcomeContent() {
     }
 
     const planNames: Record<string, string> = {
-        esploratore: 'Esploratore',
-        pioniere: 'Pioniere',
+        solopreneur: 'Solopreneur',
+        entrepreneur: 'Entrepreneur',
         conquistatore: 'Conquistatore',
         imperatore: 'Imperatore',
+        // Legacy support
+        aspirante: 'Solopreneur',
+        pioniere: 'Entrepreneur',
+        esploratore: 'Entrepreneur',
     };
 
     return (

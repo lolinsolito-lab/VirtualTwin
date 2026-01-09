@@ -8,10 +8,9 @@ import { getPlanAvailability, PlanAvailability } from '@/lib/founderAvailability
 import { getDisplayPricing, getCurrentPublicPricing } from '@/lib/waves';
 
 const plans = [
-    // Curioso removed - not an upgrade option (it's free trial)
     {
-        id: "aspirante",
-        name: "Aspirante",
+        id: "solopreneur",
+        name: "Solopreneur",
         price: "€49",
         publicPrice: "€49",
         period: "/mese",
@@ -20,9 +19,9 @@ const plans = [
             "1 Clone AI",
             "500 msg/mese",
             "1 Canale",
-            "🆕 Template",
-            "🆕 Corso",
-            "🆕 Community"
+            "Template",
+            "Corso",
+            "Community"
         ],
         icon: Sparkles,
         color: "text-green-600",
@@ -31,36 +30,19 @@ const plans = [
         badge: "🌱 Entry-Level"
     },
     {
-        id: "esploratore",
-        name: "Esploratore",
-        price: "€39",
-        publicPrice: "€79",
-        period: "/mese",
-        description: "Per testare il potenziale",
-        features: [
-            "1 Clone AI",
-            "1K msg/mese",
-            "1 Canale",
-            "Email Support <48h"
-        ],
-        icon: Zap,
-        color: "text-blue-600",
-        bg: "bg-gradient-to-br from-blue-50 to-indigo-50",
-        btn: "bg-blue-600 text-white hover:bg-blue-700",
-        popular: true
-    },
-    {
-        id: "pioniere",
-        name: "Pioniere",
+        id: "entrepreneur",
+        name: "Entrepreneur",
         price: "€147",
-        publicPrice: "€297",
+        publicPrice: "€697",
         period: "/mese",
-        description: "Il più scelto dai Coach",
+        description: "Il più scelto dai Professionisti",
         features: [
             "1 Clone AI",
-            "5K msg/mese",
+            "5.000 msg/mese",
             "3 Canali",
-            "A/B Test (20%)"
+            "A/B Test (20%)",
+            "Full Analytics",
+            "Priority Support"
         ],
         icon: Zap,
         color: "text-gold",
@@ -73,14 +55,16 @@ const plans = [
         id: "conquistatore",
         name: "Conquistatore",
         price: "€347",
-        publicPrice: "€697",
+        publicPrice: "€1.197",
         period: "/mese",
-        description: "Per agenzie e power users",
+        description: "Per agenzie e scale-up",
         features: [
             "3 Cloni AI",
-            "20K msg/mese",
+            "20.000 msg/mese",
+            "5 Canali",
             "Priority Support",
-            "API Access"
+            "API Access",
+            "Custom Logic"
         ],
         icon: Crown,
         color: "text-gold",
@@ -91,14 +75,16 @@ const plans = [
         id: "imperatore",
         name: "Imperatore",
         price: "€697",
-        publicPrice: "€1.197",
+        publicPrice: "€1.997",
         period: "/mese",
-        description: "Il trono digitale",
+        description: "Il trono digitale supremo",
         features: [
             "10 Cloni AI",
-            "50K msg/mese",
+            "50.000 msg/mese",
+            "Canali Illimitati",
             "White-label",
-            "Account Manager"
+            "Account Manager",
+            "Sovereign Vault"
         ],
         icon: Crown,
         color: "text-white/80",
@@ -161,7 +147,7 @@ export default function BillingPage() {
                     userId: user.id,
                     billing: 'monthly',
                     priceId: displayPricing?.stripePriceIds?.[planId],
-                    tier: planId === 'aspirante' ? 'public' : displayPricing?.tier // Aspirante is always public pricing logic
+                    tier: planId === 'solopreneur' ? 'public' : displayPricing?.tier // Solopreneur is always public pricing logic
                 })
             });
             const data = await response.json();
@@ -222,7 +208,7 @@ export default function BillingPage() {
                     let isFounderPrice = false;
                     let publicPrice = 0;
 
-                    if (p.id === 'aspirante') {
+                    if (p.id === 'solopreneur') {
                         price = 49; // Fixed price
                         publicPrice = 49; // No discount
                     } else {

@@ -66,8 +66,8 @@ export default function AdminUsers() {
                 // Enhanced mapping with real cost and revenue intelligence
                 const enhancedUsers = data.map(u => {
                     const tier = u.plan_tier as keyof typeof IMPERIAL_PRICES.founder;
-                    const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
-                    const rev = prices[tier] || 0;
+                    const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_h1_2026;
+                    const rev = prices[tier as keyof typeof prices] || 0;
 
                     // Realistic Tiered Cost Model (derived from AI usage)
                     const calculateUserTieredCost = (msgCount: number) => {
@@ -308,14 +308,14 @@ export default function AdminUsers() {
                             <div className="space-y-4">
                                 <label className="text-[10px] uppercase tracking-widest text-white/40 font-black px-2">Access Tier (Testing Academy)</label>
                                 <div className="grid grid-cols-1 gap-2">
-                                    {['esploratore', 'pioniere', 'conquistatore', 'imperatore'].map((tier) => (
+                                    {['solopreneur', 'entrepreneur', 'conquistatore', 'imperatore'].map((tier) => (
                                         <button
                                             key={tier}
                                             onClick={() => handleUpdateUser({ plan_tier: tier })}
                                             disabled={isSaving}
                                             className={`px-6 py-4 rounded-2xl border text-[10px] uppercase tracking-[0.2em] font-black transition-all flex items-center justify-between group ${selectedUser.plan_tier === tier
-                                                    ? 'bg-gold text-black border-gold shadow-[0_0_30px_rgba(212,175,55,0.3)]'
-                                                    : 'bg-white/5 border-white/10 text-white/40 hover:border-gold/40 hover:text-white'
+                                                ? 'bg-gold text-black border-gold shadow-[0_0_30px_rgba(212,175,55,0.3)]'
+                                                : 'bg-white/5 border-white/10 text-white/40 hover:border-gold/40 hover:text-white'
                                                 }`}
                                         >
                                             {tier}
@@ -336,8 +336,8 @@ export default function AdminUsers() {
                                                 onClick={() => handleUpdateUser({ subscription_status: status })}
                                                 disabled={isSaving}
                                                 className={`flex-1 py-4 rounded-2xl border text-[9px] uppercase tracking-widest font-black transition-all ${selectedUser.subscription_status === status
-                                                        ? 'bg-white/20 border-white/40 text-white'
-                                                        : 'bg-white/5 border-white/10 text-white/20 hover:border-white/20'
+                                                    ? 'bg-white/20 border-white/40 text-white'
+                                                    : 'bg-white/5 border-white/10 text-white/20 hover:border-white/20'
                                                     }`}
                                             >
                                                 {status}
@@ -350,8 +350,8 @@ export default function AdminUsers() {
                                     onClick={() => handleUpdateUser({ is_founder: !selectedUser.is_founder })}
                                     disabled={isSaving}
                                     className={`w-full py-5 rounded-2xl border text-[10px] uppercase tracking-[0.3em] font-black transition-all flex items-center justify-center gap-3 ${selectedUser.is_founder
-                                            ? 'bg-gold/10 border-gold/40 text-gold'
-                                            : 'bg-white/5 border-white/10 text-white/20'
+                                        ? 'bg-gold/10 border-gold/40 text-gold'
+                                        : 'bg-white/5 border-white/10 text-white/20'
                                         }`}
                                 >
                                     <Star className={`w-4 h-4 ${selectedUser.is_founder ? 'fill-gold' : ''}`} />

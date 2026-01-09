@@ -7,21 +7,28 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
-// Tier limits
+// Tier limits (Monthly messages)
 const TIER_LIMITS: Record<string, number> = {
     'curioso': 100,
-    'esploratore': 500,
-    'pioniere': 2000,
-    'conquistatore': 5000,
+    'solopreneur': 500,
+    'entrepreneur': 5000,
+    'conquistatore': 20000,
     'imperatore': 50000,
+    // Legacy support
+    'aspirante': 500,
+    'pioniere': 5000,
+    'esploratore': 5000,
 };
 
-// Tier upgrades
+// Tier upgrades paths
 const TIER_UPGRADES: Record<string, { name: string; price: number; priceId: string }> = {
-    'curioso': { name: 'Esploratore', price: 147, priceId: 'price_1QcewtKkKlvbXgKiJGXE3YtN' },
-    'esploratore': { name: 'Pioniere', price: 347, priceId: 'price_1QcexNKkKlvbXgKiVpLj5VVS' },
-    'pioniere': { name: 'Conquistatore', price: 697, priceId: 'price_1QcexzKkKlvbXgKihZ5h58aR' },
-    'conquistatore': { name: 'Imperatore', price: 1497, priceId: 'price_imperatore' },
+    'curioso': { name: 'Solopreneur', price: 49, priceId: 'price_1SlyfV7141DXdb9v9WiLhhS0' },
+    'solopreneur': { name: 'Entrepreneur', price: 147, priceId: 'price_1SlX727141DXdb9vdgRHbxrD' },
+    'entrepreneur': { name: 'Conquistatore', price: 347, priceId: 'price_1SlX727141DXdb9vCKAM0WCi' },
+    'conquistatore': { name: 'Imperatore', price: 697, priceId: 'price_1SlX737141DXdb9vTmQmgd9Z' },
+    // Legacy mapping
+    'aspirante': { name: 'Entrepreneur', price: 147, priceId: 'price_1SlX727141DXdb9vdgRHbxrD' },
+    'pioniere': { name: 'Conquistatore', price: 347, priceId: 'price_1SlX727141DXdb9vCKAM0WCi' },
 };
 
 export async function GET() {
@@ -34,7 +41,7 @@ export async function GET() {
 
         const { data: profile } = await supabase
             .from('profiles')
-            .select('messages_used_this_month, subscription_tier, is_founder, billing_cycle_start')
+            .select('messages_used_this_month, plan_tier, is_founder, billing_cycle_start')
             .eq('id', user.id)
             .single();
 
@@ -55,7 +62,7 @@ export async function GET() {
             });
         }
 
-        const tier = profile.subscription_tier || 'curioso';
+        const tier = profile.plan_tier || 'curioso';
         const limit = TIER_LIMITS[tier] || 100;
         const used = profile.messages_used_this_month || 0;
         const percentage = (used / limit) * 100;

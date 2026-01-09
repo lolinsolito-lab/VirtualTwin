@@ -1,0 +1,202 @@
+[
+    {
+        "ProductName":  "VirtualTwin Aspirante",
+        "ProductId":  "prod_TjRY6nNVIs2q6z",
+        "PriceId":  "price_1SlyfV7141DXdb9v9WiLhhS0",
+        "Amount":  49,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Imperatore - Public Q3 2026",
+        "ProductId":  "prod_Tiz5L3ARFs7quj",
+        "PriceId":  "price_1SlX7F7141DXdb9ve9Dk9yQm",
+        "Amount":  2197,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Conquistatore - Public Q3 2026",
+        "ProductId":  "prod_Tiz5XAIoCXlexT",
+        "PriceId":  "price_1SlX7F7141DXdb9vk4Jz7Ulf",
+        "Amount":  1397,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Pioniere - Public Q3 2026",
+        "ProductId":  "prod_Tiz5eZ5ORR2ZQg",
+        "PriceId":  "price_1SlX7E7141DXdb9v63Co4hK7",
+        "Amount":  797,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Esploratore - Public Q3 2026",
+        "ProductId":  "prod_Tiz5OR7CUzDjtJ",
+        "PriceId":  "price_1SlX7D7141DXdb9vjK0CGHD6",
+        "Amount":  397,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Imperatore - Public Q2 2026",
+        "ProductId":  "prod_Tiz5IwENyuiiQy",
+        "PriceId":  "price_1SlX7D7141DXdb9vLhuoEr4g",
+        "Amount":  2097,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Conquistatore - Public Q2 2026",
+        "ProductId":  "prod_Tiz5FYCDdnFRQl",
+        "PriceId":  "price_1SlX7C7141DXdb9v0gpSYRNU",
+        "Amount":  1297,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Pioniere - Public Q2 2026",
+        "ProductId":  "prod_Tiz5KBYMqXbbV5",
+        "PriceId":  "price_1SlX7C7141DXdb9vuq79oTiz",
+        "Amount":  747,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Esploratore - Public Q2 2026",
+        "ProductId":  "prod_Tiz5R7cS1iF7Pu",
+        "PriceId":  "price_1SlX7B7141DXdb9vI5yHtSLp",
+        "Amount":  347,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Imperatore - Public Q1 2026",
+        "ProductId":  "prod_Tiz5sfgINTSoPH",
+        "PriceId":  "price_1SlX7A7141DXdb9vbmrUZY5i",
+        "Amount":  1997,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Conquistatore - Public Q1 2026",
+        "ProductId":  "prod_Tiz5bQm1xlc6dP",
+        "PriceId":  "price_1SlX7A7141DXdb9vf3zLKG2q",
+        "Amount":  1197,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Pioniere - Public Q1 2026",
+        "ProductId":  "prod_Tiz5nRfo7sE3N5",
+        "PriceId":  "price_1SlX797141DXdb9vfjEhb8Al",
+        "Amount":  697,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Esploratore - Public Q1 2026",
+        "ProductId":  "prod_Tiz5m3AgJdwxvK",
+        "PriceId":  "price_1SlX787141DXdb9vqXSlofaP",
+        "Amount":  297,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Imperatore - Elite Founder",
+        "ProductId":  "prod_Tiz5DP544zcOoB",
+        "PriceId":  "price_1SlX787141DXdb9vhn2fJpVx",
+        "Amount":  1097,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Conquistatore - Elite Founder",
+        "ProductId":  "prod_Tiz5WUEE6lkYQu",
+        "PriceId":  "price_1SlX777141DXdb9v37XSqeR6",
+        "Amount":  547,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Pioniere - Elite Founder",
+        "ProductId":  "prod_Tiz5fAdSUKqIQ1",
+        "PriceId":  "price_1SlX777141DXdb9vMSBYuzHB",
+        "Amount":  247,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Esploratore - Elite Founder",
+        "ProductId":  "prod_Tiz52ENn7WamDF",
+        "PriceId":  "price_1SlX767141DXdb9vQ1NBwZHT",
+        "Amount":  79,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Imperatore - Pioneer Founder",
+        "ProductId":  "prod_Tiz5W9nAwbPMFl",
+        "PriceId":  "price_1SlX767141DXdb9vJQLtn9s2",
+        "Amount":  897,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Conquistatore - Pioneer Founder",
+        "ProductId":  "prod_Tiz5O3CGaCScdD",
+        "PriceId":  "price_1SlX757141DXdb9vVTtcw0qw",
+        "Amount":  447,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Pioniere - Pioneer Founder",
+        "ProductId":  "prod_Tiz531HLrXZKNW",
+        "PriceId":  "price_1SlX747141DXdb9vj97oU4F2",
+        "Amount":  197,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Esploratore - Pioneer Founder",
+        "ProductId":  "prod_Tiz55YWzG0tkRv",
+        "PriceId":  "price_1SlX747141DXdb9v7RaiL2FW",
+        "Amount":  59,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Imperatore - Genesis Founder",
+        "ProductId":  "prod_Tiz5t1TPLS6oOV",
+        "PriceId":  "price_1SlX737141DXdb9vTmQmgd9Z",
+        "Amount":  697,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Conquistatore - Genesis Founder",
+        "ProductId":  "prod_Tiz5Opnk7mD8aN",
+        "PriceId":  "price_1SlX727141DXdb9vCKAM0WCi",
+        "Amount":  347,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Pioniere - Genesis Founder",
+        "ProductId":  "prod_Tiz5osD4LE6V4I",
+        "PriceId":  "price_1SlX727141DXdb9vdgRHbxrD",
+        "Amount":  147,
+        "Currency":  "eur",
+        "Active":  true
+    },
+    {
+        "ProductName":  "VirtualTwin Esploratore - Genesis Founder",
+        "ProductId":  "prod_Tiz5TumrlmoPtk",
+        "PriceId":  "price_1SlX717141DXdb9vzAEbFLdY",
+        "Amount":  39,
+        "Currency":  "eur",
+        "Active":  true
+    }
+]

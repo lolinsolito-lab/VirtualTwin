@@ -40,11 +40,13 @@ const getTierInfo = (tier: string, isFounder: boolean): UserTierInfo => {
     // Founder users (any tier with is_founder = true)
     if (isFounder) {
         const founderPrices: Record<string, string> = {
-            'aspirante': '€49',
-            'esploratore': '€39',
-            'pioniere': '€147',
+            'solopreneur': '€49',
+            'entrepreneur': '€147',
             'conquistatore': '€347',
-            'imperatore': '€697'
+            'imperatore': '€697',
+            // Legacy
+            'aspirante': '€49',
+            'pioniere': '€147'
         };
         const price = founderPrices[tier] || '€147';
 
@@ -65,9 +67,8 @@ const getTierInfo = (tier: string, isFounder: boolean): UserTierInfo => {
 
     // Public paid tiers
     const publicPrices: Record<string, string> = {
-        'aspirante': '€49',
-        'esploratore': '€297',
-        'pioniere': '€697',
+        'solopreneur': '€49',
+        'entrepreneur': '€697',
         'conquistatore': '€1197',
         'imperatore': '€1997'
     };
@@ -85,9 +86,9 @@ const getTierInfo = (tier: string, isFounder: boolean): UserTierInfo => {
             : `Benvenuto! Hai scelto il piano ${tier}. Configuriamo il tuo clone AI in 5 minuti.`,
         benefits: tier === 'curioso' || !tier ? [
             { icon: Gift, text: '14 giorni di prova gratuita' },
-            { icon: Sparkles, text: 'Clone AI personalizzato' },
+            { icon: Sparkles, text: '1 Clone AI personalizzato' },
             { icon: MessageSquare, text: '100 messaggi/mese' },
-        ] : tier === 'aspirante' ? [
+        ] : (tier === 'solopreneur' || tier === 'aspirante') ? [
             { icon: Sparkles, text: '1 Clone AI personalizzato' },
             { icon: MessageSquare, text: '500 messaggi/mese' },
             { icon: Gift, text: 'Accesso Academy & Community' },
@@ -537,11 +538,12 @@ const getTierStats = (tier: string, isFounder: boolean) => {
 
     const tierLimits: Record<string, string> = {
         'curioso': '100',
-        'aspirante': '500',
-        'esploratore': '1000',
-        'pioniere': '5000',
+        'solopreneur': '500',
+        'entrepreneur': '5000',
         'conquistatore': '20000',
         'imperatore': '50000',
+        'aspirante': '500',
+        'pioniere': '5000',
     };
 
     return [

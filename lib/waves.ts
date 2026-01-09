@@ -79,9 +79,9 @@ export const WAVES: Wave[] = [
         },
         stripePriceIds: {
             solopreneur: 'price_1SlyfV7141DXdb9v9WiLhhS0',
-            entrepreneur: 'price_1Sl7lN7141DXdb9vtRbfQuCs',
-            conquistatore: 'price_1Sl7lN7141DXdb9vlpkY114O',
-            imperatore: 'price_1Sl7lO7141DXdb9vuNgZoKKQ'
+            entrepreneur: 'price_1SlX727141DXdb9vdgRHbxrD',
+            conquistatore: 'price_1SlX727141DXdb9vCKAM0WCi',
+            imperatore: 'price_1SlX737141DXdb9vTmQmgd9Z'
         },
         tier: 'founder'
     },
@@ -99,10 +99,10 @@ export const WAVES: Wave[] = [
             imperatore: 897
         },
         stripePriceIds: {
-            solopreneur: 'price_PIONEER_SOLOPRENEUR',      // TODO: Create on Stripe
-            entrepreneur: 'price_PIONEER_ENTREPRENEUR',    // TODO: Create on Stripe
-            conquistatore: 'price_PIONEER_CONQUISTATORE',  // TODO: Create on Stripe
-            imperatore: 'price_PIONEER_IMPERATORE'         // TODO: Create on Stripe
+            solopreneur: 'price_1SlyfV7141DXdb9v9WiLhhS0',
+            entrepreneur: 'price_1SlX747141DXdb9vj97oU4F2',
+            conquistatore: 'price_1SlX757141DXdb9vVTtcw0qw',
+            imperatore: 'price_1SlX767141DXdb9vJQLtn9s2'
         },
         tier: 'founder'
     },
@@ -120,10 +120,10 @@ export const WAVES: Wave[] = [
             imperatore: 1097
         },
         stripePriceIds: {
-            solopreneur: 'price_ELITE_SOLOPRENEUR',       // TODO: Create on Stripe
-            entrepreneur: 'price_ELITE_ENTREPRENEUR',      // TODO: Create on Stripe
-            conquistatore: 'price_ELITE_CONQUISTATORE',    // TODO: Create on Stripe
-            imperatore: 'price_ELITE_IMPERATORE'           // TODO: Create on Stripe
+            solopreneur: 'price_1SlyfV7141DXdb9v9WiLhhS0',
+            entrepreneur: 'price_1SlX777141DXdb9vMSBYuzHB',
+            conquistatore: 'price_1SlX777141DXdb9v37XSqeR6',
+            imperatore: 'price_1SlX787141DXdb9vhn2fJpVx'
         },
         tier: 'founder'
     }
@@ -146,9 +146,9 @@ export const PUBLIC_PRICING: PublicPricing[] = [
         },
         stripePriceIds: {
             solopreneur: 'price_1SlyfV7141DXdb9v9WiLhhS0',
-            entrepreneur: 'price_1Sl7lP7141DXdb9vZKdx4eCE',
-            conquistatore: 'price_1Sl7lQ7141DXdb9vdLOjIhXf',
-            imperatore: 'price_1Sl7lQ7141DXdb9vawSyDQdV'
+            entrepreneur: 'price_1SlX797141DXdb9vfjEhb8Al',
+            conquistatore: 'price_1SlX7A7141DXdb9vf3zLKG2q',
+            imperatore: 'price_1SlX7A7141DXdb9vbmrUZY5i'
         },
         tier: 'public'
     },
@@ -163,10 +163,10 @@ export const PUBLIC_PRICING: PublicPricing[] = [
             imperatore: 2197
         },
         stripePriceIds: {
-            solopreneur: 'price_H2_2026_SOLOPRENEUR',      // TODO: Create on Stripe
-            entrepreneur: 'price_H2_2026_ENTREPRENEUR',    // TODO
-            conquistatore: 'price_H2_2026_CONQUISTATORE',  // TODO
-            imperatore: 'price_H2_2026_IMPERATORE'         // TODO
+            solopreneur: 'price_1SlyfV7141DXdb9v9WiLhhS0',
+            entrepreneur: 'price_1SlX7E7141DXdb9v63Co4hK7',
+            conquistatore: 'price_1SlX7F7141DXdb9vk4Jz7Ulf',
+            imperatore: 'price_1SlX7F7141DXdb9ve9Dk9yQm'
         },
         tier: 'public'
     },
@@ -181,10 +181,10 @@ export const PUBLIC_PRICING: PublicPricing[] = [
             imperatore: 2397
         },
         stripePriceIds: {
-            solopreneur: 'price_H1_2027_SOLOPRENEUR',      // TODO
-            entrepreneur: 'price_H1_2027_ENTREPRENEUR',    // TODO
-            conquistatore: 'price_H1_2027_CONQUISTATORE',  // TODO
-            imperatore: 'price_H1_2027_IMPERATORE'         // TODO
+            solopreneur: 'price_1SngGX7141DXdb9vy68hlCYh',
+            entrepreneur: 'price_1SngGX7141DXdb9voR7HhjDv',
+            conquistatore: 'price_1SngGY7141DXdb9vyAw2V9Qs',
+            imperatore: 'price_1SngGY7141DXdb9veg2cSplv'
         },
         tier: 'public'
     }

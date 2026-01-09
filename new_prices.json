@@ -1,0 +1,307 @@
+{
+    "object":  "list",
+    "data":  [
+                 {
+                     "id":  "price_1SngGY7141DXdb9veg2cSplv",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767967334,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+
+                                  },
+                     "nickname":  "Imperatore H1 2027",
+                     "product":  "prod_Tiz5sfgINTSoPH",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  239700,
+                     "unit_amount_decimal":  "239700"
+                 },
+                 {
+                     "id":  "price_1SngGY7141DXdb9vyAw2V9Qs",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767967334,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+
+                                  },
+                     "nickname":  "Conquistatore H1 2027",
+                     "product":  "prod_Tiz5bQm1xlc6dP",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  159700,
+                     "unit_amount_decimal":  "159700"
+                 },
+                 {
+                     "id":  "price_1SngGX7141DXdb9voR7HhjDv",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767967333,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+
+                                  },
+                     "nickname":  "Entrepreneur H1 2027",
+                     "product":  "prod_Tiz5nRfo7sE3N5",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  89700,
+                     "unit_amount_decimal":  "89700"
+                 },
+                 {
+                     "id":  "price_1SngGX7141DXdb9vy68hlCYh",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767967333,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+
+                                  },
+                     "nickname":  "Solopreneur H1 2027",
+                     "product":  "prod_TjRY6nNVIs2q6z",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  5900,
+                     "unit_amount_decimal":  "5900"
+                 },
+                 {
+                     "id":  "price_1SlyfV7141DXdb9v9WiLhhS0",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767561417,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+                                      "plan_tier":  "aspirante"
+                                  },
+                     "nickname":  null,
+                     "product":  "prod_TjRY6nNVIs2q6z",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  4900,
+                     "unit_amount_decimal":  "4900"
+                 },
+                 {
+                     "id":  "price_1SlX7F7141DXdb9ve9Dk9yQm",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767455505,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+                                      "plan":  "imperatore",
+                                      "quarter":  "q3_2026",
+                                      "tier":  "public"
+                                  },
+                     "nickname":  "Public Q3 2026 Imperatore",
+                     "product":  "prod_Tiz5L3ARFs7quj",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  219700,
+                     "unit_amount_decimal":  "219700"
+                 },
+                 {
+                     "id":  "price_1SlX7F7141DXdb9vk4Jz7Ulf",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767455505,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+                                      "plan":  "conquistatore",
+                                      "quarter":  "q3_2026",
+                                      "tier":  "public"
+                                  },
+                     "nickname":  "Public Q3 2026 Conquistatore",
+                     "product":  "prod_Tiz5XAIoCXlexT",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  139700,
+                     "unit_amount_decimal":  "139700"
+                 },
+                 {
+                     "id":  "price_1SlX7E7141DXdb9v63Co4hK7",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767455504,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+                                      "plan":  "pioniere",
+                                      "quarter":  "q3_2026",
+                                      "tier":  "public"
+                                  },
+                     "nickname":  "Public Q3 2026 Pioniere",
+                     "product":  "prod_Tiz5eZ5ORR2ZQg",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  79700,
+                     "unit_amount_decimal":  "79700"
+                 },
+                 {
+                     "id":  "price_1SlX7D7141DXdb9vjK0CGHD6",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767455503,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+                                      "plan":  "esploratore",
+                                      "quarter":  "q3_2026",
+                                      "tier":  "public"
+                                  },
+                     "nickname":  "Public Q3 2026 Esploratore",
+                     "product":  "prod_Tiz5OR7CUzDjtJ",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  39700,
+                     "unit_amount_decimal":  "39700"
+                 },
+                 {
+                     "id":  "price_1SlX7D7141DXdb9vLhuoEr4g",
+                     "object":  "price",
+                     "active":  true,
+                     "billing_scheme":  "per_unit",
+                     "created":  1767455503,
+                     "currency":  "eur",
+                     "custom_unit_amount":  null,
+                     "livemode":  false,
+                     "lookup_key":  null,
+                     "metadata":  {
+                                      "plan":  "imperatore",
+                                      "quarter":  "q2_2026",
+                                      "tier":  "public"
+                                  },
+                     "nickname":  "Public Q2 2026 Imperatore",
+                     "product":  "prod_Tiz5IwENyuiiQy",
+                     "recurring":  {
+                                       "interval":  "month",
+                                       "interval_count":  1,
+                                       "meter":  null,
+                                       "trial_period_days":  null,
+                                       "usage_type":  "licensed"
+                                   },
+                     "tax_behavior":  "unspecified",
+                     "tiers_mode":  null,
+                     "transform_quantity":  null,
+                     "type":  "recurring",
+                     "unit_amount":  209700,
+                     "unit_amount_decimal":  "209700"
+                 }
+             ],
+    "has_more":  true,
+    "url":  "/v1/prices"
+}

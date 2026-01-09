@@ -17,16 +17,16 @@ import {
 export default function WaitlistPage() {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
-    const [plan, setPlan] = useState('pioniere');
+    const [plan, setPlan] = useState('entrepreneur');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState('');
 
     const nextWaveInfo = {
         name: 'Pioneer',
-        startDate: 'Aprile 2026',
+        startDate: 'Luglio 2026',
         spots: 30,
-        discount: '€50 di sconto rispetto a Genesis'
+        discount: 'Prezzo bloccato a €147/mese (Entrepreneur)'
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -236,9 +236,10 @@ export default function WaitlistPage() {
                                     onChange={(e) => setPlan(e.target.value)}
                                     className="w-full px-4 py-3 bg-champagne/50 border border-charcoal/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold/50 transition"
                                 >
-                                    <option value="esploratore">Esploratore (€197/mese)</option>
-                                    <option value="pioniere">Pioniere (€397/mese) - Più Popolare</option>
-                                    <option value="conquistatore">Conquistatore (€747/mese)</option>
+                                    <option value="solopreneur">Solopreneur (€49/mese)</option>
+                                    <option value="entrepreneur">Entrepreneur (€147/mese) - Più Popolare</option>
+                                    <option value="conquistatore">Conquistatore (€347/mese)</option>
+                                    <option value="imperatore">Imperatore (€697/mese)</option>
                                 </select>
                             </div>
 

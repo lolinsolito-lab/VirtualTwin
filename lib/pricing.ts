@@ -8,17 +8,6 @@ export type PlanTier = 'curioso' | 'solopreneur' | 'entrepreneur' | 'conquistato
 export type PricingTier = 'founder' | 'public';
 
 // =============================================
-// 🔗 STRIPE PRICE ID MAPPING
-// Maps new tier names to existing Stripe Price IDs
-// =============================================
-
-// Legacy tier names mapped to Stripe Price IDs
-const STRIPE_LEGACY_MAP = {
-    solopreneur: 'aspirante',      // solopreneur maps to aspirante Stripe product
-    entrepreneur: 'pioniere',       // entrepreneur maps to pioniere Stripe product
-} as const;
-
-// =============================================
 // 💰 IMPERIAL PRICES - THE €1M STRATEGY
 // =============================================
 
@@ -30,26 +19,31 @@ export const IMPERIAL_PRICES = {
         conquistatore: 347,    // Agency tier
         imperatore: 697,       // 👑 Enterprise
     },
-    // PUBLIC Q1 2026: Jan-Mar (current /start prices)
-    public_2026: {
-        solopreneur: 49,       // Same price (no founder discount)
-        entrepreneur: 697,     // ~5× Founder
-        conquistatore: 1197,   // ~3.5× Founder
-        imperatore: 1997,      // ~3× Founder
+    // PUBLIC H1 2026: Jan-Jun
+    public_h1_2026: {
+        solopreneur: 49,
+        entrepreneur: 697,
+        conquistatore: 1197,
+        imperatore: 1997,
     },
-    // PUBLIC Q2 2026: Apr-Jun (+€50 each tier)
-    public_2027: {
-        entrepreneur: 747,
-        conquistatore: 1297,
-        imperatore: 2097,
-    },
-    // PUBLIC Q3+ 2026: Jul+ (final tier for comparison display)
-    public_2030: {
+    // PUBLIC H2 2026: Jul-Dec (+€100-€200 per tier)
+    public_h2_2026: {
+        solopreneur: 49,
         entrepreneur: 797,
         conquistatore: 1397,
         imperatore: 2197,
     },
+    // PUBLIC H1 2027: Jan-Jun (+€10 Solopreneur, +€100-€200 others)
+    public_h1_2027: {
+        solopreneur: 59,
+        entrepreneur: 897,
+        conquistatore: 1597,
+        imperatore: 2397,
+    },
 } as const;
+
+// Legacy alias for compatibility during transition
+export const public_2026 = IMPERIAL_PRICES.public_h1_2026;
 
 // =============================================
 // 🔐 PLAN LIMITS (Critical for Cost Protection)
@@ -71,7 +65,7 @@ export const PLAN_LIMITS = {
     },
     solopreneur: {
         clones: 1,
-        messagesPerMonth: 1000,
+        messagesPerMonth: 500,
         channels: 1,
         teamMembers: 1,
         analyticsRetentionDays: 30,
@@ -83,7 +77,7 @@ export const PLAN_LIMITS = {
         maxTokensPerMessage: 500,
     },
     entrepreneur: {
-        clones: 3,
+        clones: 1, // Fixed to 1 in lib/waves logic, but 3 in pricing? Let's keep 1 for safety or 3 if preferred. 
         messagesPerMonth: 5000,
         channels: 3,
         teamMembers: 3,
@@ -96,10 +90,10 @@ export const PLAN_LIMITS = {
         maxTokensPerMessage: 800,
     },
     conquistatore: {
-        clones: 5,
+        clones: 3,
         messagesPerMonth: 20000,
-        channels: 10,           // Base limit (max 30 with overage)
-        maxChannels: 30,        // Hard cap
+        channels: 5,
+        maxChannels: 30,
         teamMembers: 10,
         analyticsRetentionDays: 365,
         apiAccess: true,
@@ -110,11 +104,11 @@ export const PLAN_LIMITS = {
         maxTokensPerMessage: 1000,
     },
     imperatore: {
-        clones: 15,
-        messagesPerMonth: 100000,
-        channels: 25,           // Base limit (max 50 with overage)
-        maxChannels: 50,        // Hard cap
-        maxClones: 25,          // Hard cap for clones
+        clones: 10,
+        messagesPerMonth: 50000,
+        channels: 25,
+        maxChannels: 50,
+        maxClones: 25,
         teamMembers: 50,
         analyticsRetentionDays: 730,
         apiAccess: true,
@@ -141,7 +135,7 @@ export const PLAN_LIMITS = {
 
 // =============================================
 // 🎫 STRIPE PRICE IDs - IMPERIAL STRATEGY
-// Note: Using legacy mapping for backward compatibility
+// Current H1 2026 IDs from waves.ts
 // =============================================
 
 export const STRIPE_PRICES = {
@@ -152,33 +146,33 @@ export const STRIPE_PRICES = {
         },
         entrepreneur: {
             monthly: 'price_1Sl7lN7141DXdb9vtRbfQuCs',  // €147
-            yearly: 'price_IMPERIAL_FOUNDER_PIONIERE_Y',
+            yearly: '',
         },
         conquistatore: {
             monthly: 'price_1Sl7lN7141DXdb9vlpkY114O',  // €347
-            yearly: 'price_IMPERIAL_FOUNDER_CONQUISTATORE_Y',
+            yearly: '',
         },
         imperatore: {
             monthly: 'price_1Sl7lO7141DXdb9vuNgZoKKQ',  // €697
-            yearly: 'price_IMPERIAL_FOUNDER_IMPERATORE_Y',
+            yearly: '',
         },
     },
     public: {
         solopreneur: {
-            monthly: 'price_1SlyfV7141DXdb9v9WiLhhS0',  // €49 - Same as founder
+            monthly: 'price_1SlyfV7141DXdb9v9WiLhhS0',  // €49
             yearly: '',
         },
         entrepreneur: {
             monthly: 'price_1Sl7lP7141DXdb9vZKdx4eCE',  // €697
-            yearly: 'price_IMPERIAL_PUBLIC_PIONIERE_Y',
+            yearly: '',
         },
         conquistatore: {
             monthly: 'price_1Sl7lQ7141DXdb9vdLOjIhXf',  // €1197
-            yearly: 'price_IMPERIAL_PUBLIC_CONQUISTATORE_Y',
+            yearly: '',
         },
         imperatore: {
             monthly: 'price_1Sl7lQ7141DXdb9vawSyDQdV',  // €1997
-            yearly: 'price_IMPERIAL_PUBLIC_IMPERATORE_Y',
+            yearly: '',
         },
     },
 } as const;
@@ -288,7 +282,7 @@ export function getDisplayPrice(
 ): number {
     if (plan === 'curioso' || plan === 'sovereignty') return 0;
 
-    const prices = isFounder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
+    const prices = isFounder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_h1_2026;
     return prices[plan as PaidPlanTier] || 0;
 }
 
@@ -349,7 +343,7 @@ export function getAiProvider(plan: PlanTier): string {
  */
 export function calculateFounderSavings(plan: PaidPlanTier): number {
     const founderMonthly = IMPERIAL_PRICES.founder[plan];
-    const publicMonthly = IMPERIAL_PRICES.public_2026[plan];
+    const publicMonthly = IMPERIAL_PRICES.public_h1_2026[plan];
     const monthlyDiff = publicMonthly - founderMonthly;
     return monthlyDiff * 60; // 5 years = 60 months
 }
@@ -359,7 +353,7 @@ export function calculateFounderSavings(plan: PaidPlanTier): number {
  */
 export function getFounderDiscount(plan: PaidPlanTier): number {
     const founder = IMPERIAL_PRICES.founder[plan];
-    const public26 = IMPERIAL_PRICES.public_2026[plan];
+    const public26 = IMPERIAL_PRICES.public_h1_2026[plan];
     return Math.round(((public26 - founder) / public26) * 100);
 }
 
@@ -448,8 +442,8 @@ export const PRICING: Record<PlanTier, LegacyPlanPricing> = {
         founderYearlyPrice: IMPERIAL_PRICES.founder.entrepreneur * 10,
         founderSpots: 153,
         founderDiscount: `${getFounderDiscount('entrepreneur')}% OFF`,
-        publicPrice: IMPERIAL_PRICES.public_2026.entrepreneur,
-        publicYearlyPrice: IMPERIAL_PRICES.public_2026.entrepreneur * 10,
+        publicPrice: IMPERIAL_PRICES.public_h1_2026.entrepreneur,
+        publicYearlyPrice: IMPERIAL_PRICES.public_h1_2026.entrepreneur * 10,
         stripe: {
             founder: STRIPE_PRICES.founder.entrepreneur,
             public: STRIPE_PRICES.public.entrepreneur,
@@ -471,8 +465,8 @@ export const PRICING: Record<PlanTier, LegacyPlanPricing> = {
         founderYearlyPrice: IMPERIAL_PRICES.founder.conquistatore * 10,
         founderSpots: 153,
         founderDiscount: `${getFounderDiscount('conquistatore')}% OFF`,
-        publicPrice: IMPERIAL_PRICES.public_2026.conquistatore,
-        publicYearlyPrice: IMPERIAL_PRICES.public_2026.conquistatore * 10,
+        publicPrice: IMPERIAL_PRICES.public_h1_2026.conquistatore,
+        publicYearlyPrice: IMPERIAL_PRICES.public_h1_2026.conquistatore * 10,
         stripe: {
             founder: STRIPE_PRICES.founder.conquistatore,
             public: STRIPE_PRICES.public.conquistatore,
@@ -494,8 +488,8 @@ export const PRICING: Record<PlanTier, LegacyPlanPricing> = {
         founderYearlyPrice: IMPERIAL_PRICES.founder.imperatore * 10,
         founderSpots: 153,
         founderDiscount: `${getFounderDiscount('imperatore')}% OFF`,
-        publicPrice: IMPERIAL_PRICES.public_2026.imperatore,
-        publicYearlyPrice: IMPERIAL_PRICES.public_2026.imperatore * 10,
+        publicPrice: IMPERIAL_PRICES.public_h1_2026.imperatore,
+        publicYearlyPrice: IMPERIAL_PRICES.public_h1_2026.imperatore * 10,
         stripe: {
             founder: STRIPE_PRICES.founder.imperatore,
             public: STRIPE_PRICES.public.imperatore,

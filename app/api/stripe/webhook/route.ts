@@ -114,11 +114,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                 founder_joined_at: isFounder ? new Date().toISOString() : undefined,
                 stripe_customer_id: session.customer as string,
                 stripe_subscription_id: session.subscription as string,
-                messages_limit: (plan === 'aspirante' ? 500 :
-                    plan === 'esploratore' ? 1000 :
-                        plan === 'pioniere' ? 5000 :
-                            plan === 'conquistatore' ? 20000 :
-                                plan === 'imperatore' ? 50000 : 100),
+                messages_limit: (plan === 'solopreneur' || plan === 'aspirante' ? 500 :
+                    plan === 'entrepreneur' || plan === 'pioniere' || plan === 'esploratore' ? 5000 :
+                        plan === 'conquistatore' ? 20000 :
+                            plan === 'imperatore' ? 50000 : 100),
                 trial_started_at: new Date().toISOString(),
                 trial_ends_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
                 is_trial_active: true,
@@ -260,11 +259,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         founder_joined_at: isFounder ? new Date().toISOString() : null,
         stripe_customer_id: session.customer as string,
         stripe_subscription_id: session.subscription as string,
-        messages_limit: (plan === 'aspirante' ? 500 :
-            plan === 'esploratore' ? 1000 :
-                plan === 'pioniere' ? 5000 :
-                    plan === 'conquistatore' ? 20000 :
-                        plan === 'imperatore' ? 50000 : 100),
+        messages_limit: (plan === 'solopreneur' || plan === 'aspirante' ? 500 :
+            plan === 'entrepreneur' || plan === 'pioniere' || plan === 'esploratore' ? 5000 :
+                plan === 'conquistatore' ? 20000 :
+                    plan === 'imperatore' ? 50000 : 100),
         trial_started_at: new Date().toISOString(),
         trial_ends_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
         is_trial_active: true,
