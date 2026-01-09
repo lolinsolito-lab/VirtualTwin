@@ -1,96 +1,117 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Check, Zap, Crown, Lock, Code, Headphones, Sparkles } from 'lucide-react';
+import { Check, Zap, Crown, Lock, Code, Headphones, Sparkles, Info, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 import { getPlanAvailability, PlanAvailability } from '@/lib/founderAvailability';
 import { getDisplayPricing, getCurrentPublicPricing } from '@/lib/waves';
+import PlanDetailModal from '@/components/PlanDetailModal';
 
 const plans = [
     {
         id: "solopreneur",
         name: "Solopreneur",
         price: "€49",
-        publicPrice: "€49",
         period: "/mese",
-        description: "Il primo passo nel tuo impero",
+        story: "Il tuo primo passo nell'Impero",
+        idealePer: "Freelancer e Coach P.IVA",
+        subtitle: "L'essenziale per automatizzare le tue prime vendite.",
         features: [
-            "1 Clone AI",
-            "500 msg/mese",
-            "1 Canale",
-            "Template",
-            "Corso",
-            "Community"
+            "1 Clone AI Pro",
+            "1.000 msg/mese",
+            "1 Canale Inclusivo",
+            "15 Template Strategici",
+            "Knowledge Base 10 doc",
+            "Supporto < 48h",
+            "Accesso Community",
+            "Mobile Ready"
         ],
         icon: Sparkles,
         color: "text-green-600",
-        bg: "bg-gradient-to-br from-green-50 to-emerald-50",
-        btn: "bg-green-600 text-white hover:bg-green-700",
-        badge: "🌱 Entry-Level"
+        bg: "bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50",
+        border: "border-green-200",
+        btn: "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:opacity-90 shadow-lg",
+        badge: { emoji: "🌱", text: "ENTRY-LEVEL", color: "green" }
     },
     {
         id: "entrepreneur",
         name: "Entrepreneur",
         price: "€147",
-        publicPrice: "€697",
         period: "/mese",
-        description: "Il più scelto dai Professionisti",
+        story: "La Scelta dei Professionisti",
+        idealePer: "Startup e Team 2-5 persone",
+        subtitle: "Potenzia il team e scali senza sforzo.",
         features: [
-            "1 Clone AI",
+            "3 Cloni AI d'Elite",
             "5.000 msg/mese",
-            "3 Canali",
-            "A/B Test (20%)",
-            "Full Analytics",
-            "Priority Support"
+            "3 Canali Inclusivi",
+            "A/B Testing Integrato",
+            "Full Analytics Dashboard",
+            "Academy Moduli 1-2",
+            "War Room Mensile",
+            "Priorità Supporto"
         ],
         icon: Zap,
         color: "text-gold",
-        bg: "bg-gradient-to-br from-gold/5 to-gold/15",
-        btn: "gold-gradient text-white shadow-lg",
+        bg: "bg-gradient-to-br from-amber-50 via-yellow-50 to-amber-100",
+        border: "border-amber-300",
+        btn: "gold-gradient text-white shadow-xl font-bold",
         glow: true,
-        popular: true
+        popular: true,
+        badge: { emoji: "🔥", text: "PIÙ SCELTO", color: "gold", animate: "pulse" },
+        badge2: { emoji: "⭐", text: "LIVELLO TOP", color: "gold" }
     },
     {
         id: "conquistatore",
         name: "Conquistatore",
         price: "€347",
-        publicPrice: "€1.197",
         period: "/mese",
-        description: "Per agenzie e scale-up",
+        story: "L'Elite della Scalabilità",
+        idealePer: "Agenzie e Scale-up",
+        subtitle: "Riduci costi operativi e domina il mercato.",
         features: [
-            "3 Cloni AI",
+            "5 Cloni AI d'Elite",
             "20.000 msg/mese",
-            "5 Canali",
-            "Priority Support",
-            "API Access",
-            "Custom Logic"
+            "10 Canali Inclusivi",
+            "API Access & Webhooks",
+            "Academy Full Content",
+            "CSM Dedicato",
+            "Strategic War Room",
+            "Custom Logo Branding"
         ],
         icon: Crown,
         color: "text-gold",
-        bg: "bg-gradient-to-br from-champagne to-white",
-        btn: "bg-charcoal text-white hover:bg-gold transition-all shadow-luxury"
+        bg: "bg-gradient-to-br from-purple-50 via-violet-50 to-purple-100",
+        border: "border-purple-200",
+        btn: "bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:opacity-90 shadow-luxury",
+        badge: { emoji: "💎", text: "SCALE-UP", color: "purple" }
     },
     {
         id: "imperatore",
         name: "Imperatore",
         price: "€697",
-        publicPrice: "€1.997",
         period: "/mese",
-        description: "Il trono digitale supremo",
+        story: "Il Trono Digitale Supremo",
+        idealePer: "Enterprise e Aziende Leader",
+        subtitle: "Il controllo totale sul tuo ecosistema AI.",
         features: [
-            "10 Cloni AI",
-            "50.000 msg/mese",
-            "Canali Illimitati",
-            "White-label",
-            "Account Manager",
-            "Sovereign Vault"
+            "15 Cloni AI Imperiali",
+            "100.000 msg/mese",
+            "25 Canali Inclusivi",
+            "White-label Totale",
+            "Account Manager 1-to-1",
+            "Sovereign Vault Access",
+            "SLA Garantita 99.9%",
+            "Early Access Roadmap"
         ],
         icon: Crown,
         color: "text-white/80",
-        bg: "gold-gradient !border-transparent",
-        btn: "bg-white text-gold hover:bg-champagne transition-all shadow-luxury",
-        isDark: true
+        bg: "bg-gradient-to-br from-gray-900 via-gray-800 to-black !border-gold/30",
+        border: "border-gold/50",
+        btn: "gold-gradient text-white hover:shadow-gold/20 transition-all shadow-luxury",
+        isDark: true,
+        badge: { emoji: "👑", text: "ENTERPRISE", color: "gold", animate: "bounce" }
     }
 ];
 
@@ -100,6 +121,7 @@ export default function BillingPage() {
     const [availability, setAvailability] = useState<Record<string, PlanAvailability> | null>(null);
     const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
     const [currentPlan, setCurrentPlan] = useState<string>('curioso'); // User's current plan
+    const [openModal, setOpenModal] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -223,28 +245,41 @@ export default function BillingPage() {
                             onMouseEnter={() => setHoveredIndex(i)}
                             onMouseLeave={() => setHoveredIndex(null)}
                             animate={{
-                                flex: isHovered ? 2.2 : isAnyHovered ? 0.85 : 1,
+                                flex: isHovered ? 3.0 : isAnyHovered ? 0.7 : 1,
                                 filter: isAnyHovered && !isHovered ? 'blur(1px) grayscale(0.6)' : 'none',
                                 opacity: isAnyHovered && !isHovered ? 0.6 : 1,
                                 scale: isHovered ? 1.02 : 1
                             }}
-                            className={`silk-card p-5 lg:p-7 rounded-[2.5rem] border border-white/60 flex flex-col relative overflow-hidden transition-all duration-500 cursor-pointer ${p.bg} shadow-luxury-sm hover:shadow-luxury`}
+                            className={`silk-card p-5 lg:p-7 rounded-[2.5rem] border ${p.border || 'border-white/60'} flex flex-col relative overflow-hidden transition-all duration-500 cursor-pointer ${p.bg} shadow-luxury-sm hover:shadow-luxury`}
                         >
-                            {isSoldOut ? (
-                                <div className="absolute top-5 right-5 flex items-center gap-2 bg-charcoal/80 px-2.5 py-1 rounded-full border border-white/10 z-20">
-                                    <span className="text-[6px] text-white font-black uppercase tracking-widest leading-none">SOLD OUT</span>
-                                </div>
-                            ) : p.id === currentPlan ? (
-                                <div className="absolute top-5 right-5 flex items-center gap-2 bg-green-600/90 px-2.5 py-1 rounded-full border border-white/20 z-20">
-                                    <Check className="w-2 h-2 text-white" />
-                                    <span className="text-[6px] text-white font-black uppercase tracking-widest leading-none">PIANO ATTUALE</span>
-                                </div>
-                            ) : p.popular && (
-                                <div className="absolute top-5 right-5 flex items-center gap-2 bg-gold/10 px-2.5 py-1 rounded-full border border-gold/20 z-20">
-                                    <Zap className="w-2 h-2 text-gold" />
-                                    <span className="text-[6px] text-gold font-black uppercase tracking-widest leading-none">PIÙ AMATO</span>
-                                </div>
-                            )}
+                            {/* Badges */}
+                            <div className="absolute top-5 right-5 z-20 flex flex-col items-end gap-2">
+                                {isSoldOut ? (
+                                    <div className="bg-charcoal/80 px-2.5 py-1 rounded-full border border-white/10">
+                                        <span className="text-[6px] text-white font-black uppercase tracking-widest leading-none">SOLD OUT</span>
+                                    </div>
+                                ) : p.id === currentPlan ? (
+                                    <div className="bg-green-600/90 px-3 py-1 rounded-full border border-white/20 shadow-lg flex items-center gap-1">
+                                        <Check className="w-2 h-2 text-white" />
+                                        <span className="text-[6px] text-white font-black uppercase tracking-widest leading-none">ATTIVO</span>
+                                    </div>
+                                ) : p.badge && typeof p.badge === 'object' ? (
+                                    <div className={`px-2.5 py-1 rounded-full border text-[6px] font-black uppercase tracking-widest shadow-sm flex items-center gap-1 ${p.badge.color === 'gold' ? 'bg-gold/10 text-gold border-gold/20' :
+                                        p.badge.color === 'green' ? 'bg-green-100 text-green-700 border-green-200' :
+                                            p.badge.color === 'purple' ? 'bg-purple-100 text-purple-700 border-purple-200' :
+                                                'bg-white/10 text-white border-white/20'
+                                        } ${p.badge.animate === 'pulse' ? 'animate-pulse' : ''}`}>
+                                        <span>{p.badge.emoji}</span>
+                                        <span>{p.badge.text}</span>
+                                    </div>
+                                ) : null}
+
+                                {p.badge2 && (
+                                    <div className="bg-amber-100 px-2.5 py-1 rounded-full border border-amber-200 shadow-sm flex items-center gap-1">
+                                        <span className="text-[6px] text-amber-700 font-black uppercase tracking-widest">{(p as any).badge2.emoji} {(p as any).badge2.text}</span>
+                                    </div>
+                                )}
+                            </div>
 
                             <div className="flex-grow flex flex-col min-w-[150px]">
                                 <div className="flex items-center gap-2 mb-3">
@@ -274,11 +309,17 @@ export default function BillingPage() {
                                     )}
                                 </div>
 
-                                <motion.p
-                                    className={`text-[10px] lg:text-[11px] italic font-serif leading-relaxed mb-6 h-10 overflow-hidden ${p.isDark ? 'text-white/60' : 'text-charcoal/40'}`}
-                                >
-                                    {p.description}
-                                </motion.p>
+                                <div className="mb-4">
+                                    <p className={`text-[10px] font-bold mb-1 uppercase tracking-tight ${p.isDark ? 'text-gold' : p.color}`}>{p.story}</p>
+                                    {(p as any).idealePer && (
+                                        <p className={`text-[8px] font-black uppercase tracking-widest opacity-40 mb-2 ${p.isDark ? 'text-white' : 'text-charcoal'}`}>👤 Ideale per: {(p as any).idealePer}</p>
+                                    )}
+                                    <motion.p
+                                        className={`text-[10px] lg:text-[11px] italic font-serif leading-relaxed h-8 overflow-hidden ${p.isDark ? 'text-white/60' : 'text-charcoal/40'}`}
+                                    >
+                                        {(p as any).subtitle}
+                                    </motion.p>
+                                </div>
 
                                 <AnimatePresence>
                                     {isHovered && (
@@ -288,6 +329,18 @@ export default function BillingPage() {
                                             exit={{ opacity: 0, scale: 0.95 }}
                                             className="space-y-2 flex-grow py-3 border-t border-gold/5"
                                         >
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setOpenModal(p.id);
+                                                }}
+                                                className={`mb-3 text-[9px] uppercase tracking-[0.2em] font-bold flex items-center gap-1.5 transition-all hover:gap-2.5 ${p.isDark ? 'text-white/50 hover:text-white' : 'text-gold opacity-60 hover:opacity-100'}`}
+                                            >
+                                                <Info className="w-3 h-3" />
+                                                Vedi tutti i dettagli
+                                                <ArrowRight className="w-3 h-3" />
+                                            </button>
+
                                             {p.features.slice(0, 8).map((f, j) => (
                                                 <div key={j} className="flex items-start gap-2">
                                                     <div className={`mt-1 w-3 h-3 rounded-full flex items-center justify-center shrink-0 ${p.isDark ? 'bg-white/20 text-white' : 'bg-gold/10 text-gold shadow-sm'}`}>
@@ -327,6 +380,21 @@ export default function BillingPage() {
                     );
                 })}
             </div>
+
+            <PlanDetailModal
+                isOpen={!!openModal}
+                onClose={() => setOpenModal(null)}
+                planId={openModal || ''}
+                planStyle={(() => {
+                    const p = plans.find(pl => pl.id === openModal);
+                    return {
+                        bg: p?.bg || '',
+                        border: p?.border || '',
+                        accent: p?.color || '',
+                        isDark: p?.isDark
+                    };
+                })()}
+            />
 
             <footer className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto opacity-30 hover:opacity-100 transition-opacity duration-1000 px-6">
                 {[
