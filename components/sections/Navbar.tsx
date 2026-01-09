@@ -87,16 +87,16 @@ const Navbar = () => {
                 </div>
 
                 {/* Desktop CTA */}
-                <div className="hidden lg:flex items-center gap-4">
+                <div className="hidden lg:flex items-center gap-8">
                     <Link
                         href="/auth/login"
-                        className="px-6 py-3 text-charcoal/60 text-[10px] uppercase tracking-[0.3em] font-black hover:text-gold transition-colors"
+                        className="text-charcoal/40 hover:text-gold transition-all duration-300 text-[10px] uppercase tracking-[0.2em] font-black flex items-center gap-1.5 group"
                     >
-                        Accedi
+                        Hai già un account? <span className="text-charcoal group-hover:text-gold transition-colors underline decoration-charcoal/10 group-hover:decoration-gold/40">Accedi →</span>
                     </Link>
                     <Link
                         href="/auth/register"
-                        className="px-8 lg:px-12 py-3 lg:py-4 rounded-full gold-gradient text-white text-[9px] lg:text-[10px] uppercase tracking-[0.3em] lg:tracking-[0.4em] font-black hover:scale-105 transition-all duration-300 shadow-lg"
+                        className="px-8 py-3.5 rounded-full gold-gradient text-white text-[10px] uppercase tracking-[0.4em] font-black hover:scale-105 transition-all duration-500 shadow-luxury border border-white/20"
                     >
                         14 Giorni Gratis
                     </Link>
@@ -132,20 +132,20 @@ const Navbar = () => {
                         </nav>
 
                         {/* Mobile CTA */}
-                        <div className="flex flex-col items-center gap-4 w-full max-w-xs">
+                        <div className="flex flex-col items-center gap-6 w-full max-w-xs">
                             <Link
                                 href="/auth/register"
                                 onClick={() => setMenuOpen(false)}
-                                className="w-full py-5 rounded-full gold-gradient text-white text-center text-[11px] uppercase tracking-[0.3em] font-black shadow-lg"
+                                className="w-full py-5 rounded-full gold-gradient text-white text-center text-[11px] uppercase tracking-[0.4em] font-black shadow-luxury border border-white/20"
                             >
                                 14 Giorni Gratis
                             </Link>
                             <Link
                                 href="/auth/login"
                                 onClick={() => setMenuOpen(false)}
-                                className="w-full py-5 rounded-full border border-charcoal/10 text-charcoal text-center text-[11px] uppercase tracking-[0.3em] font-black"
+                                className="text-charcoal/40 hover:text-gold transition-all duration-300 text-[11px] uppercase tracking-[0.2em] font-black flex items-center gap-1.5 group"
                             >
-                                Accedi
+                                Hai già un account? <span className="text-charcoal group-hover:text-gold underline decoration-charcoal/10 group-hover:decoration-gold/40">Accedi →</span>
                             </Link>
                         </div>
 
