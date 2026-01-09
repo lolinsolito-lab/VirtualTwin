@@ -2,73 +2,46 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Crown, Users, ArrowRight, Check, Star, Loader2, Shield, Lock, Zap, Rocket } from 'lucide-react';
-import { getCurrentWave, getCurrentWaveSpotsRemaining, getDisplayPricing, getCurrentPublicPricing, getTotalFounderSpots, Wave, WAVES, isPreLaunch } from '@/lib/waves';
+import { Crown, Users, ArrowRight, Check, Star, Lock } from 'lucide-react';
+import { getCurrentWave, getCurrentWaveSpotsRemaining, getTotalFounderSpots, Wave, WAVES, isPreLaunch } from '@/lib/waves';
 import FounderHeroEmotional from '@/components/founder-viral/FounderHeroEmotional';
 import ScarcityTimeline from '@/components/founder-viral/ScarcityTimeline';
 import FounderTestimonials from '@/components/founder-viral/FounderTestimonials';
 import FounderFAQ from '@/components/founder-viral/FounderFAQ';
 import PhilosophyAdvantage from '@/components/founder-viral/PhilosophyAdvantage';
+import PricingUltimate from '@/components/sections/PricingUltimate';
 
 export default function FounderPage() {
     const [spotsLeft, setSpotsLeft] = useState(20);
     const [totalSpots, setTotalSpots] = useState(60);
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-    const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
     const [currentWave, setCurrentWave] = useState<Wave | null>(null);
     const [isSoldOut, setIsSoldOut] = useState(false);
-    const [displayPricing, setDisplayPricing] = useState<Awaited<ReturnType<typeof getDisplayPricing>> | null>(null);
-    const [nextWave, setNextWave] = useState<Wave | null>(null);
     const [isFounderOpen, setIsFounderOpen] = useState(false);
     const [isBeforeLaunch, setIsBeforeLaunch] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
-            const [wave, remaining, allPricing, total] = await Promise.all([
+            const [wave, remaining, total] = await Promise.all([
                 getCurrentWave(),
                 getCurrentWaveSpotsRemaining(),
-                getDisplayPricing(),
                 getTotalFounderSpots()
             ]);
 
             const beforeLaunch = isPreLaunch();
-            let activeWave = wave;
-            let currentSpotsRemaining = remaining;
-            let activePricing = allPricing;
-
-            if (wave) {
-                activeWave = wave;
-                activePricing = {
-                    prices: wave.prices,
-                    stripePriceIds: wave.stripePriceIds,
-                    tier: wave.tier,
-                    waveName: wave.name,
-                    spotsRemaining: remaining
-                };
-                currentSpotsRemaining = remaining;
-            }
-
-            setCurrentWave(activeWave);
-            setSpotsLeft(currentSpotsRemaining);
-            setDisplayPricing(activePricing);
+            setCurrentWave(wave);
+            setSpotsLeft(remaining);
             setTotalSpots(total);
             setIsBeforeLaunch(beforeLaunch);
 
             // Founder is open if wave exists AND is founder tier
-            const founderOpen = activeWave !== null && activeWave.tier === 'founder';
+            const founderOpen = wave !== null && wave.tier === 'founder';
             setIsFounderOpen(founderOpen);
 
             // SOLD OUT only if NOT pre-launch AND remaining = 0
-            setIsSoldOut(!beforeLaunch && currentSpotsRemaining === 0);
+            setIsSoldOut(!beforeLaunch && remaining === 0);
 
-            // Get next wave for waitlist
-            if (activeWave && activePricing.tier === 'founder') {
-                const currentIndex = WAVES.findIndex(w => w.id === activeWave.id);
-                if (currentIndex >= 0 && currentIndex < WAVES.length - 1) {
-                    setNextWave(WAVES[currentIndex + 1]);
-                }
-            }
-            // Hardcoded deadline for UI (31 March 2026)
+            // Countdown to Genesis deadline
             const deadline = new Date('2026-03-31T23:59:59');
             const now = new Date();
             const diff = deadline.getTime() - now.getTime();
@@ -85,143 +58,6 @@ export default function FounderPage() {
         const interval = setInterval(fetchData, 30000);
         return () => clearInterval(interval);
     }, []);
-
-    // 👑 IMPERIAL PRICING PLANS
-    const publicPricing = getCurrentPublicPricing();
-
-    const plans = [
-        {
-            id: 'solopreneur',
-            name: 'Solopreneur',
-            tagline: 'Per Freelancer e Coach',
-            description: 'Entry-level per liberi professionisti che vogliono iniziare.',
-            priceFounder: displayPricing?.prices?.solopreneur || 49,
-            pricePublic: publicPricing.prices.solopreneur,
-            icon: <Zap className="w-7 h-7" />,
-            accentIcon: 'text-green-500',
-            bgIcon: 'bg-green-50',
-            gradient: 'from-[#F8FAFC] to-[#F1F5F9]',
-            borderColor: 'border-green-200',
-            borderHover: 'hover:border-green-300',
-            dark: false,
-            features: [
-                '1 Clone AI',
-                '1,000 messaggi/mese',
-                '1 Canale WhatsApp',
-                'Dashboard analytics',
-            ]
-        },
-        {
-            id: 'entrepreneur',
-            name: 'Entrepreneur',
-            tagline: 'Per chi vuole Dominare',
-            description: 'La soluzione completa per scalare la tua presenza digitale.',
-            priceFounder: displayPricing?.prices?.entrepreneur || 147,
-            pricePublic: publicPricing.prices.entrepreneur,
-            icon: <Rocket className="w-7 h-7" />,
-            accentIcon: 'text-amber-600',
-            bgIcon: 'bg-amber-50',
-            badge: 'PIÙ SCELTO',
-            featured: true,
-            gradient: 'from-[#FAFAF9] to-[#F5F5F4]',
-            borderColor: 'border-gold/30',
-            borderHover: 'hover:border-gold/50',
-            dark: false,
-            features: [
-                '3 Cloni AI',
-                '5,000 messaggi/mese',
-                '3 Canali WhatsApp',
-                'Analytics avanzate',
-                'Priority support',
-            ]
-        },
-        {
-            id: 'conquistatore',
-            name: 'Conquistatore',
-            tagline: 'PMI e Agenzie Scale-Up',
-            description: 'Potenza e velocità per chi non accetta compromessi.',
-            priceFounder: displayPricing?.prices?.conquistatore || 347,
-            pricePublic: publicPricing.prices.conquistatore,
-            icon: <Shield className="w-7 h-7" />,
-            accentIcon: 'text-purple-400',
-            bgIcon: 'bg-white/10',
-            gradient: 'from-charcoal via-[#1C1C1C] to-charcoal',
-            borderColor: 'border-white/10',
-            borderHover: 'hover:border-white/20',
-            dark: true,
-            features: [
-                '5 Cloni AI',
-                '20,000 messaggi/mese',
-                '10 Canali (max 30 con overage)',
-                'API access (60 req/min)',
-                'Success Manager',
-            ]
-        },
-        {
-            id: 'imperatore',
-            name: 'Imperatore',
-            tagline: 'Il Trono Digitale',
-            description: 'Controllo totale, dominio assoluto. Solo per i migliori.',
-            priceFounder: displayPricing?.prices?.imperatore || 697,
-            pricePublic: publicPricing.prices.imperatore,
-            icon: <Crown className="w-7 h-7" />,
-            accentIcon: 'text-gold',
-            bgIcon: 'bg-white/20',
-            gradient: 'from-[#0F0F0F] via-[#141414] to-[#0F0F0F]',
-            borderColor: 'border-gold/40',
-            borderHover: 'hover:border-gold/60 shadow-[0_0_30px_rgba(212,175,55,0.1)]',
-            dark: true,
-            features: [
-                '15 Cloni AI (max 25)',
-                '100,000 messaggi/mese',
-                '25 Canali (max 50 con overage)',
-                'API Priority',
-                '👑 Success Manager dedicato',
-            ]
-        },
-    ];
-
-    // Function to calculate 5-year savings for Founder plans
-    const calculateFounderSavings = (planId: string) => {
-        const plan = plans.find(p => p.id === planId);
-        if (!plan) return 0;
-        return (plan.pricePublic - plan.priceFounder) * 60; // 60 months in 5 years
-    };
-
-    // Direct checkout - Dynamic tier based on availability
-    const handleCheckout = async (planId: string, forcePriceId?: string) => {
-        setLoadingPlan(planId);
-
-        const priceId = forcePriceId || displayPricing?.stripePriceIds?.[planId];
-
-        try {
-            const response = await fetch('/api/stripe/checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    plan: planId,
-                    priceId,
-                    tier: displayPricing?.tier || 'founder' // Pass the dynamic tier
-                }),
-            });
-
-            const data = await response.json();
-
-            if (data.error) {
-                alert(`Errore: ${data.error}`);
-                return;
-            }
-
-            if (data.url) {
-                window.location.href = data.url;
-            }
-        } catch (error) {
-            console.error('Checkout error:', error);
-            alert('Errore durante il checkout. Riprova.');
-        } finally {
-            setLoadingPlan(null);
-        }
-    };
 
     return (
         <div className="min-h-screen bg-[#FDFCFB]">
@@ -241,8 +77,7 @@ export default function FounderPage() {
 
             {/* Main Container */}
             <div className="">
-
-                {/* HERO EMOTIONAL - NEW VIRAL COMPONENT */}
+                {/* HERO EMOTIONAL */}
                 <FounderHeroEmotional
                     spotsLeft={spotsLeft}
                     totalSpots={totalSpots}
@@ -265,7 +100,6 @@ export default function FounderPage() {
                                             {String(item.value).padStart(2, '0')}
                                         </div>
                                         <div className="text-[10px] uppercase tracking-[0.2em] font-black text-white/30 mt-2">{item.label}</div>
-                                        {i < 3 && <div className="hidden md:block absolute top-1/2 -right-4 -translate-y-1/2 text-white/10 text-3xl">:</div>}
                                     </div>
                                 ))}
                             </div>
@@ -286,187 +120,23 @@ export default function FounderPage() {
                                         <Star className="w-5 h-5 text-gold" />
                                     </div>
                                     <div className="text-left">
-                                        <div className="text-2xl font-bold text-white">€{calculateFounderSavings('imperatore').toLocaleString()}</div>
-                                        <div className="text-[10px] uppercase font-black text-white/30 tracking-widest">risparmio garantito</div>
+                                        <div className="text-2xl font-bold text-white">€78,000</div>
+                                        <div className="text-[10px] uppercase font-black text-white/30 tracking-widest">risparmio 5 anni</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                )
-                }
+                )}
 
-                {/* PHILOSOPHY SECTION - NEW */}
+                {/* PHILOSOPHY SECTION */}
                 <PhilosophyAdvantage />
 
-                {/* Pricing Grid */}
-                <div id="pricing" className="max-w-7xl mx-auto px-4 py-20 scroll-mt-8">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {plans.map((plan, i) => (
-                            <div
-                                key={i}
-                                className={`relative rounded-[2.5rem] p-8 border transition-all duration-500 group ${plan.dark
-                                    ? `bg-gradient-to-br ${plan.gradient} text-white ${plan.borderColor} shadow-2xl hover:scale-[1.02]`
-                                    : plan.featured
-                                        ? `bg-gradient-to-br ${plan.gradient} ${plan.borderColor} shadow-xl scale-[1.03] animate-pulse-slow`
-                                        : `bg-white ${plan.borderColor} ${plan.borderHover} shadow-sm hover:shadow-xl hover:scale-[1.02]`
-                                    }`}
-                            >
-
-                                {/* SOLD OUT Badge - Top right when exhausted */}
-                                {isSoldOut && !isBeforeLaunch && (
-                                    <div className="absolute -top-3 right-6 bg-red-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-20 shadow-lg">
-                                        🔴 SOLD OUT
-                                    </div>
-                                )}
-
-                                {/* Launching Badge - Positioned to the left */}
-                                {isBeforeLaunch && (
-                                    <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-10 shadow-md">
-                                        🚀 Launching Feb 1st
-                                    </div>
-                                )}
-
-                                {/* Popular / Tier Badge - Positioned to the right with high contrast */}
-                                {plan.badge && (isFounderOpen || isBeforeLaunch) && !isSoldOut && (
-                                    <div className={`absolute -top-3 right-6 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-wider z-20 shadow-xl border border-white/20 ${plan.id === 'pioniere' ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white' : 'gold-gradient text-white'
-                                        }`}>
-                                        {plan.badge}
-                                    </div>
-                                )}
-
-                                {/* Icon */}
-                                <div className={`w-14 h-14 ${plan.bgIcon} rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:rotate-12 transition-all duration-500 shadow-sm border border-black/5`}>
-                                    <div className={plan.accentIcon}>{plan.icon}</div>
-                                </div>
-
-                                {/* Plan Name */}
-                                <h3 className={`text-[10px] uppercase tracking-[0.3em] font-black mb-1 ${plan.dark ? 'text-white/40' : 'text-charcoal/40'}`}>
-                                    {plan.name}
-                                </h3>
-
-                                {/* Tagline */}
-                                <p className={`text-xl font-serif italic mb-4 ${plan.dark ? 'text-white' : 'text-charcoal'}`}>
-                                    {plan.tagline}
-                                </p>
-
-                                {/* Description */}
-                                <p className={`text-xs leading-relaxed mb-6 font-medium ${plan.dark ? 'text-white/60' : 'text-charcoal/50'}`}>
-                                    {plan.description}
-                                </p>
-
-                                <div className="mb-6">
-                                    <div className={`text-5xl lg:text-6xl font-serif font-black mb-1 tracking-tighter ${plan.dark ? 'text-white' : 'text-charcoal'}`}>
-                                        €{isFounderOpen ? plan.priceFounder : plan.pricePublic}<span className="text-sm font-normal text-current/40">/mo</span>
-                                    </div>
-                                    {isFounderOpen && (
-                                        <div className="flex flex-col gap-1">
-                                            <div className={`text-xs font-bold uppercase tracking-widest ${plan.dark ? 'text-white/30' : 'text-charcoal/30'}`}>
-                                                Public: <span className="line-through">€{plan.pricePublic}</span>
-                                            </div>
-                                            <div className="text-[9px] uppercase font-black tracking-widest text-gold animate-pulse">
-                                                ↗ Prezzo bloccato per sempre
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {isFounderOpen && (
-                                    <div className={`border text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl mb-8 text-center shadow-inner ${plan.dark ? 'bg-white/5 border-white/10 text-gold' : 'bg-gold/5 border-gold/10 text-gold'
-                                        }`}>
-                                        Risparmio: €{calculateFounderSavings(plan.id).toLocaleString()}
-                                    </div>
-                                )}
-
-                                <ul className="space-y-2 mb-6">
-                                    {plan.features.map((feature, j) => (
-                                        <li key={j} className="flex items-start gap-2 text-sm">
-                                            <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.dark ? 'text-gold' : 'text-green-500'}`} />
-                                            <span className={plan.dark ? 'text-white/80' : 'text-charcoal/70'}>{feature}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <div className={`text-xs mb-4 ${plan.dark ? 'text-white/50' : 'text-charcoal/50'}`}>
-                                    <Shield className="w-3 h-3 inline mr-1" />
-                                    {plan.id === 'solopreneur' ? '1 Clone AI' : plan.id === 'entrepreneur' ? '3 Cloni AI' : plan.id === 'conquistatore' ? '5 Cloni AI' : '15 Cloni AI'}
-                                </div>
-
-                                {/* CHECKOUT BUTTONS - Dual Option when Sold Out */}
-                                {!isSoldOut ? (
-                                    <button
-                                        onClick={() => handleCheckout(plan.id)}
-                                        disabled={loadingPlan !== null}
-                                        className={`w-full block text-center py-3 rounded-xl font-bold transition-all text-sm uppercase tracking-wider ${plan.featured
-                                            ? 'gold-gradient text-white shadow-xl hover:shadow-2xl hover:scale-105'
-                                            : plan.id === 'imperatore'
-                                                ? 'bg-gold text-charcoal hover:bg-champagne shadow-lg'
-                                                : 'bg-charcoal text-white hover:bg-gold hover:text-charcoal'
-                                            }`}
-                                    >
-                                        {loadingPlan === plan.id ? (
-                                            <span className="flex items-center justify-center gap-2">
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                Caricamento...
-                                            </span>
-                                        ) : (
-                                            <>Scegli {plan.name}</>
-                                        )}
-                                    </button>
-                                ) : (
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {nextWave && (
-                                            <button
-                                                onClick={async () => {
-                                                    const email = prompt("Email per waitlist:");
-                                                    if (email && email.includes('@')) {
-                                                        try {
-                                                            await fetch('/api/waitlist', {
-                                                                method: 'POST',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify({
-                                                                    email,
-                                                                    name: email.split('@')[0],
-                                                                    plan: plan.id,
-                                                                    current_wave: currentWave?.id,
-                                                                    next_wave: nextWave.id
-                                                                })
-                                                            });
-                                                            alert(`In waitlist per ${nextWave.name}!`);
-                                                        } catch (e) {
-                                                            alert("Errore");
-                                                        }
-                                                    }
-                                                }}
-                                                className="bg-white/20 hover:bg-white/30 text-charcoal border border-gold/30 py-3 rounded-xl font-bold text-xs uppercase transition-all"
-                                            >
-                                                📋 Waitlist
-                                            </button>
-                                        )}
-                                        <button
-                                            onClick={async () => {
-                                                const publicPricing = getCurrentPublicPricing();
-                                                await handleCheckout(plan.id, publicPricing.stripePriceIds[plan.id as keyof typeof publicPricing.stripePriceIds]);
-                                            }}
-                                            className="relative overflow-hidden bg-gradient-to-r from-charcoal via-charcoal/95 to-charcoal/90 border-2 border-gold/40 text-white py-3 px-4 rounded-xl font-bold text-xs uppercase hover:border-gold hover:scale-105 transition-all shadow-lg group"
-                                        >
-                                            {/* Gold accent line */}
-                                            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
-
-                                            <span className="flex items-center justify-center gap-2">
-                                                <span className="text-gold font-black text-base">{plan.pricePublic}€</span>
-                                                <span className="text-white/80 text-xs">Prezzo Pubblico</span>
-                                            </span>
-
-                                            {/* Hover glow */}
-                                            <div className="absolute inset-0 bg-gradient-to-r from-gold/0 via-gold/10 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                {/* ============================================= */}
+                {/* PRICING - Uses PricingUltimate Component */}
+                {/* Contains 6 cards, wave pricing, comparison */}
+                {/* ============================================= */}
+                <PricingUltimate />
 
                 {/* SCARCITY TIMELINE - Show price escalation */}
                 <ScarcityTimeline />
@@ -531,9 +201,6 @@ export default function FounderPage() {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }
-
-

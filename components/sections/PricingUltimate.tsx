@@ -128,41 +128,17 @@ const PricingUltimate = () => {
 
     const publicRef = getCurrentPublicPricing();
 
-    // Map new IDs to old wave keys for price lookup
-    const getPriceForPlan = (newId: string) => {
-        const mapping: Record<string, string> = {
-            'curioso': 'curioso',
-            'solopreneur': 'aspirante',
-            'entrepreneur': 'pioniere',
-            'conquistatore': 'conquistatore',
-            'imperatore': 'imperatore'
-        };
-        const oldKey = mapping[newId] || newId;
-        return displayPricing?.prices?.[oldKey as keyof typeof displayPricing.prices] || 0;
+    // Direct price lookup using new tier names (waves.ts now uses new names)
+    const getPriceForPlan = (planId: string) => {
+        return displayPricing?.prices?.[planId as keyof typeof displayPricing.prices] || 0;
     };
 
-    const getPublicPriceForPlan = (newId: string) => {
-        const mapping: Record<string, string> = {
-            'curioso': 'curioso',
-            'solopreneur': 'aspirante',
-            'entrepreneur': 'pioniere',
-            'conquistatore': 'conquistatore',
-            'imperatore': 'imperatore'
-        };
-        const oldKey = mapping[newId] || newId;
-        return publicRef.prices[oldKey as keyof typeof publicRef.prices] || 0;
+    const getPublicPriceForPlan = (planId: string) => {
+        return publicRef.prices[planId as keyof typeof publicRef.prices] || 0;
     };
 
-    const getPriceIdForPlan = (newId: string) => {
-        const mapping: Record<string, string> = {
-            'curioso': 'curioso',
-            'solopreneur': 'aspirante',
-            'entrepreneur': 'pioniere',
-            'conquistatore': 'conquistatore',
-            'imperatore': 'imperatore'
-        };
-        const oldKey = mapping[newId] || newId;
-        return displayPricing?.stripePriceIds?.[oldKey as keyof typeof displayPricing.stripePriceIds];
+    const getPriceIdForPlan = (planId: string) => {
+        return displayPricing?.stripePriceIds?.[planId as keyof typeof displayPricing.stripePriceIds];
     };
 
     const plans = [
