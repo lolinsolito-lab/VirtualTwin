@@ -86,8 +86,15 @@ export async function POST(req: Request) {
  * Supports both:
  * 1. Existing users (userId in metadata) - updates their subscription
  * 2. New users (no userId) - creates account from Stripe email (Checkout-First Flow)
+ * 3. Overage purchases (overageType in metadata) - adds extra capacity
  */
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+    // Check if this is an overage purchase
+    if (session.metadata?.overageType) {
+        await handleOveragePurchase(session);
+        return;
+    }
+
     const userId = session.client_reference_id || session.metadata?.userId;
     const customerEmail = session.customer_email || session.customer_details?.email;
     const plan = session.metadata?.plan || 'pioniere';
@@ -446,4 +453,81 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
             },
         });
     }
+}
+
+/**
+ * Handle overage package purchase
+ * Increments the user's overage capacity (channels, clones, conversations)
+ */
+async function handleOveragePurchase(session: Stripe.Checkout.Session) {
+    const userId = session.metadata?.userId;
+    const overageType = session.metadata?.overageType;
+    const overageAmount = parseInt(session.metadata?.overageAmount || '0', 10);
+
+    if (!userId || !overageType || !overageAmount) {
+        console.error('[Stripe Overage] Missing metadata:', { userId, overageType, overageAmount });
+        return;
+    }
+
+    console.log(`[Stripe Overage] Processing ${overageType} +${overageAmount} for user ${userId}`);
+
+    // Determine which column to update
+    const columnMap: Record<string, string> = {
+        channels: 'overage_channels',
+        clones: 'overage_clones',
+        conversations: 'overage_conversations',
+    };
+
+    const column = columnMap[overageType];
+    if (!column) {
+        console.error('[Stripe Overage] Unknown overage type:', overageType);
+        return;
+    }
+
+    // Get current value
+    const { data: profile, error: fetchError } = await supabase
+        .from('profiles')
+        .select(`id, ${column}`)
+        .eq('id', userId)
+        .single();
+
+    if (fetchError || !profile) {
+        console.error('[Stripe Overage] Failed to fetch profile:', fetchError);
+        return;
+    }
+
+    // Increment overage
+    const currentValue = (profile as any)[column] || 0;
+    const newValue = currentValue + overageAmount;
+
+    const { error: updateError } = await supabase
+        .from('profiles')
+        .update({
+            [column]: newValue,
+            updated_at: new Date().toISOString(),
+        })
+        .eq('id', userId);
+
+    if (updateError) {
+        console.error('[Stripe Overage] Failed to update profile:', updateError);
+        return;
+    }
+
+    console.log(`[Stripe Overage] ✅ Updated ${column}: ${currentValue} → ${newValue}`);
+
+    // Log billing event
+    await supabase.from('billing_events').insert({
+        user_id: userId,
+        event_type: 'overage_purchased',
+        stripe_event_id: session.id,
+        amount: session.amount_total ? session.amount_total / 100 : 0,
+        currency: session.currency || 'eur',
+        metadata: {
+            type: overageType,
+            amount: overageAmount,
+            newTotal: newValue,
+        },
+    });
+
+    console.log(`[Stripe Overage] ✅ Overage purchase complete: +${overageAmount} ${overageType}`);
 }
