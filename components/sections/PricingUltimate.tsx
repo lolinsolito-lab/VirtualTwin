@@ -505,7 +505,13 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                                                 animate={{ opacity: 1 }}
                                                 className={`text-[10px] font-black uppercase tracking-wider ${plan.isDark ? 'text-cyan-400' : 'text-green-600'}`}
                                             >
-                                                📉 Risparmia {(parseInt(plan.publicPrice.replace('€', '')) || 0) - (parseInt(plan.price.replace('€', '')) || 0)}€ /mese a vita
+                                                {plan.price === "CUSTOM" ? (
+                                                    <span className="flex items-center gap-1 text-green-400">
+                                                        📈 Guadagni Interessanti /mese a vita
+                                                    </span>
+                                                ) : (
+                                                    <>📉 Risparmia {(parseInt(plan.publicPrice.replace('€', '')) || 0) - (parseInt(plan.price.replace('€', '')) || 0)}€ /mese a vita</>
+                                                )}
                                             </motion.p>
                                         ) : (
                                             <motion.p
@@ -514,7 +520,11 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                                                 animate={{ opacity: 1 }}
                                                 className="text-[10px] font-black uppercase tracking-wider text-red-500"
                                             >
-                                                ⚠️ Prezzo pieno wave H1 2026
+                                                {plan.price === "CUSTOM" ? (
+                                                    <span className="text-gold">🤝 Trattativa Riservata</span>
+                                                ) : (
+                                                    "⚠️ Prezzo pieno wave H1 2026"
+                                                )}
                                             </motion.p>
                                         )}
                                     </AnimatePresence>
