@@ -3,6 +3,7 @@ import HeroEmotionalPunch from "@/components/home-viral/HeroEmotionalPunch";
 import WallOfHooks from "@/components/home-viral/WallOfHooks";
 import TodayTomorrowStories from "@/components/home-viral/TodayTomorrowStories";
 import VisualProofSection from "@/components/home-viral/VisualProofSection";
+import SocialProofBar from "@/components/home-viral/SocialProofBar";
 import SolutionEnhanced from "@/components/sections/SolutionEnhanced";
 import SetupStoryNarrative from "@/components/home-viral/SetupStoryNarrative";
 import FeaturesEnhanced from "@/components/sections/FeaturesEnhanced";
@@ -20,6 +21,9 @@ export default function Home() {
       <main>
         {/* VIRAL EMOTIONAL HERO - 3AM Story */}
         <HeroEmotionalPunch />
+
+        {/* SOCIAL PROOF BAR - Real numbers, instant trust */}
+        <SocialProofBar />
 
         {/* WALL OF HOOKS - Punch lines library */}
         <WallOfHooks />

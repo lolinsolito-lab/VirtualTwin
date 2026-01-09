@@ -116,6 +116,30 @@ export default function HeroEmotionalPunch() {
                                 Non è fantascienza. È VirtualTwin.<br />
                                 <strong className="text-charcoal">La tua voce. Il tuo modo di vendere. Moltiplicato per infinito.</strong>
                             </p>
+
+                            {/* CTA HIERARCHY - Gap 2 Fix */}
+                            <div className="mt-12 flex flex-col items-center gap-6">
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="relative group"
+                                >
+                                    <div className="absolute -inset-1 bg-gradient-to-r from-gold via-amber-300 to-gold rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200" />
+                                    <a
+                                        href="/auth/register"
+                                        className="relative flex flex-col items-center px-12 py-6 bg-charcoal text-white rounded-2xl font-black text-xl uppercase tracking-widest shadow-2xl transition-all"
+                                    >
+                                        Crea Il Tuo Gemello Gratis
+                                        <span className="text-[10px] text-gold/60 mt-1 lowercase tracking-wider font-medium font-sans">
+                                            14 giorni · No carta richiesta
+                                        </span>
+                                    </a>
+                                </motion.div>
+
+                                <a href="/auth/login" className="text-charcoal/40 hover:text-gold transition-colors text-sm font-medium tracking-wide flex items-center gap-2 group">
+                                    Hai già un account? <span className="underline decoration-charcoal/10 group-hover:decoration-gold/40">Accedi →</span>
+                                </a>
+                            </div>
                         </motion.div>
                     </motion.div>
                 </div>

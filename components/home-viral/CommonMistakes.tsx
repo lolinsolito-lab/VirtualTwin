@@ -15,43 +15,43 @@ export default function CommonMistakes() {
     const mistakes = [
         {
             number: "1",
-            title: "Rispondi Dopo 8 Ore",
+            title: "BOTTLENECK: Rispondi Quando Puoi, Non Quando Servono",
             icon: "⏰",
             stat: "72% dei lead abbandona dopo 5 minuti senza risposta",
             cost: "~€2.400/mese in vendite perse",
-            detail: "Il tuo competitor risponde in 2 minuti. Tu dopo 8 ore. Chi vince?"
+            detail: "Il competitor risponde in 2 minuti. Tu dopo 8 ore (perché sei umano). Chi vince?"
         },
         {
             number: "2",
-            title: "Dai Preventivi a Tutti",
+            title: "BOTTLENECK: Nessun Filtro Automatico",
             icon: "📝",
             stat: "80% dei 'mi mandi info?' sono curiosi, non buyer",
             cost: "15 ore/settimana sprecate",
-            detail: "Non qualifichi. Sprechi tempo con chi non comprerà mai."
+            detail: "Sprechi tempo con lead freddi che non comprano mai invece di chiudere deal caldi."
         },
         {
             number: "3",
-            title: "Usi Template Generici",
+            title: "BOTTLENECK: Template Freddi e Generici",
             icon: "📋",
-            stat: "I clienti sentono il copy-paste a km di distanza",
-            cost: "Conversione crolla del 65%",
-            detail: "Messaggi freddi, impersonali. Zero connessione emotiva."
+            stat: "La conversione crolla quando il cliente sente il bot",
+            cost: "-65% tasso di chiusura",
+            detail: "Senza la tua impronta digitale, i messaggi restano sterili. La connessione si rompe."
         },
         {
             number: "4",
-            title: "Perdi Messaggi Notturni/Weekend",
+            title: "BOTTLENECK: Il Buio Notturno e del Weekend",
             icon: "🌙",
             stat: "30% delle vendite arrivano fuori orario lavorativo",
             cost: "€4-8K/mese lasciati sul tavolo",
-            detail: "Lead motivati scrivono alle 23:00, domenica, 3AM. Tu dormi. Loro comprano altrove."
+            detail: "I lead non aspettano il lunedì mattina. Se non ci sei tu, comprano da chi c'è."
         },
         {
             number: "5",
-            title: "Fai Tutto Manualmente",
+            title: "BOTTLENECK: Tu sei l'imbuto del tuo business",
             icon: "🤯",
-            stat: "Non puoi scalare oltre le tue ore disponibili",
-            cost: "Business plateaued, burnout garantito",
-            detail: "Sei il collo di bottiglia del tuo business. Crescita = impossibile."
+            stat: "Non puoi scalare oltre le tue 24 ore",
+            cost: "Business bloccato, burnout assicurato",
+            detail: "La crescita è limitata dalla tua presenza fisica. Fino a oggi."
         }
     ];
 
@@ -66,18 +66,18 @@ export default function CommonMistakes() {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100/80 border-2 border-red-300/60 rounded-full mb-6">
-                            <AlertTriangle className="w-5 h-5 text-red-700" />
-                            <span className="text-red-800 text-sm font-black uppercase tracking-wider">
-                                Attenzione
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal/5 border border-charcoal/10 rounded-full mb-6">
+                            <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+                            <span className="text-charcoal/60 text-[10px] uppercase font-black tracking-widest">
+                                Analysis & Diagnosis
                             </span>
                         </div>
 
                         <h2 className="font-serif text-4xl md:text-6xl text-charcoal mb-6">
-                            5 Motivi Per Cui <span className="text-red-700 italic">Perdi Vendite</span>
+                            5 Colli di Bottiglia <br /> <span className="text-gold italic">(Che Non Sono Colpa Tua)</span>
                         </h2>
                         <p className="text-xl text-charcoal/60 max-w-3xl mx-auto">
-                            (E non te ne accorgi nemmeno)
+                            Il sistema tradizionale è rotto. Ecco dove perdi ossigeno (e vendite) ogni giorno.
                         </p>
                     </motion.div>
 
@@ -112,11 +112,13 @@ export default function CommonMistakes() {
 
                                     {/* Content */}
                                     <div className="flex-1 p-8">
-                                        <div className="flex items-start gap-3 mb-4">
-                                            <X className="w-7 h-7 text-red-700 flex-shrink-0 mt-1" />
+                                        <div className="flex items-start gap-4 mb-4">
+                                            <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                <X className="w-5 h-5 text-red-700" />
+                                            </div>
                                             <div className="flex-1">
                                                 <h3 className="text-2xl font-serif text-charcoal font-bold mb-2">
-                                                    ERRORE: {mistake.title}
+                                                    {mistake.title}
                                                 </h3>
                                                 <p className="text-charcoal/70 leading-relaxed mb-4">
                                                     {mistake.detail}

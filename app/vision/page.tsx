@@ -16,6 +16,14 @@ const BRAND_ECOSYSTEM = [
         color: "text-gold"
     },
     {
+        name: "VirtualBNB",
+        tagline: "Luxury Property Management",
+        description: "Operazioni immobiliari di prestigio a Milano e oltre, con standard di servizio imperiali.",
+        icon: Building2,
+        status: "Live",
+        color: "text-amber-600"
+    },
+    {
         name: "LuminelCoach",
         tagline: "Transformational AI Coach",
         description: "L'intelligenza artificiale al servizio dell'evoluzione personale e del coaching trasformativo.",
@@ -28,7 +36,7 @@ const BRAND_ECOSYSTEM = [
         tagline: "The Elite Operating System",
         description: "Un gestionale di nuova generazione. Il cervello operativo d'élite per la tua impresa.",
         icon: Layout,
-        status: "In Development",
+        status: "Coming Soon",
         color: "text-blue-400"
     },
     {
@@ -36,23 +44,15 @@ const BRAND_ECOSYSTEM = [
         tagline: "Formazione Personalizzata d'Elite",
         description: "Oltre l'e-learning: percorsi formativi su misura per aspiranti leader ed executive.",
         icon: GraduationCap,
-        status: "Active",
+        status: "Coming Soon",
         color: "text-emerald-400"
-    },
-    {
-        name: "VirtualBNB",
-        tagline: "Luxury Property Management",
-        description: "Operazioni immobiliari di prestigio a Milano e oltre, con standard di servizio imperiali.",
-        icon: Building2,
-        status: "Active",
-        color: "text-amber-600"
     },
     {
         name: "MichaelLuminels",
         tagline: "Virtual Coach Image",
         description: "La fusione tra immagine, stile e coaching virtuale per un brand personale d'impatto.",
         icon: Star,
-        status: "Research",
+        status: "Coming Soon",
         color: "text-pink-400"
     }
 ];

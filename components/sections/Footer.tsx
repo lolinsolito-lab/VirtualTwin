@@ -118,7 +118,7 @@ const Footer = () => {
                     <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
                         <p className="text-white/30 text-[10px] uppercase tracking-widest text-center md:text-left leading-relaxed">
                             © {currentYear} <span className="text-gold">VirtualTwin</span> · Un progetto di <span className="text-white/60">Insolito Experiences di Michael Jara</span><br />
-                            P.IVA: IT00000000000 (Placeholder) · Made with ♥ in 🇮🇹 Italy
+                            P.IVA: In fase di costituzione · Pre-lancio Q1 2026 · Made with ♥ in 🇮🇹 Italy
                         </p>
                         <div className="flex items-center gap-6 text-white/30 text-xs">
                             <button onClick={() => setActiveModal('privacy')} className="hover:text-gold transition-colors">Privacy</button>
