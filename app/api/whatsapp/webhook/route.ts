@@ -4,7 +4,6 @@ import {
     verifyWhatsAppSignature,
     extractMessageData,
     getCredentialsByWabaId,
-    findOrCreateLead,
     findOrCreateConversation,
     saveMessage,
     getLastMessages,
@@ -85,14 +84,12 @@ export async function POST(req: Request) {
             console.warn(`[Limits] ❌ BLOCKED: User ${userId} exceeded limit (${limitCheck.used}/${limitCheck.limit})`);
 
             // Send pause message to lead
-            const leadName = fullName ? fullName.split(' ')[0] : '';
             const pauseMessage = getBlockedAutoReply(ownerProfile?.business_name);
 
             await sendWhatsAppMessage(phone, pauseMessage, credentials.apiKey);
 
             // Log blocked message
-            const lead = await findOrCreateLead(userId, phone, fullName || 'Contatto WhatsApp');
-            const conversation = await findOrCreateConversation(userId, lead.id);
+            const conversation = await findOrCreateConversation(userId, phone, fullName || 'Contatto WhatsApp');
 
             await saveMessage(conversation.id, 'inbound', text || '[message blocked - limit exceeded]');
             await saveMessage(conversation.id, 'outbound', '[AUTO] Limite raggiunto - messaggio pausa inviato', true);
@@ -114,9 +111,9 @@ export async function POST(req: Request) {
             if (downloaded) mediaBuffer = downloaded as Buffer;
         }
 
-        // 6. Lead & Conversation management
-        const lead = await findOrCreateLead(userId, phone, fullName || 'Contatto WhatsApp');
-        const conversation = await findOrCreateConversation(userId, lead.id);
+        // 6. 🏛️ Sovereign Hub: Conversation management
+        // Unified contact & conversation identification
+        const conversation = await findOrCreateConversation(userId, phone, fullName || 'Contatto WhatsApp');
 
         // 7. Log messaggio Inbound
         await saveMessage(conversation.id, 'inbound', text);

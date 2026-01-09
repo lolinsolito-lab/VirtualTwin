@@ -78,11 +78,8 @@ export async function getCredentialsByWabaId(wabaId: string): Promise<{ userId: 
 
 /**
  * Verifica la firma di 360dialog per sicurezza webhook
- * In produzione: validare X-Hub-Signature se configurato
  */
 export function verifyWhatsAppSignature(payload: any, headers: Headers) {
-    // 360Dialog non richiede signature verification obbligatoria
-    // ma possiamo validare che il payload abbia la struttura attesa
     if (!payload || (!payload.messages && !payload.statuses)) {
         console.warn('[360Dialog] Payload non valido ricevuto');
         return false;
@@ -94,7 +91,6 @@ export function verifyWhatsAppSignature(payload: any, headers: Headers) {
  * Estrae i dati essenziali dal payload di 360dialog
  */
 export function extractMessageData(payload: any) {
-    // Struttura 360dialog standard
     const message = payload.messages?.[0];
     const contact = payload.contacts?.[0];
 
@@ -111,8 +107,6 @@ export function extractMessageData(payload: any) {
 
 /**
  * Scarica un file media da 360dialog
- * @param mediaId - ID del media da scaricare
- * @param apiKey - (Opzionale) API key dell'utente. Se non fornita, usa env var
  */
 export async function downloadWhatsAppMedia(mediaId: string, apiKey?: string): Promise<Buffer | null> {
     const finalApiKey = apiKey || process.env.D360_API_KEY;
@@ -144,73 +138,40 @@ export async function downloadWhatsAppMedia(mediaId: string, apiKey?: string): P
 }
 
 /**
- * Identifica il tenant (cliente VirtualTwin) dal numero di telefono ricevente (WABA ID)
+ * Trova o crea una conversazione (Hub Omni-canale)
+ * Nel nuovo schema Sovereign, la conversazione contiene i dati del contatto direttamente.
  */
-export async function getTenantByWabaId(wabaId: string) {
-    const { data, error } = await supabase
-        .from('channels')
-        .select('tenant_id')
-        .eq('account_id', wabaId)
-        .single();
-
-    if (error || !data) return null;
-    return data.tenant_id;
-}
-
-/**
- * Trova o crea un lead nel CRM basato sul numero di telefono
- */
-export async function findOrCreateLead(tenantId: string, phone: string, fullName: string) {
-    // Cerca lead esistente
-    const { data: existingLead } = await supabase
-        .from('leads')
-        .select('*')
-        .eq('tenant_id', tenantId)
-        .eq('phone_number', phone)
-        .single();
-
-    if (existingLead) return existingLead;
-
-    // Crea nuovo lead se non esiste
-    const { data: newLead, error } = await supabase
-        .from('leads')
-        .insert([{
-            tenant_id: tenantId,
-            phone_number: phone,
-            full_name: fullName,
-            source: 'whatsapp'
-        }])
-        .select()
-        .single();
-
-    if (error) throw error;
-    return newLead;
-}
-
-/**
- * Trova o crea una conversazione per il lead
- */
-export async function findOrCreateConversation(tenantId: string, leadId: string) {
+export async function findOrCreateConversation(userId: string, contactPhone: string, contactName: string, channelType: string = 'whatsapp') {
+    // 1. Cerca conversazione esistente per questo utente e questo contatto
     const { data: existingConv } = await supabase
         .from('conversations')
         .select('*')
-        .eq('tenant_id', tenantId)
-        .eq('lead_id', leadId)
+        .eq('user_id', userId)
+        .eq('contact_platform_id', contactPhone)
+        .eq('channel_type', channelType)
         .single();
 
     if (existingConv) return existingConv;
 
+    // 2. Crea nuova conversazione se non esiste
     const { data: newConv, error } = await supabase
         .from('conversations')
         .insert([{
-            tenant_id: tenantId,
-            lead_id: leadId,
-            channel_type: 'whatsapp'
+            user_id: userId,
+            contact_platform_id: contactPhone,
+            contact_phone: contactPhone,
+            contact_name: contactName,
+            channel_type: channelType,
+            status: 'active'
         }])
         .select()
         .single();
 
-    if (error) throw error;
+    if (error) {
+        console.error('[Sovereign] Errore creazione conversazione:', error);
+        throw error;
+    }
+
     return newConv;
 }
 
@@ -218,11 +179,22 @@ export async function findOrCreateConversation(tenantId: string, leadId: string)
  * Salva un messaggio nel database (inbound/outbound)
  */
 export async function saveMessage(convId: string, direction: 'inbound' | 'outbound', content: string, aiGenerated = false) {
+    const { data: conversation } = await supabase
+        .from('conversations')
+        .select('user_id, clone_id')
+        .eq('id', convId)
+        .single();
+
+    if (!conversation) return;
+
     await supabase
         .from('messages')
         .insert([{
             conversation_id: convId,
-            direction,
+            user_id: conversation.user_id,
+            clone_id: conversation.clone_id,
+            direction: direction === 'inbound' ? 'incoming' : 'outgoing',
+            sender_type: direction === 'inbound' ? 'contact' : (aiGenerated ? 'ai' : 'human'),
             content,
             ai_generated: aiGenerated
         }]);
@@ -230,7 +202,10 @@ export async function saveMessage(convId: string, direction: 'inbound' | 'outbou
     // Aggiorna timestamp ultima attività conversazione
     await supabase
         .from('conversations')
-        .update({ last_message_at: new Date().toISOString() })
+        .update({
+            last_message_at: new Date().toISOString(),
+            total_messages: supabase.rpc('increment', { row_id: convId }) // Opzionale se gestito da trigger
+        })
         .eq('id', convId);
 }
 
