@@ -134,9 +134,9 @@ export default function FounderPage() {
 
                 {/* ============================================= */}
                 {/* PRICING - Uses PricingUltimate Component */}
-                {/* Contains 6 cards, wave pricing, comparison */}
+                {/* pricingMode='founder' ensures founder prices */}
                 {/* ============================================= */}
-                <PricingUltimate />
+                <PricingUltimate pricingMode="founder" />
 
                 {/* SCARCITY TIMELINE - Show price escalation */}
                 <ScarcityTimeline />

@@ -153,8 +153,9 @@ export default function StartPage() {
 
             {/* ============================================= */}
             {/* PRICING - Uses PricingUltimate Component */}
+            {/* pricingMode='public' ensures public prices */}
             {/* ============================================= */}
-            <PricingUltimate />
+            <PricingUltimate pricingMode="public" />
 
             {/* More Story Sections */}
             <MythVsReality />

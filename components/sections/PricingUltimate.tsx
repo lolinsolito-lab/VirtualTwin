@@ -4,14 +4,23 @@ import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { Check, Zap, Sparkles, Crown, Star, ArrowRight, Clock, Gift, Info, Handshake } from 'lucide-react';
 import { getPlanAvailability, PlanAvailability, PlanName } from '@/lib/founderAvailability';
-import { getDisplayPricing, getCurrentPublicPricing, Wave, WAVES, getFoundersSold, isPreLaunch, getDaysUntilLaunch } from '@/lib/waves';
+import { getDisplayPricing, getCurrentPublicPricing, Wave, WAVES, getFoundersSold, isPreLaunch, getDaysUntilLaunch, getCurrentWaveSpotsRemaining } from '@/lib/waves';
 import DualOptionOverlay from '@/components/DualOptionOverlay';
 import CountdownTimer from '@/components/CountdownTimer';
 import { isAspiranteVisible } from '@/lib/features';
 import PlanDetailModal from '@/components/PlanDetailModal';
 
+// =============================================
+// PROPS: pricingMode controls display behavior
+// 'public' = Show public prices, "Inizia Ora" buttons
+// 'founder' = Show founder prices, "Diventa Founder" buttons
+// 'auto' = Dynamic based on wave availability (default)
+// =============================================
+interface PricingUltimateProps {
+    pricingMode?: 'public' | 'founder' | 'auto';
+}
 
-const PricingUltimate = () => {
+const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
     const [inView, setInView] = useState(false);
     const [hoveredPlan, setHoveredPlan] = useState<number | null>(null);
     const [planAvailability, setPlanAvailability] = useState<Record<PlanName, PlanAvailability> | null>(null);
@@ -21,17 +30,27 @@ const PricingUltimate = () => {
     const [prelaunch, setPrelaunch] = useState(isPreLaunch());
     const [daysToLaunch, setDaysToLaunch] = useState(getDaysUntilLaunch());
     const [openModal, setOpenModal] = useState<string | null>(null);
+    const [founderSpotsAvailable, setFounderSpotsAvailable] = useState(0);
     const sectionRef = useRef<HTMLElement>(null);
+
+    // Determine effective mode: prop > auto-detection
+    // 'public' = force public prices, 'founder' = force founder prices
+    const isShowingFounder = pricingMode === 'founder' ||
+        (pricingMode === 'auto' && displayPricing?.tier === 'founder');
+    const isShowingPublic = pricingMode === 'public' ||
+        (pricingMode === 'auto' && displayPricing?.tier === 'public');
 
     useEffect(() => {
         const fetchAvailability = async () => {
             try {
-                const [availability, pricing] = await Promise.all([
+                const [availability, pricing, spotsRemaining] = await Promise.all([
                     getPlanAvailability(),
-                    getDisplayPricing()
+                    getDisplayPricing(),
+                    getCurrentWaveSpotsRemaining()
                 ]);
                 setPlanAvailability(availability);
                 setDisplayPricing(pricing);
+                setFounderSpotsAvailable(spotsRemaining);
 
                 if (pricing.tier === 'founder' && pricing.waveName) {
                     const sold = await getFoundersSold();
@@ -176,9 +195,9 @@ const PricingUltimate = () => {
                 { wave: "Public", price: 347, date: "Ott 2026" }
             ],
             features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scegli Solopreneur →",
+            cta: isShowingFounder ? "Diventa Founder →" : "Inizia Ora →",
             priceId: getPriceIdForPlan('solopreneur'),
-            isFounder: displayPricing?.tier === 'founder',
+            isFounder: isShowingFounder,
             bg: "bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50",
             border: "border-green-400",
             accent: "text-green-700",
@@ -203,9 +222,9 @@ const PricingUltimate = () => {
                 { wave: "Public", price: 797, date: "Ott 2026" }
             ],
             features: ["3 Cloni AI", "5K msg/mese", "3 Canali", "A/B Test", "Academy Mod 1-2", "War Room mensile"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Scala con Entrepreneur →",
+            cta: isShowingFounder ? "Diventa Founder →" : "Inizia Ora →",
             priceId: getPriceIdForPlan('entrepreneur'),
-            isFounder: displayPricing?.tier === 'founder',
+            isFounder: isShowingFounder,
             bg: "bg-gradient-to-br from-amber-50 via-yellow-100 to-amber-100",
             border: "border-amber-400",
             accent: "text-amber-900",
@@ -233,9 +252,9 @@ const PricingUltimate = () => {
                 { wave: "Public", price: 1397, date: "Ott 2026" }
             ],
             features: ["5 Cloni AI", "20K msg/mese", "10 Canali inclusi", "API + CRM", "Academy Full", "CSM Dedicato"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Conquista il Mercato →",
+            cta: isShowingFounder ? "Diventa Founder →" : "Inizia Ora →",
             priceId: getPriceIdForPlan('conquistatore'),
-            isFounder: displayPricing?.tier === 'founder',
+            isFounder: isShowingFounder,
             bg: "bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900",
             border: "border-purple-500",
             accent: "text-purple-300",
@@ -260,9 +279,9 @@ const PricingUltimate = () => {
                 { wave: "Public", price: 2197, date: "Ott 2026" }
             ],
             features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "Team Dedicato", "SLA 99.9%"],
-            cta: displayPricing?.tier === 'founder' ? "Diventa Founder →" : "Richiedi Accesso →",
+            cta: isShowingFounder ? "Diventa Founder →" : "Inizia Ora →",
             priceId: getPriceIdForPlan('imperatore'),
-            isFounder: displayPricing?.tier === 'founder',
+            isFounder: isShowingFounder,
             bg: "bg-gradient-to-br from-[#f5f0e8] via-[#e8dcc8] to-[#d4c4a8]",
             border: "border-[#c9b896]",
             accent: "text-[#8b7355]",
