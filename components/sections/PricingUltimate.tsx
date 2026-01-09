@@ -201,7 +201,7 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                 { wave: "Elite", price: 89, date: "Lug 2026" },
                 { wave: "Public", price: 347, date: "Ott 2026" }
             ],
-            features: ["1 Clone AI Pro", "500 msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
+            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
             cta: isShowingFounder ? "Diventa Founder →" : "Inizia Ora →",
             priceId: getPriceIdForPlan('solopreneur'),
             isFounder: isShowingFounder,
@@ -285,7 +285,7 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                 { wave: "Elite", price: 1097, date: "Lug 2026" },
                 { wave: "Public", price: 2197, date: "Ott 2026" }
             ],
-            features: ["15 Cloni AI", "50K msg/mese", "25 Canali inclusi", "White-label", "Team Dedicato", "SLA 99.9%"],
+            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "Team Dedicato", "SLA 99.9%"],
             cta: isShowingFounder ? "Diventa Founder →" : "Inizia Ora →",
             priceId: getPriceIdForPlan('imperatore'),
             isFounder: isShowingFounder,
@@ -677,10 +677,10 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                                 <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
                                     <td className="py-4 px-4 font-medium text-charcoal">Conversazioni/mese</td>
                                     <td className="text-center py-4 px-3 text-charcoal/60">100 totali</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/60">500</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">1.000</td>
                                     <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">5.000</td>
                                     <td className="text-center py-4 px-3 text-charcoal/60">20.000</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/60">50.000</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">100.000</td>
                                 </tr>
                                 <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
                                     <td className="py-4 px-4 font-medium text-charcoal">Canali</td>

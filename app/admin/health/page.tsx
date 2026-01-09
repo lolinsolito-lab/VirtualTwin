@@ -43,8 +43,8 @@ export default function AdminHealth() {
             // Calculate average health score from real user profiles
             const userHealths = users?.map(u => {
                 const tier = u.plan_tier as keyof typeof IMPERIAL_PRICES.founder;
-                const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
-                const rev = prices[tier] || 0;
+                const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_h1_2026;
+                const rev = (prices as any)[tier] || 0;
 
                 const msgCount = u.messages_used_this_month || 0;
                 const cost = msgCount * 0.01; // Average cost

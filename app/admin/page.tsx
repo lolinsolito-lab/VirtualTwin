@@ -64,8 +64,8 @@ export default function AdminOverview() {
             // 👑 IMPERIAL PRICING SYNC
             const totalRev = users?.reduce((acc, user) => {
                 const tier = user.plan_tier as keyof typeof IMPERIAL_PRICES.founder;
-                const prices = user.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
-                return acc + (prices[tier] || 0);
+                const prices = user.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_h1_2026;
+                return acc + ((prices as any)[tier] || 0);
             }, 0) || 0;
 
             // 2. GROWTH INTELLIGENCE (Real-Sync)

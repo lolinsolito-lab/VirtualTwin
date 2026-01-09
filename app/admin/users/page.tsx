@@ -67,7 +67,7 @@ export default function AdminUsers() {
                 const enhancedUsers = data.map(u => {
                     const tier = u.plan_tier as keyof typeof IMPERIAL_PRICES.founder;
                     const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_h1_2026;
-                    const rev = prices[tier as keyof typeof prices] || 0;
+                    const rev = (prices as any)[tier] || 0;
 
                     // Realistic Tiered Cost Model (derived from AI usage)
                     const calculateUserTieredCost = (msgCount: number) => {
@@ -308,7 +308,7 @@ export default function AdminUsers() {
                             <div className="space-y-4">
                                 <label className="text-[10px] uppercase tracking-widest text-white/40 font-black px-2">Access Tier (Testing Academy)</label>
                                 <div className="grid grid-cols-1 gap-2">
-                                    {['solopreneur', 'entrepreneur', 'conquistatore', 'imperatore'].map((tier) => (
+                                    {['curioso', 'solopreneur', 'entrepreneur', 'conquistatore', 'imperatore', 'sovereignty'].map((tier) => (
                                         <button
                                             key={tier}
                                             onClick={() => handleUpdateUser({ plan_tier: tier })}

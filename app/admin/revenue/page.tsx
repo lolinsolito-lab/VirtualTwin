@@ -58,7 +58,7 @@ export default function AdminRevenue() {
 
             activeUsers.forEach(u => {
                 const tier = u.plan_tier;
-                const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_2026;
+                const prices = u.is_founder ? IMPERIAL_PRICES.founder : IMPERIAL_PRICES.public_h1_2026;
                 const price = (prices as any)[tier] || 0;
 
                 counts[tier] = (counts[tier] || 0) + 1;
