@@ -241,7 +241,8 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
             glow: true,
             scale: 1.0,
             badge: { emoji: "🔥", text: "PIÙ SCELTO", color: "red", animate: "pulse" },
-            badge2: { emoji: "⭐", text: "68% CLIENTI", color: "gold" }
+            badge2: { emoji: "⭐", text: "68% CLIENTI", color: "gold" },
+            promoBadge: { text: "⏳ TARIFFA PROMOZIONALE", color: "gold" }
         },
         {
             id: "conquistatore",
@@ -269,7 +270,8 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
             btnStyle: "bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700 shadow-xl",
             badge: { emoji: "💎", text: "SCALE-UP", color: "purple", animate: "shimmer" },
             scale: 1.0,
-            isDark: true
+            isDark: true,
+            promoBadge: { text: "⏳ TARIFFA PROMOZIONALE", color: "purple" }
         },
         {
             id: "imperatore",
@@ -299,7 +301,8 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
             isChampagne: true,
             scale: 1.0,
             badge: { emoji: "👑", text: "ENTERPRISE", color: "gold", animate: "bounce" },
-            badge2: { emoji: "🔒", text: "12 SLOT", color: "red" }
+            badge2: { emoji: "🔒", text: "12 SLOT", color: "red" },
+            promoBadge: { text: "⏳ TARIFFA PROMOZIONALE", color: "gold" }
         },
         {
             id: "sovereignty",
@@ -474,6 +477,13 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                                     {plan.name}
                                 </p>
 
+                                {/* Promo Badge for Tier 3, 4, 5 */}
+                                {(plan as any).promoBadge && (
+                                    <div className={`mb-2 inline-flex px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase border border-current opacity-80 ${(plan as any).promoBadge.color === 'gold' ? 'text-gold border-gold/30' : (plan as any).promoBadge.color === 'purple' ? 'text-purple-400 border-purple-400/30' : 'text-green-400 border-green-400/30'}`}>
+                                        {(plan as any).promoBadge.text}
+                                    </div>
+                                )}
+
                                 {/* Price */}
                                 <div className="mb-2 overflow-hidden h-14 relative">
                                     <AnimatePresence mode="wait">
@@ -510,7 +520,7 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                                                         📈 Guadagni Interessanti /mese a vita
                                                     </span>
                                                 ) : (
-                                                    <>📉 Risparmia {(parseInt(plan.publicPrice.replace('€', '')) || 0) - (parseInt(plan.price.replace('€', '')) || 0)}€ /mese a vita</>
+                                                    <>📉 BLOCCA IL PREZZO — RISPARMIA IL 70%</>
                                                 )}
                                             </motion.p>
                                         ) : (
@@ -523,7 +533,7 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                                                 {plan.price === "CUSTOM" ? (
                                                     <span className="text-gold">🤝 Trattativa Riservata</span>
                                                 ) : (
-                                                    "⚠️ Prezzo pieno wave H1 2026"
+                                                    "⏳ TARIFFA PROMOZIONALE IN SCADENZA"
                                                 )}
                                             </motion.p>
                                         )}
@@ -761,111 +771,189 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                             <span className="text-red-600 text-xs font-black uppercase tracking-widest">Prezzi in aumento</span>
                         </div>
                         <h3 className="font-serif text-2xl md:text-4xl text-charcoal mb-3">
-                            Il Prezzo <span className="italic gold-text-gradient">Aumenta</span> Ogni 6 Mesi
+                            {isShowingPublic ? (
+                                <>Il Prezzo <span className="italic gold-text-gradient">Aumenta</span> Ogni 6 Mesi</>
+                            ) : (
+                                <>Il Tuo Vantaggio <span className="italic gold-text-gradient">Founder</span></>
+                            )}
                         </h3>
                         <p className="text-charcoal/60 text-base max-w-2xl mx-auto">
-                            Chi entra <strong className="text-charcoal">prima</strong> paga <strong className="text-charcoal">meno per sempre</strong>.
-                            Il tuo prezzo resta bloccato a vita.
+                            {isShowingPublic ? (
+                                <>I prezzi pubblici non sono mai bloccati e aumentano semestralmente. Blocca ora la tua tariffa.</>
+                            ) : (
+                                <>Chi entra <strong className="text-charcoal">prima</strong> paga <strong className="text-charcoal">meno per sempre</strong>. Il tuo prezzo resta bloccato a vita.</>
+                            )}
                         </p>
                     </div>
 
                     {/* Timeline Visual */}
                     <div className="max-w-5xl mx-auto">
-                        {/* FOUNDER WAVES - Highlighted */}
+                        {/* DYNAMIC WAVES (FOUNDER or PUBLIC based on mode) */}
                         <div className="mb-8">
                             <div className="flex items-center gap-3 mb-4">
-                                <span className="text-[10px] uppercase tracking-[0.3em] font-black text-green-600">🔒 Founder Waves</span>
-                                <span className="flex-1 h-px bg-green-200"></span>
-                                <span className="text-[10px] text-green-600 font-bold">Prezzo bloccato LIFETIME</span>
+                                <span className={`text-[10px] uppercase tracking-[0.3em] font-black ${isShowingPublic ? 'text-blue-600' : 'text-green-600'}`}>
+                                    {isShowingPublic ? '📅 Public Pricing Waves' : '🔒 Founder Waves'}
+                                </span>
+                                <span className={`flex-1 h-px ${isShowingPublic ? 'bg-blue-200' : 'bg-green-200'}`}></span>
+                                <span className={`text-[10px] font-bold ${isShowingPublic ? 'text-blue-600' : 'text-green-600'}`}>
+                                    {isShowingPublic ? 'Nessun lock-in dopo il 2026' : 'Prezzo bloccato LIFETIME'}
+                                </span>
                             </div>
 
                             <div className="grid md:grid-cols-3 gap-4">
-                                {/* Genesis Wave - CURRENT */}
-                                <div className="relative bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-400 rounded-2xl p-5 shadow-lg">
-                                    <div className="absolute -top-3 left-4 px-3 py-1 bg-green-500 text-white text-[8px] font-black uppercase rounded-full animate-pulse">
-                                        ⚡ Ora Disponibile
-                                    </div>
-                                    <div className="flex items-center gap-2 mb-3 mt-2">
-                                        <span className="text-2xl">🌱</span>
-                                        <div>
-                                            <h4 className="font-bold text-green-800">Genesis Wave</h4>
-                                            <p className="text-green-600 text-[10px] font-bold">Spot 1-20 • Gen-Giu 2026</p>
+                                {isShowingPublic ? (
+                                    <>
+                                        {/* H1 2026 */}
+                                        <div className="relative bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-400 rounded-2xl p-5 shadow-lg">
+                                            <div className="absolute -top-3 left-4 px-3 py-1 bg-blue-500 text-white text-[8px] font-black uppercase rounded-full animate-pulse">
+                                                ⚡ Attuale
+                                            </div>
+                                            <div className="flex items-center gap-2 mb-3 mt-2">
+                                                <span className="text-2xl">🌍</span>
+                                                <div>
+                                                    <h4 className="font-bold text-blue-800">Public Wave H1</h4>
+                                                    <p className="text-blue-600 text-[10px] font-bold">Gen-Giu 2026</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2 text-sm">
+                                                <div className="flex justify-between"><span className="text-blue-700">Entrepreneur</span><span className="font-black text-blue-800">€697/m</span></div>
+                                                <div className="flex justify-between"><span className="text-blue-700">Conquistatore</span><span className="font-black text-blue-800">€1.197/m</span></div>
+                                                <div className="flex justify-between"><span className="text-blue-700">Imperatore</span><span className="font-black text-blue-800">€1.997/m</span></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="space-y-2 text-sm">
-                                        <div className="flex justify-between"><span className="text-green-700">Entrepreneur</span><span className="font-black text-green-800">€147/m</span></div>
-                                        <div className="flex justify-between"><span className="text-green-700">Conquistatore</span><span className="font-black text-green-800">€347/m</span></div>
-                                        <div className="flex justify-between"><span className="text-green-700">Imperatore</span><span className="font-black text-green-800">€697/m</span></div>
-                                    </div>
-                                </div>
 
-                                {/* Pioneer Wave */}
-                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 opacity-80 hover:opacity-100 transition-opacity">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="text-2xl">🚀</span>
-                                        <div>
-                                            <h4 className="font-bold text-blue-800">Pioneer Wave</h4>
-                                            <p className="text-blue-600 text-[10px] font-bold">Spot 21-40 • Lug-Dic 2026</p>
+                                        {/* H2 2026 */}
+                                        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-2xl p-5 opacity-90 transition-all hover:opacity-100">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="text-2xl">📈</span>
+                                                <div>
+                                                    <h4 className="font-bold text-indigo-800">Public Wave H2</h4>
+                                                    <p className="text-indigo-600 text-[10px] font-bold">Lug-Dic 2026</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2 text-sm">
+                                                <div className="flex justify-between"><span className="text-indigo-700">Entrepreneur</span><span className="font-black text-indigo-800">€797/m</span></div>
+                                                <div className="flex justify-between"><span className="text-indigo-700">Conquistatore</span><span className="font-black text-indigo-800">€1.397/m</span></div>
+                                                <div className="flex justify-between"><span className="text-indigo-700">Imperatore</span><span className="font-black text-indigo-800">€2.197/m</span></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="space-y-2 text-sm">
-                                        <div className="flex justify-between"><span className="text-blue-700">Entrepreneur</span><span className="font-black text-blue-800">€197/m</span></div>
-                                        <div className="flex justify-between"><span className="text-blue-700">Conquistatore</span><span className="font-black text-blue-800">€447/m</span></div>
-                                        <div className="flex justify-between"><span className="text-blue-700">Imperatore</span><span className="font-black text-blue-800">€897/m</span></div>
-                                    </div>
-                                </div>
 
-                                {/* Elite Wave */}
-                                <div className="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-2xl p-5 opacity-60 hover:opacity-100 transition-opacity">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="text-2xl">💎</span>
-                                        <div>
-                                            <h4 className="font-bold text-purple-800">Elite Wave</h4>
-                                            <p className="text-purple-600 text-[10px] font-bold">Spot 41-60 • Gen-Giu 2027</p>
+                                        {/* H1 2027 */}
+                                        <div className="bg-gradient-to-br from-red-50 to-rose-50 border border-red-200 rounded-2xl p-5 opacity-70 transition-all hover:opacity-100">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="text-2xl">🔥</span>
+                                                <div>
+                                                    <h4 className="font-bold text-red-800">Public Wave 2027</h4>
+                                                    <p className="text-red-600 text-[10px] font-bold">Gen-Giu 2027</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2 text-sm">
+                                                <div className="flex justify-between"><span className="text-red-700">Entrepreneur</span><span className="font-black text-red-800">€897/m</span></div>
+                                                <div className="flex justify-between"><span className="text-red-700">Conquistatore</span><span className="font-black text-red-800">€1.597/m</span></div>
+                                                <div className="flex justify-between"><span className="text-red-700">Imperatore</span><span className="font-black text-red-800">€2.397/m</span></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="space-y-2 text-sm">
-                                        <div className="flex justify-between"><span className="text-purple-700">Entrepreneur</span><span className="font-black text-purple-800">€247/m</span></div>
-                                        <div className="flex justify-between"><span className="text-purple-700">Conquistatore</span><span className="font-black text-purple-800">€547/m</span></div>
-                                        <div className="flex justify-between"><span className="text-purple-700">Imperatore</span><span className="font-black text-purple-800">€1.097/m</span></div>
-                                    </div>
-                                </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* Genesis Wave - CURRENT */}
+                                        <div className="relative bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-400 rounded-2xl p-5 shadow-lg">
+                                            <div className="absolute -top-3 left-4 px-3 py-1 bg-green-500 text-white text-[8px] font-black uppercase rounded-full animate-pulse">
+                                                ⚡ Ora Disponibile
+                                            </div>
+                                            <div className="flex items-center gap-2 mb-3 mt-2">
+                                                <span className="text-2xl">🌱</span>
+                                                <div>
+                                                    <h4 className="font-bold text-green-800">Genesis Wave</h4>
+                                                    <p className="text-green-600 text-[10px] font-bold">Spot 1-20 • Gen-Giu 2026</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2 text-sm">
+                                                <div className="flex justify-between"><span className="text-green-700">Entrepreneur</span><span className="font-black text-green-800">€147/m</span></div>
+                                                <div className="flex justify-between"><span className="text-green-700">Conquistatore</span><span className="font-black text-green-800">€347/m</span></div>
+                                                <div className="flex justify-between"><span className="text-green-700">Imperatore</span><span className="font-black text-green-800">€697/m</span></div>
+                                            </div>
+                                        </div>
+
+                                        {/* Pioneer Wave */}
+                                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 opacity-80 hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="text-2xl">🚀</span>
+                                                <div>
+                                                    <h4 className="font-bold text-blue-800">Pioneer Wave</h4>
+                                                    <p className="text-blue-600 text-[10px] font-bold">Spot 21-40 • Lug-Dic 2026</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2 text-sm">
+                                                <div className="flex justify-between"><span className="text-blue-700">Entrepreneur</span><span className="font-black text-blue-800">€197/m</span></div>
+                                                <div className="flex justify-between"><span className="text-blue-700">Conquistatore</span><span className="font-black text-blue-800">€447/m</span></div>
+                                                <div className="flex justify-between"><span className="text-blue-700">Imperatore</span><span className="font-black text-blue-800">€897/m</span></div>
+                                            </div>
+                                        </div>
+
+                                        {/* Elite Wave */}
+                                        <div className="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-2xl p-5 opacity-60 hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="text-2xl">💎</span>
+                                                <div>
+                                                    <h4 className="font-bold text-purple-800">Elite Wave</h4>
+                                                    <p className="text-purple-600 text-[10px] font-bold">Spot 41-60 • Gen-Giu 2027</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2 text-sm">
+                                                <div className="flex justify-between"><span className="text-purple-700">Entrepreneur</span><span className="font-black text-purple-800">€247/m</span></div>
+                                                <div className="flex justify-between"><span className="text-purple-700">Conquistatore</span><span className="font-black text-purple-800">€547/m</span></div>
+                                                <div className="flex justify-between"><span className="text-purple-700">Imperatore</span><span className="font-black text-purple-800">€1.097/m</span></div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 
-                        {/* PUBLIC PRICING - Greyed out */}
-                        <div className="opacity-50">
-                            <div className="flex items-center gap-3 mb-4">
-                                <span className="text-[10px] uppercase tracking-[0.3em] font-black text-charcoal/40">📅 Prezzi Pubblici</span>
-                                <span className="flex-1 h-px bg-charcoal/10"></span>
-                                <span className="text-[10px] text-red-500 font-bold">Nessun lock-in</span>
-                            </div>
+                        {/* CONDITIONAL BOTTOM INFO */}
+                        {!isShowingPublic && (
+                            <div className="opacity-50">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <span className="text-[10px] uppercase tracking-[0.3em] font-black text-charcoal/40">📅 Prezzi Pubblici</span>
+                                    <span className="flex-1 h-px bg-charcoal/10"></span>
+                                    <span className="text-[10px] text-red-500 font-bold">Nessun lock-in</span>
+                                </div>
 
-                            <div className="bg-charcoal/[0.03] rounded-2xl p-6 border border-charcoal/5">
-                                <div className="grid md:grid-cols-3 gap-6 text-sm">
-                                    <div>
-                                        <p className="text-charcoal/40 text-xs font-bold mb-2">Da Luglio 2027</p>
-                                        <div className="space-y-1">
-                                            <div className="flex justify-between"><span className="text-charcoal/50">Entrepreneur</span><span className="text-charcoal/40 line-through">€697-797/m</span></div>
-                                            <div className="flex justify-between"><span className="text-charcoal/50">Conquistatore</span><span className="text-charcoal/40 line-through">€1.197-1.397/m</span></div>
-                                            <div className="flex justify-between"><span className="text-charcoal/50">Imperatore</span><span className="text-charcoal/40 line-through">€1.997-2.197/m</span></div>
+                                <div className="bg-charcoal/[0.03] rounded-2xl p-6 border border-charcoal/5">
+                                    <div className="grid md:grid-cols-3 gap-6 text-sm">
+                                        <div>
+                                            <p className="text-charcoal/40 text-xs font-bold mb-2">Da Luglio 2027</p>
+                                            <div className="space-y-1">
+                                                <div className="flex justify-between"><span className="text-charcoal/50">Entrepreneur</span><span className="text-charcoal/40 line-through">€697-797/m</span></div>
+                                                <div className="flex justify-between"><span className="text-charcoal/50">Conquistatore</span><span className="text-charcoal/40 line-through">€1.197-1.397/m</span></div>
+                                                <div className="flex justify-between"><span className="text-charcoal/50">Imperatore</span><span className="text-charcoal/40 line-through">€1.997-2.197/m</span></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="md:col-span-2 flex items-center justify-center">
-                                        <div className="text-center">
-                                            <p className="text-charcoal/60 text-sm mb-2">⚠️ <strong>Pagherai 3-5x di più</strong> se aspetti i prezzi pubblici</p>
-                                            <p className="text-charcoal/40 text-xs">I prezzi pubblici aumentano ogni 6 mesi e non sono mai bloccati.</p>
+                                        <div className="md:col-span-2 flex items-center justify-center">
+                                            <div className="text-center">
+                                                <p className="text-charcoal/60 text-sm mb-2">⚠️ <strong>Pagherai 3-5x di più</strong> se aspetti i prezzi pubblici</p>
+                                                <p className="text-charcoal/40 text-xs">I prezzi pubblici aumentano ogni 6 mesi e non sono mai bloccati.</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* CTA Urgency */}
+                        {/* CTA Urgency / Saving Bar */}
                         <div className="mt-8 text-center">
-                            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full shadow-lg">
-                                <span className="text-lg">💰</span>
-                                <span className="text-sm font-bold">Risparmia fino a €78.000 in 5 anni entrando ora nella Genesis Wave</span>
+                            <div className="inline-flex flex-col md:flex-row items-center gap-3 px-6 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-[2rem] shadow-2xl ring-4 ring-green-500/20">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-bounce">
+                                        <Gift className="w-4 h-4" />
+                                    </div>
+                                    <span className="text-sm md:text-base font-black uppercase tracking-tight">
+                                        Risparmia fino a <span className="text-yellow-300 text-xl">€78.000</span> in 5 anni
+                                    </span>
+                                </div>
+                                <div className="hidden md:block w-px h-6 bg-white/20 mx-2"></div>
+                                <span className="text-xs md:text-sm font-bold opacity-90">Entra ora nella Genesis Wave e blocca il prezzo per sempre.</span>
                             </div>
                         </div>
                     </div>
