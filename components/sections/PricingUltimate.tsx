@@ -706,7 +706,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                                         <span className="text-2xl">🌱</span>
                                         <div>
                                             <h4 className="font-bold text-green-800">Genesis Wave</h4>
-                                            <p className="text-green-600 text-[10px] font-bold">Spot 1-20 • Gen-Mar 2026</p>
+                                            <p className="text-green-600 text-[10px] font-bold">Spot 1-20 • Gen-Giu 2026</p>
                                         </div>
                                     </div>
                                     <div className="space-y-2 text-sm">
@@ -722,7 +722,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                                         <span className="text-2xl">🚀</span>
                                         <div>
                                             <h4 className="font-bold text-blue-800">Pioneer Wave</h4>
-                                            <p className="text-blue-600 text-[10px] font-bold">Spot 21-40 • Apr-Giu 2026</p>
+                                            <p className="text-blue-600 text-[10px] font-bold">Spot 21-40 • Lug-Dic 2026</p>
                                         </div>
                                     </div>
                                     <div className="space-y-2 text-sm">
@@ -738,7 +738,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                                         <span className="text-2xl">💎</span>
                                         <div>
                                             <h4 className="font-bold text-purple-800">Elite Wave</h4>
-                                            <p className="text-purple-600 text-[10px] font-bold">Spot 41-60 • Lug-Set 2026</p>
+                                            <p className="text-purple-600 text-[10px] font-bold">Spot 41-60 • Gen-Giu 2027</p>
                                         </div>
                                     </div>
                                     <div className="space-y-2 text-sm">
@@ -761,7 +761,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                             <div className="bg-charcoal/[0.03] rounded-2xl p-6 border border-charcoal/5">
                                 <div className="grid md:grid-cols-3 gap-6 text-sm">
                                     <div>
-                                        <p className="text-charcoal/40 text-xs font-bold mb-2">Da Ottobre 2026</p>
+                                        <p className="text-charcoal/40 text-xs font-bold mb-2">Da Luglio 2027</p>
                                         <div className="space-y-1">
                                             <div className="flex justify-between"><span className="text-charcoal/50">Entrepreneur</span><span className="text-charcoal/40 line-through">€697-797/m</span></div>
                                             <div className="flex justify-between"><span className="text-charcoal/50">Conquistatore</span><span className="text-charcoal/40 line-through">€1.197-1.397/m</span></div>
@@ -771,7 +771,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                                     <div className="md:col-span-2 flex items-center justify-center">
                                         <div className="text-center">
                                             <p className="text-charcoal/60 text-sm mb-2">⚠️ <strong>Pagherai 3-5x di più</strong> se aspetti i prezzi pubblici</p>
-                                            <p className="text-charcoal/40 text-xs">I prezzi pubblici aumentano ogni trimestre e non sono mai bloccati.</p>
+                                            <p className="text-charcoal/40 text-xs">I prezzi pubblici aumentano ogni 6 mesi e non sono mai bloccati.</p>
                                         </div>
                                     </div>
                                 </div>

@@ -17,7 +17,7 @@ export default function ScarcityTimeline() {
         {
             phase: "Genesis",
             spots: 20,
-            dates: "Feb - Apr 2026",
+            dates: "Gen - Giu 2026",
             price: 697,
             status: "current",
             icon: "⚡",
@@ -27,7 +27,7 @@ export default function ScarcityTimeline() {
         {
             phase: "Pioneer",
             spots: 20,
-            dates: "May - Jul 2026",
+            dates: "Lug - Dic 2026",
             price: 897,
             status: "upcoming",
             icon: "🚀",
@@ -37,7 +37,7 @@ export default function ScarcityTimeline() {
         {
             phase: "Elite",
             spots: 20,
-            dates: "Aug - Oct 2026",
+            dates: "Gen - Giu 2027",
             price: 1097,
             status: "upcoming",
             icon: "💎",
@@ -47,7 +47,7 @@ export default function ScarcityTimeline() {
         {
             phase: "Public",
             spots: "∞",
-            dates: "Nov 2026+",
+            dates: "Lug 2027+",
             price: 1997,
             status: "final",
             icon: "🔴",
