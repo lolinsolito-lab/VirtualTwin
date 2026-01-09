@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, Crown, Check, Lock, Shield } from 'lucide-react';
+import { getCurrentWaveSpotsRemaining, getDisplayPricing, getDaysUntilPriceIncrease } from '@/lib/waves';
 
 const FinalCTAUltimate = () => {
     const [inView, setInView] = useState(false);
@@ -10,10 +11,23 @@ const FinalCTAUltimate = () => {
     const [sector, setSector] = useState('');
     const [accepted, setAccepted] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-    const [spotsLeft, setSpotsLeft] = useState(20); // Genesis Wave 1
+    const [spotsLeft, setSpotsLeft] = useState(20);
+    const [pricingInfo, setPricingInfo] = useState<{ tier: string, waveName?: string } | null>(null);
+    const [daysToIncrease, setDaysToIncrease] = useState(0);
     const sectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
+        const fetchWaves = async () => {
+            const [spots, pricing] = await Promise.all([
+                getCurrentWaveSpotsRemaining(),
+                getDisplayPricing()
+            ]);
+            setSpotsLeft(spots);
+            setPricingInfo(pricing);
+            setDaysToIncrease(getDaysUntilPriceIncrease());
+        };
+        fetchWaves();
+
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
@@ -68,13 +82,19 @@ const FinalCTAUltimate = () => {
 
                             {/* Subtitle */}
                             <p className="text-white/50 text-sm lg:text-base mb-8 max-w-sm leading-relaxed">
-                                L'opportunità Genesis Founder chiude per sempre. Solo 20 posti disponibili.
+                                {pricingInfo?.tier === 'founder'
+                                    ? `L'opportunità ${pricingInfo.waveName || 'Genesis'} Founder chiude per sempre. Entra ora o pagherai prezzi pieni.`
+                                    : `I prezzi della wave H1 2026 stanno per scadere. Blocca ora il tuo piano prima dell'aumento.`}
                             </p>
 
                             {/* Scarcity Badge */}
-                            <div className="inline-flex items-center gap-3 px-5 py-3 gold-gradient rounded-full mb-8">
+                            <div className="inline-flex items-center gap-3 px-5 py-3 gold-gradient rounded-full mb-8 shadow-[0_0_20px_rgba(212,175,55,0.3)] animate-pulse">
                                 <Crown className="w-4 h-4 text-white" />
-                                <span className="text-white text-sm font-bold">Solo {spotsLeft} posti rimasti!</span>
+                                <span className="text-white text-sm font-bold uppercase tracking-wider">
+                                    {pricingInfo?.tier === 'founder'
+                                        ? `Solo ${spotsLeft} posti rimasti!`
+                                        : `Aumento tra ${daysToIncrease} giorni!`}
+                                </span>
                             </div>
 
                             {/* Trust Badge */}

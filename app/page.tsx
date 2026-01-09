@@ -43,7 +43,7 @@ export default function Home() {
         <CommonMistakes />
 
         {/* PRICING (NON TOCCARE - user requirement) */}
-        <PricingUltimate />
+        <PricingUltimate showToggle={true} />
 
         {/* SOCIAL PROOF HUMAN - warm testimonials */}
         <SocialProofHuman />

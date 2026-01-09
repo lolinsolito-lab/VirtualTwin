@@ -11,6 +11,8 @@ import FounderTestimonials from '@/components/viral-sections/FounderTestimonials
 import FAQVideoReady from '@/components/viral-sections/FAQVideoReady';
 import CommunityFOMO from '@/components/viral-sections/CommunityFOMO';
 import PricingUltimate from '@/components/sections/PricingUltimate';
+import SocialProofHuman from '@/components/home-viral/SocialProofHuman';
+import FinalCTAUltimate from '@/components/sections/FinalCTAUltimate';
 import {
     Clock,
     ArrowRight,
@@ -157,11 +159,17 @@ export default function StartPage() {
             {/* ============================================= */}
             <PricingUltimate pricingMode="public" />
 
+            {/* SOCIAL PROOF HUMAN - warm testimonials */}
+            <SocialProofHuman />
+
             {/* More Story Sections */}
             <MythVsReality />
             <FounderTestimonials />
             <FAQVideoReady />
             <CommunityFOMO />
+
+            {/* FINAL CTA */}
+            <FinalCTAUltimate />
 
             {/* Trust Section */}
             <section className="relative z-10 py-16 bg-gradient-to-b from-transparent via-white/50 to-transparent">
@@ -183,41 +191,7 @@ export default function StartPage() {
                 </div>
             </section>
 
-            {/* Founder CTA Section - Only show if slots available */}
-            {founderSpotsLeft > 0 && (
-                <section className="relative z-10 container mx-auto px-6 pb-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="max-w-4xl mx-auto"
-                    >
-                        <div className="relative overflow-hidden bg-charcoal rounded-[2rem] p-10 md:p-16 text-center">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
-                            <Crown className="w-12 h-12 text-gold mx-auto mb-6" />
-
-                            <h3 className="font-serif text-3xl md:text-4xl text-white mb-4">
-                                🔥 Cerchi uno Sconto? Posti Founder Ancora Disponibili!
-                            </h3>
-
-                            <p className="text-white/60 max-w-xl mx-auto mb-8 leading-relaxed">
-                                Solo <strong className="text-gold">{founderSpotsLeft} posti</strong> rimasti nella Wave Genesis.
-                                Blocca il prezzo <strong className="text-gold">fino al 50% in meno</strong> per sempre.
-                            </p>
-
-                            <Link
-                                href="/founder"
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-gold text-charcoal rounded-2xl font-bold hover:bg-gold/90 transition"
-                            >
-                                <Crown className="w-5 h-5" />
-                                Verifica Disponibilità Founder
-                                <ArrowRight className="w-5 h-5" />
-                            </Link>
-                        </div>
-                    </motion.div>
-                </section>
-            )}
 
             {/* Footer */}
             <footer className="relative z-10 py-12 border-t border-charcoal/5">

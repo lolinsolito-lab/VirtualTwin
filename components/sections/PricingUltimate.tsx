@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { Check, Zap, Sparkles, Crown, Star, ArrowRight, Clock, Gift, Info, Handshake } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Check, Zap, Sparkles, Crown, Star, ArrowRight, Clock, Gift, Info, Handshake, Users } from 'lucide-react';
 import { getPlanAvailability, PlanAvailability, PlanName } from '@/lib/founderAvailability';
 import { getDisplayPricing, getCurrentPublicPricing, Wave, WAVES, getFoundersSold, isPreLaunch, getDaysUntilLaunch, getCurrentWaveSpotsRemaining } from '@/lib/waves';
 import DualOptionOverlay from '@/components/DualOptionOverlay';
@@ -18,9 +19,10 @@ import PlanDetailModal from '@/components/PlanDetailModal';
 // =============================================
 interface PricingUltimateProps {
     pricingMode?: 'public' | 'founder' | 'auto';
+    showToggle?: boolean;
 }
 
-const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
+const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUltimateProps) => {
     const [inView, setInView] = useState(false);
     const [hoveredPlan, setHoveredPlan] = useState<number | null>(null);
     const [planAvailability, setPlanAvailability] = useState<Record<PlanName, PlanAvailability> | null>(null);
@@ -31,14 +33,15 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
     const [daysToLaunch, setDaysToLaunch] = useState(getDaysUntilLaunch());
     const [openModal, setOpenModal] = useState<string | null>(null);
     const [founderSpotsAvailable, setFounderSpotsAvailable] = useState(0);
+    const [activeTier, setActiveTier] = useState<'founder' | 'public'>('founder');
     const sectionRef = useRef<HTMLElement>(null);
 
-    // Determine effective mode: prop > auto-detection
-    // 'public' = force public prices, 'founder' = force founder prices
+    // Determine effective mode: prop > activeTier toggle > auto-detection
     const isShowingFounder = pricingMode === 'founder' ||
-        (pricingMode === 'auto' && displayPricing?.tier === 'founder');
+        (pricingMode === 'auto' && (showToggle ? activeTier === 'founder' : displayPricing?.tier === 'founder'));
+
     const isShowingPublic = pricingMode === 'public' ||
-        (pricingMode === 'auto' && displayPricing?.tier === 'public');
+        (pricingMode === 'auto' && (showToggle ? activeTier === 'public' : displayPricing?.tier === 'public'));
 
     useEffect(() => {
         const fetchAvailability = async () => {
@@ -157,7 +160,11 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
     };
 
     const getPriceIdForPlan = (planId: string) => {
-        return displayPricing?.stripePriceIds?.[planId as keyof typeof displayPricing.stripePriceIds];
+        if (isShowingFounder) {
+            return displayPricing?.stripePriceIds?.[planId as keyof typeof displayPricing.stripePriceIds];
+        } else {
+            return publicRef.stripePriceIds[planId as keyof typeof publicRef.stripePriceIds];
+        }
     };
 
     const plans = [
@@ -194,7 +201,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                 { wave: "Elite", price: 89, date: "Lug 2026" },
                 { wave: "Public", price: 347, date: "Ott 2026" }
             ],
-            features: ["1 Clone AI Pro", "1K msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
+            features: ["1 Clone AI Pro", "500 msg/mese", "1 Canale", "15 Template", "Knowledge Base 10 doc", "Support <48h"],
             cta: isShowingFounder ? "Diventa Founder →" : "Inizia Ora →",
             priceId: getPriceIdForPlan('solopreneur'),
             isFounder: isShowingFounder,
@@ -278,7 +285,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                 { wave: "Elite", price: 1097, date: "Lug 2026" },
                 { wave: "Public", price: 2197, date: "Ott 2026" }
             ],
-            features: ["15 Cloni AI", "100K msg/mese", "25 Canali inclusi", "White-label", "Team Dedicato", "SLA 99.9%"],
+            features: ["15 Cloni AI", "50K msg/mese", "25 Canali inclusi", "White-label", "Team Dedicato", "SLA 99.9%"],
             cta: isShowingFounder ? "Diventa Founder →" : "Inizia Ora →",
             priceId: getPriceIdForPlan('imperatore'),
             isFounder: isShowingFounder,
@@ -341,6 +348,44 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                     </p>
 
                     <CountdownTimer />
+
+                    {/* INTERACTIVE TOGGLE */}
+                    {showToggle && (
+                        <div className="mt-12 flex flex-col items-center">
+                            <div className="relative p-1 bg-charcoal/5 rounded-2xl flex items-center gap-1 mb-4 border border-charcoal/10 shadow-inner">
+                                <button
+                                    onClick={() => setActiveTier('founder')}
+                                    className={`relative px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 z-10 ${activeTier === 'founder' ? 'text-white' : 'text-charcoal/40 hover:text-charcoal'}`}
+                                >
+                                    {activeTier === 'founder' && (
+                                        <motion.div layoutId="toggleBg" className="absolute inset-0 bg-charcoal rounded-xl -z-10" />
+                                    )}
+                                    <div className="flex items-center gap-2">
+                                        <Crown className="w-3 h-3" />
+                                        <span>Founder Mode</span>
+                                    </div>
+                                </button>
+                                <button
+                                    onClick={() => setActiveTier('public')}
+                                    className={`relative px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 z-10 ${activeTier === 'public' ? 'text-white' : 'text-charcoal/40 hover:text-charcoal'}`}
+                                >
+                                    {activeTier === 'public' && (
+                                        <motion.div layoutId="toggleBg" className="absolute inset-0 bg-charcoal rounded-xl -z-10" />
+                                    )}
+                                    <div className="flex items-center gap-2">
+                                        <Users className="w-3 h-3" />
+                                        <span>Public Mode</span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <p className="text-[10px] uppercase font-black tracking-[0.2em] text-gold animate-pulse">
+                                {activeTier === 'founder'
+                                    ? "💪 Risparmia fino a €78.000 (Lifetime Lock)"
+                                    : "📅 Prezzi correnti wave Pubblica H1 2026"}
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* PRICING GRID */}
@@ -430,22 +475,50 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                                 </p>
 
                                 {/* Price */}
-                                <div className="mb-2">
-                                    <span className={`text-4xl lg:text-5xl font-serif tracking-tight ${plan.isDark || plan.isGold ? 'text-white' : (plan as any).textColor || 'text-charcoal'}`}>
-                                        {plan.price}
-                                    </span>
-                                    <span className={`text-sm ml-1 ${plan.isDark ? 'text-white/50' : plan.isGold ? 'text-white/60' : 'text-charcoal/40'}`}>
-                                        {plan.period}
-                                    </span>
+                                <div className="mb-2 overflow-hidden h-14 relative">
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={isShowingFounder ? 'founder' : 'public'}
+                                            initial={{ y: 20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            exit={{ y: -20, opacity: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="flex items-baseline"
+                                        >
+                                            <span className={`text-4xl lg:text-5xl font-serif tracking-tight ${plan.isDark || plan.isGold ? 'text-white' : (plan as any).textColor || 'text-charcoal'}`}>
+                                                {isShowingFounder ? plan.price : plan.publicPrice}
+                                            </span>
+                                            <span className={`text-sm ml-1 ${plan.isDark ? 'text-white/50' : plan.isGold ? 'text-white/60' : 'text-charcoal/40'}`}>
+                                                {plan.period}
+                                            </span>
+                                        </motion.div>
+                                    </AnimatePresence>
                                 </div>
 
-                                {/* Public Price */}
-                                {plan.publicPrice && plan.publicPrice !== plan.price && plan.publicPrice !== "CUSTOM" && (
-                                    <p className={`text-xs mb-3 ${plan.isDark || plan.isGold ? 'text-white/50' : 'text-charcoal/40'}`}>
-                                        <span className="line-through">{plan.publicPrice}/m</span>
-                                        <span className="ml-2 text-green-500 font-bold">FOUNDER</span>
-                                    </p>
-                                )}
+                                {/* Dynamic Savings/Warning */}
+                                <div className="h-6 mb-3">
+                                    <AnimatePresence mode="wait">
+                                        {isShowingFounder ? (
+                                            <motion.p
+                                                key="savings"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                className={`text-[10px] font-black uppercase tracking-wider ${plan.isDark ? 'text-cyan-400' : 'text-green-600'}`}
+                                            >
+                                                📉 Risparmia {(parseInt(plan.publicPrice.replace('€', '')) || 0) - (parseInt(plan.price.replace('€', '')) || 0)}€ /mese a vita
+                                            </motion.p>
+                                        ) : (
+                                            <motion.p
+                                                key="warning"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                className="text-[10px] font-black uppercase tracking-wider text-red-500"
+                                            >
+                                                ⚠️ Prezzo pieno wave H1 2026
+                                            </motion.p>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
 
                                 {/* Story */}
                                 <p className={`text-sm lg:text-base font-medium mb-1 ${plan.isDark || plan.isGold ? 'text-white' : 'text-charcoal'}`}>
@@ -548,7 +621,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                                         </Link>
                                     ) : (
                                         <button
-                                            onClick={() => handleCheckout(plan.id, (plan as any).priceId, 'public')}
+                                            onClick={() => handleCheckout(plan.id, getPriceIdForPlan(plan.id) || '', isShowingFounder ? 'founder' : 'public')}
                                             disabled={isCheckoutLoading === plan.id}
                                             className={`group w-full py-4 rounded-xl text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 flex items-center justify-center gap-2 ${plan.btnStyle} disabled:opacity-50 disabled:cursor-not-allowed`}
                                         >
@@ -604,10 +677,10 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                                 <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
                                     <td className="py-4 px-4 font-medium text-charcoal">Conversazioni/mese</td>
                                     <td className="text-center py-4 px-3 text-charcoal/60">100 totali</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/60">1.000</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">500</td>
                                     <td className="text-center py-4 px-3 font-bold text-amber-700 bg-amber-50/30">5.000</td>
                                     <td className="text-center py-4 px-3 text-charcoal/60">20.000</td>
-                                    <td className="text-center py-4 px-3 text-charcoal/60">100.000</td>
+                                    <td className="text-center py-4 px-3 text-charcoal/60">50.000</td>
                                 </tr>
                                 <tr className="border-b border-charcoal/5 hover:bg-charcoal/[0.02]">
                                     <td className="py-4 px-4 font-medium text-charcoal">Canali</td>
@@ -782,7 +855,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                         <div className="mt-8 text-center">
                             <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full shadow-lg">
                                 <span className="text-lg">💰</span>
-                                <span className="text-sm font-bold">Risparmia fino a €18.000 in 5 anni entrando ora nella Genesis Wave</span>
+                                <span className="text-sm font-bold">Risparmia fino a €78.000 in 5 anni entrando ora nella Genesis Wave</span>
                             </div>
                         </div>
                     </div>

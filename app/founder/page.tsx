@@ -10,6 +10,7 @@ import FounderTestimonials from '@/components/founder-viral/FounderTestimonials'
 import FounderFAQ from '@/components/founder-viral/FounderFAQ';
 import PhilosophyAdvantage from '@/components/founder-viral/PhilosophyAdvantage';
 import PricingUltimate from '@/components/sections/PricingUltimate';
+import SocialProofHuman from '@/components/home-viral/SocialProofHuman';
 
 export default function FounderPage() {
     const [spotsLeft, setSpotsLeft] = useState(20);
@@ -137,6 +138,9 @@ export default function FounderPage() {
                 {/* pricingMode='founder' ensures founder prices */}
                 {/* ============================================= */}
                 <PricingUltimate pricingMode="founder" />
+
+                {/* SOCIAL PROOF HUMAN - warm testimonials */}
+                <SocialProofHuman />
 
                 {/* SCARCITY TIMELINE - Show price escalation */}
                 <ScarcityTimeline />

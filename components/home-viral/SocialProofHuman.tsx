@@ -63,7 +63,7 @@ export default function SocialProofHuman() {
             results: [
                 "Da 20 call a 6 call/settimana",
                 "Tasso chiusura: 35% → 78%",
-                "10 ore/settimana risparmiate"
+                "Risparmiati €12.400 di fee (Prezzo Founder bloccato)"
             ],
             emotion: "Focus sui deal veri",
             rating: 5,
