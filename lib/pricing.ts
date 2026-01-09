@@ -42,8 +42,7 @@ export const IMPERIAL_PRICES = {
     },
 } as const;
 
-// Legacy alias for compatibility during transition
-export const public_2026 = IMPERIAL_PRICES.public_h1_2026;
+// public_h1_2026 is the current standard public price reference
 
 // =============================================
 // 🔐 PLAN LIMITS (Critical for Cost Protection)

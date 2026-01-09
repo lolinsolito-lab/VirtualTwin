@@ -114,7 +114,7 @@ export async function POST(req: Request) {
         // Get display price for logging
         const displayPrice = isFounder
             ? IMPERIAL_PRICES.founder[plan as keyof typeof IMPERIAL_PRICES.founder]
-            : IMPERIAL_PRICES.public_2026[plan as keyof typeof IMPERIAL_PRICES.public_2026];
+            : (IMPERIAL_PRICES.public_h1_2026 as any)[plan as any] || 0;
 
         console.log(`[Create Checkout] Plan: ${plan}, Tier: ${tier}, Price: €${displayPrice}, PriceId: ${priceId}`);
 
