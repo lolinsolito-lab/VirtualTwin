@@ -64,7 +64,7 @@ export const PLAN_LIMITS = {
     },
     solopreneur: {
         clones: 1,
-        messagesPerMonth: 500,
+        messagesPerMonth: 1000,
         channels: 1,
         teamMembers: 1,
         analyticsRetentionDays: 30,
@@ -103,8 +103,8 @@ export const PLAN_LIMITS = {
         maxTokensPerMessage: 1000,
     },
     imperatore: {
-        clones: 10,
-        messagesPerMonth: 50000,
+        clones: 15,
+        messagesPerMonth: 100000,
         channels: 25,
         maxChannels: 50,
         maxClones: 25,
