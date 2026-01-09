@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { PRICING, getStripePriceId, IMPERIAL_PRICES, FOUNDER_CONFIG, type PlanTier } from '@/lib/pricing';
 import { getFounderSpotsLeft } from '@/lib/supabaseHelpers';
+import { getCurrentWave } from '@/lib/waves';
 
 /**
  * Create Stripe Checkout Session (No Auth Required)
@@ -23,6 +24,7 @@ export async function POST(req: Request) {
         const stripe = getStripe();
         const body = await req.json();
         const { plan, tier: requestedTier = 'founder', priceId: directPriceId, isFounder: directIsFounder } = body;
+        const currentWave = await getCurrentWave();
 
         // Scenario A: Direct priceId provided (from /start page)
         if (directPriceId) {
@@ -46,13 +48,15 @@ export async function POST(req: Request) {
                 }],
                 metadata: {
                     tier: requestedTier,
-                    source: 'direct_priceId_start_page'
+                    source: 'direct_priceId_start_page',
+                    wave_id: currentWave?.id || ''
                 },
                 subscription_data: {
                     trial_period_days: 14,
                     metadata: {
                         tier: requestedTier,
                         isFounder: (directIsFounder || false).toString(),
+                        wave_id: currentWave?.id || ''
                     },
                 },
                 success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/onboarding?success=true&session_id={CHECKOUT_SESSION_ID}`,
@@ -143,7 +147,8 @@ export async function POST(req: Request) {
             metadata: {
                 plan,
                 tier,
-                isFounder: isFounder.toString(),
+                is_founder: isFounder.toString(),
+                wave_id: currentWave?.id || '',
                 source: 'imperial_checkout_flow',
                 displayPrice: displayPrice.toString(),
             },

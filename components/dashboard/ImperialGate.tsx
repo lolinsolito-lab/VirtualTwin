@@ -11,6 +11,7 @@ interface ImperialGateProps {
     tier: PlanTier;
     featureName?: string;
     description?: string;
+    waveId?: string;
     className?: string;
 }
 
@@ -23,12 +24,29 @@ export const ImperialGate: React.FC<ImperialGateProps> = ({
     tier,
     featureName = "Questa funzione",
     description,
+    waveId,
     className = ""
 }) => {
     const { isFeatureAccessible, user } = useSovereign();
 
-    // Check if the user has access to the required tier
-    const hasAccess = isFeatureAccessible(tier);
+    // Check tier access
+    const hasTierAccess = isFeatureAccessible(tier);
+
+    // Check wave access (if waveId specified)
+    // A user has wave access if:
+    // 1. No waveId is required
+    // 2. User's wave_id matches the required waveId
+    // 3. User is an admin
+    const hasWaveAccess = !waveId || user?.wave_id === waveId || user?.role === 'admin';
+
+    const hasAccess = hasTierAccess && hasWaveAccess;
+
+    // Custom description for wave locking
+    const lockDescription = description || (
+        !hasWaveAccess
+            ? `${featureName} è riservato esclusivamente ai membri della Wave ${waveId?.toUpperCase()}.`
+            : `${featureName} è sbloccabile solo per i membri del tier ${tier.charAt(0).toUpperCase() + tier.slice(1)} o superiore.`
+    );
 
     if (hasAccess) {
         return <div className={className}>{children}</div>;
@@ -53,7 +71,7 @@ export const ImperialGate: React.FC<ImperialGateProps> = ({
                     </h3>
 
                     <p className="text-charcoal/60 text-sm mb-6 leading-relaxed px-2">
-                        {description || `${featureName} è sbloccabile solo per i membri del tier ${tier.charAt(0).toUpperCase() + tier.slice(1)} o superiore.`}
+                        {lockDescription}
                     </p>
 
                     <Link

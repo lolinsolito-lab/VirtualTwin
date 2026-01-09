@@ -100,6 +100,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     const plan = session.metadata?.plan || 'pioniere';
     const tier = session.metadata?.tier || 'founder';
     const isFounder = tier === 'founder' || session.metadata?.isFounder === 'true';
+    const waveId = session.metadata?.wave_id || null;
 
     console.log(`[Stripe] Checkout completed - Email: ${customerEmail}, Plan: ${plan}, Tier: ${tier}, UserId: ${userId || 'NEW_USER'}`);
 
@@ -111,6 +112,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                 plan_tier: plan,
                 subscription_status: 'active',
                 is_founder: isFounder,
+                wave_id: waveId,
                 founder_joined_at: isFounder ? new Date().toISOString() : undefined,
                 stripe_customer_id: session.customer as string,
                 stripe_subscription_id: session.subscription as string,
@@ -206,6 +208,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                 plan_tier: plan,
                 subscription_status: 'active',
                 is_founder: isFounder,
+                wave_id: waveId,
                 founder_joined_at: isFounder ? new Date().toISOString() : undefined,
                 stripe_customer_id: session.customer as string,
                 stripe_subscription_id: session.subscription as string,
@@ -256,6 +259,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         plan_tier: plan,
         subscription_status: 'active',
         is_founder: isFounder,
+        wave_id: waveId,
         founder_joined_at: isFounder ? new Date().toISOString() : null,
         stripe_customer_id: session.customer as string,
         stripe_subscription_id: session.subscription as string,

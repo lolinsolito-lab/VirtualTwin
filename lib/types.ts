@@ -100,6 +100,7 @@ export interface UserProfile {
   completed_video_ids: string[];
   badges: any[];
   role: 'user' | 'admin' | 'moderator';
+  wave_id?: 'genesis' | 'pioneer' | 'elite';
   business_iban?: string;
   business_vat?: string;
   legal_address?: string;

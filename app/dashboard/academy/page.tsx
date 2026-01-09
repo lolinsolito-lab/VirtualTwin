@@ -27,7 +27,8 @@ import {
     Utensils,
     Code,
     Palette,
-    Globe
+    Globe,
+    Crown
 } from 'lucide-react';
 import { useSovereign } from '@/components/providers/SovereignProvider';
 import { ImperialGate } from '@/components/dashboard/ImperialGate';
@@ -37,7 +38,7 @@ import { useRouter } from 'next/navigation';
 import { PlanTier } from '@/lib/pricing';
 
 /**
- * Founder Academy Page
+ * Academy Élite Page
  * Private section for premium users to access growth templates
  * Upgraded with Wave 2: The Academy Gate gating & progress tracking
  */
@@ -49,6 +50,7 @@ export default function AcademyPage() {
     const [activeQuiz, setActiveQuiz] = useState<any>(null);
     const [isCompleting, setIsCompleting] = useState(false);
     const [activeSector, setActiveSector] = useState('Generale');
+    const [templateSearch, setTemplateSearch] = useState('');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const sectors = [
@@ -72,7 +74,7 @@ export default function AcademyPage() {
         }
     };
 
-    const videoModules: { name: string; tier: PlanTier; description: string; videos: any[]; quizQuestions?: any[] }[] = [
+    const videoModules: { name: string; tier: PlanTier; waveId?: string; description: string; videos: any[]; quizQuestions?: any[] }[] = [
         {
             name: "Fondamenta dell'Impero",
             tier: "curioso",
@@ -142,6 +144,25 @@ export default function AcademyPage() {
             ] as any
         },
         {
+            name: "Protocollo Genesis (Esclusivo)",
+            tier: "entrepreneur",
+            waveId: "genesis",
+            description: "Segreti riservati ai primi 20 fondatori che hanno dato vita all'impero.",
+            videos: [
+                { id: "v15", title: 'Il Vantaggio del Primo Sovrano', duration: '22:15', thumbnail: 'bg-gold/20', xp: 200 },
+                { id: "v16", title: 'Architettura Founder Genesis', duration: '18:50', thumbnail: 'bg-gold/20', xp: 200 },
+            ],
+        },
+        {
+            name: "Protocollo Pioneer (Scale-Up)",
+            tier: "entrepreneur",
+            waveId: "pioneer",
+            description: "Strategie di espansione per chi ha cavalcato la seconda ondata.",
+            videos: [
+                { id: "v17", title: 'Scaling Pioneer: Da 10k a 50k', duration: '25:00', thumbnail: 'bg-gold/10', xp: 150 },
+            ],
+        },
+        {
             name: "Espansione Dominante",
             tier: "conquistatore",
             description: "Gestisci team, deleghe e API per una scalata senza limiti.",
@@ -181,6 +202,7 @@ export default function AcademyPage() {
             ] as any
         }
     ];
+
 
     const submitQuizResults = async (score: number, total: number) => {
         if (!activeQuiz) return null;
@@ -343,7 +365,44 @@ export default function AcademyPage() {
         }
     ];
 
-    const filteredTemplates = templates.filter(t => t.sector === activeSector || activeSector === 'Generale');
+    const filteredTemplates = templates.filter(t =>
+        (t.sector === activeSector || activeSector === 'Generale') &&
+        (t.title.toLowerCase().includes(templateSearch.toLowerCase()) ||
+            t.text.toLowerCase().includes(templateSearch.toLowerCase()))
+    );
+
+    const roadmap = [
+        {
+            step: '01',
+            title: 'Outreach LinkedIn',
+            desc: 'Sfrutta algoritmi e script proprietari per connetterti con lead pronti all\'acquisto.',
+            icon: Target,
+            details: ['Targeting Chirurgico', 'Script ad Alta Conversione', 'Automazione Etica']
+        },
+        {
+            step: '02',
+            title: 'Demo Call d\'Elite',
+            desc: 'Protocolli di conversione per trasformare lo scetticismo in autorità assoluta.',
+            icon: MessageCircle,
+            details: ['Script di Chiusura', 'Gestione Obiezioni', 'Ancoraggio del Valore']
+        },
+        {
+            step: '03',
+            title: 'Beta Test Expansion',
+            desc: 'Scala l\'impero raccogliendo prove sociali e dominando la tua nicchia.',
+            icon: Sparkles,
+            details: ['Case Studies Asset', 'Referral Loop', 'Scalabilità Atomica']
+        }
+    ];
+
+    const badges = [
+        { id: 'b1', name: 'Genesis Pioniere', icon: Award, unlocked: (user?.level || 0) >= 1 },
+        { id: 'b2', name: 'Master Prospector', icon: Target, unlocked: (user?.completed_video_ids?.length || 0) >= 3 },
+        { id: 'b3', name: 'Sovereign Speaker', icon: MessageCircle, unlocked: (user?.level || 0) >= 5 },
+        { id: 'b4', name: 'Empire Architect', icon: Cpu, unlocked: (user?.level || 0) >= 10 },
+        { id: 'b5', name: 'Genesis Founder', icon: Crown, unlocked: user?.wave_id === 'genesis' },
+        { id: 'b6', name: 'World Dominator', icon: Globe, unlocked: user?.plan_tier === 'imperatore' },
+    ];
 
     return (
         <div className="p-4 lg:p-12 max-w-7xl mx-auto">
@@ -383,22 +442,22 @@ export default function AcademyPage() {
                         transition={{ delay: 0.4 }}
                         className="text-charcoal/40 max-w-2xl text-lg font-serif italic leading-relaxed"
                     >
-                        "Le armi segrete non si condividono, si dominano. Benvenuto nell'Elite dei Founder, dove l'ambizione incontra l'automazione assoluta."
+                        "Le armi segrete non si condividono, si dominano. Benvenuto nella tua Academy Élite, dove l'ambizione incontra l'automazione assoluta."
                     </motion.p>
                 </div>
             </header>
 
-            {/* Steps Guide (Luxe Redesign) */}
-            <div className="relative mb-24">
-                {/* Background Decor */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gold/5 blur-[120px] rounded-full pointer-events-none" />
+            {/* Strategic Roadmap (Monumental Fusion) */}
+            <div className="relative mb-32">
+                <div className="text-center mb-16">
+                    <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-black mb-4 block">Strategic Roadmap</span>
+                    <h2 className="text-4xl lg:text-5xl font-serif italic text-charcoal">Il Percorso verso la <span className="gold-text-gradient">Maestria</span></h2>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-                    {[
-                        { step: '01', title: 'Outreach LinkedIn', desc: 'Sfrutta algoritmi e script proprietari per connetterti con lead pronti all\'acquisto.', icon: Target },
-                        { step: '02', title: 'Demo Call d\'Elite', desc: 'Protocolli di conversione per trasformare lo scetticismo in autorità assoluta.', icon: MessageCircle },
-                        { step: '03', title: 'Beta Test Expansion', desc: 'Scala l\'impero raccogliendo prove sociali e dominando la tua nicchia.', icon: Sparkles }
-                    ].map((item, i) => (
+                <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-gold/10 hidden md:block -translate-y-1/2 z-0" />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
+                    {roadmap.map((item, i) => (
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 20 }}
@@ -410,23 +469,35 @@ export default function AcademyPage() {
                             <div className="absolute inset-0 bg-white/40 backdrop-blur-md rounded-[3rem] border border-white/60 shadow-luxury-sm group-hover:shadow-luxury transition-all duration-700" />
                             <div className="absolute inset-x-0 bottom-0 h-1 gold-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-b-[3rem]" />
 
-                            <div className="relative p-10 h-full flex flex-col">
-                                <span className="absolute top-8 right-10 text-6xl font-serif italic text-gold/10 group-hover:text-gold/20 transition-colors duration-700 select-none">
+                            <div className="relative p-10 flex flex-col items-center text-center">
+                                <span className="text-5xl font-serif italic text-gold/10 group-hover:text-gold/20 transition-colors duration-700 mb-6">
                                     {item.step}
                                 </span>
 
-                                <div className="w-14 h-14 bg-charcoal text-white rounded-2xl flex items-center justify-center mb-10 shadow-xl group-hover:scale-110 transition-transform duration-700">
-                                    <item.icon className="w-6 h-6 text-gold" />
+                                <div className="w-20 h-20 bg-charcoal text-white rounded-[2rem] flex items-center justify-center mb-8 shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-700 border border-gold/20">
+                                    <item.icon className="w-10 h-10 text-gold" />
                                 </div>
 
-                                <h3 className="text-xl font-serif italic text-charcoal mb-4 group-hover:text-gold transition-colors duration-500">{item.title}</h3>
-                                <p className="text-xs text-charcoal/40 leading-relaxed font-sans font-medium">
+                                <h3 className="text-2xl font-serif italic text-charcoal mb-4 group-hover:text-gold transition-colors duration-500">{item.title}</h3>
+                                <p className="text-xs text-charcoal/50 leading-relaxed font-sans mb-8">
                                     {item.desc}
                                 </p>
 
-                                <div className="mt-auto pt-8 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gold opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0 text-left">
-                                    Mastery Protocol <ArrowRight className="w-3 h-3" />
+                                <div className="space-y-2 w-full">
+                                    {item.details.map((detail, dIdx) => (
+                                        <div key={dIdx} className="flex items-center justify-center gap-2 text-[9px] font-bold uppercase tracking-widest text-charcoal/30">
+                                            <div className="w-1 h-1 rounded-full bg-gold/40" />
+                                            {detail}
+                                        </div>
+                                    ))}
                                 </div>
+
+                                <motion.div
+                                    whileHover={{ x: 5 }}
+                                    className="mt-10 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-gold cursor-pointer"
+                                >
+                                    Esplora Protocollo <ArrowRight className="w-3 h-3" />
+                                </motion.div>
                             </div>
                         </motion.div>
                     ))}
@@ -529,17 +600,30 @@ export default function AcademyPage() {
                             </div>
                         </div>
 
-                        <ImperialGate tier={module.tier} featureName={module.name} className="space-y-8">
+                        <ImperialGate
+                            tier={module.tier}
+                            waveId={module.waveId}
+                            featureName={module.name}
+                            className="space-y-8"
+                        >
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {module.videos.map((lesson) => {
                                     const isCompleted = user?.completed_video_ids?.includes(lesson.id);
                                     return (
                                         <div
                                             key={lesson.id}
-                                            className={`bg-white rounded-[2rem] border border-charcoal/5 overflow-hidden group hover:shadow-2xl transition-all duration-700 ${isCompleted ? 'ring-1 ring-green-100' : ''}`}
+                                            className={`bg-white rounded-[2.5rem] border border-charcoal/5 overflow-hidden group hover:shadow-2xl transition-all duration-700 ${isCompleted ? 'ring-1 ring-green-100' : ''}`}
                                         >
-                                            <div className={`aspect-video ${lesson.thumbnail} flex items-center justify-center relative overflow-hidden`}>
-                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-700" />
+                                            <div className={`aspect-video ${lesson.thumbnail} flex items-center justify-center relative overflow-hidden shadow-inner`}>
+                                                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/40 transition-colors duration-700" />
+
+                                                {/* Founder Exclusive Badge */}
+                                                {(mIndex >= 3) && (
+                                                    <div className="absolute top-4 right-4 z-20 bg-gold/20 backdrop-blur-md border border-gold/30 px-3 py-1 rounded-full flex items-center gap-2">
+                                                        <Sparkles className="w-3 h-3 text-gold" />
+                                                        <span className="text-[8px] font-black uppercase tracking-widest text-gold">Founder Exclusive</span>
+                                                    </div>
+                                                )}
 
                                                 {isCompleted ? (
                                                     <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center text-white shadow-xl z-20">
@@ -548,7 +632,7 @@ export default function AcademyPage() {
                                                 ) : (
                                                     <button
                                                         onClick={() => setSelectedVideo(lesson)}
-                                                        className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gold shadow-xl group-hover:scale-110 transition-transform duration-700 z-10"
+                                                        className="w-16 h-16 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-gold shadow-2xl group-hover:scale-110 group-hover:bg-white transition-all duration-700 z-10"
                                                     >
                                                         <PlayCircle className="w-8 h-8 fill-gold/10" />
                                                     </button>
@@ -565,9 +649,11 @@ export default function AcademyPage() {
                                                 )}
                                             </div>
                                             <div className="p-8">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-gold" />
-                                                    <span className="text-[10px] text-charcoal/30 font-black uppercase tracking-[0.3em]">{lesson.xp} XP AWARD</span>
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-gold" />
+                                                        <span className="text-[10px] text-charcoal/30 font-black uppercase tracking-[0.3em] font-sans">{lesson.xp} XP AWARD</span>
+                                                    </div>
                                                 </div>
                                                 <h4 className="text-charcoal font-serif italic text-xl leading-tight group-hover:text-gold transition-colors">{lesson.title}</h4>
                                             </div>
@@ -576,8 +662,27 @@ export default function AcademyPage() {
                                 })}
                             </div>
 
+                            {/* Imperial Badges Showcase (New) */}
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 py-4">
+                                {badges.map((badge) => (
+                                    <div
+                                        key={badge.id}
+                                        className={`p-6 rounded-[2rem] border flex flex-col items-center text-center transition-all duration-700 ${badge.unlocked
+                                            ? 'bg-white border-gold/20 shadow-luxury-sm'
+                                            : 'bg-charcoal/5 border-transparent opacity-40 filter grayscale'}`}
+                                    >
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-4 ${badge.unlocked ? 'bg-gold/10 text-gold' : 'bg-charcoal/10 text-charcoal/20'}`}>
+                                            <badge.icon className="w-5 h-5" />
+                                        </div>
+                                        <span className={`text-[8px] font-black uppercase tracking-widest ${badge.unlocked ? 'text-gold' : 'text-charcoal/20'}`}>
+                                            {badge.name}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+
                             {/* Module Progress Footer / Quiz Trigger */}
-                            <div className="flex items-center justify-between p-8 bg-charcoal/[0.02] border border-charcoal/5 rounded-[2rem]">
+                            <div className="flex items-center justify-between p-8 bg-charcoal/[0.02] border border-charcoal/5 rounded-[2rem] shadow-inner">
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gold shadow-luxury-sm">
                                         <Award className="w-6 h-6" />
@@ -588,15 +693,17 @@ export default function AcademyPage() {
                                     </div>
                                 </div>
 
-                                <button
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
                                     onClick={() => setActiveQuiz({ moduleId: module.tier, moduleName: module.name, questions: (module as any).quizQuestions || [] })}
                                     className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${user?.quizzes_passed?.[module.tier]
                                         ? 'bg-green-50 text-green-600 border border-green-100 cursor-default'
-                                        : 'bg-white text-charcoal shadow-luxury-sm hover:bg-charcoal hover:text-white'
+                                        : 'bg-white text-charcoal shadow-luxury-sm hover:bg-charcoal hover:text-white border border-charcoal/5'
                                         }`}
                                 >
                                     {user?.quizzes_passed?.[module.tier] ? 'Modulo Convalidato ✓' : 'Inizia Quiz Modulo'}
-                                </button>
+                                </motion.button>
                             </div>
                         </ImperialGate>
                     </div>
@@ -605,9 +712,21 @@ export default function AcademyPage() {
 
             {/* Template Section with Gating */}
             <div className="flex flex-col gap-8 mb-16">
-                <div className="flex items-end justify-between">
-                    <h2 className="text-3xl font-serif text-charcoal italic tracking-tight">Script di Vendita & <span className="gold-text-gradient">Outreach</span></h2>
-                    <div className="hidden lg:flex items-center gap-2 mb-2">
+                <div className="flex flex-col lg:flex-row items-end justify-between gap-6">
+                    <div className="max-w-xl">
+                        <h2 className="text-3xl lg:text-4xl font-serif text-charcoal italic tracking-tight mb-4">Script di Vendita & <span className="gold-text-gradient">Outreach</span></h2>
+                        <div className="relative group">
+                            <Send className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/20 group-hover:text-gold transition-colors" />
+                            <input
+                                type="text"
+                                placeholder="Cerca negli script imperiali..."
+                                value={templateSearch}
+                                onChange={(e) => setTemplateSearch(e.target.value)}
+                                className="w-full pl-16 pr-8 py-4 bg-white/60 backdrop-blur-md border border-charcoal/5 rounded-[1.5rem] text-[10px] font-bold tracking-widest uppercase focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all shadow-luxury-sm"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2 mb-2">
                         <button onClick={() => scroll('left')} className="p-2 rounded-full hover:bg-gold/10 text-charcoal/30 hover:text-gold transition-all">
                             <ChevronLeft className="w-5 h-5" />
                         </button>
