@@ -116,13 +116,13 @@ export async function sendMessage(message: OutgoingMessage): Promise<boolean> {
 }
 
 /**
- * Get channel configuration for a tenant
+ * Get channel configuration for a user
  */
-export async function getChannelConfig(tenantId: string, channelType: ChannelType) {
+export async function getChannelConfig(userId: string, channelType: ChannelType) {
     const { data, error } = await supabase
         .from('channels')
         .select('*')
-        .eq('tenant_id', tenantId)
+        .eq('user_id', userId)
         .eq('channel_type', channelType)
         .single();
 
@@ -138,8 +138,7 @@ export async function getChannelConfig(tenantId: string, channelType: ChannelTyp
  * Unified message processing for all channels
  */
 export async function processChannelMessage(
-    tenantId: string,
-    leadId: string,
+    userId: string,
     conversationId: string,
     message: IncomingMessage,
     history: ChatHistoryItem[],

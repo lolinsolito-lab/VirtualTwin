@@ -97,7 +97,6 @@ async function processMessengerMessage(payload: any) {
         // Process with AI
         const aiResponse = await processChannelMessage(
             userId,
-            conversation.id, // In the new schema, leadId is no longer needed separately
             conversation.id,
             message,
             history,
