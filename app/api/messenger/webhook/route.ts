@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
 import { parseIncomingMessage, processChannelMessage, sendMessage } from '@/lib/channels';
 import { supabase } from '@/lib/supabase';
-import { findOrCreateLead, findOrCreateConversation, saveMessage, getConversationHistory } from '@/lib/whatsapp';
+import { findOrCreateConversation, saveMessage, getConversationHistory } from '@/lib/whatsapp';
 
 /**
  * Facebook Messenger Webhook
- * 
- * Setup in Meta Developer Console:
- * 1. Create a Facebook App with Messenger API
- * 2. Add webhook subscription for 'messages' field
- * 3. Set verify token in env as META_WEBHOOK_VERIFY_TOKEN
  */
 
 // GET: Webhook verification (required by Meta)
@@ -35,7 +30,7 @@ export async function POST(req: Request) {
         const payload = await req.json();
 
         // Acknowledge immediately (Meta requires fast response)
-        const responsePromise = processMessengerMessage(payload);
+        processMessengerMessage(payload);
 
         // Return 200 immediately, process in background
         return NextResponse.json({ received: true });
@@ -55,30 +50,32 @@ async function processMessengerMessage(payload: any) {
             return;
         }
 
-        // Get page ID from payload to identify tenant
+        // Get page ID from payload to identify user
         const pageId = payload.entry?.[0]?.id;
         if (!pageId) return;
 
-        // Find tenant by Facebook page ID
+        // Find user by Facebook page ID
         const { data: channel } = await supabase
             .from('channels')
-            .select('tenant_id')
+            .select('user_id')
             .eq('page_id', pageId)
             .eq('channel_type', 'messenger')
             .single();
 
         if (!channel) {
-            console.error('[Messenger] No tenant found for page:', pageId);
+            console.error('[Messenger] No user found for page:', pageId);
             return;
         }
 
-        const tenantId = channel.tenant_id;
+        const userId = channel.user_id;
 
-        // Find or create lead
-        const lead = await findOrCreateLead(tenantId, message.senderId, message.senderName || 'Facebook User');
-
-        // Find or create conversation
-        const conversation = await findOrCreateConversation(tenantId, lead.id);
+        // 🏛️ Sovereign Hub: Find or create conversation
+        const conversation = await findOrCreateConversation(
+            userId,
+            message.senderId,
+            message.senderName || 'Facebook User',
+            'messenger'
+        );
 
         // Save inbound message
         await saveMessage(conversation.id, 'inbound', message.text, false);
@@ -86,17 +83,21 @@ async function processMessengerMessage(payload: any) {
         // Get conversation history
         const history = await getConversationHistory(conversation.id);
 
-        // Get bot settings
-        const { data: botSettings } = await supabase
-            .from('settings_bot')
-            .select('*')
-            .eq('tenant_id', tenantId)
+        // Get bot settings from profile
+        const { data: userProfile } = await supabase
+            .from('profiles')
+            .select('business_name, business_sector, ai_tone')
+            .eq('id', userId)
             .single();
+
+        const botSettings = {
+            business_context: `Assistente AI di ${userProfile?.business_name || 'VirtualTwin'}. Settore: ${userProfile?.business_sector || 'Generale'}. Tono: ${userProfile?.ai_tone || 'professionale'}.`
+        };
 
         // Process with AI
         const aiResponse = await processChannelMessage(
-            tenantId,
-            lead.id,
+            userId,
+            conversation.id, // In the new schema, leadId is no longer needed separately
             conversation.id,
             message,
             history,
