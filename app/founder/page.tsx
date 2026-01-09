@@ -91,33 +91,33 @@ export default function FounderPage() {
 
     const plans = [
         {
-            id: 'esploratore',
-            name: 'Esploratore',
-            tagline: 'Per chi Inizia a Scalare',
-            description: 'Il punto di ingresso per testare il potenziale della tua AI.',
-            priceFounder: displayPricing?.prices?.esploratore || 39,
-            pricePublic: publicPricing.prices.esploratore,
+            id: 'solopreneur',
+            name: 'Solopreneur',
+            tagline: 'Per Freelancer e Coach',
+            description: 'Entry-level per liberi professionisti che vogliono iniziare.',
+            priceFounder: displayPricing?.prices?.solopreneur || 49,
+            pricePublic: publicPricing.prices.solopreneur,
             icon: <Zap className="w-7 h-7" />,
-            accentIcon: 'text-blue-500',
-            bgIcon: 'bg-blue-50',
+            accentIcon: 'text-green-500',
+            bgIcon: 'bg-green-50',
             gradient: 'from-[#F8FAFC] to-[#F1F5F9]',
-            borderColor: 'border-slate-200',
-            borderHover: 'hover:border-slate-300',
+            borderColor: 'border-green-200',
+            borderHover: 'hover:border-green-300',
             dark: false,
             features: [
-                '1 Clone AI Professionale',
+                '1 Clone AI',
                 '1,000 messaggi/mese',
-                '1 Canale dedicato',
-                'Supporto Email <48h',
+                '1 Canale WhatsApp',
+                'Dashboard analytics',
             ]
         },
         {
-            id: 'pioniere',
-            name: 'Pioniere',
+            id: 'entrepreneur',
+            name: 'Entrepreneur',
             tagline: 'Per chi vuole Dominare',
             description: 'La soluzione completa per scalare la tua presenza digitale.',
-            priceFounder: displayPricing?.prices?.pioniere || 147,
-            pricePublic: publicPricing.prices.pioniere,
+            priceFounder: displayPricing?.prices?.entrepreneur || 147,
+            pricePublic: publicPricing.prices.entrepreneur,
             icon: <Rocket className="w-7 h-7" />,
             accentIcon: 'text-amber-600',
             bgIcon: 'bg-amber-50',
@@ -128,17 +128,17 @@ export default function FounderPage() {
             borderHover: 'hover:border-gold/50',
             dark: false,
             features: [
-                '1 Clone AI Alta Fedeltà',
+                '3 Cloni AI',
                 '5,000 messaggi/mese',
-                '3 Canali diversi',
-                'A/B Testing 20% vocale',
-                'Analytics Pro',
+                '3 Canali WhatsApp',
+                'Analytics avanzate',
+                'Priority support',
             ]
         },
         {
             id: 'conquistatore',
             name: 'Conquistatore',
-            tagline: 'L\'Agenzia nell\'Ombra',
+            tagline: 'PMI e Agenzie Scale-Up',
             description: 'Potenza e velocità per chi non accetta compromessi.',
             priceFounder: displayPricing?.prices?.conquistatore || 347,
             pricePublic: publicPricing.prices.conquistatore,
@@ -150,11 +150,11 @@ export default function FounderPage() {
             borderHover: 'hover:border-white/20',
             dark: true,
             features: [
-                '3 Cloni AI Simultanei',
+                '5 Cloni AI',
                 '20,000 messaggi/mese',
-                'Accesso API (60 req/min)',
-                'Priority Support 24/7',
-                'White-label (optional)',
+                '10 Canali (max 30 con overage)',
+                'API access (60 req/min)',
+                'Success Manager',
             ]
         },
         {
@@ -172,11 +172,11 @@ export default function FounderPage() {
             borderHover: 'hover:border-gold/60 shadow-[0_0_30px_rgba(212,175,55,0.1)]',
             dark: true,
             features: [
-                '10 Cloni AI - Rete Neurale',
-                '50,000 messaggi/mese',
-                'Account Manager Dedicato',
-                'API Priority & Custom',
-                'Sviluppo Modelli Custom',
+                '15 Cloni AI (max 25)',
+                '100,000 messaggi/mese',
+                '25 Canali (max 50 con overage)',
+                'API Priority',
+                '👑 Success Manager dedicato',
             ]
         },
     ];
@@ -389,7 +389,7 @@ export default function FounderPage() {
 
                                 <div className={`text-xs mb-4 ${plan.dark ? 'text-white/50' : 'text-charcoal/50'}`}>
                                     <Shield className="w-3 h-3 inline mr-1" />
-                                    {plan.id === 'esploratore' ? '1 Clone AI' : plan.id === 'pioniere' ? '1 Clone AI' : plan.id === 'conquistatore' ? '3 Cloni AI' : '10 Cloni AI'}
+                                    {plan.id === 'solopreneur' ? '1 Clone AI' : plan.id === 'entrepreneur' ? '3 Cloni AI' : plan.id === 'conquistatore' ? '5 Cloni AI' : '15 Cloni AI'}
                                 </div>
 
                                 {/* CHECKOUT BUTTONS - Dual Option when Sold Out */}
