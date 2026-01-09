@@ -678,7 +678,7 @@ const PricingUltimate = ({ pricingMode = 'auto' }: PricingUltimateProps) => {
                             <span className="text-red-600 text-xs font-black uppercase tracking-widest">Prezzi in aumento</span>
                         </div>
                         <h3 className="font-serif text-2xl md:text-4xl text-charcoal mb-3">
-                            Il Prezzo <span className="italic gold-text-gradient">Aumenta</span> Ogni Mese
+                            Il Prezzo <span className="italic gold-text-gradient">Aumenta</span> Ogni 6 Mesi
                         </h3>
                         <p className="text-charcoal/60 text-base max-w-2xl mx-auto">
                             Chi entra <strong className="text-charcoal">prima</strong> paga <strong className="text-charcoal">meno per sempre</strong>.
