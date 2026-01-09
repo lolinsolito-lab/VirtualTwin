@@ -32,6 +32,7 @@ export default function AdminRevenue() {
         arpu: 0,
         churn: 2.1,
         failedAmount: 218,
+        overageRevenue: 0,
         planBreakdown: [] as any[]
     });
     const [recentEvents, setRecentEvents] = useState<BillingEvent[]>([]);
@@ -77,6 +78,14 @@ export default function AdminRevenue() {
 
             const totalFailed = failedPayments?.reduce((acc, curr) => acc + (curr.amount || 0), 0) || 0;
 
+            // 4. OVERAGE REVENUE
+            const { data: overageEvents } = await supabase
+                .from('billing_events')
+                .select('amount')
+                .eq('event_type', 'overage_purchased');
+
+            const totalOverage = overageEvents?.reduce((acc, curr) => acc + (curr.amount || 0), 0) || 0;
+
             const breakdown = Object.keys(counts).map(tier => ({
                 name: tier.charAt(0).toUpperCase() + tier.slice(1),
                 users: counts[tier],
@@ -96,6 +105,7 @@ export default function AdminRevenue() {
                 arpu: activeUsers.length > 0 ? totalMRR / activeUsers.length : 0,
                 churn: Number(churnRate.toFixed(1)),
                 failedAmount: totalFailed,
+                overageRevenue: totalOverage,
                 planBreakdown: breakdown
             });
             setRecentEvents(events || []);
@@ -140,6 +150,23 @@ export default function AdminRevenue() {
                     <div className="flex items-baseline gap-4">
                         <h3 className="text-5xl font-serif italic text-white tabular-nums">{stats.churn}%</h3>
                         <span className="text-[10px] text-green-500/60 uppercase tracking-widest font-black">-0.2% vs Nov</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Overage Revenue Card */}
+            <div className="mb-12">
+                <div className="bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 p-8 rounded-[2rem] backdrop-blur-xl">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-purple-400/60 text-[10px] uppercase tracking-[0.4em] font-black mb-2">💎 Overage Revenue</p>
+                            <h3 className="text-4xl font-serif italic text-white tabular-nums">{formatCurrency(stats.overageRevenue)}</h3>
+                            <p className="text-[10px] text-purple-400/40 mt-2">Revenue addizionale da pacchetti extra (canali, cloni, messaggi)</p>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1">MRR Totale + Overage</p>
+                            <p className="text-2xl font-serif text-gold">{formatCurrency(stats.mrr + stats.overageRevenue)}</p>
+                        </div>
                     </div>
                 </div>
             </div>
