@@ -5,7 +5,7 @@ import {
     Send, Bot, User, Brain, Database, ShieldCheck, Sparkles,
     Search, MessageSquare, Instagram, MessageCircle,
     Filter, Clock, CheckCheck, Loader2, ChevronRight,
-    Zap, Hash, Phone
+    Zap, Hash, Phone, Activity
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -233,32 +233,35 @@ function ChatContent() {
     );
 
     return (
-        <div className="h-[calc(100vh-80px)] p-6 lg:p-10 flex gap-6">
+        <div className="h-[calc(100vh-80px)] p-6 lg:p-10 flex gap-6 bg-[#FAF9F6]">
 
-            {/* 1. ARCHITETTURA: LISTA CONVERSAZIONI (SIDEBAR) */}
+            {/* 1. ARCHITETTURA: LISTA CONVERSAZIONI (SIDEBAR) - DARK ELITE */}
             <div className="w-80 flex flex-col gap-6">
-                <div className="silk-card p-6 h-full flex flex-col gap-6 overflow-hidden">
-                    <div className="flex items-center justify-between">
-                        <h2 className="font-serif italic text-2xl text-charcoal">Frequenze.</h2>
-                        <div className="bg-gold/10 p-2 rounded-lg">
+                <div className="bg-charcoal p-6 h-full flex flex-col gap-6 overflow-hidden rounded-[3rem] border border-gold/20 shadow-luxury relative">
+                    {/* Ambient Glow Inside Sidebar */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 blur-3xl pointer-events-none" />
+
+                    <div className="flex items-center justify-between relative z-10">
+                        <h2 className="font-serif italic text-2xl text-white">Frequenze.</h2>
+                        <div className="bg-white/5 p-2 rounded-lg border border-white/10">
                             <Filter className="w-4 h-4 text-gold" />
                         </div>
                     </div>
 
-                    <div className="relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/20 group-focus-within:text-gold transition-colors" />
+                    <div className="relative group z-10">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-gold transition-colors" />
                         <input
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Cerca lead..."
-                            className="w-full pl-12 pr-4 py-3 bg-white/50 border border-charcoal/5 rounded-xl outline-none focus:border-gold/30 text-xs font-medium"
+                            className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl outline-none focus:border-gold/30 text-xs font-medium text-white placeholder:text-white/20"
                         />
                     </div>
 
-                    <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar z-10">
                         {loadingConvs ? (
                             Array(5).fill(0).map((_, i) => (
-                                <div key={i} className="h-20 bg-charcoal/5 rounded-2xl animate-pulse" />
+                                <div key={i} className="h-20 bg-white/5 rounded-2xl animate-pulse border border-white/5" />
                             ))
                         ) : filteredConversations.length > 0 ? (
                             filteredConversations.map((conv) => (
@@ -268,122 +271,135 @@ function ChatContent() {
                                     className={cn(
                                         "w-full p-4 rounded-2xl border transition-all text-left flex items-center gap-4 group",
                                         activeLeadId === conv.id
-                                            ? "bg-charcoal border-gold/30 shadow-luxury"
-                                            : "bg-white/50 border-charcoal/5 hover:bg-white hover:border-gold/10"
+                                            ? "bg-white/10 border-gold/40 shadow-luxury-sm"
+                                            : "bg-white/[0.02] border-white/5 hover:bg-white/5 hover:border-gold/20"
                                     )}
                                 >
                                     <div className={cn(
                                         "w-10 h-10 rounded-xl flex items-center justify-center relative",
-                                        activeLeadId === conv.id ? "bg-white/10" : "bg-charcoal/5"
+                                        activeLeadId === conv.id ? "bg-gold text-charcoal shadow-[0_0_15px_rgba(212,175,55,0.3)]" : "bg-white/5 text-white/40"
                                     )}>
                                         {conv.channel_type === 'whatsapp' ? (
-                                            <MessageCircle className={cn("w-5 h-5", activeLeadId === conv.id ? "text-gold" : "text-charcoal/40")} />
+                                            <MessageCircle className="w-5 h-5" />
                                         ) : conv.channel_type === 'instagram' ? (
-                                            <Instagram className={cn("w-5 h-5", activeLeadId === conv.id ? "text-gold" : "text-charcoal/40")} />
+                                            <Instagram className="w-5 h-5" />
                                         ) : (
-                                            <MessageSquare className={cn("w-5 h-5", activeLeadId === conv.id ? "text-gold" : "text-charcoal/40")} />
+                                            <MessageSquare className="w-5 h-5" />
                                         )}
                                         {conv.status === 'active' && (
-                                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-gold rounded-full border-2 border-champagne animate-pulse shadow-sm" />
+                                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-gold rounded-full border-2 border-charcoal animate-pulse shadow-sm" />
                                         )}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-center mb-0.5">
-                                            <p className={cn("font-bold text-[11px] truncate uppercase tracking-widest", activeLeadId === conv.id ? "text-white" : "text-charcoal")}>
+                                            <p className={cn("font-bold text-[11px] truncate uppercase tracking-widest", activeLeadId === conv.id ? "text-gold" : "text-white/80")}>
                                                 {conv.contact_name || 'Contatto'}
                                             </p>
-                                            <p className={cn("text-[8px]", activeLeadId === conv.id ? "text-gold/50" : "text-charcoal/20")}>
+                                            <p className={cn("text-[8px]", activeLeadId === conv.id ? "text-gold/50" : "text-white/20")}>
                                                 {conv.last_message_at ? new Date(conv.last_message_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                                             </p>
                                         </div>
-                                        <p className={cn("text-[9px] truncate italic", activeLeadId === conv.id ? "text-white/40" : "text-charcoal/40")}>
+                                        <p className={cn("text-[9px] truncate italic", activeLeadId === conv.id ? "text-white/40" : "text-white/30")}>
                                             {conv.contact_phone || 'Senza Numero'}
                                         </p>
                                     </div>
                                 </button>
                             ))
                         ) : (
-                            <div className="text-center py-10 opacity-30 italic text-xs">Nessun lead trovato</div>
+                            <div className="text-center py-10 opacity-30 italic text-xs text-white">Nessun lead trovato</div>
                         )}
                     </div>
 
-                    <button className="w-full py-4 bg-gold/10 text-gold rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-gold hover:text-white transition-all">
+                    <button className="w-full py-4 bg-gold/10 text-gold border border-gold/20 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-gold hover:text-white transition-all z-10 shadow-lg">
                         Nuova Conversazione +
                     </button>
                 </div>
             </div>
 
-            {/* 2. ARCHITETTURA: PONTE DI COMANDO (CHAT) */}
-            <div className="flex-1 silk-card overflow-hidden flex flex-col relative">
+            {/* 2. ARCHITETTURA: PONTE DI COMANDO (CHAT) - LUXURY LIGHT GRID */}
+            <div className="flex-1 silk-card overflow-hidden flex flex-col relative !rounded-[3rem] border-gold/10 !bg-white/80 shadow-mastermind backdrop-blur-3xl">
+                {/* Visual Accent: Golden Neural Grid */}
+                <div className="absolute inset-0 neural-grid opacity-[0.03] pointer-events-none" />
+
                 {/* Decorative Light */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-40 bg-gold/5 blur-[100px] pointer-events-none" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-gold/5 blur-[120px] pointer-events-none" />
 
                 {/* Header Chat */}
-                <div className="px-10 py-6 border-b border-charcoal/5 flex items-center justify-between relative z-10">
+                <div className="px-12 py-8 border-b border-charcoal/5 flex items-center justify-between relative z-10">
                     <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 bg-charcoal rounded-2xl flex items-center justify-center shadow-luxury p-1">
-                            <div className="w-full h-full border border-gold/30 rounded-xl flex items-center justify-center">
-                                <Bot className="w-8 h-8 text-gold" />
+                        <div className="w-20 h-20 bg-charcoal rounded-3xl flex items-center justify-center shadow-luxury p-1 group">
+                            <div className="w-full h-full border border-gold/30 rounded-2xl flex items-center justify-center group-hover:bg-gold/10 transition-colors">
+                                <Bot className="w-10 h-10 text-gold" />
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-2xl font-serif italic text-charcoal">
+                            <div className="flex items-center gap-3 mb-1">
+                                <span className="text-[9px] uppercase tracking-[0.4em] text-gold font-black">Interface Hub</span>
+                                <ChevronRight className="w-3 h-3 text-gold/30" />
+                                <span className="text-[9px] uppercase tracking-[0.4em] text-charcoal/40 font-black">
+                                    {activeConversation?.channel_type || 'Sandbox'}
+                                </span>
+                            </div>
+                            <h3 className="text-3xl font-serif italic text-charcoal tracking-tight">
                                 {activeConversation ? activeConversation.contact_name : 'Sovereign Assistant'}
                             </h3>
-                            <div className="flex items-center gap-4 mt-1">
-                                <span className="flex items-center gap-2 text-green-600 text-[10px] font-black uppercase tracking-widest">
+                            <div className="flex items-center gap-5 mt-2">
+                                <span className="flex items-center gap-2 text-green-600 text-[10px] font-black uppercase tracking-widest bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                    Link Attivo
+                                    Nucleo Attivo
                                 </span>
                                 <span className="text-charcoal/20 text-[10px]">|</span>
-                                <span className="text-charcoal/40 text-[10px] flex items-center gap-2">
+                                <span className="text-charcoal/40 text-[10px] flex items-center gap-2 italic">
                                     <Clock className="w-3 h-3" />
-                                    Latenza 0.4s
+                                    Latenza 0.3s
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-8">
                         <div className="text-right hidden xl:block">
-                            <p className="text-[9px] uppercase tracking-widest text-gold font-black mb-1">Status Canale</p>
+                            <p className="text-[9px] uppercase tracking-widest text-gold font-black mb-1">Protocollo Sicurezza</p>
                             <div className="flex items-center gap-2 justify-end">
-                                <Zap className="w-3 h-3 text-gold" />
-                                <span className="text-xs font-bold text-charcoal">Cifratura Sovereignty</span>
+                                <ShieldCheck className="w-4 h-4 text-gold" />
+                                <span className="text-xs font-bold text-charcoal">Cifratura Sovereign V2</span>
                             </div>
                         </div>
-                        <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center text-gold cursor-pointer hover:bg-gold hover:text-white transition-all">
-                            <ShieldCheck className="w-6 h-6" />
+                        <div className="w-14 h-14 bg-charcoal text-gold rounded-2xl flex items-center justify-center hover:bg-gold hover:text-white transition-all cursor-pointer shadow-luxury">
+                            <Activity className="w-7 h-7" />
                         </div>
                     </div>
                 </div>
 
                 {/* Area Messaggi */}
-                <div ref={scrollRef} className="flex-1 overflow-y-auto p-12 space-y-10 custom-scrollbar relative z-10">
+                <div ref={scrollRef} className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar relative z-10">
                     {messages.map((m, i) => (
-                        <div key={i} className={cn("flex group", m.role === 'assistant' ? 'justify-start' : 'justify-end')}>
-                            <div className={cn("max-w-[70%] flex gap-6", m.role === 'assistant' ? 'flex-row' : 'flex-row-reverse')}>
+                        <div key={i} className={cn("flex group animate-soft-focus", m.role === 'assistant' ? 'justify-start' : 'justify-end')}>
+                            <div className={cn("max-w-[75%] flex gap-8", m.role === 'assistant' ? 'flex-row' : 'flex-row-reverse')}>
                                 <div className={cn(
-                                    "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg transition-transform group-hover:scale-110",
+                                    "w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-luxury transition-transform group-hover:scale-110",
                                     m.role === 'assistant' ? 'bg-charcoal text-gold' : 'gold-gradient text-white'
                                 )}>
-                                    {m.role === 'assistant' ? <Bot className="w-6 h-6" /> : <User className="w-6 h-6" />}
+                                    {m.role === 'assistant' ? <Bot className="w-7 h-7" /> : <User className="w-7 h-7" />}
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-3">
                                     <div className={cn(
-                                        "px-8 py-5 rounded-[2.5rem] text-[13px] leading-relaxed shadow-sm border",
+                                        "px-10 py-6 rounded-[2.5rem] text-sm leading-relaxed shadow-sm border",
                                         m.role === 'assistant'
                                             ? 'bg-white border-charcoal/5 text-charcoal rounded-tl-lg'
-                                            : 'bg-charcoal border-gold/10 text-white rounded-tr-lg'
+                                            : 'bg-charcoal border-gold/20 text-white rounded-tr-lg'
                                     )}>
                                         {m.content}
                                     </div>
-                                    <div className={cn("flex items-center gap-3 px-2", m.role === 'assistant' ? 'justify-start' : 'justify-end')}>
-                                        <span className="text-[8px] uppercase tracking-widest text-charcoal/20 font-black">
+                                    <div className={cn("flex items-center gap-3 px-3", m.role === 'assistant' ? 'justify-start' : 'justify-end')}>
+                                        <span className="text-[8px] uppercase tracking-[0.3em] text-charcoal/20 font-black">
                                             {m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Sincronizzato'}
                                         </span>
                                         {m.role === 'assistant' && (
-                                            <CheckCheck className="w-3 h-3 text-blue-400" />
+                                            <div className="flex gap-0.5">
+                                                <div className="w-1 h-1 bg-blue-400 rounded-full" />
+                                                <div className="w-1 h-1 bg-blue-400 rounded-full" />
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -392,13 +408,13 @@ function ChatContent() {
                     ))}
                     {loading && (
                         <div className="flex justify-start animate-in fade-in slide-in-from-bottom-2">
-                            <div className="flex gap-6 items-center">
-                                <div className="w-12 h-12 rounded-2xl bg-charcoal flex items-center justify-center text-gold shadow-lg"><Brain className="w-6 h-6 animate-pulse" /></div>
-                                <div className="px-10 py-5 bg-white border border-charcoal/5 rounded-[2.5rem] rounded-tl-lg shadow-sm">
+                            <div className="flex gap-8 items-center">
+                                <div className="w-14 h-14 rounded-2xl bg-charcoal flex items-center justify-center text-gold shadow-luxury"><Brain className="w-7 h-7 animate-pulse" /></div>
+                                <div className="px-12 py-6 bg-white border border-charcoal/5 rounded-[2.5rem] rounded-tl-lg shadow-sm">
                                     <div className="flex gap-2">
-                                        <div className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce [animation-delay:-0.3s]" />
-                                        <div className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce [animation-delay:-0.15s]" />
-                                        <div className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" />
+                                        <div className="w-2 h-2 bg-gold rounded-full animate-bounce [animation-delay:-0.3s]" />
+                                        <div className="w-2 h-2 bg-gold rounded-full animate-bounce [animation-delay:-0.15s]" />
+                                        <div className="w-2 h-2 bg-gold rounded-full animate-bounce" />
                                     </div>
                                 </div>
                             </div>
@@ -406,96 +422,111 @@ function ChatContent() {
                     )}
                 </div>
 
-                {/* Input Area */}
-                <div className="p-8 border-t border-charcoal/5 bg-white/40">
-                    <form onSubmit={handleSend} className="flex gap-5 max-w-5xl mx-auto">
+                {/* Input Area - Integrated Modern Bar */}
+                <div className="p-10 border-t border-charcoal/5 bg-white/60 relative z-10">
+                    <form onSubmit={handleSend} className="flex gap-6 max-w-5xl mx-auto">
                         <div className="flex-1 relative">
-                            <div className="absolute left-6 top-1/2 -translate-y-1/2 w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center">
-                                <Hash className="w-5 h-5 text-gold" />
+                            <div className="absolute left-7 top-1/2 -translate-y-1/2 w-12 h-12 bg-gold/10 rounded-2xl flex items-center justify-center border border-gold/10 group">
+                                <Zap className="w-6 h-6 text-gold group-hover:scale-110 transition-transform" />
                             </div>
                             <input
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder={activeConversation ? `Scrivi a ${activeConversation.contact_name}...` : "Invia un comando neurale..."}
-                                className="w-full bg-white border border-charcoal/5 rounded-[2rem] pl-20 pr-32 py-5 outline-none focus:border-gold/30 focus:shadow-luxury-sm transition-all text-sm font-medium text-charcoal shadow-inner"
+                                placeholder={activeConversation ? `Trasmetti comando a ${activeConversation.contact_name}...` : "Invia un comando neurale..."}
+                                className="w-full bg-white border border-charcoal/10 rounded-[2.5rem] pl-24 pr-36 py-6 outline-none focus:border-gold/40 focus:shadow-luxury-sm transition-all text-sm font-medium text-charcoal shadow-inner"
                             />
-                            <div className="absolute right-8 top-1/2 -translate-y-1/2 flex items-center gap-3">
-                                <span className="text-[8px] font-black uppercase tracking-[0.3em] text-gold animate-pulse">Neural Input</span>
-                                <Database className="w-4 h-4 text-charcoal/20" />
+                            <div className="absolute right-10 top-1/2 -translate-y-1/2 flex items-center gap-4">
+                                <div className="h-6 w-[1px] bg-charcoal/10" />
+                                <Database className="w-5 h-5 text-charcoal/20 hover:text-gold cursor-pointer transition-colors" />
                             </div>
                         </div>
                         <button
                             type="submit"
                             disabled={loading || !input.trim()}
-                            className="w-16 h-16 bg-charcoal text-gold border border-gold/20 rounded-[2rem] flex items-center justify-center hover:bg-gold hover:text-white transition-all duration-700 shadow-luxury disabled:opacity-30 group"
+                            className="w-20 h-20 bg-charcoal text-gold border border-gold/30 rounded-[2.5rem] flex items-center justify-center hover:bg-gold hover:text-white transition-all duration-700 shadow-luxury disabled:opacity-30 group"
                         >
-                            <Send className="w-7 h-7 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                            <Send className="w-8 h-8 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                         </button>
                     </form>
                 </div>
             </div>
 
-            {/* 3. ARCHITETTURA: NEURAL INSIGHTS (RIGHT SIDEBAR) */}
+            {/* 3. ARCHITETTURA: NEURAL INSIGHTS (RIGHT SIDEBAR) - DARK LUXURY */}
             <div className="w-96 flex flex-col gap-8">
-                <div className="bg-charcoal p-10 rounded-[3rem] border border-gold/20 shadow-luxury relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-gold/10 blur-[60px] -translate-y-1/2 translate-x-1/2 group-hover:bg-gold/20 transition-all duration-700" />
+                <div className="bg-charcoal p-10 rounded-[3.5rem] border border-gold/30 shadow-mastermind relative overflow-hidden group h-[55%]">
+                    {/* High-End Visual Effects */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-gold/20 transition-all duration-1000" />
+                    <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 blur-[60px] translate-y-1/2 -translate-x-1/2 group-hover:bg-white/10 transition-all duration-1000" />
 
-                    <div className="flex items-center gap-4 mb-10 relative z-10">
-                        <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-gold/30 transition-colors">
-                            <Sparkles className="w-7 h-7 text-gold" />
+                    <div className="flex items-center gap-5 mb-12 relative z-10">
+                        <div className="w-16 h-16 rounded-[1.5rem] bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-gold/50 transition-all duration-500 shadow-inner">
+                            <Brain className="w-8 h-8 text-gold animate-neural-pulse" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-serif italic text-white">Neural Analysis</h3>
-                            <p className="text-gold text-[9px] uppercase tracking-widest font-black">Lead Fingerprint</p>
+                            <p className="text-gold text-[10px] uppercase tracking-[0.5em] font-black mb-1">Neural Core</p>
+                            <h3 className="text-2xl font-serif italic text-white tracking-tight">Lead Analysis</h3>
                         </div>
                     </div>
 
-                    <div className="space-y-6 relative z-10">
-                        <div className="silk-card !bg-white/5 border-white/5 p-6 hover:border-gold/20 transition-all group/item">
-                            <p className="text-[9px] uppercase tracking-[0.3em] text-gold font-black mb-4 flex items-center justify-between">
-                                Budget Rilevato
-                                <Zap className="w-3 h-3 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                    <div className="space-y-8 relative z-10">
+                        <div className="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-gold/30 transition-all group/item shadow-inner backdrop-blur-md">
+                            <p className="text-[10px] uppercase tracking-[0.4em] text-gold/60 font-black mb-4 flex items-center justify-between">
+                                Budget Estrapolato
+                                <Database className="w-3 h-3 opacity-0 group-hover/item:opacity-100 transition-opacity" />
                             </p>
-                            <p className="text-white font-serif italic text-2xl tracking-tight leading-none">{insights.budget}</p>
+                            <p className="text-white font-serif italic text-3xl tracking-tight leading-none text-reveal">{insights.budget}</p>
                         </div>
 
-                        <div className="silk-card !bg-white/5 border-white/5 p-6 hover:border-gold/20 transition-all group/item">
-                            <p className="text-[9px] uppercase tracking-[0.3em] text-gold font-black mb-4">Desideri & Obiettivi</p>
-                            <p className="text-white/70 text-xs leading-relaxed font-medium italic">{insights.desires}</p>
+                        <div className="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-gold/30 transition-all group/item shadow-inner backdrop-blur-md">
+                            <p className="text-[10px] uppercase tracking-[0.4em] text-gold/60 font-black mb-4">Focus Strategico</p>
+                            <p className="text-white/80 text-[13px] leading-relaxed font-medium italic opacity-80 group-hover/item:opacity-100 transition-opacity">{insights.desires}</p>
                         </div>
 
-                        <div className="p-8 rounded-[2rem] border border-gold/40 bg-gold/10 shadow-inner group/stage">
-                            <div className="flex justify-between items-center mb-4">
-                                <p className="text-[9px] uppercase tracking-[0.4em] text-white/40 font-black">Pipeline Projection</p>
-                                <div className="w-2 h-2 bg-gold rounded-full animate-pulse shadow-[0_0_10px_#D4AF37]" />
+                        <div className="p-10 rounded-[2.5rem] border border-gold/40 bg-gold/5 shadow-[inset_0_0_20px_rgba(212,175,55,0.05)] group/stage relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-2 h-full bg-gold/10" />
+                            <div className="flex justify-between items-center mb-5">
+                                <p className="text-[10px] uppercase tracking-[0.5em] text-white/40 font-black italic">Sales Pipeline</p>
+                                <Sparkles className="w-4 h-4 text-gold animate-pulse" />
                             </div>
-                            <p className="text-white font-black text-sm uppercase tracking-[0.2em]">{insights.stage}</p>
+                            <div className="flex items-end justify-between">
+                                <p className="text-white font-serif text-2xl italic tracking-wide">{insights.stage}</p>
+                                <div className="text-[10px] font-black text-gold/60 uppercase tracking-widest">94% Confidence</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex-1 silk-card p-8 flex flex-col items-center justify-center text-center gap-4 border-gold/10">
-                    <p className="text-[9px] uppercase tracking-[0.4em] text-charcoal/40 font-black">Status Operazione</p>
+                {/* Live Operations Panel */}
+                <div className="flex-1 silk-card !rounded-[3.5rem] p-10 flex flex-col items-center justify-center text-center gap-6 border-gold/20 shadow-luxury bg-white/90">
+                    <p className="text-[10px] uppercase tracking-[0.5em] text-charcoal/30 font-black">Status Unità Operativa</p>
+
                     <div className={cn(
-                        "px-8 py-2 rounded-full text-[10px] font-black tracking-widest border",
-                        activeLeadId ? "bg-red-50 text-red-600 border-red-100" : "bg-green-50 text-green-600 border-green-100"
+                        "px-10 py-3 rounded-full text-[11px] font-black tracking-[0.3em] border shadow-sm animate-pulse",
+                        activeLeadId
+                            ? "bg-red-50 text-red-600 border-red-200"
+                            : "bg-green-50 text-green-600 border-green-200"
                     )}>
-                        {activeLeadId ? '🔴 UNITÀ LIVE' : '🟢 SIMULAZIONE NEURALE'}
+                        {activeLeadId ? '🔴 COMANDO LIVE' : '🟢 SIMULAZIONE NEURALE'}
                     </div>
+
                     {activeConversation && (
-                        <div className="mt-4 p-5 bg-charcoal/5 rounded-2xl border border-charcoal/5 w-full bg-white/50">
-                            <p className="text-[10px] text-charcoal/30 uppercase tracking-widest font-black mb-3">Dati Connessione</p>
-                            <div className="space-y-3">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-[9px] text-charcoal/40">Canale</span>
-                                    <span className="text-[10px] px-3 py-1 bg-charcoal text-white rounded-full font-bold uppercase tracking-widest">{activeConversation.channel_type}</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-[9px] text-charcoal/40">Contatto</span>
-                                    <span className="text-[10px] font-bold text-charcoal flex items-center gap-2">
-                                        <Phone className="w-3 h-3" />
-                                        {activeConversation.contact_phone}
-                                    </span>
+                        <div className="w-full mt-6 space-y-4">
+                            <div className="h-[1px] w-full bg-charcoal/5" />
+                            <div className="p-6 bg-charcoal/5 rounded-[2rem] border border-charcoal/5 bg-white/60">
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[10px] text-charcoal/40 uppercase tracking-widest font-black">Canale</span>
+                                        <div className="px-4 py-1.5 bg-charcoal text-gold rounded-xl text-[10px] font-black uppercase tracking-widest shadow-luxury-sm">
+                                            {activeConversation.channel_type}
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[10px] text-charcoal/40 uppercase tracking-widest font-black">ID Frequenza</span>
+                                        <span className="text-[11px] font-serif italic text-charcoal flex items-center gap-2">
+                                            <Phone className="w-3 h-3 text-gold" />
+                                            {activeConversation.contact_phone}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

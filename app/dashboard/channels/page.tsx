@@ -19,11 +19,21 @@ import {
     EyeOff,
     AlertTriangle,
     Shield,
-    Activity
+    Activity,
+    Send,
+    Globe,
+    Linkedin,
+    Music
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useSovereign } from '@/components/providers/SovereignProvider';
 import { PLAN_LIMITS } from '@/lib/pricing';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs));
+}
 
 interface Channel {
     id: string;
@@ -89,6 +99,50 @@ const channelConfig = {
         provider: 'Meta Graph API',
         webhookPath: '/api/messenger/webhook',
         comingSoon: true,
+        steps: []
+    },
+    telegram: {
+        name: 'Telegram Bot',
+        icon: Send,
+        color: 'bg-sky-500',
+        description: 'Connetti il tuo bot Telegram per assistenze rapide',
+        provider: 'Telegram Bot API',
+        webhookPath: '/api/telegram/webhook',
+        comingSoon: true,
+        imperialOnly: true,
+        steps: []
+    },
+    webchat: {
+        name: 'Neural Webchat',
+        icon: Globe,
+        color: 'bg-gold',
+        description: 'Widget AI avanzato da integrare nel tuo sito',
+        provider: 'VirtualTwin Native',
+        webhookPath: '/api/webchat/webhook',
+        comingSoon: true,
+        imperialOnly: true,
+        steps: []
+    },
+    linkedin: {
+        name: 'LinkedIn Direct',
+        icon: Linkedin,
+        color: 'bg-[#0077b5]',
+        description: 'Espandi il tuo network con messaggi AI su LinkedIn',
+        provider: 'LinkedIn API',
+        webhookPath: '/api/linkedin/webhook',
+        comingSoon: true,
+        imperialOnly: true,
+        steps: []
+    },
+    tiktok: {
+        name: 'TikTok Messages',
+        icon: Music,
+        color: 'bg-black',
+        description: 'Interagisci con la tua audience su TikTok',
+        provider: 'TikTok Shop API',
+        webhookPath: '/api/tiktok/webhook',
+        comingSoon: true,
+        imperialOnly: true,
         steps: []
     }
 };
@@ -551,7 +605,7 @@ export default function ChannelsPage() {
                                             Live Neural Link
                                         </>
                                     ) : isComingSoon ? (
-                                        'Coming Soon'
+                                        (config as any).imperialOnly ? 'Exclusive Access' : 'Coming Soon'
                                     ) : (
                                         <>
                                             <Activity className="w-3 h-3" />
@@ -587,9 +641,19 @@ export default function ChannelsPage() {
                                 ) : isComingSoon ? (
                                     <button
                                         disabled
-                                        className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-charcoal/5 border border-charcoal/5 rounded-2xl text-charcoal/30 text-[10px] font-black uppercase tracking-widest cursor-not-allowed"
+                                        className={cn(
+                                            "w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest cursor-not-allowed transition-all",
+                                            (config as any).imperialOnly
+                                                ? "bg-gold/10 border border-gold/20 text-gold"
+                                                : "bg-charcoal/5 border border-charcoal/5 text-charcoal/30 shadow-none border-none"
+                                        )}
                                     >
-                                        🚀 Orbita Futura
+                                        {(config as any).imperialOnly ? (
+                                            <>
+                                                <Shield className="w-4 h-4" />
+                                                Tier 4 & 5 VIP
+                                            </>
+                                        ) : '🚀 Orbita Futura'}
                                     </button>
                                 ) : isLimitReached ? (
                                     <button
