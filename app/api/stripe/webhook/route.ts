@@ -232,7 +232,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
         email: customerEmail,
         password: randomPassword,
-        email_confirm: true, // Skip email confirmation
+        email_confirm: false, // Skip automatic confirmation to enforce bot protection flow
         user_metadata: {
             plan,
             tier,

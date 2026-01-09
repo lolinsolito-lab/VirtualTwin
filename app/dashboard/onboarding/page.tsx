@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 import {
     Sparkles, Building2, Brain, MessageSquare, Trophy,
     ArrowRight, ArrowLeft, Check, Loader2, Crown,
-    Gift, Lock, Phone, Instagram, MessageCircle
+    Gift, Lock, Phone, Instagram, MessageCircle, Shield
 } from 'lucide-react';
 
 // =============================================
@@ -15,6 +15,7 @@ import {
 // =============================================
 
 const STEPS = [
+    { id: 0, title: 'Attiva', icon: Lock },
     { id: 1, title: 'Benvenuto', icon: Sparkles },
     { id: 2, title: 'Profilo', icon: Building2 },
     { id: 3, title: 'Addestra AI', icon: Brain },
@@ -136,6 +137,95 @@ function StepWelcome({ onNext, tierInfo }: { onNext: (data: any) => void; tierIn
             >
                 Iniziamo
                 <ArrowRight className="w-5 h-5" />
+            </button>
+        </div>
+    );
+}
+
+// =============================================
+// STEP 0: SET PASSWORD (FOR NEW BUYERS)
+// =============================================
+function StepSetPassword({ onNext, sessionId }: { onNext: (email: string) => void; sessionId: string }) {
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleActivate = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            // 1. Claim Account (Set Password)
+            const res = await fetch('/api/auth/claim-account', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sessionId, password })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || 'Errore durante l\'attivazione');
+
+            // 2. Auto-Login
+            const { error: loginError } = await supabase.auth.signInWithPassword({
+                email: data.email,
+                password: password
+            });
+
+            if (loginError) throw loginError;
+
+            onNext(data.email);
+
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="text-center max-w-md mx-auto">
+            <div className="w-20 h-20 mx-auto mb-8 bg-gold/10 rounded-full flex items-center justify-center">
+                <Shield className="w-10 h-10 text-gold" />
+            </div>
+
+            <h1 className="text-3xl font-serif italic text-charcoal mb-4">
+                Attiva il Tuo <span className="gold-text-gradient">Impero</span>
+            </h1>
+
+            <p className="text-charcoal/60 mb-8">
+                Imposta una password sicura per il tuo account associato al pagamento.
+            </p>
+
+            {error && (
+                <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100 italic">
+                    {error}
+                </div>
+            )}
+
+            <div className="space-y-4 mb-8">
+                <div className="text-left">
+                    <label className="block text-xs font-black uppercase tracking-widest text-charcoal/40 mb-2 ml-1">Password</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Minimo 8 caratteri"
+                        className="w-full px-5 py-4 bg-white border border-charcoal/10 rounded-2xl focus:border-gold outline-none transition-all shadow-sm"
+                    />
+                </div>
+            </div>
+
+            <button
+                onClick={handleActivate}
+                disabled={loading || password.length < 8}
+                className="w-full gold-gradient py-5 rounded-2xl text-white font-black uppercase tracking-[0.3em] text-[11px] shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+            >
+                {loading ? (
+                    <Loader2 className="w-5 h-5 animate-spin mx-auto" />
+                ) : (
+                    'Attiva Account e Inizia'
+                )}
             </button>
         </div>
     );
@@ -632,6 +722,25 @@ export default function OnboardingPage() {
     const [loadingTier, setLoadingTier] = useState(true);
     const router = useRouter();
 
+    // Handle session_id from Stripe
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const sessionId = searchParams.get('session_id');
+
+        if (sessionId) {
+            // Check if user is already logged in
+            supabase.auth.getUser().then(({ data: { user } }) => {
+                if (!user) {
+                    // Not logged in but has session_id -> Step 0 (Set Password)
+                    setCurrentStep(0);
+                } else {
+                    // Already logged in, continue to welcome
+                    setCurrentStep(1);
+                }
+            });
+        }
+    }, []);
+
     // Fetch user tier on mount
     useEffect(() => {
         async function fetchUserTier() {
@@ -739,6 +848,9 @@ export default function OnboardingPage() {
         }
 
         switch (currentStep) {
+            case 0:
+                const sessionId = new URLSearchParams(window.location.search).get('session_id') || '';
+                return <StepSetPassword sessionId={sessionId} onNext={() => setCurrentStep(1)} />;
             case 1:
                 return <StepWelcome onNext={handleNext} tierInfo={tierInfo} />;
             case 2:

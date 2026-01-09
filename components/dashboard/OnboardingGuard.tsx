@@ -21,10 +21,24 @@ export default function OnboardingGuard({ children }: { children: React.ReactNod
     const isOnboardingPage = pathname?.includes('/onboarding');
 
     useEffect(() => {
-        if (!loading && user && user.onboarding_completed === false && !isOnboardingPage) {
-            router.push('/dashboard/onboarding');
+        if (!loading && user) {
+            // 1. If onboarding not completed, go there
+            if (user.onboarding_completed === false && !isOnboardingPage) {
+                router.push('/dashboard/onboarding');
+                return;
+            }
+
+            // 2. If onboarding completed but email NOT verified, show verification screen
+            // This is the "Bot Protection Gate" requested by the user
+            const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+                if (session?.user && !session.user.email_confirmed_at && user.onboarding_completed && !pathname?.includes('/check-email')) {
+                    router.push('/auth/check-email');
+                }
+            });
+
+            return () => subscription.unsubscribe();
         }
-    }, [user, loading, isOnboardingPage, router]);
+    }, [user, loading, isOnboardingPage, pathname, router]);
 
     // Show loading while checking
     if (loading && !isOnboardingPage) {
