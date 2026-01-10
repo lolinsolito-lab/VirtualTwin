@@ -151,15 +151,18 @@ export default function HeroEmotionalPunch() {
                                     className="relative group"
                                 >
                                     <div className="absolute -inset-1 bg-gradient-to-r from-gold via-amber-300 to-gold rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200" />
-                                    <a
-                                        href="/auth/register"
+                                    <button
+                                        onClick={() => {
+                                            const pricing = document.getElementById('pricing');
+                                            pricing?.scrollIntoView({ behavior: 'smooth' });
+                                        }}
                                         className="relative flex flex-col items-center px-12 py-6 bg-charcoal text-white rounded-2xl font-black text-xl uppercase tracking-widest shadow-2xl transition-all"
                                     >
-                                        Attiva il Tuo Gemello Digitale
+                                        Attiva Ora il Tuo Gemello Digitale
                                         <span className="text-[10px] text-gold/60 mt-1 lowercase tracking-wider font-medium font-sans">
-                                            14 giorni · No carta richiesta
+                                            Scopri i piani · No carta richiesta
                                         </span>
-                                    </a>
+                                    </button>
                                 </motion.div>
 
                                 <a href="/auth/login" className="text-charcoal/40 hover:text-gold transition-colors text-sm font-medium tracking-wide flex items-center gap-2 group">

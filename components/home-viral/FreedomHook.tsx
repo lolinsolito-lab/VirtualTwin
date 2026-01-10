@@ -125,6 +125,37 @@ export default function FreedomHook() {
                     >
                         <CountdownTimer />
                     </motion.div>
+
+                    {/* CTA Button */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.6 }}
+                        className="pt-8"
+                    >
+                        <button
+                            onClick={() => {
+                                const pricing = document.getElementById('pricing');
+                                pricing?.scrollIntoView({ behavior: 'smooth' });
+                            }}
+                            className="group relative inline-flex flex-col items-center px-12 py-5 bg-charcoal text-white rounded-2xl font-black text-lg md:text-xl uppercase tracking-widest shadow-2xl hover:scale-[1.02] transition-all duration-300"
+                        >
+                            <span className="relative z-10 flex items-center gap-2">
+                                Attiva Ora la Tua Libertà
+                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                            <span className="text-[10px] text-gold/60 mt-1 lowercase tracking-wider font-medium font-sans relative z-10">
+                                Scopri i piani · Zero rischi
+                            </span>
+
+                            <div className="absolute inset-0 bg-gradient-to-r from-gold/0 via-gold/10 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                        </button>
+
+                        <p className="mt-4 text-charcoal/30 text-[10px] uppercase tracking-[0.2em] font-bold">
+                            Disponibilità limitata per la Genesis Wave
+                        </p>
+                    </motion.div>
                 </div>
 
                 {/* Visual Comparison Section */}
