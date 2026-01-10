@@ -13,7 +13,6 @@ interface CountdownState {
 }
 
 const CountdownTimer = () => {
-    const [mounted, setMounted] = useState(false);
     const [timeLeft, setTimeLeft] = useState<CountdownState>({
         days: 21,
         hours: 9,
@@ -22,7 +21,6 @@ const CountdownTimer = () => {
     });
 
     useEffect(() => {
-        setMounted(true);
         const timer = setInterval(() => {
             setTimeLeft(prev => {
                 if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
@@ -37,7 +35,10 @@ const CountdownTimer = () => {
 
     const TimeUnit = ({ label, value }: { label: string; value: number }) => (
         <div className="flex flex-col items-center">
-            <div className="text-2xl md:text-3xl font-serif text-charcoal tabular-nums">
+            <div
+                suppressHydrationWarning
+                className="text-2xl md:text-3xl font-serif text-charcoal tabular-nums"
+            >
                 {value.toString().padStart(2, '0')}
             </div>
             <div className="text-[7px] md:text-[8px] uppercase tracking-widest text-charcoal/40 font-black mt-1">
@@ -46,18 +47,16 @@ const CountdownTimer = () => {
         </div>
     );
 
-    if (!mounted) return null;
-
     return (
         <div className="inline-flex items-center gap-4 md:gap-8 px-8 md:px-12 py-4 md:py-6 bg-gold/5 border border-gold/10 rounded-2xl md:rounded-[2rem] backdrop-blur-sm self-center">
             <Clock className="w-5 h-5 md:w-6 md:h-6 text-gold/60" />
             <div className="flex items-center gap-3 md:gap-6">
                 <TimeUnit label="Days" value={timeLeft.days} />
-                <span className="text-gold/30 font-serif text-xl">:</span>
+                <span className="text-gold/30 font-serif text-xl border-none">:</span>
                 <TimeUnit label="Hours" value={timeLeft.hours} />
-                <span className="text-gold/30 font-serif text-xl">:</span>
+                <span className="text-gold/30 font-serif text-xl border-none">:</span>
                 <TimeUnit label="Min" value={timeLeft.minutes} />
-                <span className="text-gold/30 font-serif text-xl">:</span>
+                <span className="text-gold/30 font-serif text-xl border-none">:</span>
                 <TimeUnit label="Sec" value={timeLeft.seconds} />
             </div>
         </div>
@@ -101,7 +100,8 @@ export default function FreedomHook() {
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-6xl lg:text-7xl font-serif text-charcoal tracking-tight mb-8 leading-[1.1]"
                     >
-                        Quanto Vale la Tua <span className="text-gold italic">Libertà</span>?
+                        Quanto Vale la Tua{' '}
+                        <span className="text-gold italic">Libertà</span>?
                     </motion.h1>
 
                     {/* Sub-headline */}
@@ -112,7 +112,7 @@ export default function FreedomHook() {
                         transition={{ delay: 0.2 }}
                         className="text-sm md:text-lg text-charcoal/50 font-medium tracking-wide max-w-2xl mb-12"
                     >
-                        14 giorni per provare. Nessuna carta richiesta.{" "}
+                        14 giorni per provare. Nessuna carta richiesta.{' '}
                         <span className="text-charcoal font-bold">Zero rischi.</span>
                     </motion.p>
 
