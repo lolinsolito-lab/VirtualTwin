@@ -13,6 +13,7 @@ interface CountdownState {
 }
 
 const CountdownTimer = () => {
+    const [mounted, setMounted] = useState(false);
     const [timeLeft, setTimeLeft] = useState<CountdownState>({
         days: 21,
         hours: 9,
@@ -21,6 +22,7 @@ const CountdownTimer = () => {
     });
 
     useEffect(() => {
+        setMounted(true);
         const timer = setInterval(() => {
             setTimeLeft(prev => {
                 if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
@@ -43,6 +45,8 @@ const CountdownTimer = () => {
             </div>
         </div>
     );
+
+    if (!mounted) return null;
 
     return (
         <div className="inline-flex items-center gap-4 md:gap-8 px-8 md:px-12 py-4 md:py-6 bg-gold/5 border border-gold/10 rounded-2xl md:rounded-[2rem] backdrop-blur-sm self-center">
@@ -135,7 +139,7 @@ export default function FreedomHook() {
                         <div className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden border border-charcoal/10 shadow-luxury overflow-hidden">
                             <div className="absolute inset-0 bg-charcoal/20 group-hover:bg-transparent transition-colors duration-700 z-10" />
                             <img
-                                src="https://raw.githubusercontent.com/lolinsolito-lab/Virtualtwin/main/public/traditional_stress_cons.png"
+                                src="/traditional_stress_cons.png"
                                 alt="Lo Stress Tradizionale"
                                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
                             />
@@ -161,7 +165,7 @@ export default function FreedomHook() {
                         <div className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden border border-gold/30 shadow-luxury-gold overflow-hidden">
                             <div className="absolute inset-0 bg-gold/5 group-hover:bg-transparent transition-colors duration-700 z-10" />
                             <img
-                                src="https://raw.githubusercontent.com/lolinsolito-lab/Virtualtwin/main/public/sovereign_freedom_pros.png"
+                                src="/sovereign_freedom_pros.png"
                                 alt="La Libertà Sovereign"
                                 className="w-full h-full object-cover transition-all duration-1000 scale-105 group-hover:scale-100"
                             />
