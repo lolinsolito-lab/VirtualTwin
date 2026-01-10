@@ -1,4 +1,5 @@
 import Navbar from "@/components/sections/Navbar";
+import FreedomHook from "@/components/home-viral/FreedomHook";
 import HeroEmotionalPunch from "@/components/home-viral/HeroEmotionalPunch";
 import WallOfHooks from "@/components/home-viral/WallOfHooks";
 import TodayTomorrowStories from "@/components/home-viral/TodayTomorrowStories";
@@ -19,6 +20,9 @@ export default function Home() {
     <div className="selection:bg-gold selection:text-black min-h-screen bg-champagne overflow-x-hidden">
       <Navbar />
       <main>
+        {/* FREEDOM HOOK - The Question */}
+        <FreedomHook />
+
         {/* VIRAL EMOTIONAL HERO - 3AM Story */}
         <HeroEmotionalPunch />
 
