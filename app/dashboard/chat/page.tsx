@@ -31,6 +31,9 @@ function ChatContent() {
     const [userId, setUserId] = useState<string | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
+    // Mobile View State: 'list' | 'chat' | 'insights'
+    const [view, setView] = useState<'list' | 'chat' | 'insights'>('list');
+
     // AI extracted insights
     const [insights, setInsights] = useState({
         budget: 'In analisi...',
@@ -72,11 +75,15 @@ function ChatContent() {
     useEffect(() => {
         if (activeLeadId && userId) {
             loadActiveConversation(activeLeadId);
+            // On mobile, switch to chat view when a lead is selected
+            setView('chat');
         } else {
             setActiveConversation(null);
             setMessages([
                 { role: 'assistant', content: 'Buongiorno! Seleziona una conversazione per iniziare o scrivi un messaggio in modalità Sandbox.' }
             ]);
+            // On mobile, ensure we are in list view if no lead selected
+            setView('list');
         }
     }, [activeLeadId, userId]);
 
@@ -233,10 +240,13 @@ function ChatContent() {
     );
 
     return (
-        <div className="h-[calc(100vh-80px)] p-6 lg:p-10 flex gap-6 bg-[#FAF9F6]">
+        <div className="h-[calc(100vh-64px)] lg:h-[calc(100vh-80px)] p-4 md:p-6 lg:p-10 flex gap-6 bg-[#FAF9F6] relative overflow-hidden">
 
             {/* 1. ARCHITETTURA: LISTA CONVERSAZIONI (SIDEBAR) - DARK ELITE */}
-            <div className="w-80 flex flex-col gap-6">
+            <div className={cn(
+                "w-full lg:w-80 flex flex-col gap-6 transition-all duration-500",
+                view !== 'list' && "hidden lg:flex"
+            )}>
                 <div className="bg-charcoal p-6 h-full flex flex-col gap-6 overflow-hidden rounded-[3rem] border border-gold/20 shadow-luxury relative">
                     {/* Ambient Glow Inside Sidebar */}
                     <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 blur-3xl pointer-events-none" />
@@ -317,19 +327,43 @@ function ChatContent() {
             </div>
 
             {/* 2. ARCHITETTURA: PONTE DI COMANDO (CHAT) - LUXURY LIGHT GRID */}
-            <div className="flex-1 silk-card overflow-hidden flex flex-col relative !rounded-[3rem] border-gold/10 !bg-white/80 shadow-mastermind backdrop-blur-3xl">
+            <div className={cn(
+                "flex-1 silk-card overflow-hidden flex flex-col relative !rounded-[2rem] md:!rounded-[3rem] border-gold/10 !bg-white/80 shadow-mastermind backdrop-blur-3xl transition-all duration-500",
+                view !== 'chat' && "hidden lg:flex"
+            )}>
                 {/* Visual Accent: Golden Neural Grid */}
                 <div className="absolute inset-0 neural-grid opacity-[0.03] pointer-events-none" />
 
                 {/* Decorative Light */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-gold/5 blur-[120px] pointer-events-none" />
 
+                {/* Mobile Navigation Header (Only visible on mobile/tablet) */}
+                <div className="lg:hidden px-6 py-4 bg-charcoal flex items-center justify-between z-20">
+                    <button
+                        onClick={() => {
+                            router.push('/dashboard/chat');
+                            setView('list');
+                        }}
+                        className="flex items-center gap-2 text-gold text-[10px] font-black uppercase tracking-widest"
+                    >
+                        <ChevronRight className="w-4 h-4 rotate-180" />
+                        Lista
+                    </button>
+                    <button
+                        onClick={() => setView('insights')}
+                        className="flex items-center gap-2 text-gold text-[10px] font-black uppercase tracking-widest"
+                    >
+                        Insights
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
+
                 {/* Header Chat */}
-                <div className="px-12 py-8 border-b border-charcoal/5 flex items-center justify-between relative z-10">
-                    <div className="flex items-center gap-6">
-                        <div className="w-20 h-20 bg-charcoal rounded-3xl flex items-center justify-center shadow-luxury p-1 group">
-                            <div className="w-full h-full border border-gold/30 rounded-2xl flex items-center justify-center group-hover:bg-gold/10 transition-colors">
-                                <Bot className="w-10 h-10 text-gold" />
+                <div className="px-6 md:px-12 py-6 md:py-8 border-b border-charcoal/5 flex flex-col sm:flex-row sm:items-center justify-between relative z-10 gap-4">
+                    <div className="flex items-center gap-4 md:gap-6">
+                        <div className="w-14 h-14 md:w-20 md:h-20 bg-charcoal rounded-2xl md:rounded-3xl flex items-center justify-center shadow-luxury p-1 group flex-shrink-0">
+                            <div className="w-full h-full border border-gold/30 rounded-xl md:rounded-2xl flex items-center justify-center group-hover:bg-gold/10 transition-colors">
+                                <Bot className="w-6 h-6 md:w-10 md:h-10 text-gold" />
                             </div>
                         </div>
                         <div>
@@ -357,34 +391,34 @@ function ChatContent() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-8">
-                        <div className="text-right hidden xl:block">
-                            <p className="text-[9px] uppercase tracking-widest text-gold font-black mb-1">Protocollo Sicurezza</p>
+                    <div className="flex items-center justify-between sm:justify-end gap-4 md:gap-8">
+                        <div className="text-right hidden md:block">
+                            <p className="text-[8px] md:text-[9px] uppercase tracking-widest text-gold font-black mb-1">Protocollo Sicurezza</p>
                             <div className="flex items-center gap-2 justify-end">
                                 <ShieldCheck className="w-4 h-4 text-gold" />
-                                <span className="text-xs font-bold text-charcoal">Cifratura Sovereign V2</span>
+                                <span className="text-[10px] md:text-xs font-bold text-charcoal">Cifratura Sovereign V2</span>
                             </div>
                         </div>
-                        <div className="w-14 h-14 bg-charcoal text-gold rounded-2xl flex items-center justify-center hover:bg-gold hover:text-white transition-all cursor-pointer shadow-luxury">
-                            <Activity className="w-7 h-7" />
+                        <div className="w-10 h-10 md:w-14 md:h-14 bg-charcoal text-gold rounded-xl md:rounded-2xl flex items-center justify-center hover:bg-gold hover:text-white transition-all cursor-pointer shadow-luxury">
+                            <Activity className="w-5 h-5 md:w-7 md:h-7" />
                         </div>
                     </div>
                 </div>
 
                 {/* Area Messaggi */}
-                <div ref={scrollRef} className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar relative z-10">
+                <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-12 space-y-8 md:space-y-12 custom-scrollbar relative z-10">
                     {messages.map((m, i) => (
                         <div key={i} className={cn("flex group animate-soft-focus", m.role === 'assistant' ? 'justify-start' : 'justify-end')}>
-                            <div className={cn("max-w-[75%] flex gap-8", m.role === 'assistant' ? 'flex-row' : 'flex-row-reverse')}>
+                            <div className={cn("max-w-[90%] md:max-w-[75%] flex gap-4 md:gap-8", m.role === 'assistant' ? 'flex-row' : 'flex-row-reverse')}>
                                 <div className={cn(
-                                    "w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-luxury transition-transform group-hover:scale-110",
+                                    "w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-luxury transition-transform group-hover:scale-110",
                                     m.role === 'assistant' ? 'bg-charcoal text-gold' : 'gold-gradient text-white'
                                 )}>
-                                    {m.role === 'assistant' ? <Bot className="w-7 h-7" /> : <User className="w-7 h-7" />}
+                                    {m.role === 'assistant' ? <Bot className="w-5 h-5 md:w-7 md:h-7" /> : <User className="w-5 h-5 md:w-7 md:h-7" />}
                                 </div>
                                 <div className="space-y-3">
                                     <div className={cn(
-                                        "px-10 py-6 rounded-[2.5rem] text-sm leading-relaxed shadow-sm border",
+                                        "px-6 md:px-10 py-4 md:py-6 rounded-[1.5rem] md:rounded-[2.5rem] text-xs md:text-sm leading-relaxed shadow-sm border",
                                         m.role === 'assistant'
                                             ? 'bg-white border-charcoal/5 text-charcoal rounded-tl-lg'
                                             : 'bg-charcoal border-gold/20 text-white rounded-tr-lg'
@@ -422,20 +456,19 @@ function ChatContent() {
                     )}
                 </div>
 
-                {/* Input Area - Integrated Modern Bar */}
-                <div className="p-10 border-t border-charcoal/5 bg-white/60 relative z-10">
-                    <form onSubmit={handleSend} className="flex gap-6 max-w-5xl mx-auto">
+                <div className="p-6 md:p-10 border-t border-charcoal/5 bg-white/60 relative z-10">
+                    <form onSubmit={handleSend} className="flex gap-4 md:gap-6 max-w-5xl mx-auto">
                         <div className="flex-1 relative">
-                            <div className="absolute left-7 top-1/2 -translate-y-1/2 w-12 h-12 bg-gold/10 rounded-2xl flex items-center justify-center border border-gold/10 group">
-                                <Zap className="w-6 h-6 text-gold group-hover:scale-110 transition-transform" />
+                            <div className="absolute left-4 md:left-7 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-gold/10 rounded-xl md:rounded-2xl flex items-center justify-center border border-gold/10 group">
+                                <Zap className="w-5 h-5 md:w-6 md:h-6 text-gold group-hover:scale-110 transition-transform" />
                             </div>
                             <input
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder={activeConversation ? `Trasmetti comando a ${activeConversation.contact_name}...` : "Invia un comando neurale..."}
-                                className="w-full bg-white border border-charcoal/10 rounded-[2.5rem] pl-24 pr-36 py-6 outline-none focus:border-gold/40 focus:shadow-luxury-sm transition-all text-sm font-medium text-charcoal shadow-inner"
+                                className="w-full bg-white border border-charcoal/10 rounded-full md:rounded-[2.5rem] pl-16 md:pl-24 pr-12 md:pr-36 py-4 md:py-6 outline-none focus:border-gold/40 focus:shadow-luxury-sm transition-all text-xs md:text-sm font-medium text-charcoal shadow-inner"
                             />
-                            <div className="absolute right-10 top-1/2 -translate-y-1/2 flex items-center gap-4">
+                            <div className="absolute right-6 md:right-10 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-4">
                                 <div className="h-6 w-[1px] bg-charcoal/10" />
                                 <Database className="w-5 h-5 text-charcoal/20 hover:text-gold cursor-pointer transition-colors" />
                             </div>
@@ -443,65 +476,78 @@ function ChatContent() {
                         <button
                             type="submit"
                             disabled={loading || !input.trim()}
-                            className="w-20 h-20 bg-charcoal text-gold border border-gold/30 rounded-[2.5rem] flex items-center justify-center hover:bg-gold hover:text-white transition-all duration-700 shadow-luxury disabled:opacity-30 group"
+                            className="w-14 h-14 md:w-20 md:h-20 bg-charcoal text-gold border border-gold/30 rounded-xl md:rounded-[2.5rem] flex items-center justify-center hover:bg-gold hover:text-white transition-all duration-700 shadow-luxury disabled:opacity-30 group flex-shrink-0"
                         >
-                            <Send className="w-8 h-8 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                            <Send className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                         </button>
                     </form>
                 </div>
             </div>
 
             {/* 3. ARCHITETTURA: NEURAL INSIGHTS (RIGHT SIDEBAR) - DARK LUXURY */}
-            <div className="w-96 flex flex-col gap-8">
-                <div className="bg-charcoal p-10 rounded-[3.5rem] border border-gold/30 shadow-mastermind relative overflow-hidden group h-[55%]">
+            <div className={cn(
+                "w-full lg:w-96 flex flex-col gap-8 transition-all duration-500",
+                view !== 'insights' && "hidden lg:flex"
+            )}>
+                {/* Mobile Navigation Header for Insights */}
+                <div className="lg:hidden px-6 py-4 bg-white/80 backdrop-blur-md rounded-[2rem] border border-gold/10 flex items-center justify-between mb-4">
+                    <button
+                        onClick={() => setView('chat')}
+                        className="flex items-center gap-2 text-charcoal text-[10px] font-black uppercase tracking-widest"
+                    >
+                        <ChevronRight className="w-4 h-4 rotate-180" />
+                        Torna alla Chat
+                    </button>
+                </div>
+                <div className="bg-charcoal p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] border border-gold/30 shadow-mastermind relative overflow-hidden group h-auto lg:h-[55%]">
                     {/* High-End Visual Effects */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-gold/20 transition-all duration-1000" />
                     <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 blur-[60px] translate-y-1/2 -translate-x-1/2 group-hover:bg-white/10 transition-all duration-1000" />
 
-                    <div className="flex items-center gap-5 mb-12 relative z-10">
-                        <div className="w-16 h-16 rounded-[1.5rem] bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-gold/50 transition-all duration-500 shadow-inner">
-                            <Brain className="w-8 h-8 text-gold animate-neural-pulse" />
+                    <div className="flex items-center gap-4 md:gap-5 mb-8 md:mb-12 relative z-10">
+                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-[1.5rem] bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-gold/50 transition-all duration-500 shadow-inner">
+                            <Brain className="w-6 h-6 md:w-8 md:h-8 text-gold animate-neural-pulse" />
                         </div>
                         <div>
-                            <p className="text-gold text-[10px] uppercase tracking-[0.5em] font-black mb-1">Neural Core</p>
-                            <h3 className="text-2xl font-serif italic text-white tracking-tight">Lead Analysis</h3>
+                            <p className="text-gold text-[8px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] font-black mb-1">Neural Core</p>
+                            <h3 className="text-xl md:text-2xl font-serif italic text-white tracking-tight">Lead Analysis</h3>
                         </div>
                     </div>
 
                     <div className="space-y-8 relative z-10">
-                        <div className="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-gold/30 transition-all group/item shadow-inner backdrop-blur-md">
-                            <p className="text-[10px] uppercase tracking-[0.4em] text-gold/60 font-black mb-4 flex items-center justify-between">
+                        <div className="p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-gold/30 transition-all group/item shadow-inner backdrop-blur-md">
+                            <p className="text-[8px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-gold/60 font-black mb-3 md:mb-4 flex items-center justify-between">
                                 Budget Estrapolato
                                 <Database className="w-3 h-3 opacity-0 group-hover/item:opacity-100 transition-opacity" />
                             </p>
-                            <p className="text-white font-serif italic text-3xl tracking-tight leading-none text-reveal">{insights.budget}</p>
+                            <p className="text-white font-serif italic text-2xl md:text-3xl tracking-tight leading-none text-reveal">{insights.budget}</p>
                         </div>
 
-                        <div className="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-gold/30 transition-all group/item shadow-inner backdrop-blur-md">
-                            <p className="text-[10px] uppercase tracking-[0.4em] text-gold/60 font-black mb-4">Focus Strategico</p>
-                            <p className="text-white/80 text-[13px] leading-relaxed font-medium italic opacity-80 group-hover/item:opacity-100 transition-opacity">{insights.desires}</p>
+                        <div className="p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-gold/30 transition-all group/item shadow-inner backdrop-blur-md">
+                            <p className="text-[8px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-gold/60 font-black mb-3 md:mb-4">Focus Strategico</p>
+                            <p className="text-white/80 text-[12px] md:text-[13px] leading-relaxed font-medium italic opacity-80 group-hover/item:opacity-100 transition-opacity">{insights.desires}</p>
                         </div>
 
-                        <div className="p-10 rounded-[2.5rem] border border-gold/40 bg-gold/5 shadow-[inset_0_0_20px_rgba(212,175,55,0.05)] group/stage relative overflow-hidden">
+                        <div className="p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] border border-gold/40 bg-gold/5 shadow-[inset_0_0_20px_rgba(212,175,55,0.05)] group/stage relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-2 h-full bg-gold/10" />
-                            <div className="flex justify-between items-center mb-5">
-                                <p className="text-[10px] uppercase tracking-[0.5em] text-white/40 font-black italic">Sales Pipeline</p>
-                                <Sparkles className="w-4 h-4 text-gold animate-pulse" />
+                            <div className="flex justify-between items-center mb-4 md:mb-5">
+                                <p className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] text-white/40 font-black italic">Sales Pipeline</p>
+                                <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold animate-pulse" />
                             </div>
                             <div className="flex items-end justify-between">
-                                <p className="text-white font-serif text-2xl italic tracking-wide">{insights.stage}</p>
-                                <div className="text-[10px] font-black text-gold/60 uppercase tracking-widest">94% Confidence</div>
+                                <p className="text-white font-serif text-xl md:text-2xl italic tracking-wide">{insights.stage}</p>
+                                <div className="text-[8px] md:text-[10px] font-black text-gold/60 uppercase tracking-widest">94% Confidence</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Live Operations Panel */}
-                <div className="flex-1 silk-card !rounded-[3.5rem] p-10 flex flex-col items-center justify-center text-center gap-6 border-gold/20 shadow-luxury bg-white/90">
-                    <p className="text-[10px] uppercase tracking-[0.5em] text-charcoal/30 font-black">Status Unità Operativa</p>
+                <div className="flex-1 silk-card !rounded-[2.5rem] md:!rounded-[3.5rem] p-6 md:p-10 flex flex-col items-center justify-center text-center gap-4 md:gap-6 border-gold/20 shadow-luxury bg-white/90">
+                    <p className="text-[8px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] text-charcoal/30 font-black">Status Unità Operativa</p>
 
                     <div className={cn(
-                        "px-10 py-3 rounded-full text-[11px] font-black tracking-[0.3em] border shadow-sm animate-pulse",
+                        "px-6 md:px-10 py-2.5 md:py-3 rounded-full text-[9px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] border shadow-sm animate-pulse",
                         activeLeadId
                             ? "bg-red-50 text-red-600 border-red-200"
                             : "bg-green-50 text-green-600 border-green-200"

@@ -280,12 +280,12 @@ function ConnectionModal({ channel, onClose, onSuccess }: ConnectionModalProps) 
                             <config.icon className="w-8 h-8" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-serif italic text-charcoal tracking-tight">Connetti {config.name}</h2>
-                            <p className="text-charcoal/30 text-[9px] uppercase tracking-[0.3em] font-black mt-1">Provider: {config.provider}</p>
+                            <h2 className="text-xl md:text-2xl font-serif italic text-charcoal tracking-tight">Connetti {config.name}</h2>
+                            <p className="text-charcoal/30 text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black mt-1">Provider: {config.provider}</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="w-12 h-12 bg-charcoal/5 hover:bg-charcoal text-charcoal/30 hover:text-white rounded-full flex items-center justify-center transition-all">
-                        <X className="w-6 h-6" />
+                    <button onClick={onClose} className="w-10 h-10 md:w-12 md:h-12 bg-charcoal/5 hover:bg-charcoal text-charcoal/30 hover:text-white rounded-full flex items-center justify-center transition-all">
+                        <X className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
                 </div>
 
@@ -312,13 +312,13 @@ function ConnectionModal({ channel, onClose, onSuccess }: ConnectionModalProps) 
                 </div>
 
                 {/* Step Content */}
-                <div className="p-12">
-                    <div className="mb-10">
-                        <p className="text-gold text-[9px] uppercase tracking-[0.4em] font-black mb-4">Step {currentStep + 1} di {config.steps.length}</p>
-                        <h3 className="text-3xl font-serif italic text-charcoal mb-4 tracking-tight">
+                <div className="p-6 md:p-12">
+                    <div className="mb-6 md:mb-10">
+                        <p className="text-gold text-[8px] md:text-[9px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-black mb-3 md:mb-4">Step {currentStep + 1} di {config.steps.length}</p>
+                        <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal mb-3 md:mb-4 tracking-tight">
                             {step.title}
                         </h3>
-                        <p className="text-charcoal/50 text-base leading-relaxed whitespace-pre-line">{step.description}</p>
+                        <p className="text-charcoal/50 text-sm md:text-base leading-relaxed whitespace-pre-line">{step.description}</p>
                     </div>
 
                     {/* External Link */}
@@ -327,42 +327,42 @@ function ConnectionModal({ channel, onClose, onSuccess }: ConnectionModalProps) 
                             href={step.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-3 px-8 py-4 bg-charcoal text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-gold transition-all shadow-luxury mb-10"
+                            className="inline-flex items-center gap-3 px-6 md:px-8 py-3 md:py-4 bg-charcoal text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] hover:bg-gold transition-all shadow-luxury mb-8 md:mb-10"
                         >
-                            <ExternalLink className="w-4 h-4" />
+                            <ExternalLink className="w-3.5 h-3.5 md:w-4 md:h-4" />
                             {step.linkText}
                         </a>
                     )}
 
                     {/* Tip */}
                     {step.tip && (
-                        <div className="p-6 bg-gold/[0.03] border border-gold/20 rounded-[2rem] mb-10 relative overflow-hidden group">
+                        <div className="p-5 md:p-6 bg-gold/[0.03] border border-gold/20 rounded-[1.5rem] md:rounded-[2rem] mb-8 md:mb-10 relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-12 h-12 bg-gold/5 blur-xl group-hover:bg-gold/10 transition-colors" />
-                            <div className="flex items-start gap-4">
-                                <HelpCircle className="w-6 h-6 text-gold flex-shrink-0 mt-0.5" />
-                                <p className="text-charcoal/60 text-sm italic leading-relaxed">{step.tip}</p>
+                            <div className="flex items-start gap-3 md:gap-4">
+                                <HelpCircle className="w-5 h-5 md:w-6 md:h-6 text-gold flex-shrink-0 mt-0.5" />
+                                <p className="text-charcoal/60 text-xs md:text-sm italic leading-relaxed">{step.tip}</p>
                             </div>
                         </div>
                     )}
 
                     {/* Webhook URL */}
                     {step.webhookUrl && (
-                        <div className="mb-10">
-                            <label className="block text-[9px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3 italic">
+                        <div className="mb-8 md:mb-10">
+                            <label className="block text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-charcoal/40 font-black mb-2 md:mb-3 italic">
                                 Webhook Neural URL
                             </label>
-                            <div className="flex items-center gap-3">
-                                <code className="flex-1 px-6 py-4 bg-white border border-charcoal/5 rounded-2xl text-[11px] font-mono text-charcoal overflow-x-auto shadow-sm">
+                            <div className="flex items-center gap-2 md:gap-3">
+                                <code className="flex-1 px-4 md:px-6 py-3 md:py-4 bg-white border border-charcoal/5 rounded-xl md:rounded-2xl text-[9px] md:text-[11px] font-mono text-charcoal overflow-x-auto shadow-sm">
                                     {webhookUrl}
                                 </code>
                                 <button
                                     onClick={() => copyToClipboard(webhookUrl)}
-                                    className="p-4 bg-gold/10 text-gold rounded-2xl hover:bg-gold hover:text-white transition-all border border-gold/10 shadow-sm"
+                                    className="p-3 md:p-4 bg-gold/10 text-gold rounded-xl md:rounded-2xl hover:bg-gold hover:text-white transition-all border border-gold/10 shadow-sm"
                                 >
-                                    {copied ? <CheckCircle className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                                    {copied ? <CheckCircle className="w-4 h-4 md:w-5 md:h-5" /> : <Copy className="w-4 h-4 md:w-5 md:h-5" />}
                                 </button>
                             </div>
-                            <p className="text-charcoal/30 text-[8px] mt-3 font-bold uppercase tracking-[0.2em]">
+                            <p className="text-charcoal/30 text-[7px] md:text-[8px] mt-3 font-bold uppercase tracking-[0.2em]">
                                 Verification Token: <span className="text-gold">virtualtwin_sovereign</span>
                             </p>
                         </div>
@@ -438,10 +438,10 @@ function ConnectionModal({ channel, onClose, onSuccess }: ConnectionModalProps) 
                 </div>
 
                 {/* Footer */}
-                <div className="p-10 border-t border-charcoal/5 flex items-center justify-between relative z-10">
+                <div className="p-6 md:p-10 border-t border-charcoal/5 flex flex-col sm:flex-row sm:items-center justify-between relative z-10 gap-6">
                     <button
                         onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : onClose()}
-                        className="text-charcoal/30 hover:text-charcoal transition-colors font-black text-[10px] uppercase tracking-[0.2em] italic"
+                        className="text-charcoal/30 hover:text-charcoal transition-colors font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic self-start sm:self-auto"
                     >
                         {currentStep > 0 ? '← Passaggio Precedente' : 'Annulla Genesi'}
                     </button>
@@ -450,16 +450,16 @@ function ConnectionModal({ channel, onClose, onSuccess }: ConnectionModalProps) 
                         <button
                             onClick={handleConnect}
                             disabled={connecting}
-                            className="gold-gradient px-12 py-5 rounded-2xl text-white font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-4 hover:scale-105 transition-all disabled:opacity-70 shadow-luxury"
+                            className="gold-gradient px-8 md:px-12 py-4 md:py-5 rounded-xl md:rounded-2xl text-white font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] flex items-center justify-center gap-3 md:gap-4 hover:scale-105 transition-all disabled:opacity-70 shadow-luxury w-full sm:w-auto"
                         >
                             {connecting ? (
                                 <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
                                     Sincronizzazione...
                                 </>
                             ) : (
                                 <>
-                                    <Zap className="w-5 h-5" />
+                                    <Zap className="w-4 h-4 md:w-5 md:h-5" />
                                     Attiva Frequenza
                                 </>
                             )}
@@ -467,10 +467,10 @@ function ConnectionModal({ channel, onClose, onSuccess }: ConnectionModalProps) 
                     ) : (
                         <button
                             onClick={() => setCurrentStep(currentStep + 1)}
-                            className="gold-gradient px-12 py-5 rounded-2xl text-white font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-4 hover:scale-105 transition-all shadow-luxury"
+                            className="gold-gradient px-8 md:px-12 py-4 md:py-5 rounded-xl md:rounded-2xl text-white font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] flex items-center justify-center gap-3 md:gap-4 hover:scale-105 transition-all shadow-luxury w-full sm:w-auto"
                         >
                             Procedi
-                            <ArrowRight className="w-5 h-5" />
+                            <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
                         </button>
                     )}
                 </div>
@@ -526,41 +526,41 @@ export default function ChannelsPage() {
     };
 
     return (
-        <div className="p-8 lg:p-16 min-h-screen bg-champagne">
+        <div className="p-4 md:p-8 lg:p-16 min-h-screen bg-champagne">
             <header className="mb-16 relative">
                 {/* Ambient Glow */}
                 <div className="absolute -top-20 -left-10 w-64 h-64 bg-gold/10 blur-[100px] rounded-full pointer-events-none" />
 
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 relative z-10">
-                    <div className="max-w-2xl">
-                        <div className="flex items-center gap-4 mb-6">
+                    <div className="max-w-2xl flex-1 w-full">
+                        <div className="flex items-center gap-4 mb-4 md:mb-6">
                             <span className="h-[1px] w-12 bg-gold/30"></span>
-                            <span className="text-gold text-[9px] uppercase tracking-[0.8em] font-black">Neural Network</span>
+                            <span className="text-gold text-[8px] md:text-[9px] uppercase tracking-[0.6em] md:tracking-[0.8em] font-black">Neural Network</span>
                         </div>
-                        <h1 className="font-serif text-5xl lg:text-7xl italic text-charcoal leading-[1.1] tracking-tight">
+                        <h1 className="font-serif text-3xl md:text-5xl lg:text-7xl italic text-charcoal leading-[1.1] tracking-tight">
                             Canali <span className="gold-text-gradient">Connessi.</span>
                         </h1>
-                        <p className="mt-6 text-charcoal/40 font-serif italic text-lg tracking-wide max-w-xl border-l border-gold/20 pl-6">
+                        <p className="mt-4 md:mt-6 text-charcoal/40 font-serif italic text-sm md:text-lg tracking-wide max-w-xl border-l border-gold/20 pl-4 md:pl-6">
                             &ldquo;La tua voce imperiale, riverberata attraverso ogni frequenza digitale.&rdquo;
                         </p>
                     </div>
 
                     {/* Quota Meter - Imperial Visual */}
                     {user && (
-                        <div className="bg-white/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-white/60 shadow-luxury-sm min-w-[280px]">
+                        <div className="bg-white/40 backdrop-blur-md p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-white/60 shadow-luxury-sm min-w-full sm:min-w-[280px]">
                             <div className="flex justify-between items-center mb-4">
-                                <span className="text-[9px] uppercase tracking-widest text-charcoal/40 font-black">Neural Capacity</span>
-                                <span className={`text-[10px] font-black ${isLimitReached ? 'text-red-500' : 'text-gold'}`}>
+                                <span className="text-[8px] md:text-[9px] uppercase tracking-widest text-charcoal/40 font-black">Neural Capacity</span>
+                                <span className={`text-[9px] md:text-[10px] font-black ${isLimitReached ? 'text-red-500' : 'text-gold'}`}>
                                     {activeChannels.length} / {channelLimit === -1 ? '∞' : channelLimit}
                                 </span>
                             </div>
-                            <div className="h-2 w-full bg-charcoal/5 rounded-full overflow-hidden mb-4">
+                            <div className="h-1.5 md:h-2 w-full bg-charcoal/5 rounded-full overflow-hidden mb-4">
                                 <div
                                     className={`h-full bg-gold-gradient transition-all duration-1000 ${isLimitReached ? 'from-red-500 to-red-400' : ''}`}
                                     style={{ width: `${channelLimit === -1 ? 100 : (activeChannels.length / channelLimit) * 100}%` }}
                                 />
                             </div>
-                            <p className="text-[8px] text-charcoal/30 uppercase tracking-[0.2em] font-bold italic">
+                            <p className="text-[7px] md:text-[8px] text-charcoal/30 uppercase tracking-[0.2em] font-bold italic">
                                 {isLimitReached ? '⚠️ Quota raggiunta. Potenzia il tuo Impero.' : 'Connessione stabile attraverso la rete.'}
                             </p>
                         </div>
@@ -615,14 +615,14 @@ export default function ChannelsPage() {
                                 </div>
 
                                 {/* Icon */}
-                                <div className={`w-20 h-20 ${config.color} rounded-3xl flex items-center justify-center text-white mb-8 shadow-luxury group-hover:scale-110 transition-transform duration-700`}>
-                                    <Icon className="w-10 h-10" />
+                                <div className={`w-14 h-14 md:w-20 md:h-20 ${config.color} rounded-2xl md:rounded-3xl flex items-center justify-center text-white mb-6 md:mb-8 shadow-luxury group-hover:scale-110 transition-transform duration-700 flex-shrink-0`}>
+                                    <Icon className="w-7 h-7 md:w-10 md:h-10" />
                                 </div>
 
                                 {/* Info */}
-                                <h3 className="text-2xl font-serif italic text-charcoal mb-3 tracking-tight">{config.name}</h3>
-                                <p className="text-charcoal/40 text-[10px] font-black uppercase tracking-widest mb-4 italic">{config.provider}</p>
-                                <p className="text-charcoal/50 text-sm mb-10 leading-relaxed">{config.description}</p>
+                                <h3 className="text-xl md:text-2xl font-serif italic text-charcoal mb-2 md:mb-3 tracking-tight">{config.name}</h3>
+                                <p className="text-charcoal/40 text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-3 md:mb-4 italic">{config.provider}</p>
+                                <p className="text-charcoal/50 text-xs md:text-sm mb-8 md:mb-10 leading-relaxed line-clamp-2 md:line-clamp-none">{config.description}</p>
 
                                 {/* Actions */}
                                 {isActive ? (

@@ -110,7 +110,7 @@ export function KanbanBoard({ initialStages, initialLeads }: KanbanBoardProps) {
             onDragOver={handleDragOver}
             onDragEnd={handleDragEnd}
         >
-            <div className="flex gap-10 overflow-x-auto pb-10 scrollbar-hide">
+            <div className="flex gap-6 md:gap-10 overflow-x-auto pb-10 scrollbar-hide">
                 {initialStages.map((stage) => (
                     <KanbanColumn
                         key={stage.id}

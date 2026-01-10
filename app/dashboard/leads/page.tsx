@@ -83,33 +83,33 @@ export default function LeadsPage() {
     const hasData = leads.length > 0 || loading;
 
     return (
-        <div className="p-6 lg:p-12 min-h-screen bg-champagne">
+        <div className="p-4 md:p-8 lg:p-12 min-h-screen bg-champagne">
             {/* Header with Fade-in Animation */}
             <header className={`flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-16 transition-all duration-1000 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                <div className="max-w-2xl">
-                    <div className="flex items-center gap-4 mb-4">
+                <div className="max-w-2xl flex-1 w-full">
+                    <div className="flex items-center gap-4 mb-4 md:mb-6">
                         <span className="h-[1px] w-12 bg-gold/30"></span>
-                        <span className="text-gold text-[9px] uppercase tracking-[0.8em] font-black">Sales Pipeline</span>
+                        <span className="text-gold text-[8px] md:text-[9px] uppercase tracking-[0.6em] md:tracking-[0.8em] font-black">Sales Pipeline</span>
                     </div>
-                    <h1 className="font-serif text-4xl lg:text-6xl italic text-charcoal leading-[1.1] tracking-tight">
+                    <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl italic text-charcoal leading-[1.1] tracking-tight">
                         Gestione <span className="gold-text-gradient">Patrimoniale.</span>
                     </h1>
-                    <p className="mt-4 text-charcoal/40 font-medium text-sm tracking-wide max-w-xl">
+                    <p className="mt-4 text-charcoal/40 font-serif italic text-sm md:text-lg tracking-wide max-w-xl border-l border-gold/20 pl-4 md:pl-6">
                         Monitora l'espansione del tuo impero. Ogni lead è un'opportunità.
                     </p>
                 </div>
-                <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-3 px-5 py-3 bg-white border border-charcoal/10 rounded-full">
+                <div className="flex flex-wrap items-center gap-3 md:gap-4 w-full sm:w-auto">
+                    <div className="flex-1 sm:flex-initial flex items-center gap-3 px-4 md:px-5 py-3 bg-white border border-charcoal/10 rounded-full shadow-sm">
                         <Search className="w-4 h-4 text-charcoal/40" />
                         <input
                             type="text"
                             placeholder="Cerca lead..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="bg-transparent outline-none text-sm text-charcoal placeholder:text-charcoal/30 w-40"
+                            className="bg-transparent outline-none text-[12px] md:text-sm text-charcoal placeholder:text-charcoal/30 w-full sm:w-40"
                         />
                     </div>
-                    <button className="gold-gradient p-4 rounded-full text-white shadow-lg hover:scale-105 transition-all">
+                    <button className="gold-gradient p-3.5 md:p-4 rounded-full text-white shadow-lg hover:scale-105 transition-all flex-shrink-0">
                         <Plus className="w-5 h-5" />
                     </button>
                 </div>
@@ -123,21 +123,21 @@ export default function LeadsPage() {
             ) : hasData ? (
                 <>
                     {/* Stats Bar - Imperial Glass Shields */}
-                    <div className={`grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12 transition-all duration-1000 delay-200 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 transition-all duration-1000 delay-200 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                         {[
                             { label: 'Totale Lead', value: statsCounts.total, icon: Users },
                             { label: 'In Qualifica', value: statsCounts.qualification, icon: Sparkles },
                             { label: 'Negoziazione', value: statsCounts.negotiation, icon: ArrowRight },
                             { label: 'Chiusi', value: statsCounts.closed, icon: ChevronRight },
                         ].map((stat, i) => (
-                            <div key={i} className="bg-white/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-white/60 relative group overflow-hidden shadow-luxury-sm">
+                            <div key={i} className="bg-white/40 backdrop-blur-md p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-white/60 relative group overflow-hidden shadow-luxury-sm">
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-gold/[0.03] blur-2xl group-hover:bg-gold/[0.08] transition-colors" />
                                 <div className="flex justify-between items-start mb-4">
-                                    <p className="text-charcoal/40 text-[9px] uppercase tracking-[0.3em] font-black">{stat.label}</p>
-                                    <stat.icon className="w-4 h-4 text-gold/30" />
+                                    <p className="text-charcoal/40 text-[8px] md:text-[9px] uppercase tracking-[0.3em] font-black">{stat.label}</p>
+                                    <stat.icon className="w-3 h-3 md:w-4 md:h-4 text-gold/30" />
                                 </div>
-                                <p className="text-5xl font-serif italic text-charcoal group-hover:scale-110 transition-transform duration-700 origin-left">{stat.value}</p>
-                                <div className="w-8 h-[1px] bg-gold/30 mt-4 group-hover:w-16 transition-all duration-700" />
+                                <p className="text-4xl md:text-5xl font-serif italic text-charcoal group-hover:scale-110 transition-transform duration-700 origin-left">{stat.value}</p>
+                                <div className="w-8 h-[1px] bg-gold/30 mt-3 md:mt-4 group-hover:w-16 transition-all duration-700" />
                             </div>
                         ))}
                     </div>

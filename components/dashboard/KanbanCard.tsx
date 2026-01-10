@@ -53,36 +53,36 @@ export function KanbanCard({ id, lead }: KanbanCardProps) {
             style={style}
             {...attributes}
             {...listeners}
-            className="silk-card p-10 rounded-[3rem] border border-white/60 hover:border-gold/30 transition-all duration-700 group cursor-grab active:cursor-grabbing relative overflow-hidden"
+            className="silk-card p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/60 hover:border-gold/30 transition-all duration-700 group cursor-grab active:cursor-grabbing relative overflow-hidden"
         >
             <div className="absolute top-0 right-0 w-24 h-24 bg-gold/[0.02] group-hover:bg-gold/[0.05] transition-colors duration-700 blur-2xl" />
-            <div className="flex justify-between items-start mb-8">
-                <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 gold-gradient rounded-full flex items-center justify-center font-serif text-white text-xl shadow-luxury border border-white/50">
+            <div className="flex justify-between items-start mb-6 md:mb-8">
+                <div className="flex items-center gap-3 md:gap-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 gold-gradient rounded-full flex items-center justify-center font-serif text-white text-lg md:text-xl shadow-luxury border border-white/50">
                         {lead.name?.[0] || 'L'}
                     </div>
                     <Link
                         href={`/dashboard/chat?leadId=${lead.id}`}
                         onPointerDown={(e) => e.stopPropagation()}
-                        className="p-3 bg-white/40 hover:bg-gold hover:text-white rounded-full transition-all duration-500 text-gold shadow-sm"
+                        className="p-2.5 md:p-3 bg-white/40 hover:bg-gold hover:text-white rounded-full transition-all duration-500 text-gold shadow-sm"
                         title="Apri Chat Live"
                     >
-                        <MessageCircle className="w-5 h-5" />
+                        <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
                     </Link>
                 </div>
                 <button
                     onPointerDown={(e) => e.stopPropagation()}
                     className="text-charcoal/10 hover:text-gold transition-colors duration-500"
                 >
-                    <MoreHorizontal className="w-6 h-6" />
+                    <MoreHorizontal className="w-4 h-4 md:w-5 md:h-5" />
                 </button>
             </div>
-            <h4 className="text-charcoal text-base font-medium tracking-tight mb-2">{lead.name}</h4>
-            <p className="text-charcoal/30 text-[9px] uppercase tracking-[0.3em] mb-8 font-black">{lead.business}</p>
+            <h4 className="text-charcoal text-sm md:text-base font-medium tracking-tight mb-1 md:mb-2">{lead.name}</h4>
+            <p className="text-charcoal/30 text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em] mb-6 md:mb-8 font-black">{lead.business}</p>
 
-            <div className="flex justify-between items-center pt-8 border-t border-charcoal/5">
-                <span className="text-gold font-serif italic text-2xl tracking-tight">€{lead.value?.toLocaleString() || '0'}</span>
-                <span className="text-[9px] text-charcoal/20 uppercase tracking-tighter font-bold">{timeAgo(lead.created_at)}</span>
+            <div className="flex justify-between items-center pt-6 md:pt-8 border-t border-charcoal/5">
+                <span className="text-gold font-serif italic text-xl md:text-2xl tracking-tight">€{lead.value?.toLocaleString() || '0'}</span>
+                <span className="text-[8px] md:text-[9px] text-charcoal/20 uppercase tracking-tighter font-bold">{timeAgo(lead.created_at)}</span>
             </div>
         </div>
     );

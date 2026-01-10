@@ -115,36 +115,36 @@ export default function DashboardPage() {
     const hasData = stats.totalLeads > 0 || stats.conversations > 0;
 
     return (
-        <div className="p-6 lg:p-12 bg-champagne min-h-screen">
+        <div className="p-4 md:p-8 lg:p-12 bg-champagne min-h-screen">
             {/* Header */}
             <header className="mb-16">
                 <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-                    <div>
-                        <div className="flex items-center gap-6 mb-8">
-                            <span className="h-[1px] w-16 bg-gold/30"></span>
-                            <span className="text-gold text-[10px] uppercase tracking-[1em] font-black italic">Imperial Intelligence</span>
+                    <div className="flex-1">
+                        <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-8">
+                            <span className="h-[1px] w-12 md:w-16 bg-gold/30"></span>
+                            <span className="text-gold text-[8px] md:text-[10px] uppercase tracking-[0.6em] md:tracking-[1em] font-black italic">Imperial Intelligence</span>
                         </div>
-                        <h1 className="font-serif text-5xl lg:text-7xl italic text-charcoal leading-[1.1] tracking-tight mb-6">
-                            Il tuo Impero, <span className="gold-text-gradient">Sincronizzato.</span>
+                        <h1 className="font-serif text-3xl md:text-5xl lg:text-7xl italic text-charcoal leading-[1.1] tracking-tight mb-4 md:mb-6">
+                            Il tuo Impero, <br className="sm:hidden" /> <span className="gold-text-gradient">Sincronizzato.</span>
                         </h1>
-                        <p className="text-charcoal/40 font-serif italic text-lg max-w-xl border-l border-gold/20 pl-6">
+                        <p className="text-charcoal/40 font-serif italic text-sm md:text-lg max-w-xl border-l border-gold/20 pl-4 md:pl-6">
                             &ldquo;Il futuro non si aspetta, si governa. Monitora ogni battito del tuo clone digitale.&rdquo;
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-3 md:gap-4 w-full sm:w-auto">
                         <Link
                             href="/dashboard/leads"
-                            className="flex items-center gap-4 px-10 py-5 gold-gradient text-white text-[10px] uppercase tracking-[0.3em] font-black rounded-full hover:scale-105 transition-all shadow-luxury"
+                            className="flex-1 sm:flex-none flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-4 md:py-5 gold-gradient text-white text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black rounded-full hover:scale-105 transition-all shadow-luxury"
                         >
-                            <Plus className="w-5 h-5" />
+                            <Plus className="w-4 h-4 md:w-5 md:h-5" />
                             Gestisci Pipeline
                         </Link>
                         <button
                             onClick={handleRefresh}
-                            className={`p-5 bg-white border border-charcoal/5 rounded-full text-gold shadow-sm hover:shadow-xl transition-all ${isRefreshing ? 'animate-spin' : ''}`}
+                            className={`p-4 md:p-5 bg-white border border-charcoal/5 rounded-full text-gold shadow-sm hover:shadow-xl transition-all ${isRefreshing ? 'animate-spin' : ''}`}
                         >
-                            <RefreshCw className="w-5 h-5" />
+                            <RefreshCw className="w-4 h-4 md:w-5 md:h-5" />
                         </button>
                     </div>
                 </div>
@@ -160,23 +160,23 @@ export default function DashboardPage() {
                             { icon: MessageSquare, label: "Messaggi AI", val: stats.conversations.toString(), change: "+24%", status: "up", data: [100, 150, 200, 180, 250, 300, 350], color: "gold" },
                             { icon: Zap, label: "AI Accuracy", val: `${stats.aiAccuracy}%`, change: "Optimal", status: "stable", data: [98, 98.2, 98.1, 98.2, 98.2, 98.3, 98.2], color: "gold" }
                         ].map((stat, i) => (
-                            <div key={i} className="silk-card p-10 rounded-[3rem] border border-white/60 group hover:border-gold/30 hover:shadow-luxury transition-all duration-700 relative overflow-hidden">
+                            <div key={i} className="silk-card p-6 md:p-8 lg:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/60 group hover:border-gold/30 hover:shadow-luxury transition-all duration-700 relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-gold/[0.02] group-hover:bg-gold/[0.05] transition-colors blur-2xl" />
-                                <div className="flex items-start justify-between mb-8">
-                                    <div className="p-3 rounded-2xl bg-white shadow-sm border border-charcoal/5 group-hover:scale-110 transition-transform duration-500">
-                                        <stat.icon className="w-5 h-5 text-gold" />
+                                <div className="flex items-start justify-between mb-6 md:mb-8">
+                                    <div className="p-2.5 md:p-3 rounded-2xl bg-white shadow-sm border border-charcoal/5 group-hover:scale-110 transition-transform duration-500">
+                                        <stat.icon className="w-4 h-4 md:w-5 md:h-5 text-gold" />
                                     </div>
                                     <MiniChart data={stat.data} color={stat.color} />
                                 </div>
-                                <p className="text-[10px] uppercase tracking-[0.4em] text-charcoal/30 mb-2 font-black italic">{stat.label}</p>
-                                <p className="text-4xl lg:text-5xl font-serif text-charcoal group-hover:scale-105 transition-transform duration-700 origin-left mb-6">{stat.val}</p>
+                                <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-charcoal/30 mb-2 font-black italic">{stat.label}</p>
+                                <p className="text-3xl md:text-4xl lg:text-5xl font-serif text-charcoal group-hover:scale-105 transition-transform duration-700 origin-left mb-4 md:mb-6">{stat.val}</p>
                                 <div className="flex items-center gap-2">
-                                    <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${stat.status === "up" ? "bg-green-500/10 text-green-600" : stat.status === "down" ? "bg-red-500/10 text-red-600" : "bg-gold/10 text-gold"
+                                    <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[8px] md:text-[9px] font-black uppercase tracking-widest ${stat.status === "up" ? "bg-green-500/10 text-green-600" : stat.status === "down" ? "bg-red-500/10 text-red-600" : "bg-gold/10 text-gold"
                                         }`}>
-                                        {stat.status === "up" ? <TrendingUp className="w-3 h-3" /> : stat.status === "down" ? <TrendingDown className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
+                                        {stat.status === "up" ? <TrendingUp className="w-2.5 h-2.5 md:w-3 md:h-3" /> : stat.status === "down" ? <TrendingDown className="w-2.5 h-2.5 md:w-3 md:h-3" /> : <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />}
                                         {stat.change}
                                     </div>
-                                    <span className="text-charcoal/20 text-[9px] font-bold uppercase tracking-widest italic">vs sett. scorsa</span>
+                                    <span className="text-charcoal/20 text-[8px] md:text-[9px] font-bold uppercase tracking-widest italic">vs sett. scorsa</span>
                                 </div>
                             </div>
                         ))}
@@ -185,35 +185,35 @@ export default function DashboardPage() {
                     {/* Main Content Grid */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Lead Activity */}
-                        <div className="lg:col-span-2 silk-card p-12 rounded-[4rem] border border-white/60">
-                            <div className="flex justify-between items-center mb-12">
-                                <h2 className="font-serif text-3xl italic text-charcoal tracking-tight">Attività <span className="gold-text-gradient">Critica</span></h2>
-                                <Link href="/dashboard/leads" className="text-gold text-[10px] uppercase tracking-[0.3em] font-black hover:tracking-[0.5em] transition-all duration-500 flex items-center gap-2">
+                        <div className="lg:col-span-2 silk-card p-6 md:p-10 lg:p-12 rounded-[2.5rem] md:rounded-[4rem] border border-white/60">
+                            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8 md:mb-12">
+                                <h2 className="font-serif text-2xl md:text-3xl italic text-charcoal tracking-tight">Attività <span className="gold-text-gradient">Critica</span></h2>
+                                <Link href="/dashboard/leads" className="text-gold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black hover:tracking-[0.5em] transition-all duration-500 flex items-center gap-2">
                                     Vedi Registro
-                                    <ArrowRight className="w-4 h-4" />
+                                    <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                                 </Link>
                             </div>
-                            <div className="space-y-6">
+                            <div className="space-y-4 md:space-y-6">
                                 {stats.recentLeads.map((lead, i) => (
                                     <Link
                                         key={i}
                                         href="/dashboard/leads"
-                                        className="flex items-center justify-between p-6 border border-charcoal/5 rounded-[2rem] hover:bg-white/40 transition-all duration-500 group/item cursor-pointer"
+                                        className="flex flex-col sm:flex-row sm:items-center justify-between p-5 md:p-6 border border-charcoal/5 rounded-[1.5rem] md:rounded-[2rem] hover:bg-white/40 transition-all duration-500 group/item cursor-pointer gap-4"
                                     >
-                                        <div className="flex items-center gap-6">
-                                            <div className="w-14 h-14 gold-gradient rounded-full flex items-center justify-center font-serif text-white italic text-xl shadow-luxury group-hover/item:scale-110 transition-transform">
+                                        <div className="flex items-center gap-4 md:gap-6">
+                                            <div className="w-10 h-10 md:w-14 md:h-14 gold-gradient rounded-full flex items-center justify-center font-serif text-white italic text-lg shadow-luxury group-hover/item:scale-110 transition-transform flex-shrink-0">
                                                 {(lead.contact_name || 'P')[0]}
                                             </div>
-                                            <div>
-                                                <p className="text-charcoal font-medium text-base tracking-tight">{lead.contact_name || 'Prospect Anonimo'}</p>
-                                                <p className="text-charcoal/30 text-[9px] uppercase tracking-[0.3em] mt-1 font-black italic">{lead.contact_platform_id || 'Automa WhatsApp'}</p>
+                                            <div className="min-w-0">
+                                                <p className="text-charcoal font-medium text-sm md:text-base tracking-tight truncate">{lead.contact_name || 'Prospect Anonimo'}</p>
+                                                <p className="text-charcoal/30 text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1 font-black italic truncate">{lead.contact_platform_id || 'Automa WhatsApp'}</p>
                                             </div>
                                         </div>
-                                        <div className="text-right flex items-center gap-8">
+                                        <div className="flex items-center justify-between sm:justify-end gap-6 md:gap-8 border-t sm:border-t-0 pt-3 sm:pt-0 border-charcoal/5">
                                             <StatusBadge status={lead.status} />
                                             <div>
-                                                <p className="text-gold text-2xl font-serif italic tracking-tight">€500</p>
-                                                <div className="w-8 h-[0.5px] bg-gold/30 ml-auto mt-1" />
+                                                <p className="text-gold text-xl md:text-2xl font-serif italic tracking-tight">€500</p>
+                                                <div className="w-6 md:w-8 h-[0.5px] bg-gold/30 ml-auto mt-0.5 md:mt-1" />
                                             </div>
                                         </div>
                                     </Link>
@@ -222,23 +222,23 @@ export default function DashboardPage() {
                         </div>
 
                         {/* Quick Setup / CTA */}
-                        <div className="silk-card p-12 rounded-[4rem] border border-white/60 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                        <div className="silk-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border border-white/60 flex flex-col items-center justify-center text-center relative overflow-hidden group">
                             <div className="absolute inset-0 bg-gold/[0.01] group-hover:bg-gold/[0.03] transition-colors duration-700" />
-                            <div className="w-24 h-24 gold-gradient rounded-full mb-10 flex items-center justify-center shadow-luxury relative z-10">
-                                <Zap className="w-10 h-10 text-white fill-white animate-pulse" />
+                            <div className="w-16 h-16 md:w-24 md:h-24 gold-gradient rounded-full mb-6 md:mb-10 flex items-center justify-center shadow-luxury relative z-10">
+                                <Zap className="w-7 h-7 md:w-10 md:h-10 text-white fill-white animate-pulse" />
                             </div>
-                            <h2 className="font-serif text-3xl lg:text-4xl mb-6 italic text-charcoal leading-tight relative z-10">
+                            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 md:mb-6 italic text-charcoal leading-tight relative z-10">
                                 L'Impero ha sete <br />di <span className="gold-text-gradient">Dati.</span>
                             </h2>
-                            <p className="text-charcoal/40 text-[10px] uppercase tracking-[0.2em] max-w-xs mb-10 leading-relaxed font-bold italic relative z-10">
+                            <p className="text-charcoal/40 text-[9px] md:text-[10px] uppercase tracking-[0.2em] max-w-xs mb-8 md:mb-10 leading-relaxed font-bold italic relative z-10">
                                 Per attivare il flusso automatico di vendita su WhatsApp, completa la genesi del tuo VirtualTwin.
                             </p>
                             <Link
                                 href="/dashboard/settings"
-                                className="w-full py-5 gold-gradient rounded-full text-white font-black uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-luxury text-[10px] flex items-center justify-center gap-4 relative z-10"
+                                className="w-full py-4 md:py-5 gold-gradient rounded-full text-white font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:scale-105 transition-all shadow-luxury text-[10px] flex items-center justify-center gap-3 md:gap-4 relative z-10"
                             >
                                 Avvia Genesi AI
-                                <ArrowRight className="w-5 h-5" />
+                                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
                             </Link>
                         </div>
                     </div>
