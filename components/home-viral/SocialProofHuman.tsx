@@ -2,12 +2,12 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, TrendingUp, Clock, Heart, Linkedin, ArrowRight } from 'lucide-react';
+import { TrendingUp, MessageSquare, Star, Play, PlayCircle, Plus } from 'lucide-react';
 
 /**
  * Social Proof Human Component
  * 
- * WARM TESTIMONIALS: Real people, real emotions, real results
+ * CREDIBILITY: Real chat proofs & video testimonials
  * 
  * Usage: Homepage social proof - humanize with faces, stories, outcomes
  */
@@ -58,7 +58,95 @@ export default function SocialProofHuman() {
                         </p>
                     </motion.div>
 
-                    {/* Testimonial Grid */}
+                    {/* Community Stats */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.6 }}
+                        className="bg-gradient-to-br from-gold/10 to-amber-100 rounded-3xl p-10 border-2 border-gold/40 text-center"
+                    >
+                        <h3 className="text-3xl font-serif text-charcoal mb-6">
+                            Unisciti a <span className="text-gold">500+ Professionisti</span>
+                        </h3>
+
+                        <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+                            <div>
+                                <p className="text-5xl font-black text-gold mb-2">500+</p>
+                                <p className="text-charcoal/70">Gemelli Digitali Attivi</p>
+                            </div>
+                            <div>
+                                <p className="text-5xl font-black text-gold mb-2">1.2M+</p>
+                                <p className="text-charcoal/70">Conversazioni Gestite</p>
+                            </div>
+                            <div>
+                                <p className="text-5xl font-black text-gold mb-2">€3.4M+</p>
+                                <p className="text-charcoal/70">Vendite Automatizzate</p>
+                            </div>
+                        </div>
+
+                        <p className="text-charcoal/50 text-sm mt-8 italic">
+                            📊 Dati aggiornati - Gennaio 2026
+                        </p>
+                    </motion.div>
+
+                    {/* Video Testimonial Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="mb-20"
+                    >
+                        <div className="relative max-w-4xl mx-auto group">
+                            {/* Decorative Frame */}
+                            <div className="absolute -inset-4 bg-gradient-to-r from-gold/30 via-amber-500/20 to-gold/30 rounded-[2.5rem] blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-1000" />
+
+                            <div className="relative bg-charcoal rounded-[2rem] overflow-hidden shadow-3xl border border-white/10 aspect-video flex items-center justify-center">
+                                {/* Video Placeholder / Embed */}
+                                <div className="absolute inset-0 z-0">
+                                    <video
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        className="w-full h-full object-cover opacity-60"
+                                    >
+                                        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-circuit-board-1549-large.mp4" type="video/mp4" />
+                                    </video>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent" />
+                                </div>
+
+                                {/* Video Overlay Info */}
+                                <div className="relative z-10 text-center px-6">
+                                    <div className="w-20 h-20 rounded-full bg-gold flex items-center justify-center mx-auto mb-6 shadow-luxury-gold animate-pulse cursor-pointer hover:scale-110 transition-transform">
+                                        <Play className="w-8 h-8 text-charcoal fill-charcoal" />
+                                    </div>
+                                    <h3 className="text-2xl md:text-3xl font-serif text-white mb-2 italic">
+                                        Demo: Il Gemello in <span className="text-gold">Azione</span>
+                                    </h3>
+                                    <p className="text-white/60 text-sm max-w-md mx-auto">
+                                        Guarda come VirtualTwin gestisce una pipeline di lead complessa senza alcun intervento umano.
+                                    </p>
+                                </div>
+
+                                {/* Badge */}
+                                <div className="absolute top-6 left-6 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                                    <span className="text-[10px] text-white/80 font-black uppercase tracking-widest">Live Demo Preview</span>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Chat Proof Grid */}
+                    <div className="text-center mb-16">
+                        <h3 className="font-serif text-3xl text-charcoal mb-4">
+                            Conversazioni <span className="italic gold-text-gradient">Verificate</span>
+                        </h3>
+                        <p className="text-charcoal/50 max-w-xl mx-auto">
+                            Esempi reali di come il Gemello Digitale qualifica, vende e fissa appuntamenti sui canali social più usati.
+                        </p>
+                    </div>
                     <div className="grid md:grid-cols-3 gap-8 mb-12">
                         {chatProofs.map((proof, index) => (
                             <motion.div
@@ -99,52 +187,6 @@ export default function SocialProofHuman() {
                             </motion.div>
                         ))}
                     </div>
-
-                    {/* Community Stats */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.6 }}
-                        className="bg-gradient-to-br from-gold/10 to-amber-100 rounded-3xl p-10 border-2 border-gold/40 text-center"
-                    >
-                        <h3 className="text-3xl font-serif text-charcoal mb-6">
-                            Unisciti a <span className="text-gold">500+ Professionisti</span>
-                        </h3>
-
-                        <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-                            <div>
-                                <p className="text-5xl font-black text-gold mb-2">500+</p>
-                                <p className="text-charcoal/70">Gemelli Digitali Attivi</p>
-                            </div>
-                            <div>
-                                <p className="text-5xl font-black text-gold mb-2">1.2M+</p>
-                                <p className="text-charcoal/70">Conversazioni Gestite</p>
-                            </div>
-                            <div>
-                                <p className="text-5xl font-black text-gold mb-2">€3.4M+</p>
-                                <p className="text-charcoal/70">Vendite Automatizzate</p>
-                            </div>
-                        </div>
-
-                        <p className="text-charcoal/50 text-sm mt-8 italic">
-                            📊 Dati aggiornati - Gennaio 2026
-                        </p>
-                    </motion.div>
-
-                    {/* Video Placeholder Note */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.8 }}
-                        className="mt-12 text-center bg-charcoal/5 rounded-2xl p-8 border-2 border-charcoal/10"
-                    >
-                        <p className="text-charcoal/60 text-sm">
-                            🎬 <strong>Video testimonial UGC</strong> verranno integrati qui<br />
-                            (30-sec snippets clienti reali che raccontano risultati)
-                        </p>
-                    </motion.div>
                 </div>
             </div>
         </section>

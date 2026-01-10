@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowRight, Crown, Check, Lock, Shield } from 'lucide-react';
+import { ArrowRight, Crown, Check, Lock, Shield, TrendingUp } from 'lucide-react';
 import { getCurrentWaveSpotsRemaining, getDisplayPricing, getDaysUntilPriceIncrease } from '@/lib/waves';
 
 const FinalCTAUltimate = () => {
@@ -103,23 +103,17 @@ const FinalCTAUltimate = () => {
                                 <span>Dati sicuri & Crittografati</span>
                             </div>
 
-                            {/* Social Proof Avatars */}
+                            {/* Social Proof Placeholder - Cleaned for Launch */}
                             <div className="flex items-center gap-3">
                                 <div className="flex -space-x-2">
-                                    {['M', 'E', 'G'].map((letter, i) => (
-                                        <div key={i} className="w-9 h-9 rounded-full gold-gradient flex items-center justify-center text-white text-xs font-bold border-2 border-charcoal">
-                                            {letter}
-                                        </div>
-                                    ))}
-                                    <div className="w-9 h-9 rounded-full bg-charcoal border-2 border-gold/50 flex items-center justify-center text-gold text-[10px] font-bold">
-                                        +847
+                                    <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center">
+                                        <TrendingUp className="w-5 h-5 text-gold" />
                                     </div>
                                 </div>
+                                <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black">
+                                    Sviluppo Basato su Audit Reale
+                                </p>
                             </div>
-
-                            <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mt-3">
-                                Unisciti a 847+ Professionisti
-                            </p>
                         </div>
 
                         {/* RIGHT SIDE - Form */}

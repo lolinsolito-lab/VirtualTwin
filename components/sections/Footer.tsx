@@ -82,54 +82,55 @@ const Footer = () => {
                 </div>
             )}
 
-            {/* ELEGANT SLIM FOOTER */}
-            <footer className="bg-charcoal px-6 lg:px-24 py-10">
+            {/* SMART MINIMAL FOOTER */}
+            <footer className="bg-charcoal px-6 lg:px-24 py-8 border-t border-white/5">
                 <div className="max-w-7xl mx-auto">
-                    {/* Main Row - Compact */}
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-8 pb-8 border-b border-white/10">
-                        {/* Logo */}
-                        <Link href="/" className="flex items-center gap-3 group">
-                            <div className="w-10 h-10 gold-gradient rounded-full flex items-center justify-center text-white font-serif font-bold text-lg shadow-lg">V</div>
-                            <div>
-                                <span className="font-serif text-xl text-white italic">Virtual<span className="text-gold">twin</span></span>
-                            </div>
-                        </Link>
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        {/* Left: Minimal Logo & Copyright */}
+                        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+                            <Link href="/" className="flex items-center gap-2 group">
+                                <div className="w-8 h-8 gold-gradient rounded-full flex items-center justify-center text-white font-serif font-bold text-sm shadow-lg">V</div>
+                                <span className="font-serif text-lg text-white italic tracking-tight">Virtual<span className="text-gold">twin</span></span>
+                            </Link>
+                            <span className="hidden md:block w-px h-4 bg-white/10"></span>
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
+                                © {currentYear} · Insolito Experiences
+                            </p>
+                        </div>
 
-                        {/* Nav Links - Horizontal */}
-                        <nav className="flex flex-wrap items-center justify-center gap-6 lg:gap-10 text-white/40 text-sm">
-                            <a href="#solution" className="hover:text-gold transition-colors">Come Funziona</a>
-                            <a href="#pricing" className="hover:text-gold transition-colors">Prezzi</a>
-                            <Link href="/vision" className="hover:text-gold transition-colors">La Nostra Visione</Link>
-                            <Link href="/contact" className="hover:text-gold transition-colors">Contatti</Link>
+                        {/* Center: Essential Links */}
+                        <nav className="flex items-center gap-6 text-[10px] uppercase tracking-widest text-white/40 font-bold">
+                            <a href="#solution" className="hover:text-gold transition-colors">Vision</a>
+                            <a href="#pricing" className="hover:text-gold transition-colors">Piani</a>
+                            <Link href="/contact" className="hover:text-gold transition-colors">Supporto</Link>
                         </nav>
 
-                        {/* Social */}
-                        <div className="flex items-center gap-3">
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:bg-gold hover:text-white transition-all">
-                                <Instagram className="w-4 h-4" />
-                            </a>
-                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:bg-gold hover:text-white transition-all">
-                                <Linkedin className="w-4 h-4" />
-                            </a>
+                        {/* Right: Social & Trust */}
+                        <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-3">
+                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-gold transition-colors">
+                                    <Instagram className="w-4 h-4" />
+                                </a>
+                                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-gold transition-colors">
+                                    <Linkedin className="w-4 h-4" />
+                                </a>
+                            </div>
+                            <div className="flex items-center gap-4 text-[10px] text-white/20 font-bold uppercase tracking-tighter">
+                                <button onClick={() => setActiveModal('privacy')} className="hover:text-white transition-colors">Privacy</button>
+                                <button onClick={() => setActiveModal('terms')} className="hover:text-white transition-colors">Terms</button>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Bottom Row - Legal Links as Popups */}
-                    <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <p className="text-white/30 text-[10px] uppercase tracking-widest text-center md:text-left leading-relaxed">
-                            © {currentYear} <span className="text-gold">VirtualTwin</span> · Un progetto di <span className="text-white/60">Insolito Experiences di Michael Jara</span><br />
-                            P.IVA: In fase di costituzione · Pre-lancio Q1 2026 · Made with ♥ in 🇮🇹 Italy
+                    {/* Meta Info Small */}
+                    <div className="mt-6 pt-6 border-t border-white/5 text-center">
+                        <p className="text-[9px] text-white/10 uppercase tracking-[0.4em]">
+                            P.IVA: In fase di costituzione · Pre-Lancio Q1 2026 · Made in Italy 🇮🇹
                         </p>
-                        <div className="flex items-center gap-6 text-white/30 text-xs">
-                            <button onClick={() => setActiveModal('privacy')} className="hover:text-gold transition-colors">Privacy</button>
-                            <span className="w-px h-3 bg-white/10"></span>
-                            <button onClick={() => setActiveModal('terms')} className="hover:text-gold transition-colors">Termini</button>
-                            <span className="w-px h-3 bg-white/10"></span>
-                            <button onClick={() => setActiveModal('cookies')} className="hover:text-gold transition-colors">Cookie</button>
-                        </div>
                     </div>
                 </div>
             </footer>
+
         </>
     );
 };

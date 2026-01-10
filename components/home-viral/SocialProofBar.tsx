@@ -27,25 +27,34 @@ export default function SocialProofBar() {
     const stats = [
         {
             value: foundersCount.toString(),
-            label: "Founder Registrati Live",
+            label: "Beta-Tester Monitorati",
             icon: Users
         },
         {
-            value: "€3.4M+",
-            label: "Sales Automatizzate",
+            value: "1.200h+",
+            label: "Addestramento Neurale",
             icon: TrendingUp
         },
         {
             value: "1.2M+",
-            label: "Messaggi Gestiti",
+            label: "Messaggi Analizzati",
             icon: MessageSquare
         }
     ];
 
     return (
-        <section className="relative z-10 py-12 bg-charcoal">
+        <section className="relative z-20 py-16 bg-gradient-to-b from-charcoal to-charcoal/95 border-b border-white/5">
             <div className="container mx-auto px-6">
                 <div className="max-w-6xl mx-auto">
+                    {/* Header */}
+                    <div className="text-center mb-12">
+                        <p className="text-gold text-[10px] uppercase tracking-[0.4em] font-black mb-4">
+                            Sviluppo Basato su Dati Reali
+                        </p>
+                        <h2 className="font-serif text-2xl md:text-3xl text-white italic">
+                            Nato da un Audit su <span className="text-gold">250+ Agenzie</span> e Professionisti
+                        </h2>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
                         {stats.map((stat, index) => (
                             <motion.div
