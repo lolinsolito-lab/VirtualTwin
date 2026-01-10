@@ -101,6 +101,32 @@ export default function HeroEmotionalPunch() {
                             </p>
                         </div>
 
+                        {/* DIGITAL TWIN VISUAL HOOK - Italian Elite Edition */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                            className="relative group mt-12 mb-16"
+                        >
+                            <div className="absolute -inset-2 bg-gold/10 blur-2xl rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                            <div className="relative rounded-[2.5rem] overflow-hidden border border-gold/30 shadow-luxury-gold aspect-[4/3] md:aspect-auto">
+                                <img
+                                    src="/digital_twin_hologram.png"
+                                    alt="VirtualTwin in Action - Milano, Roma, Firenze"
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent pointer-events-none" />
+
+                                <div className="absolute bottom-8 left-0 right-0 px-8 text-center">
+                                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal/80 backdrop-blur-md rounded-full border border-gold/20 mb-4">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+                                        <span className="text-[10px] uppercase tracking-widest text-white/90 font-black">Sovereign Presence: Live 24/7</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+
                         {/* Punch Line */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
@@ -129,7 +155,7 @@ export default function HeroEmotionalPunch() {
                                         href="/auth/register"
                                         className="relative flex flex-col items-center px-12 py-6 bg-charcoal text-white rounded-2xl font-black text-xl uppercase tracking-widest shadow-2xl transition-all"
                                     >
-                                        Crea Il Tuo Gemello Gratis
+                                        Attiva il Tuo Gemello Digitale
                                         <span className="text-[10px] text-gold/60 mt-1 lowercase tracking-wider font-medium font-sans">
                                             14 giorni · No carta richiesta
                                         </span>
