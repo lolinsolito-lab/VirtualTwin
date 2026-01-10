@@ -2,23 +2,42 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, TrendingUp, MessageSquare, Crown } from 'lucide-react';
+import { Crown, Users, TrendingUp, MessageSquare, ShieldCheck, Cpu } from 'lucide-react';
+
+import { getFoundersSold } from '@/lib/waves';
 
 export default function SocialProofBar() {
+    const [foundersCount, setFoundersCount] = React.useState(0);
+
+    React.useEffect(() => {
+        const fetchFounders = async () => {
+            const sold = await getFoundersSold();
+            setFoundersCount(sold);
+        };
+        fetchFounders();
+
+        // Simula la crescita "Live" ogni tanto
+        const interval = setInterval(() => {
+            setFoundersCount(prev => prev + (Math.random() > 0.9 ? 1 : 0));
+        }, 30000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const stats = [
         {
-            value: "847+",
-            label: "Founder Attivi",
+            value: foundersCount.toString(),
+            label: "Founder Registrati Live",
             icon: Users
         },
         {
             value: "€3.4M+",
-            label: "Revenue Generato",
+            label: "Sales Automatizzate",
             icon: TrendingUp
         },
         {
             value: "1.2M+",
-            label: "Conversazioni Gestite",
+            label: "Messaggi Gestiti",
             icon: MessageSquare
         }
     ];
@@ -53,13 +72,22 @@ export default function SocialProofBar() {
                     </div>
 
                     <div className="mt-12 pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-center gap-8 opacity-40 grayscale contrast-125">
-                        <span className="text-[10px] uppercase tracking-[0.6em] text-white/40 font-black mb-4 md:mb-0">Powered by the Future:</span>
+                        <span className="text-[10px] uppercase tracking-[0.6em] text-white/40 font-black mb-4 md:mb-0">Powered by Elite Ecosystem:</span>
                         <div className="flex flex-wrap items-center justify-center gap-12">
-                            {/* Simple text logos for now as placeholders */}
-                            <span className="text-white font-serif text-xl italic opacity-80">TechElite</span>
-                            <span className="text-white font-serif text-xl italic opacity-80">VisionaryCorp</span>
-                            <span className="text-white font-serif text-xl italic opacity-80">InsolitaNexus</span>
-                            <span className="text-white font-serif text-xl italic opacity-80">SovereignLabs</span>
+                            <div className="flex items-center gap-2">
+                                <ShieldCheck className="w-4 h-4 text-white" />
+                                <span className="text-white font-serif text-xl italic opacity-80 uppercase tracking-widest">Meta</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Cpu className="w-4 h-4 text-white" />
+                                <span className="text-white font-serif text-xl italic opacity-80 uppercase tracking-widest">OpenAI</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-white font-serif text-xl italic opacity-80 uppercase tracking-widest">Stripe</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-white font-serif text-xl italic opacity-80 uppercase tracking-widest">WhatsApp</span>
+                            </div>
                         </div>
                     </div>
                 </div>
