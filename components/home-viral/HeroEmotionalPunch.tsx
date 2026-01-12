@@ -16,7 +16,7 @@ export default function HeroEmotionalPunch() {
         {
             title: "Milano · Visione",
             location: "Porta Nuova Skyline",
-            desc: "Addestramento neurale e scalabilità.",
+            desc: "Sincronizzazione dell'Essenza e scalabilità.",
             position: "object-top",
             mobilePosition: "left", // Show the person on the left
             icon: Zap

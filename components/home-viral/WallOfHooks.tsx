@@ -46,7 +46,7 @@ export default function WallOfHooks() {
                         viewport={{ once: true }}
                         className="text-center mb-24"
                     >
-                        <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic mb-8 block opacity-40">Leggi Universali dell'Impero Neurale</span>
+                        <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic mb-8 block opacity-40">Leggi Universali dell'Impero Sovrano</span>
                         <h2 className="font-serif text-4xl md:text-8xl text-charcoal mb-8 leading-[0.9] tracking-tighter">
                             La Struttura della <br />
                             <span className="text-gold italic">Tua Nuova Libertà.</span>
@@ -64,7 +64,7 @@ export default function WallOfHooks() {
                                 transition={{ delay: index * 0.1 }}
                                 className="group relative"
                             >
-                                {/* Neural Glow Background - PERSISTENT */}
+                                {/* Sovereign Glow Background - PERSISTENT */}
                                 <div className="absolute -inset-4 bg-gradient-to-tr from-gold/10 via-transparent to-champagne/5 blur-2xl opacity-100 group-hover:from-gold/30 group-hover:to-gold/10 transition-all duration-1000" />
 
                                 <div className="relative bg-white/70 backdrop-blur-3xl border border-white/60 rounded-[2.5rem] p-12 transition-all duration-1000 hover:border-gold/50 hover:shadow-[0_40px_100px_-20px_rgba(212,175,55,0.2)] h-full flex flex-col justify-between overflow-hidden group">

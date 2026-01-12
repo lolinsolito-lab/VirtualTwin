@@ -16,7 +16,7 @@ export default function SetupStoryNarrative() {
         {
             minutes: "Capitolo I",
             icon: MessageSquare,
-            title: "L'Essenza Neurale",
+            title: "L'Essenza Pura",
             story: "Il sistema estrae il tuo DNA imprenditoriale attraverso domande profonde. Non è un database, è il tuo modo di guardare il mercato.",
             example: "Esempio: 'Qual è la tua verità inconfutabile che nessun concorrente osa dire?'",
             detail: "Tu riversi la tua visione. Il sistema la cristallizza nel silenzio.",
@@ -59,7 +59,7 @@ export default function SetupStoryNarrative() {
                         <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic mb-8 block opacity-40">L'Efficienza senza Sforzo</span>
                         <h2 className="font-serif text-5xl md:text-9xl text-charcoal mb-12 leading-[0.8] tracking-tighter">
                             Genesi <br />
-                            <span className="text-gold italic">Neurale.</span>
+                            <span className="text-gold italic">Sovrana.</span>
                         </h2>
                         <p className="text-xl md:text-2xl text-charcoal/30 max-w-4xl mx-auto leading-relaxed font-light italic">
                             "10 minuti non sono il tempo di configurazione. <br />

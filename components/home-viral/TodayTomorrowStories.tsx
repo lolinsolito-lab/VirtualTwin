@@ -27,7 +27,7 @@ export default function TodayTomorrowStories() {
             tomorrow: {
                 time: "Sabato Sera · Grazia",
                 scene: "Il telefono resta silenzioso. Il presente è intatto.",
-                action: "Il tuo gemello neurale accoglie il lead, educa, risolve dubbi e posiziona il valore.",
+                action: "Il tuo gemello sovrano accoglie il lead, educa, risolve dubbi e posiziona il valore.",
                 result: "Tu proteggi il tuo tempo sacro. Lui costruisce il tuo impero.",
                 emotion: "Sovranità"
             }
@@ -44,7 +44,7 @@ export default function TodayTomorrowStories() {
                 emotion: "Impoverimento Strategico"
             },
             tomorrow: {
-                time: "Ore 03:00 · Presenza Neurale",
+                time: "Ore 03:00 · Presenza d'Anima",
                 scene: "Un buyer in un altro fuso orario cerca la tua autorità.",
                 action: "Il gemello risponde con la tua saggezza istantanea. Qualifica e chiude.",
                 result: "Ti svegli davanti a una realtà già espansa. Senza sforzo biologico.",
@@ -196,7 +196,7 @@ export default function TodayTomorrowStories() {
                         className="text-center mt-12"
                     >
                         <p className="text-charcoal/50 text-sm italic">
-                            📈 Basato su proiezioni di mercato e analisi dell'automazione neurale.
+                            📈 Basato su proiezioni di mercato e analisi dell'automazione sovrana.
                         </p>
                     </motion.div>
                 </div>

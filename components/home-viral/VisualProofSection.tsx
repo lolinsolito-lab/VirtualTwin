@@ -12,6 +12,11 @@ import { MessageCircle, Check, ArrowRight } from 'lucide-react';
  * Usage: Homepage proof section - visual social proof with annotated chats
  */
 export default function VisualProofSection() {
+    const demoResponses: Record<string, string> = {
+        "default": "Buongiorno. 👋 Sono l'Essenza Sovrana di Sarah. Chiedimi qualsiasi cosa sul potenziale di VirtualTwin: la visione, la scalabilità o il setup dell'Impero.",
+        "prezzo": "L'investimento nella tua libertà parte da €39/mese. 🌱 Vuoi esplorare i dettagli dei piani?",
+        "funziona": "Sincronizzazione in 10 minuti: 15 domande strategiche → Analisi del Tono → Integrazione Invisibile. ♾️",
+    };
     const conversations = [
         {
             title: "Qualifica & Appuntamento",
@@ -94,6 +99,14 @@ export default function VisualProofSection() {
                                     </div>
                                 </div>
 
+                                {/* Explainer Note */}
+                                <div className="mt-6 bg-gradient-to-r from-gold/5 to-champagne/20 rounded-2xl p-5 border border-gold/20">
+                                    <p className="text-charcoal/80 text-sm leading-relaxed">
+                                        <strong className="text-gold">👆 Questa è pura magia tecnologica.</strong><br />
+                                        Sarah ha creato la sua <strong className="text-charcoal">Presenza Sovrana</strong> che governa il mercato per lei 24/7.<br />
+                                        <span className="text-charcoal/60 text-xs">Mettila alla prova. È esattamente l'effetto che farà il TUO Gemello.</span>
+                                    </p>
+                                </div>
                                 {/* Annotation */}
                                 <div className="px-6 py-4 bg-green-50 border-t-2 border-green-200">
                                     <div className="flex items-start gap-2">
@@ -107,7 +120,7 @@ export default function VisualProofSection() {
                         ))}
                     </div>
 
-                    {/* Dashboard Neural Hub Preview */}
+                    {/* Dashboard Sovereign Hub Preview */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.98 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -119,7 +132,7 @@ export default function VisualProofSection() {
                                 Un Pannello di Comando <span className="italic gold-text-gradient">Imperiale</span>
                             </h3>
                             <p className="text-charcoal/50 max-w-2xl mx-auto">
-                                Neural Hub: Dove l'intelligenza artificiale incontra il controllo assoluto. <br />
+                                Sovereign Hub: Dove la tua visione incontra il controllo assoluto. <br />
                                 Monitora ogni conversazione, analisi e conversione in tempo reale.
                             </p>
                         </div>
@@ -128,14 +141,14 @@ export default function VisualProofSection() {
                             <div className="absolute inset-0 bg-gradient-to-tr from-gold/10 to-transparent pointer-events-none" />
                             <img
                                 src="/elite_dashboard_mockup_1_1768242446427.png"
-                                alt="Neural Hub Dashboard"
+                                alt="Sovereign Hub Dashboard"
                                 className="w-full h-auto rounded-3xl shadow-2xl group-hover:scale-[1.01] transition-transform duration-1000"
                             />
 
                             {/* Dashboard Floating Badges */}
                             <div className="absolute top-10 left-10 hidden md:flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
                                 <div className="w-3 h-3 bg-gold rounded-full animate-pulse" />
-                                <span className="text-xs text-white font-bold uppercase tracking-widest">Neural Link Active</span>
+                                <span className="text-xs text-white font-bold uppercase tracking-widest">Sovereign Link Active</span>
                             </div>
                         </div>
                     </motion.div>

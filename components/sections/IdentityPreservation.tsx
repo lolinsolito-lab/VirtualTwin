@@ -45,7 +45,7 @@ export default function IdentityPreservation() {
 
                                 {/* Floating Labels */}
                                 <div className="absolute top-12 left-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-3">
-                                    <p className="text-[10px] text-gold uppercase tracking-[0.3em] font-black">Digital DNA</p>
+                                    <p className="text-[10px] text-gold uppercase tracking-[0.3em] font-black">Impronta d'Anima</p>
                                     <p className="text-white text-sm font-serif italic">Indistinguibile</p>
                                 </div>
                                 <div className="absolute bottom-12 right-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-3 text-right">
@@ -65,7 +65,7 @@ export default function IdentityPreservation() {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                         >
-                            <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black mb-6 block">Identity Over Automation</span>
+                            <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black mb-6 block">L'Inviolabilità del Tuo Genio</span>
                             <h2 className="font-serif text-4xl md:text-6xl text-charcoal mb-8 leading-[1.1]">
                                 Non è un Bot. <br />
                                 <span className="text-gold italic">È la Tua Proiezione.</span>

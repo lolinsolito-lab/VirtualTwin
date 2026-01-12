@@ -15,7 +15,7 @@ export default function SocialProofHuman() {
         role: "Founder & High-Performance Coach",
         transformation: "Dalla saturazione operativa alla sovranità creativa.",
         story: "Marco gestiva 150+ interazioni al giorno. Il suo business cresceva, ma la sua vita era ostaggio di uno schermo. L'eccellenza era diventata un limite biologico invalicabile.",
-        outcome: "Oggi, la sua Essenza Neurale governa il mercato mentre lui governa la visione. Il suo gemello non si limita a rispondere: protegge il suo brand e scala la sua influenza nel silenzio assoluto dei risultati."
+        outcome: "Oggi, la sua Essenza Sovrana governa il mercato mentre lui governa la visione. Il suo gemello non si limita a rispondere: protegge il suo brand e scala la sua influenza nel silenzio assoluto dei risultati."
     };
 
     return (
@@ -33,7 +33,7 @@ export default function SocialProofHuman() {
                         >
                             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/20 rounded-full">
                                 <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                                <span className="text-gold text-[10px] uppercase font-black tracking-widest">Metamorfosi d'Élite</span>
+                                <span className="text-gold text-[10px] uppercase font-black tracking-widest">Metamorfosi dell'Anima</span>
                             </div>
 
                             <h3 className="font-serif text-4xl md:text-6xl text-charcoal leading-[1.1]">
@@ -73,7 +73,7 @@ export default function SocialProofHuman() {
                                 {/* Floating Label */}
                                 <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl flex items-center gap-3">
                                     <CheckCircle2 className="w-5 h-5 text-gold" />
-                                    <span className="text-white text-[10px] uppercase font-black tracking-widest">Status: Presenza Neurale Attiva</span>
+                                    <span className="text-white text-[10px] uppercase font-black tracking-widest">Status: Presenza Sovrana Attiva</span>
                                 </div>
 
                                 <div className="absolute bottom-10 left-10 right-10 bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl">
@@ -143,7 +143,7 @@ export default function SocialProofHuman() {
                             {/* Info */}
                             <div className="absolute bottom-10 left-10 text-left">
                                 <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mb-1">Elite Insight</p>
-                                <h5 className="text-white font-serif text-2xl italic">L'Inconfutabile: La Magia in Azione</h5>
+                                <h5 className="text-white font-serif text-2xl italic">L'Inconfutabile: La Sovranità in Azione</h5>
                             </div>
                         </div>
                     </motion.div>
