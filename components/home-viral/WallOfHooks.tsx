@@ -12,25 +12,25 @@ import { Sparkles, Bot, Shield, Unlock, Moon, Zap, Infinity } from 'lucide-react
  * Usage: Homepage sub-hero - headline library for Meta Ads
  */
 export default function WallOfHooks() {
-    const hooks = [
+    const laws = [
         {
-            text: "Presenza Neurale Permanente. Tu Vivi, Lui Espande il Tuo Impero.",
+            text: "Presenza Neurale Permanente. Tu vivi. Il Genio espande l'Impero.",
             icon: Bot
         },
         {
-            text: "Non è un Bot. È la Tua Identità Digitale, Senza Scalabilità Fisica.",
+            text: "Oltre il Bot. Oltre l'Umano. L'Identità che non conosce stanchezza.",
             icon: Infinity
         },
         {
-            text: "La Vera Libertà? Riappropriarsi del Proprio Tempo e dell'Energia Creativa.",
-            icon: Unlock
+            text: "Sovranità Temporale. Riprenditi l'energia che il mercato ti ha sottratto.",
+            icon: Zap
         },
         {
-            text: "Proteggi la Tua Reputazione con un’Intelligenza che Pensa al Tuo Livello.",
+            text: "L'Autorità è Silenziosa. Un'Intelligenza che agisce esattamente come te.",
             icon: Shield
         },
         {
-            text: "Massimizza l'Impatto Mentre Ti Rigeneri. L'Eccellenza Non Dorme.",
+            text: "L'Eccellenza non dorme. Massimizza l'impatto mentre ti rigeneri.",
             icon: Moon
         }
     ];
@@ -41,52 +41,39 @@ export default function WallOfHooks() {
                 <div className="max-w-6xl mx-auto">
                     {/* Section Header */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        className="text-center mb-12"
+                        className="text-center mb-24"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 border border-gold/40 rounded-full mb-4">
-                            <Sparkles className="w-4 h-4 text-gold" />
-                            <span className="text-gold text-sm font-black uppercase tracking-wider">
-                                Messaggi Chiave
-                            </span>
-                        </div>
+                        <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic mb-8 block opacity-40">Leggi Universali dell'Impero Neurale</span>
+                        <h2 className="font-serif text-4xl md:text-8xl text-charcoal mb-8 leading-[0.9] tracking-tighter">
+                            La Struttura della <br />
+                            <span className="text-gold italic">Tua Nuova Libertà.</span>
+                        </h2>
                     </motion.div>
 
                     {/* Hooks Grid - LUXURY STYLE (Flexbox for centering) */}
-                    <div className="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto">
-                        {hooks.map((hook, index) => (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
+                        {laws.map((law, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, scale: 0.95 }}
+                                initial={{ opacity: 0, scale: 0.98 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="group relative w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-sm"
+                                className="group relative"
                             >
-                                {/* Luxury Card */}
-                                <div className="relative bg-gradient-to-br from-white via-champagne/20 to-champagne/40 border-2 border-charcoal/10 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all hover:scale-[1.02] overflow-hidden">
-                                    {/* Subtle top accent */}
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
-
-                                    {/* Icon - Sophisticated */}
-                                    <div className="w-12 h-12 rounded-xl bg-gold/5 flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors">
-                                        <hook.icon className="w-6 h-6 text-gold/40 group-hover:text-gold transition-colors" />
+                                <div className="bg-white border border-charcoal/5 rounded-[2.5rem] p-12 transition-all duration-1000 hover:border-gold/30 hover:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] h-full flex flex-col justify-between">
+                                    <div className="w-12 h-12 rounded-2xl bg-charcoal/5 flex items-center justify-center mb-10 group-hover:bg-gold/10 transition-colors">
+                                        <law.icon className="w-6 h-6 text-charcoal/20 group-hover:text-gold transition-colors" />
                                     </div>
 
-                                    {/* Hook Text */}
-                                    <p className="text-charcoal font-serif text-xl md:text-2xl font-bold leading-tight">
-                                        {hook.text}
+                                    <p className="text-charcoal/80 font-serif text-2xl leading-tight italic">
+                                        "{law.text}"
                                     </p>
 
-                                    {/* Gold corner accent */}
-                                    <div className="absolute bottom-4 right-4">
-                                        <div className="w-2 h-2 bg-gold rounded-full opacity-40 group-hover:opacity-60 transition-opacity" />
-                                    </div>
-
-                                    {/* Hover glow effect */}
-                                    <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                    <div className="mt-12 h-[1px] w-8 bg-gold/20 group-hover:w-full transition-all duration-1000" />
                                 </div>
                             </motion.div>
                         ))}
