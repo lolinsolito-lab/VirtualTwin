@@ -18,6 +18,7 @@ export default function HeroEmotionalPunch() {
             location: "Porta Nuova Skyline",
             desc: "Addestramento neurale e scalabilità.",
             position: "object-top",
+            mobilePosition: "left", // Show the person on the left
             icon: Zap
         },
         {
@@ -25,6 +26,7 @@ export default function HeroEmotionalPunch() {
             location: "Terrazza Colosseo",
             desc: "Empatia e vendita strategica.",
             position: "object-center",
+            mobilePosition: "center", // Center the interaction
             icon: Sparkles
         },
         {
@@ -32,6 +34,7 @@ export default function HeroEmotionalPunch() {
             location: "Studio Artistico",
             desc: "Identità e voce inconfondibile.",
             position: "object-bottom",
+            mobilePosition: "50%", // Center it horizontally to catch both figures
             icon: MapPin
         }
     ];
@@ -166,6 +169,7 @@ export default function HeroEmotionalPunch() {
                                                 src="/hero_storyboard.jpg"
                                                 alt={chapter.title}
                                                 className={`absolute inset-0 w-full h-[300%] max-w-none ${chapter.position === 'object-top' ? 'top-0' : chapter.position === 'object-center' ? '-top-[100%]' : '-top-[200%]'} object-cover`}
+                                                style={{ objectPosition: (chapter as any).mobilePosition }}
                                             />
                                             {/* Overlays */}
                                             <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent opacity-80" />
