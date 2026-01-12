@@ -124,27 +124,51 @@ export default function HeroEmotionalPunch() {
                             </p>
                         </div>
 
-                        {/* DIGITAL TWIN STORYBOARD - Responsive Fix */}
+                        {/* DIGITAL TWIN VISUAL - Responsive Strategy */}
                         <div className="mt-16 mb-20">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {/* PC VIEW: The Original Single Storyboard Strip */}
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                className="hidden md:block relative group rounded-[3rem] overflow-hidden border border-gold/30 shadow-luxury-gold"
+                            >
+                                <img
+                                    src="/hero_storyboard.jpg"
+                                    alt="VirtualTwin Cinematic Storyboard"
+                                    className="w-full h-auto object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent pointer-events-none" />
+
+                                <div className="absolute bottom-8 left-0 right-0 px-8 text-center">
+                                    <div className="inline-flex items-center gap-2 px-6 py-2.5 bg-charcoal/80 backdrop-blur-md rounded-full border border-gold/20 mb-4">
+                                        <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+                                        <span className="text-[10px] uppercase tracking-[0.4em] text-white/90 font-black px-2">
+                                            Milano · Roma · Firenze
+                                        </span>
+                                    </div>
+                                </div>
+                            </motion.div>
+
+                            {/* MOBILE/TABLET VIEW: The 3 Chapters Grid for Clarity */}
+                            <div className="md:hidden grid grid-cols-1 gap-6">
                                 {chapters.map((chapter, index) => (
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, y: 20 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
-                                        transition={{ delay: index * 0.2 }}
-                                        className="relative group rounded-[2rem] overflow-hidden border border-gold/20 shadow-xl bg-charcoal"
+                                        transition={{ delay: index * 0.1 }}
+                                        className="relative group rounded-[2.5rem] overflow-hidden border border-gold/20 shadow-xl bg-charcoal"
                                     >
-                                        <div className="aspect-[16/10] md:aspect-[3/4] lg:aspect-[3/5] relative">
+                                        <div className="aspect-[16/10] relative">
                                             <img
                                                 src="/hero_storyboard.jpg"
                                                 alt={chapter.title}
-                                                className={`absolute inset-0 w-full h-[300%] max-w-none ${chapter.position === 'object-top' ? 'top-0' : chapter.position === 'object-center' ? '-top-[100%]' : '-top-[200%]'} object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700`}
+                                                className={`absolute inset-0 w-full h-[300%] max-w-none ${chapter.position === 'object-top' ? 'top-0' : chapter.position === 'object-center' ? '-top-[100%]' : '-top-[200%]'} object-cover`}
                                             />
                                             {/* Overlays */}
                                             <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent opacity-80" />
-                                            <div className="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                                             {/* Info */}
                                             <div className="absolute bottom-6 left-6 right-6 text-left">
@@ -160,9 +184,9 @@ export default function HeroEmotionalPunch() {
                                                 <p className="text-white/50 text-[10px] uppercase tracking-wider">{chapter.desc}</p>
                                             </div>
 
-                                            {/* Badge */}
-                                            <div className="absolute top-4 right-4 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-                                                <span className="text-[8px] text-white/60 font-black uppercase tracking-widest italic">Chapter 0{index + 1}</span>
+                                            {/* Badge - SPOSTATO A SINISTRA per non coprire i visi */}
+                                            <div className="absolute top-4 left-4 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                                                <span className="text-[8px] text-white/60 font-black uppercase tracking-widest italic font-sans">Chapter 0{index + 1}</span>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -175,11 +199,11 @@ export default function HeroEmotionalPunch() {
                                 whileInView={{ opacity: 1 }}
                                 className="mt-8 flex items-center justify-center gap-4"
                             >
-                                <div className="h-px w-12 bg-gold/20" />
+                                <div className="h-px hidden md:block w-12 bg-gold/20" />
                                 <p className="text-[10px] uppercase tracking-[0.4em] text-gold font-black">
                                     Presenza Sovrana · Ovunque. Sempre.
                                 </p>
-                                <div className="h-px w-12 bg-gold/20" />
+                                <div className="h-px hidden md:block w-12 bg-gold/20" />
                             </motion.div>
                         </div>
 
