@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Brain, Link2, Rocket, CheckCircle2 } from 'lucide-react';
+import { MessageSquare, Brain, Link2, Rocket, CheckCircle2, Mic2 } from 'lucide-react';
 
 /**
  * Setup Story Narrative Component
@@ -86,13 +86,13 @@ export default function SetupStoryNarrative() {
                                     {/* Central Time Pulse */}
                                     <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex flex-col items-center">
                                         <div className="w-4 h-4 rounded-full bg-gold shadow-[0_0_20px_rgba(212,175,55,0.4)] animate-pulse" />
-                                        <div className="mt-4 text-[9px] uppercase font-black text-gold tracking-widest leading-none h-0 opacity-40">{step.time}</div>
+                                        <div className="mt-4 text-[9px] uppercase font-black text-gold tracking-widest leading-none h-0 opacity-40">{step.minutes}</div>
                                     </div>
 
                                     {/* Content Card - ARIOUS LUXURY */}
                                     <div className="flex-1 text-center md:text-left">
                                         <div className={`flex flex-col ${index % 2 === 0 ? 'md:items-start' : 'md:items-end'}`}>
-                                            <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black mb-6">{step.time}</span>
+                                            <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black mb-6">{step.minutes}</span>
                                             <h3 className="text-3xl md:text-5xl font-serif text-charcoal italic mb-8 tracking-tight">
                                                 {step.title}
                                             </h3>
