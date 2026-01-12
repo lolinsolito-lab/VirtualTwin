@@ -302,8 +302,12 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
             isChampagne: true,
             scale: 1.0,
             badge: { emoji: "👑", text: "ENTERPRISE", color: "gold", animate: "bounce" },
-            badge2: { emoji: "🔒", text: "12 SLOT", color: "red" },
-            promoBadge: { text: "⏳ TARIFFA PROMOZIONALE", color: "gold" }
+            badge2: {
+                emoji: "🔒",
+                text: `${founderSpotsAvailable > 0 ? founderSpotsAvailable : 'ULTIMI'} / 20 SLOT`,
+                color: "red"
+            },
+            promoBadge: { text: "⏳ TARIFF PROMOZIONALE", color: "gold" }
         },
         {
             id: "sovereignty",
