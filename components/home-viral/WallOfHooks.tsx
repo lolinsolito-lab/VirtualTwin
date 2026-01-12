@@ -64,24 +64,24 @@ export default function WallOfHooks() {
                                 transition={{ delay: index * 0.1 }}
                                 className="group relative"
                             >
-                                {/* Neural Glow Background */}
-                                <div className="absolute -inset-4 bg-gradient-to-tr from-gold/20 via-transparent to-champagne/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                                {/* Neural Glow Background - PERSISTENT */}
+                                <div className="absolute -inset-4 bg-gradient-to-tr from-gold/10 via-transparent to-champagne/5 blur-2xl opacity-100 group-hover:from-gold/30 group-hover:to-gold/10 transition-all duration-1000" />
 
-                                <div className="relative bg-white/60 backdrop-blur-xl border border-white/40 rounded-[2.5rem] p-12 transition-all duration-1000 hover:border-gold/50 hover:shadow-[0_40px_100px_-20px_rgba(212,175,55,0.15)] h-full flex flex-col justify-between overflow-hidden group">
-                                    {/* Animated light beam */}
-                                    <div className="absolute -left-full top-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 group-hover:animate-[shine_2s_ease-in-out_infinite]" />
+                                <div className="relative bg-white/70 backdrop-blur-3xl border border-white/60 rounded-[2.5rem] p-12 transition-all duration-1000 hover:border-gold/50 hover:shadow-[0_40px_100px_-20px_rgba(212,175,55,0.2)] h-full flex flex-col justify-between overflow-hidden group">
+                                    {/* Animated light beam - PERSISTENT SUBTLE */}
+                                    <div className="absolute -left-full top-0 w-full h-full bg-gradient-to-r from-transparent via-gold/5 to-transparent skew-x-12 animate-[shine_8s_ease-in-out_infinite]" />
 
-                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-charcoal/5 to-gold/5 flex items-center justify-center mb-10 group-hover:from-gold/20 group-hover:to-gold/10 transition-all duration-700 shadow-inner">
-                                        <law.icon className="w-8 h-8 text-charcoal/20 group-hover:text-gold transition-all duration-700 group-hover:scale-110" />
+                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold/10 to-gold/5 flex items-center justify-center mb-10 group-hover:from-gold group-hover:to-gold/80 transition-all duration-700 shadow-lg shadow-gold/5">
+                                        <law.icon className="w-8 h-8 text-gold/60 group-hover:text-white transition-all duration-700 group-hover:scale-110" />
                                     </div>
 
-                                    <p className="text-charcoal/80 font-serif text-2xl leading-tight italic relative z-10 transition-colors duration-700 group-hover:text-charcoal">
+                                    <p className="text-charcoal/90 font-serif text-2xl leading-tight italic relative z-10 transition-colors duration-700">
                                         "{law.text}"
                                     </p>
 
                                     <div className="mt-12 group">
-                                        <div className="h-[2px] w-12 bg-gradient-to-r from-gold/40 to-transparent group-hover:w-full transition-all duration-1000 rounded-full" />
-                                        <div className="mt-2 text-[8px] uppercase font-black text-gold tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-opacity duration-1000">Verità Assoluta</div>
+                                        <div className="h-[2px] w-24 bg-gradient-to-r from-gold/60 via-gold/20 to-transparent group-hover:w-full transition-all duration-1000 rounded-full" />
+                                        <div className="mt-2 text-[8px] uppercase font-black text-gold tracking-[0.3em] opacity-30 group-hover:opacity-100 transition-opacity duration-1000">Verità Assoluta</div>
                                     </div>
                                 </div>
                             </motion.div>
