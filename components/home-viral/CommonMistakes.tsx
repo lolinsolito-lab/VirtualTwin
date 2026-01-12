@@ -39,19 +39,19 @@ export default function CommonMistakes() {
         },
         {
             number: "IV",
-            title: "IL FALLIMENTO BIOLOGICO",
+            title: "IL PARADOSSO BIOLOGICO",
             icon: "📈",
-            stat: "Impatto limitato dalla carne",
-            cost: "Crescita soffocata dal sonno",
-            detail: "Il mercato è infinito. Il tuo corpo no. Se il tuo successo dipende dalla tua presenza fisica, non hai un business, hai una prigione."
+            stat: "Limite fisico invalicabile",
+            cost: "Crescita soffocata dal riposo",
+            detail: "Il mercato non si ferma mai. Il tuo corpo sì. Se il tuo successo richiede la tua interazione fisica, non sei un libero professionista, sei un prigioniero del tuo tempo."
         },
         {
             number: "V",
-            title: "IL COLLO DI BOTTIGLIA DEL SÉ",
+            title: "IL COLLO DI BOTTIGLIA DELL'ANIMA",
             icon: "👑",
-            stat: "Saturazione totale",
-            cost: "Stallo strategico permanente",
-            detail: "Sei il limite massimo della tua stessa espansione. Fino a quando non decidi di trascendere te stesso."
+            stat: "Saturazione del sé",
+            cost: "Eclissi della visione strategica",
+            detail: "Non puoi scalare oltre il perimetro della tua attenzione. Fino a quando non decidi di trascendere il tuo limite e diventare infinito."
         }
     ];
 
