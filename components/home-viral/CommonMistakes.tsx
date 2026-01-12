@@ -15,43 +15,43 @@ export default function CommonMistakes() {
     const mistakes = [
         {
             number: "1",
-            title: "BOTTLENECK: Rispondi Quando Puoi, Non Quando Servono",
-            icon: "⏰",
-            stat: "72% dei lead abbandona dopo 5 minuti senza risposta",
-            cost: "~€2.400/mese in vendite perse",
-            detail: "Il competitor risponde in 2 minuti. Tu dopo 8 ore (perché sei umano). Chi vince?"
+            title: "OSTRUZIONE: Risposta Reattiva vs Proattiva",
+            icon: "⌛",
+            stat: "Il 72% dei lead di alto livello cerca altrove se non riceve una risposta immediata",
+            cost: "~€2.400/mese in opportunità perse",
+            detail: "Mentre tu gestisci la tua vita, l'opportunità sfuma. L'eccellenza richiede una presenza che non conosce pause."
         },
         {
             number: "2",
-            title: "BOTTLENECK: Nessun Filtro Automatico",
-            icon: "📝",
-            stat: "80% dei 'mi mandi info?' sono curiosi, non buyer",
-            cost: "15 ore/settimana sprecate",
-            detail: "Sprechi tempo con lead freddi che non comprano mai invece di chiudere deal caldi."
+            title: "OSTRUZIONE: Assenza di Filtro Strategico",
+            icon: "🛡️",
+            stat: "L'80% delle interazioni sono rumore cognitivo, non potenziale buyer",
+            cost: "15 ore/settimana di energia dissipata",
+            detail: "Filtrare manualmente i curiosi è un furto alla tua creatività. Il gemello seleziona solo l'élite."
         },
         {
             number: "3",
-            title: "BOTTLENECK: Template Freddi e Generici",
-            icon: "📋",
-            stat: "La conversione crolla quando il cliente sente il bot",
-            cost: "-65% tasso di chiusura",
-            detail: "Senza la tua impronta digitale, i messaggi restano sterili. La connessione si rompe."
+            title: "OSTRUZIONE: Erosione dell'Identità Digitale",
+            icon: "💎",
+            stat: "La conversione crolla quando il cliente non percepisce la tua autorità",
+            cost: "-65% nel valore percepito del brand",
+            detail: "I messaggi standard uccidono il desiderio. Senza la tua impronta, sei solo un altro numero sul mercato."
         },
         {
             number: "4",
-            title: "BOTTLENECK: Il Buio Notturno e del Weekend",
-            icon: "🌙",
-            stat: "30% delle vendite arrivano fuori orario lavorativo",
-            cost: "€4-8K/mese lasciati sul tavolo",
-            detail: "I lead non aspettano il lunedì mattina. Se non ci sei tu, comprano da chi c'è."
+            title: "OSTRUZIONE: Il Limite Biologico delle 24 Ore",
+            icon: "📈",
+            stat: "Il 30% del potenziale impatto arriva fuori dai ritmi convenzionali",
+            cost: "Incalcolabile perdita di momentum",
+            detail: "Il mercato non dorme. Se la tua crescita dipende dalla tua presenza fisica, hai un tetto, non un business."
         },
         {
             number: "5",
-            title: "BOTTLENECK: Tu sei l'imbuto del tuo business",
-            icon: "🤯",
-            stat: "Non puoi scalare oltre le tue 24 ore",
-            cost: "Business bloccato, burnout assicurato",
-            detail: "La crescita è limitata dalla tua presenza fisica. Fino a oggi."
+            title: "OSTRUZIONE: Tu sei il collo di bottiglia del tuo Impero",
+            icon: "👑",
+            stat: "Non puoi scalare oltre la tua capacità di attenzione",
+            cost: "Saturazione cognitiva e stallo strategico",
+            detail: "La crescita organica è soffocata dalla necessità della tua operatività costante. Fino a oggi."
         }
     ];
 
@@ -168,25 +168,25 @@ export default function CommonMistakes() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.8 }}
-                        className="mt-16 bg-gradient-to-br from-green-50/80 via-emerald-50/60 to-champagne/20 rounded-3xl p-10 border-2 border-green-600/30 text-center shadow-xl"
+                        className="mt-16 bg-gradient-to-br from-gold/5 via-champagne/10 to-white rounded-3xl p-10 border-2 border-gold/30 text-center shadow-xl"
                     >
                         <h3 className="text-3xl font-serif text-charcoal mb-4">
-                            La Soluzione? <span className="text-green-700 italic">Un Gemello Che Non Sbaglia Mai</span>
+                            La Trasformazione? <span className="text-gold italic">L'Eleganza della Presenza Infinita</span>
                         </h3>
                         <p className="text-xl text-charcoal/70 max-w-2xl mx-auto leading-relaxed mb-8">
-                            Risponde in 2 secondi. Qualifica automaticamente. Lavora 24/7. Non si stanca. Non perde messaggi.<br />
-                            <strong className="text-charcoal">È te, moltiplicato.</strong>
+                            Risposte indistinguibili. Qualifica strategica. Operatività 24/7.<br />
+                            <strong className="text-charcoal">Il tuo gemello protegge il tuo tempo, mentre tu espandi la tua visione.</strong>
                         </p>
 
                         <a
                             href="#pricing"
-                            className="inline-flex items-center gap-3 px-8 py-4 bg-charcoal text-white rounded-xl font-black text-lg uppercase tracking-wider hover:bg-charcoal/90 transition-all shadow-2xl hover:scale-105"
+                            className="inline-flex items-center gap-3 px-8 py-4 bg-gold text-charcoal rounded-xl font-black text-lg uppercase tracking-wider hover:bg-amber-400 transition-all shadow-2xl hover:scale-105"
                         >
-                            Elimina Questi Errori Ora
+                            Libera il Tuo Potenziale Ora
                         </a>
 
                         <p className="text-charcoal/50 text-sm mt-6 italic">
-                            Setup 10 minuti • Recuperi il costo in 48h • 14 giorni gratis
+                            Integrazione in 10 minuti • Preserva la tua Energia • 14 giorni di prova d'Élite
                         </p>
                     </motion.div>
                 </div>

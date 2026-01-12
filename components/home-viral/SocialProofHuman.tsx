@@ -2,230 +2,189 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, MessageSquare, Star, Play, PlayCircle, Plus } from 'lucide-react';
+import { TrendingUp, Play, CheckCircle2 } from 'lucide-react';
 
 /**
- * Social Proof Human Component
+ * Social Proof Human Component - NARRATIVE CASE STUDY EDITION
  * 
- * CREDIBILITY: Real chat proofs & video testimonials
- * 
- * Usage: Homepage social proof - humanize with faces, stories, outcomes
+ * Focus: Outcome, Transformation, Freedom.
  */
 export default function SocialProofHuman() {
-    const chatProofs = [
-        {
-            platform: "WhatsApp",
-            title: "Qualifica Lead Immobiliare",
-            image: "/whatsapp_proof_real_mockup_1768242467395.png",
-            outcome: "Lead qualificato e link pagamento inviato in 2 minuti.",
-            color: "from-green-500/20 to-emerald-500/20",
-            borderColor: "border-green-400/30"
-        },
-        {
-            platform: "Instagram",
-            title: "Chiusura Vendita Diretta",
-            image: "/instagram_proof_real_mockup_1768242485974.png",
-            outcome: "Obiezione prezzo gestita con empatia e grazia.",
-            color: "from-purple-500/20 to-pink-500/20",
-            borderColor: "border-purple-400/30"
-        },
-        {
-            platform: "Messenger",
-            title: "Supporto Clienti & Upsell",
-            image: "/messenger_proof_real_mockup_1768242505400.png",
-            outcome: "Risposta tecnica precisa alle 3:14 AM. Senza di te.",
-            color: "from-blue-500/20 to-cyan-500/20",
-            borderColor: "border-blue-400/30"
-        }
-    ];
-
-    const identities = [
-        {
-            name: "Real Estate",
-            image: "/avatar_real_estate_elite_1768245447946.png",
-            desc: "Eleganza & Precisione"
-        },
-        {
-            name: "Wellness",
-            image: "/avatar_wellness_elite_1768245462232.png",
-            desc: "Empatia & Cura"
-        },
-        {
-            name: "Finance",
-            image: "/avatar_finance_elite_man_1768245476050.png",
-            desc: "Autorità & Risultati"
-        },
-        {
-            name: "Coaching",
-            image: "/avatar_coaching_elite_man_1768245490457.png",
-            desc: "Saggezza & Visione"
-        }
-    ];
+    const caseStudy = {
+        name: "Marco G.",
+        role: "Founder & High-Performance Coach",
+        transformation: "Dalla saturazione digitale alla libertà creativa assoluta.",
+        story: "Marco gestiva 150+ DM al giorno. Il suo business cresceva, ma la sua vita si restringeva allo schermo di uno smartphone. L'eccellenza era diventata una prigione biologica.",
+        outcome: "Oggi, il suo gemello digitale gestisce l'80% del primo contatto e della qualifica. Marco è tornato a guidare la visione, mentre la sua presenza neurale protegge e scala il suo brand, senza che lui debba digitare una sola parola."
+    };
 
     return (
-        <section className="relative z-10 py-20 bg-gradient-to-b from-white via-champagne/20 to-white">
+        <section className="relative z-10 py-24 bg-gradient-to-b from-white via-champagne/10 to-white overflow-hidden">
             <div className="container mx-auto px-6">
                 <div className="max-w-7xl mx-auto">
-                    {/* Section Header */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-center mb-16"
-                    >
-                        <h2 className="font-serif text-4xl md:text-6xl text-charcoal mb-6">
-                            L'Identità Digitale <span className="text-gold italic">A Tua Immagine</span>
-                        </h2>
-                        <p className="text-xl text-charcoal/60 max-w-3xl mx-auto">
-                            Non è un bot. È la tua essenza, il tuo tono, la tua professionalità. <br />
-                            <strong className="text-charcoal font-medium">Addestrato per essere indistinguibile da te.</strong>
-                        </p>
-                    </motion.div>
 
-                    {/* Digital Identities Showcase */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
-                        {identities.map((id, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className="group text-center"
-                            >
-                                <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold/20 group-hover:border-gold transition-colors duration-500 shadow-xl">
-                                    <img
-                                        src={id.image}
-                                        alt={id.name}
-                                        className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
-                                    />
-                                    <div className="absolute inset-0 bg-gold/10 group-hover:bg-transparent transition-colors" />
+                    {/* CASE STUDY NARRATIVE */}
+                    <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="space-y-8"
+                        >
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/20 rounded-full">
+                                <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+                                <span className="text-gold text-[10px] uppercase font-black tracking-widest">Metamorfosi d'Élite</span>
+                            </div>
+
+                            <h3 className="font-serif text-4xl md:text-6xl text-charcoal leading-[1.1]">
+                                Il Fondatore <br /> <span className="text-gold italic">Liberato.</span>
+                            </h3>
+
+                            <div className="space-y-6 text-charcoal/70 text-lg leading-relaxed italic">
+                                <p>"{caseStudy.story}"</p>
+                                <p className="not-italic font-medium text-charcoal border-l-4 border-gold pl-6 py-2 bg-gold/5 rounded-r-2xl">
+                                    "{caseStudy.outcome}"
+                                </p>
+                            </div>
+
+                            <div className="pt-8 flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-charcoal flex items-center justify-center text-white font-serif font-bold">MG</div>
+                                <div>
+                                    <p className="font-serif text-xl text-charcoal font-bold leading-none">{caseStudy.name}</p>
+                                    <p className="text-gold text-[10px] uppercase tracking-widest mt-1 font-black">{caseStudy.role}</p>
                                 </div>
-                                <h4 className="text-charcoal font-serif font-bold text-sm md:text-md mb-1">{id.name}</h4>
-                                <p className="text-[10px] text-charcoal/40 uppercase tracking-widest font-black">{id.desc}</p>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            className="relative group"
+                        >
+                            <div className="absolute -inset-4 bg-gradient-to-tr from-gold/20 via-transparent to-gold/10 blur-3xl opacity-50" />
+                            <div className="relative rounded-[3rem] overflow-hidden border border-gold/20 shadow-3xl aspect-[4/5] bg-charcoal">
+                                <img
+                                    src="/avatar_coaching_elite_man_1768245490457.png"
+                                    alt="Elite Founder Transformation"
+                                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000"
+                                />
+
+                                {/* Floating Label */}
+                                <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl flex items-center gap-3">
+                                    <CheckCircle2 className="w-5 h-5 text-gold" />
+                                    <span className="text-white text-[10px] uppercase font-black tracking-widest">Status: Presenza Neurale Attiva</span>
+                                </div>
+
+                                <div className="absolute bottom-10 left-10 right-10 bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl">
+                                    <p className="text-white font-serif italic text-lg leading-relaxed">
+                                        "Il gemello non ha solo aumentato il mio impatto; mi ha restituito l'energia per tornare a sognare in grande."
+                                    </p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* PROOF GALLERY (Minimalist) */}
+                    <div className="text-center mb-16">
+                        <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black italic">Presenza Indistinguibile</span>
+                        <h4 className="font-serif text-3xl text-charcoal mt-4">Conversazioni che Proteggono il Brand</h4>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-12 mb-32">
+                        {[
+                            { image: "/whatsapp_proof_real_mockup_1768242467395.png", label: "Relazioni su WhatsApp" },
+                            { image: "/instagram_proof_real_mockup_1768242485974.png", label: "Ingaggio su Instagram" },
+                            { image: "/messenger_proof_real_mockup_1768242505400.png", label: "Scalabilità su Messenger" }
+                        ].map((proof, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="group"
+                            >
+                                <div className="relative rounded-[2rem] overflow-hidden border border-charcoal/5 shadow-2xl aspect-[9/16] bg-gray-100">
+                                    <img
+                                        src={proof.image}
+                                        alt={proof.label}
+                                        className="w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 transition-all duration-1000"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity" />
+                                </div>
+                                <p className="text-center mt-6 text-[10px] uppercase tracking-[0.2em] text-charcoal/40 font-black">{proof.label}</p>
                             </motion.div>
                         ))}
                     </div>
 
-                    {/* Genesis Wave Scarcity */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.6 }}
-                        className="bg-gradient-to-br from-gold/10 to-amber-100 rounded-3xl p-10 border-2 border-gold/40 text-center mb-20"
-                    >
-                        <h3 className="text-3xl font-serif text-charcoal mb-4">
-                            🚀 Pre-Lancio <span className="text-gold">Wave Genesis</span>
-                        </h3>
-                        <p className="text-xl text-charcoal/60 max-w-2xl mx-auto mb-8">
-                            VirtualTwin è in fase di lancio esclusivo. <br />
-                            I primi <strong className="text-charcoal">20 Founder</strong> della Wave Genesis bloccano il prezzo per sempre.
-                        </p>
-
-                        <div className="flex flex-col items-center justify-center">
-                            <p className="text-6xl font-black text-gold mb-2">20</p>
-                            <p className="text-charcoal/70 uppercase tracking-widest text-xs font-bold">Posti Disponibili in Wave Genesis</p>
-                        </div>
-
-                        <p className="text-charcoal/50 text-sm mt-8 italic">
-                            ⏳ L'opportunità Founder si chiude al completamento della wave.
-                        </p>
-                    </motion.div>
-
-                    {/* Video Testimonial Section */}
+                    {/* VIDEO DEMO - THE FINAL TOUCH */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="mb-20"
+                        className="relative max-w-5xl mx-auto"
                     >
-                        <div className="relative max-w-4xl mx-auto group">
-                            {/* Decorative Frame */}
-                            <div className="absolute -inset-4 bg-gradient-to-r from-gold/30 via-amber-500/20 to-gold/30 rounded-[2.5rem] blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-1000" />
+                        <div className="absolute -inset-10 bg-gold/5 rounded-[4rem] blur-[100px] pointer-events-none" />
 
-                            <div className="relative bg-charcoal rounded-[2rem] overflow-hidden shadow-3xl border border-white/10 aspect-video flex items-center justify-center">
-                                {/* Video Frame */}
-                                <div className="absolute inset-0 z-0">
-                                    <img
-                                        src="/video_testimonial_frame_elite_1768245512073.png"
-                                        alt="Neural Training Demo"
-                                        className="w-full h-full object-cover opacity-80"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/20 to-transparent" />
-                                </div>
+                        <div className="relative bg-charcoal rounded-[3rem] overflow-hidden shadow-3xl border border-white/10 aspect-video flex items-center justify-center group cursor-pointer">
+                            <img
+                                src="/video_testimonial_frame_elite_1768245512073.png"
+                                alt="Neural Training Demo"
+                                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-[2000ms]"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent" />
 
-                                {/* Video Overlay Info */}
-                                <div className="relative z-10 text-center px-6">
-                                    <div className="w-20 h-20 rounded-full bg-gold flex items-center justify-center mx-auto mb-6 shadow-luxury-gold animate-pulse cursor-pointer hover:scale-110 transition-transform">
-                                        <Play className="w-8 h-8 text-charcoal fill-charcoal" />
-                                    </div>
-                                    <h3 className="text-2xl md:text-3xl font-serif text-white mb-2 italic">
-                                        Demo: Il Gemello in <span className="text-gold">Azione</span>
-                                    </h3>
-                                    <p className="text-white/60 text-sm max-w-md mx-auto">
-                                        Guarda come VirtualTwin gestisce una pipeline di lead complessa senza alcun intervento umano.
-                                    </p>
-                                </div>
+                            {/* Play Button */}
+                            <div className="relative z-10 w-24 h-24 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-gold transition-all duration-500 shadow-2xl">
+                                <Play className="w-10 h-10 text-white fill-white group-hover:text-charcoal group-hover:fill-charcoal transition-colors" />
+                            </div>
 
-                                {/* Badge */}
-                                <div className="absolute top-6 left-6 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                                    <span className="text-[10px] text-white/80 font-black uppercase tracking-widest">Live Demo Preview</span>
-                                </div>
+                            {/* Info */}
+                            <div className="absolute bottom-10 left-10 text-left">
+                                <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mb-1">Authentic Audit</p>
+                                <h5 className="text-white font-serif text-2xl italic">Vedi la Trasformazione in Tempo Reale</h5>
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Chat Proof Grid */}
-                    <div className="text-center mb-16">
-                        <h3 className="font-serif text-3xl text-charcoal mb-4">
-                            Conversazioni <span className="italic gold-text-gradient">Verificate</span>
-                        </h3>
-                        <p className="text-charcoal/50 max-w-xl mx-auto">
-                            Esempi reali di come il Gemello Digitale qualifica, vende e fissa appuntamenti sui canali social più usati.
-                        </p>
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-8 mb-12">
-                        {chatProofs.map((proof, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className={`relative group rounded-[2.5rem] overflow-hidden border ${proof.borderColor} bg-gradient-to-br ${proof.color} p-4 shadow-luxury-gold hover:shadow-2xl transition-all duration-500`}
-                            >
-                                {/* Platform Badge */}
-                                <div className="absolute top-6 right-6 z-20 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-[10px] uppercase font-black tracking-widest text-charcoal">
-                                    {proof.platform}
-                                </div>
+                    {/* ELITE SCARCITY - WAVE GENESIS */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="mt-32 p-12 rounded-[3.5rem] bg-gradient-to-br from-charcoal to-black border border-gold/30 text-center relative overflow-hidden shadow-3xl"
+                    >
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[100px]" />
+                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-[80px]" />
 
-                                <div className="space-y-4">
-                                    <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-charcoal/10 aspect-[9/16]">
-                                        <img
-                                            src={proof.image}
-                                            alt={proof.title}
-                                            className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent opacity-60" />
-                                    </div>
+                        <div className="relative z-10">
+                            <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black mb-6 block">Genesis Founders Wave</span>
+                            <h3 className="text-3xl md:text-5xl font-serif text-white mb-6">
+                                Unisciti ai <span className="text-gold italic">Primi 20 Visionari.</span>
+                            </h3>
+                            <p className="text-white/60 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                                Stiamo aprendo le porte a soli 20 fondatori per addestrare i primi Gemelli Digitali con accesso prioritario e prezzo bloccato a vita. <br />
+                                <span className="text-white font-medium">L'opportunità di scalare senza limiti biologici inizia qui.</span>
+                            </p>
 
-                                    <div className="px-2 pb-2">
-                                        <h3 className="text-xl font-serif text-charcoal font-bold mb-2">
-                                            {proof.title}
-                                        </h3>
-                                        <div className="flex items-start gap-2 p-3 bg-white/40 backdrop-blur-sm rounded-xl border border-white/50">
-                                            <TrendingUp className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                                            <p className="text-xs text-charcoal/80 leading-relaxed italic">
-                                                {proof.outcome}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
+                            <div className="inline-flex flex-col items-center">
+                                <div className="text-7xl font-serif text-gold font-black mb-2">20</div>
+                                <p className="text-white/40 text-[10px] uppercase tracking-[0.3em] font-bold">Posti Disponibili • Wave Genesis</p>
+                            </div>
+
+                            <div className="mt-12">
+                                <a
+                                    href="#pricing"
+                                    className="inline-flex items-center gap-4 px-10 py-5 bg-gold text-charcoal rounded-2xl font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all shadow-luxury-gold"
+                                >
+                                    Richiedi Accesso Genesis
+                                    <TrendingUp className="w-5 h-5" />
+                                </a>
+                            </div>
+                        </div>
+                    </motion.div>
+
                 </div>
             </div>
         </section>

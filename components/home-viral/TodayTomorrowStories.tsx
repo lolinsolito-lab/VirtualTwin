@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { X, Check, TrendingUp, Clock } from 'lucide-react';
+import { X, Check, TrendingUp, Clock, Moon } from 'lucide-react';
 
 /**
  * Today Tomorrow Stories Component - LUXURY EDITION
@@ -14,79 +14,79 @@ import { X, Check, TrendingUp, Clock } from 'lucide-react';
 export default function TodayTomorrowStories() {
     const stories = [
         {
-            title: "Il Sabato Sera Perso",
-            icon: "🍽️",
+            title: "L'Erosione della Vita",
+            icon: Clock,
             today: {
-                time: "Sabato 22:00",
-                scene: "Cena con la famiglia. Il telefono vibra.",
-                message: "'Mi mandi info?'",
-                dilemma: "Scelta impossibile: ignori il cliente o rovini la serata?",
-                result: "Cliente perso o serata rovinata.",
-                emotion: "Frustrazione"
+                time: "Sabato Sera · Attrito",
+                scene: "Cena sacra con la famiglia. Una vibrazione interrompe il presente.",
+                message: "'Mi mandi info? Vorrei iniziare subito.'",
+                dilemma: "La scelta è tra il furto di tempo ai tuoi cari o l'abbandono di un'opportunità.",
+                result: "Presenza distrutta. Energia dissipata.",
+                emotion: "Schiavitù Operativa"
             },
             tomorrow: {
-                time: "Sabato 22:00",
-                scene: "Cena con la famiglia. Il telefono vibra.",
-                action: "Il tuo gemello digitale risponde, qualifica, invia preventivo.",
-                result: "Tu godi la serata. Lui lavora. Notifica mattina: +€347 vendita notturna.",
-                emotion: "Libertà"
+                time: "Sabato Sera · Grazia",
+                scene: "Il telefono resta silenzioso. Il presente è intatto.",
+                action: "Il tuo gemello neurale accoglie il lead, educa, risolve dubbi e posiziona il valore.",
+                result: "Tu proteggi il tuo tempo sacro. Lui costruisce il tuo impero.",
+                emotion: "Sovranità"
             }
         },
         {
-            title: "Le 3 di Notte",
-            icon: "🌙",
+            title: "Il Fallimento del Limite",
+            icon: Moon,
             today: {
-                time: "Domenica 03:00 AM",
-                scene: "Lead motivato scrive mentre tu dormi.",
-                message: "Aspetta la tua risposta...",
-                dilemma: "Alle 11:00 rispondi. Troppo tardi.",
-                result: "Il competitor ha già risposto alle 03:05. Vendita persa.",
-                emotion: "Opportunità bruciata"
+                time: "Ore 03:00 · Vulnerabilità",
+                scene: "Il mercato richiede verità alle 3 del mattino. Tu dormi (perché sei umano).",
+                message: "Il potenziale buyer cerca una connessione immediata.",
+                dilemma: "Il mondo non tace mentre tu ti rigeneri. Il tempo è il nemico.",
+                result: "Silenzio assordante. Lead congelato o perso.",
+                emotion: "Impoverimento Strategico"
             },
             tomorrow: {
-                time: "Domenica 03:00 AM",
-                scene: "Lead motivato scrive.",
-                action: "Il tuo gemello risponde in 2 secondi. Qualifica. Manda link pagamento.",
-                result: "Tu dormi tranquillo. Lui chiude. Al risveglio: +€197 vendita.",
-                emotion: "Vendite mentre sogni"
+                time: "Ore 03:00 · Presenza Neurale",
+                scene: "Un buyer in un altro fuso orario cerca la tua autorità.",
+                action: "Il gemello risponde con la tua saggezza istantanea. Qualifica e chiude.",
+                result: "Ti svegli davanti a una realtà già espansa. Senza sforzo biologico.",
+                emotion: "Evoluzione Continua"
             }
         },
         {
-            title: "Il Lunedì Infernale",
-            icon: "📱",
+            title: "Saturazione Cognitiva",
+            icon: TrendingUp,
             today: {
-                time: "Lunedì 09:00",
-                scene: "20+ messaggi 'info?' accumulati nel weekend.",
-                message: "3 ore per rispondere a tutti manualmente.",
-                dilemma: "La metà ha già comprato altrove. L'altra metà ti ghosterà.",
-                result: "15 ore/settimana buttate. Nessuna vendita.",
-                emotion: "Overwhelm totale"
+                time: "Lunedì Mattina · Caos",
+                scene: "20+ anime cercano la tua attenzione. Il rumore è insopportabile.",
+                message: "3 ore di digitazione meccanica, template sterili, ripetizioni estenuanti.",
+                dilemma: "Sei un Fondatore o un operatore di data-entry dei tuoi stessi pensieri?",
+                result: "Saturazione. Creatività annientata dalla routine.",
+                emotion: "Burnout Aziendale"
             },
             tomorrow: {
-                time: "Lunedì 09:00",
-                scene: "20+ messaggi gestiti automaticamente dal gemello.",
-                action: "80% qualificati. 12 call fissate. Solo lead caldi ti aspettano.",
-                result: "Lavori SUL business, non NEL business. 15h/settimana recuperate.",
-                emotion: "Controllo e focus"
+                time: "Lunedì Mattina · Purezza",
+                scene: "I 20 messaggi sono già stati filtrati, educati e convertiti dal gemello.",
+                action: "Solo il 5% che richiede il tuo genio creativo arriva alla tua attenzione.",
+                result: "Lavori SUL futuro, non NEL passato. 15 ore di ossigeno recuperate.",
+                emotion: "Chiarezza Mentale"
             }
         },
         {
-            title: "Il 'Mi Penso' Eterno",
-            icon: "💭",
+            title: "Il Deserto del 'Ci Penso'",
+            icon: Check,
             today: {
-                time: "Martedì pomeriggio",
-                scene: "Cliente: 'Mi mandi info?'",
-                message: "Spieghi tutto per 10 minuti. Copy-paste FAQ.",
-                dilemma: "'Ci penso, ti faccio sapere.' Ghost mode attivato.",
-                result: "Tempo sprecato. Zero vendite. Frustrazione.",
-                emotion: "Tempo divorato"
+                time: "Pomeriggio · Ghosting",
+                scene: "Investi 15 minuti a spiegare. Scrivi con passione.",
+                message: "Cliente: 'Grazie, ci farò sapere.' Mai più visto.",
+                dilemma: "Hai scambiato il tuo ossigeno per un 'forse'. Un baratto fallimentare.",
+                result: "Frustrazione. Il valore percepito crolla nel follow-up manuale.",
+                emotion: "Svalutazione del Sé"
             },
             tomorrow: {
-                time: "Martedì pomeriggio",
-                scene: "Cliente: 'Mi mandi info?'",
-                action: "Gemello: FAQ personalizzate, pricing, case study, testimonianze in 2 minuti.",
-                result: "Cliente: 'Perfetto, procedo!' Tu intervieni solo per chiudere deal caldi.",
-                emotion: "Efficienza pura"
+                time: "Pomeriggio · Autorità",
+                scene: "Il gemello gestisce l'educazione e le obiezioni con perfezione neutrale.",
+                action: "Case study, FAQ e link arrivano in tempo reale, mantenendo il desiderio al massimo.",
+                result: "Il cliente dice: 'Indistinguibile'. Tu intervieni solo per il brindisi finale.",
+                emotion: "Eccellenza Sistematica"
             }
         }
     ];
@@ -102,12 +102,23 @@ export default function TodayTomorrowStories() {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="font-serif text-4xl md:text-6xl text-charcoal mb-6">
-                            La Tua Giornata <span className="text-gold italic">Trasformata</span>
-                        </h2>
-                        <p className="text-xl text-charcoal/60 max-w-3xl mx-auto">
-                            Questo è il futuro del business conversazionale. <strong className="text-gold italic">E sta arrivando.</strong>
-                        </p>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1 }}
+                            className="text-center mb-24"
+                        >
+                            <span className="text-gold text-[9px] uppercase tracking-[0.6em] font-black italic mb-8 block opacity-50">L'Invisibile Potere del Genio</span>
+                            <h2 className="font-serif text-5xl md:text-9xl text-charcoal mb-12 leading-[0.8] tracking-tighter">
+                                La Libertà del <br />
+                                <span className="text-gold italic">Silenzio.</span>
+                            </h2>
+                            <p className="text-xl md:text-2xl text-charcoal/20 max-w-4xl mx-auto leading-relaxed font-light italic">
+                                "La tecnologia perfetta è quella che scompare. <br />
+                                <strong className="text-charcoal/40 font-medium">Non aggiungiamo rumore al tuo business. Lo eliminiamo alla radice."</strong>
+                            </p>
+                        </motion.div>
                     </motion.div>
 
                     {/* Story Cards - LUXURY GRID */}
@@ -122,14 +133,15 @@ export default function TodayTomorrowStories() {
                                 className="bg-white rounded-3xl overflow-hidden shadow-xl border-2 border-charcoal/10 hover:shadow-2xl transition-all"
                             >
                                 {/* Story Title - LUXURY HEADER */}
-                                <div className="bg-gradient-to-r from-charcoal to-charcoal/90 px-8 py-6 relative overflow-hidden">
-                                    {/* Subtle gold accent */}
-                                    <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent" />
+                                <div className="bg-charcoal px-12 py-10 relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-gold/5" />
 
-                                    <div className="flex items-center gap-4 relative z-10">
-                                        <span className="text-5xl opacity-80">{story.icon}</span>
+                                    <div className="flex items-center gap-8 relative z-10">
+                                        <div className="w-20 h-20 rounded-full border border-white/5 flex items-center justify-center backdrop-blur-3xl group-hover:border-gold/30 transition-all duration-1000">
+                                            <story.icon className="w-8 h-8 text-gold" />
+                                        </div>
                                         <div>
-                                            <h3 className="text-2xl font-serif text-white font-bold">
+                                            <h3 className="text-4xl font-serif text-white italic tracking-tight">
                                                 {story.title}
                                             </h3>
                                         </div>
@@ -137,61 +149,36 @@ export default function TodayTomorrowStories() {
                                 </div>
 
                                 {/* TODAY (Problem) - Subtle red accents */}
-                                <div className="p-8 bg-gradient-to-br from-red-50/50 to-rose-50/30 border-b-2 border-red-200/40">
-                                    <div className="flex items-start gap-3 mb-4">
-                                        <X className="w-6 h-6 text-red-700 flex-shrink-0 mt-1" />
+                                <div className="p-12 border-b border-charcoal/5 group-hover:bg-rose-50/10 transition-colors duration-1000">
+                                    <div className="flex items-start gap-6 mb-4">
+                                        <X className="w-5 h-5 text-red-900/20 flex-shrink-0 mt-2" />
                                         <div className="flex-1">
-                                            <h4 className="text-sm uppercase font-black text-red-800 tracking-wider mb-2">
-                                                OGGI (senza gemello)
+                                            <h4 className="text-[9px] uppercase font-black text-charcoal/20 tracking-[0.4em] mb-4">
+                                                Il Vecchio Mondo
                                             </h4>
-                                            <p className="text-charcoal/80 font-medium mb-2">
-                                                <Clock className="w-4 h-4 inline mr-2 text-red-600" />
-                                                {story.today.time}
-                                            </p>
-                                            <p className="text-charcoal/70 leading-relaxed mb-3">
+                                            <p className="text-charcoal/40 leading-relaxed mb-4 text-lg italic">
                                                 {story.today.scene}
                                             </p>
-                                            <div className="bg-white/80 rounded-xl p-3 mb-3 border-l-4 border-red-400/60 shadow-sm">
-                                                <p className="text-charcoal/60 italic text-sm">
-                                                    {story.today.message}
-                                                </p>
-                                            </div>
-                                            <p className="text-charcoal/70 leading-relaxed mb-3">
-                                                {story.today.dilemma}
-                                            </p>
-                                            <p className="text-red-800 font-bold">
+                                            <p className="text-red-900/60 font-serif text-xl italic mb-4">
                                                 → {story.today.result}
-                                            </p>
-                                            <p className="text-red-600 text-sm italic mt-2">
-                                                Emozione: {story.today.emotion}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* TOMORROW (Solution) - Subtle green accents */}
-                                <div className="p-8 bg-gradient-to-br from-green-50/50 to-emerald-50/30">
-                                    <div className="flex items-start gap-3">
-                                        <Check className="w-6 h-6 text-green-700 flex-shrink-0 mt-1" />
+                                {/* TOMORROW (Solution) - Pure Magic */}
+                                <div className="p-12 group-hover:bg-gold/5 transition-colors duration-1000">
+                                    <div className="flex items-start gap-6">
+                                        <Sparkles className="w-5 h-5 text-gold flex-shrink-0 mt-2" />
                                         <div className="flex-1">
-                                            <h4 className="text-sm uppercase font-black text-green-800 tracking-wider mb-2">
-                                                DOMANI (con il tuo gemello)
+                                            <h4 className="text-[9px] uppercase font-black text-gold tracking-[0.4em] mb-4">
+                                                La Nuova Realtà
                                             </h4>
-                                            <p className="text-charcoal/80 font-medium mb-2">
-                                                <TrendingUp className="w-4 h-4 inline mr-2 text-green-700" />
-                                                {story.tomorrow.time}
-                                            </p>
-                                            <p className="text-charcoal/70 leading-relaxed mb-3">
+                                            <p className="text-charcoal leading-relaxed mb-4 text-lg italic">
                                                 {story.tomorrow.scene}
                                             </p>
-                                            <p className="text-charcoal/70 leading-relaxed mb-3">
-                                                <strong className="text-green-800">Il gemello:</strong> {story.tomorrow.action}
-                                            </p>
-                                            <p className="text-green-800 font-bold">
+                                            <p className="text-gold font-serif text-2xl italic">
                                                 → {story.tomorrow.result}
-                                            </p>
-                                            <p className="text-green-700 text-sm italic mt-2">
-                                                Emozione: {story.tomorrow.emotion}
                                             </p>
                                         </div>
                                     </div>

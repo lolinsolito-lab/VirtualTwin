@@ -3,7 +3,8 @@ import FreedomHook from "@/components/home-viral/FreedomHook";
 import HeroEmotionalPunch from "@/components/home-viral/HeroEmotionalPunch";
 import WallOfHooks from "@/components/home-viral/WallOfHooks";
 import TodayTomorrowStories from "@/components/home-viral/TodayTomorrowStories";
-import VisualProofSection from "@/components/home-viral/VisualProofSection";
+import IdentityPreservation from "@/components/sections/IdentityPreservation";
+import MarketUniversalTruths from "@/components/sections/MarketUniversalTruths";
 import SocialProofBar from "@/components/home-viral/SocialProofBar";
 import SolutionEnhanced from "@/components/sections/SolutionEnhanced";
 import SetupStoryNarrative from "@/components/home-viral/SetupStoryNarrative";
@@ -35,8 +36,39 @@ export default function Home() {
         {/* TODAY/TOMORROW DRAMATIC STORIES - 4 scenarios */}
         <TodayTomorrowStories />
 
-        {/* VISUAL PROOF - Chat screenshots annotated */}
-        <VisualProofSection />
+        {/* VIRAL NUGGET 1 */}
+        <div className="py-20 text-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="max-w-3xl mx-auto px-6"
+          >
+            <p className="font-serif text-3xl md:text-5xl text-charcoal/30 italic leading-tight">
+              "L'unico modo per essere <span className="text-gold">ovunque</span> è smettere di essere <span className="text-charcoal/10">solo carne e ossa.</span>"
+            </p>
+          </motion.div>
+        </div>
+
+        {/* IDENTITY PRESERVATION - Elite Coach Vision */}
+        <IdentityPreservation />
+
+        {/* MARKET UNIVERSAL TRUTHS - The 6 Tiers Philosophy */}
+        <MarketUniversalTruths />
+
+        {/* VIRAL NUGGET 2 */}
+        <div className="py-24 bg-charcoal">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="max-w-4xl mx-auto text-center px-6"
+          >
+            <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black mb-6 block">Il Verdetto</span>
+            <p className="font-serif text-3xl md:text-6xl text-white leading-none mb-4">
+              La libertà non è un lusso. <br />
+              <span className="text-gold italic">È la struttura.</span>
+            </p>
+          </motion.div>
+        </div>
 
         {/* SOLUTION (keep existing) */}
         <SolutionEnhanced />

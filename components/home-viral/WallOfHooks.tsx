@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Bot, Shield, Unlock, Moon, Zap, Infinity } from 'lucide-react';
 
 /**
  * Wall of Hooks Component - LUXURY EDITION
@@ -14,24 +14,24 @@ import { Sparkles } from 'lucide-react';
 export default function WallOfHooks() {
     const hooks = [
         {
-            text: "Uno di Te Vive. L'Altro Vende 24/7.",
-            icon: "⚡"
+            text: "Presenza Neurale Permanente. Tu Vivi, Lui Espande il Tuo Impero.",
+            icon: Bot
         },
         {
-            text: "Non è un Bot. Sei TU, Duplicato.",
-            icon: "👥"
+            text: "Non è un Bot. È la Tua Identità Digitale, Senza Scalabilità Fisica.",
+            icon: Infinity
         },
         {
-            text: "La Libertà Inizia Quando Non Sei Più Schiavo dello Smartphone.",
-            icon: "🔓"
+            text: "La Vera Libertà? Riappropriarsi del Proprio Tempo e dell'Energia Creativa.",
+            icon: Unlock
         },
         {
-            text: "Il Tuo Venditore Più Bravo Non Dovrebbe Dormire.",
-            icon: "🌙"
+            text: "Proteggi la Tua Reputazione con un’Intelligenza che Pensa al Tuo Livello.",
+            icon: Shield
         },
         {
-            text: "Vendite Mentre Sogni. Non è Magia, è VirtualTwin.",
-            icon: "✨"
+            text: "Massimizza l'Impatto Mentre Ti Rigeneri. L'Eccellenza Non Dorme.",
+            icon: Moon
         }
     ];
 
@@ -70,9 +70,9 @@ export default function WallOfHooks() {
                                     {/* Subtle top accent */}
                                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
 
-                                    {/* Icon - Subtle */}
-                                    <div className="text-5xl mb-4 opacity-20 group-hover:opacity-30 transition-opacity">
-                                        {hook.icon}
+                                    {/* Icon - Sophisticated */}
+                                    <div className="w-12 h-12 rounded-xl bg-gold/5 flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors">
+                                        <hook.icon className="w-6 h-6 text-gold/40 group-hover:text-gold transition-colors" />
                                     </div>
 
                                     {/* Hook Text */}

@@ -38,8 +38,8 @@ const FeaturesEnhanced = () => {
         },
         {
             icon: CreditCard,
-            title: "Chiude le Vendite",
-            desc: "Invia link Stripe, prenota chiamate, raccoglie pagamenti. Tutto in chat.",
+            title: "Massimizza ogni Opportunità",
+            desc: "Dalla gestione del desiderio alla conversione finale. Il gemello trasforma l'interesse in impatto concreto.",
             iconBg: "bg-gradient-to-br from-amber-400 to-amber-500",
             cardBg: "bg-gradient-to-br from-amber-50 to-white"
         }
@@ -116,12 +116,12 @@ const FeaturesEnhanced = () => {
 
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black">Mentre Tu Vivi</span>
+                    <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black italic">Preserva la Tua Identità</span>
                     <h2 className="font-serif text-[2rem] md:text-[3rem] lg:text-[3.5rem] font-medium leading-[1] tracking-[-0.02em] text-charcoal mt-4 mb-4">
-                        Lui Risponde. Vende. <span className="italic text-gold">Incassa.</span>
+                        Espandi l'Impatto. <span className="italic text-gold">Proteggi l'Energia.</span>
                     </h2>
                     <p className="text-charcoal/50 text-base lg:text-lg max-w-lg mx-auto">
-                        Tutto in un'unica piattaforma. <span className="text-charcoal font-medium">Niente più 10 tool diversi.</span>
+                        Integrazione Neurale Indistinguibile. <span className="text-charcoal font-medium">Scalabilità infinita, zero sforzo biologico.</span>
                     </p>
                 </div>
 

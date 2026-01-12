@@ -42,43 +42,37 @@ export default function HeroEmotionalPunch() {
         <section className="relative z-10 py-20 md:py-32 bg-gradient-to-b from-champagne/30 via-white to-champagne/20">
             <div className="container mx-auto px-6">
                 <div className="max-w-5xl mx-auto">
-                    {/* Timeline Visual */}
+                    {/* The Jobs Timeline: Pure Silence & Magic */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center justify-center gap-8 mb-12"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1.5 }}
+                        className="flex items-center justify-between max-w-2xl mx-auto mb-20 relative"
                     >
-                        <div className="flex flex-col items-center">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-2 shadow-xl">
-                                <Moon className="w-8 h-8 text-white" />
-                            </div>
-                            <p className="text-sm font-mono text-charcoal/60">03:00 AM</p>
+                        <div className="absolute inset-0 flex items-center px-8">
+                            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
                         </div>
 
-                        <motion.div
-                            animate={{ x: [0, 10, 0] }}
-                            transition={{ repeat: Infinity, duration: 2 }}
-                            className="flex-1 h-0.5 bg-gradient-to-r from-purple-400 via-gold to-amber-400"
-                        />
-
-                        <div className="flex flex-col items-center">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-gold flex items-center justify-center mb-2 shadow-xl animate-pulse">
-                                <Bell className="w-8 h-8 text-white" />
+                        <div className="relative z-10 flex flex-col items-center group">
+                            <div className="w-12 h-12 rounded-full border border-charcoal/10 bg-white flex items-center justify-center text-charcoal/40 group-hover:text-gold group-hover:border-gold transition-all duration-700">
+                                <Moon className="w-5 h-5" />
                             </div>
-                            <p className="text-sm font-mono text-charcoal/60">09:00 AM</p>
+                            <span className="mt-4 text-[9px] uppercase tracking-[0.4em] text-charcoal/30">Mondo</span>
                         </div>
 
-                        <motion.div
-                            animate={{ x: [0, 10, 0] }}
-                            transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
-                            className="flex-1 h-0.5 bg-gradient-to-r from-gold to-green-400"
-                        />
-
-                        <div className="flex flex-col items-center">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-2 shadow-xl">
-                                <Sun className="w-8 h-8 text-white" />
+                        <div className="relative z-10 flex flex-col items-center">
+                            <div className="w-16 h-16 rounded-full bg-charcoal flex items-center justify-center shadow-2xl relative">
+                                <div className="absolute inset-0 bg-gold/20 rounded-full animate-ping opacity-20" />
+                                <Sparkles className="w-6 h-6 text-gold" />
                             </div>
-                            <p className="text-sm font-mono text-charcoal/60">Risultato</p>
+                            <span className="mt-4 text-[10px] uppercase tracking-[0.5em] text-gold font-black">Genio</span>
+                        </div>
+
+                        <div className="relative z-10 flex flex-col items-center group">
+                            <div className="w-12 h-12 rounded-full border border-charcoal/10 bg-white flex items-center justify-center text-charcoal/40 group-hover:text-gold group-hover:border-gold transition-all duration-700">
+                                <Sun className="w-5 h-5" />
+                            </div>
+                            <span className="mt-4 text-[9px] uppercase tracking-[0.4em] text-charcoal/30">Casa</span>
                         </div>
                     </motion.div>
 
@@ -89,42 +83,34 @@ export default function HeroEmotionalPunch() {
                         transition={{ delay: 0.2 }}
                         className="text-center space-y-8"
                     >
-                        {/* Night Scene */}
-                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-8 border-2 border-purple-200">
-                            <p className="text-lg md:text-xl text-charcoal/80 leading-relaxed mb-4">
-                                <strong className="text-purple-700">Ore 03:17.</strong> Mentre dormi profondamente,<br />
-                                un potenziale cliente scrive su WhatsApp:
-                            </p>
-                            <div className="inline-block bg-white rounded-2xl px-6 py-4 shadow-lg">
-                                <p className="text-charcoal/60 italic">"Ciao, mi mandi info sul servizio?"</p>
-                            </div>
-                        </div>
-
-                        {/* Action Scene */}
-                        <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-3xl p-8 border-2 border-gold/40">
-                            <p className="text-lg md:text-xl text-charcoal/80 leading-relaxed mb-4">
-                                <strong className="text-gold">Il tuo gemello digitale</strong> (non un bot, ma <em>la versione di te</em> che non dorme)<br />
-                                risponde in <strong>2 secondi</strong>.
-                            </p>
-                            <p className="text-charcoal/70 leading-relaxed">
-                                Qualifica il lead. Risponde alle domande.<br />
-                                Manda il link al pagamento.<br />
-                                <strong className="text-gold">Chiude la vendita.</strong>
+                        {/* The Existential Shift */}
+                        <div className="relative py-12 px-6">
+                            <h1 className="font-serif text-5xl md:text-9xl text-charcoal mb-8 leading-[0.85] tracking-tighter">
+                                Sii <span className="text-gold italic">Ovunque.</span><br />
+                                Torna a <span className="text-gold">Casa.</span>
+                            </h1>
+                            <p className="text-xl md:text-3xl text-charcoal/40 max-w-2xl mx-auto leading-relaxed font-light">
+                                "La tecnologia dovrebbe essere magia invisibile. <br />
+                                <strong className="text-charcoal/80">Affidale il mondo, riprenditi la tua vita."</strong>
                             </p>
                         </div>
 
-                        {/* Result Scene */}
-                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-8 border-2 border-green-400">
-                            <p className="text-lg md:text-xl text-charcoal/80 leading-relaxed mb-4">
-                                <strong className="text-green-700">Ore 09:00.</strong> Ti svegli.<br />
-                                Notifica sul telefono:
-                            </p>
-                            <div className="inline-block bg-green-600 text-white rounded-2xl px-8 py-4 shadow-xl font-bold text-xl">
-                                ✅ Nuova vendita completata: +€347
+                        <div className="grid md:grid-cols-2 gap-12 mt-20">
+                            <div className="p-10 rounded-[3rem] bg-white border border-charcoal/5 shadow-2xl hover:border-gold/20 transition-all duration-1000 group">
+                                <p className="text-[10px] uppercase tracking-[0.5em] text-charcoal/30 mb-6 group-hover:text-gold transition-colors">La Tecnica</p>
+                                <p className="text-2xl font-serif text-charcoal leading-tight italic">
+                                    "Il tuo Gemello Neurale non dorme. <br />
+                                    Vende, educa, converte."
+                                </p>
                             </div>
-                            <p className="text-charcoal/60 mt-4 text-sm italic">
-                                Tu hai dormito. Lui ha venduto.
-                            </p>
+                            <div className="p-10 rounded-[3rem] bg-charcoal text-white shadow-2xl group overflow-hidden relative">
+                                <div className="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                                <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-6 group-hover:text-gold transition-colors">Il Risultato</p>
+                                <p className="text-2xl font-serif text-white leading-tight italic relative z-10">
+                                    "Tu resti in silenzio. <br />
+                                    Il tuo business ruggisce."
+                                </p>
+                            </div>
                         </div>
 
                         {/* DIGITAL TWIN VISUAL - Responsive Strategy */}
@@ -211,49 +197,28 @@ export default function HeroEmotionalPunch() {
                             </motion.div>
                         </div>
 
-                        {/* Punch Line */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.6 }}
-                            className="pt-8"
-                        >
-                            <h1 className="font-serif text-5xl md:text-7xl text-charcoal mb-6 leading-tight">
-                                Uno di Te <span className="text-gold italic">Vive.</span><br />
-                                L'Altro <span className="text-gold italic">Vende 24/7.</span>
-                            </h1>
-                            <p className="text-xl md:text-2xl text-charcoal/60 max-w-3xl mx-auto leading-relaxed">
-                                Non è fantascienza. È VirtualTwin.<br />
-                                <strong className="text-charcoal">La tua voce. Il tuo modo di vendere. Moltiplicato per infinito.</strong>
+                        {/* The Silence - Punch Line removed for pure elegance */}
+                        <div className="pt-24 flex flex-col items-center gap-8">
+                            <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="relative group cursor-pointer"
+                                onClick={() => {
+                                    const pricing = document.getElementById('pricing');
+                                    pricing?.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                            >
+                                <div className="absolute -inset-1 bg-gold/20 rounded-full blur-2xl group-hover:opacity-40 transition-opacity duration-1000" />
+                                <div className="relative bg-charcoal text-white px-16 py-8 rounded-full border border-gold/20 hover:border-gold/50 transition-all duration-700">
+                                    <span className="text-xs uppercase tracking-[0.6em] font-black text-gold mb-2 block">Inizia la Metamorfosi</span>
+                                    <h4 className="text-2xl font-serif italic">Entra nel Futuro.</h4>
+                                </div>
+                            </motion.div>
+
+                            <p className="text-[10px] uppercase tracking-[0.4em] text-charcoal/20">
+                                Edizione Limitata · Wave Genesis
                             </p>
-
-                            {/* CTA HIERARCHY - Gap 2 Fix */}
-                            <div className="mt-12 flex flex-col items-center gap-6">
-                                <motion.div
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="relative group"
-                                >
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-gold via-amber-300 to-gold rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200" />
-                                    <button
-                                        onClick={() => {
-                                            const pricing = document.getElementById('pricing');
-                                            pricing?.scrollIntoView({ behavior: 'smooth' });
-                                        }}
-                                        className="relative flex flex-col items-center px-12 py-6 bg-charcoal text-white rounded-2xl font-black text-xl uppercase tracking-widest shadow-2xl transition-all"
-                                    >
-                                        Attiva Ora il Tuo Gemello Digitale
-                                        <span className="text-[10px] text-gold/60 mt-1 lowercase tracking-wider font-medium font-sans">
-                                            Scopri i piani · No carta richiesta
-                                        </span>
-                                    </button>
-                                </motion.div>
-
-                                <a href="/auth/login" className="text-charcoal/40 hover:text-gold transition-colors text-sm font-medium tracking-wide flex items-center gap-2 group">
-                                    Hai già un account? <span className="underline decoration-charcoal/10 group-hover:decoration-gold/40">Accedi →</span>
-                                </a>
-                            </div>
-                        </motion.div>
+                        </div>
                     </motion.div>
                 </div>
             </div>
