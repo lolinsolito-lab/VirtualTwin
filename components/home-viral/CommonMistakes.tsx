@@ -86,33 +86,36 @@ export default function CommonMistakes() {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="group relative bg-white rounded-[3rem] p-12 border border-charcoal/5 hover:border-gold/20 transition-all duration-1000 overflow-hidden"
+                                className="group relative bg-white/80 backdrop-blur-xl rounded-[3rem] p-12 border border-charcoal/5 hover:border-gold/40 transition-all duration-1000 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_100px_rgba(212,175,55,0.1)]"
                             >
-                                <div className="absolute top-0 right-0 p-12 text-charcoal/5 font-serif text-9xl leading-none">
+                                {/* Diagnostic Pulse Glow */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
+
+                                <div className="absolute top-0 right-0 p-12 text-charcoal/5 font-serif text-9xl leading-none transition-all duration-1000 group-hover:text-gold/10 group-hover:scale-110">
                                     {mistake.number}
                                 </div>
 
                                 <div className="relative z-10 flex flex-col md:flex-row gap-12 items-start">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-4 mb-2">
-                                            <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black">{mistake.number}</span>
-                                            <div className="h-[1px] w-12 bg-gold/30" />
+                                            <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black group-hover:animate-pulse">{mistake.number}</span>
+                                            <div className="h-[1px] w-12 bg-gold/30 group-hover:w-24 transition-all duration-1000" />
                                         </div>
-                                        <h3 className="text-3xl md:text-4xl font-serif text-charcoal mb-6 italic tracking-tight">
+                                        <h3 className="text-3xl md:text-4xl font-serif text-charcoal mb-6 italic tracking-tight group-hover:text-gold transition-colors duration-700">
                                             {mistake.title}
                                         </h3>
-                                        <p className="text-xl text-charcoal/40 leading-relaxed italic mb-8 max-w-2xl">
+                                        <p className="text-xl text-charcoal/40 leading-relaxed italic mb-8 max-w-2xl transition-colors duration-700 group-hover:text-charcoal/60">
                                             "{mistake.detail}"
                                         </p>
 
                                         <div className="grid md:grid-cols-2 gap-8">
-                                            <div>
-                                                <p className="text-[9px] uppercase font-black text-red-900/30 tracking-[0.4em] mb-2">Impatto</p>
-                                                <p className="text-charcoal/60 font-serif text-lg italic">{mistake.stat}</p>
+                                            <div className="p-6 rounded-3xl bg-charcoal/[0.02] border border-charcoal/5 group-hover:bg-red-500/[0.02] group-hover:border-red-500/10 transition-all duration-700 shadow-inner">
+                                                <p className="text-[9px] uppercase font-black text-red-900/30 tracking-[0.4em] mb-2 group-hover:text-red-900/50">Impatto</p>
+                                                <p className="text-charcoal/60 font-serif text-lg italic group-hover:text-charcoal/80">{mistake.stat}</p>
                                             </div>
-                                            <div>
-                                                <p className="text-[9px] uppercase font-black text-rose-900/30 tracking-[0.4em] mb-2">Costo Esistenziale</p>
-                                                <p className="text-charcoal/60 font-serif text-lg italic">{mistake.cost}</p>
+                                            <div className="p-6 rounded-3xl bg-charcoal/[0.02] border border-charcoal/5 group-hover:bg-gold/5 group-hover:border-gold/10 transition-all duration-700 shadow-inner">
+                                                <p className="text-[9px] uppercase font-black text-rose-900/30 tracking-[0.4em] mb-2 group-hover:text-gold/50">Costo Esistenziale</p>
+                                                <p className="text-charcoal/60 font-serif text-lg italic group-hover:text-charcoal/80">{mistake.cost}</p>
                                             </div>
                                         </div>
                                     </div>

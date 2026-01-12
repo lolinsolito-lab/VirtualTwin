@@ -64,16 +64,25 @@ export default function WallOfHooks() {
                                 transition={{ delay: index * 0.1 }}
                                 className="group relative"
                             >
-                                <div className="bg-white border border-charcoal/5 rounded-[2.5rem] p-12 transition-all duration-1000 hover:border-gold/30 hover:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] h-full flex flex-col justify-between">
-                                    <div className="w-12 h-12 rounded-2xl bg-charcoal/5 flex items-center justify-center mb-10 group-hover:bg-gold/10 transition-colors">
-                                        <law.icon className="w-6 h-6 text-charcoal/20 group-hover:text-gold transition-colors" />
+                                {/* Neural Glow Background */}
+                                <div className="absolute -inset-4 bg-gradient-to-tr from-gold/20 via-transparent to-champagne/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+
+                                <div className="relative bg-white/60 backdrop-blur-xl border border-white/40 rounded-[2.5rem] p-12 transition-all duration-1000 hover:border-gold/50 hover:shadow-[0_40px_100px_-20px_rgba(212,175,55,0.15)] h-full flex flex-col justify-between overflow-hidden group">
+                                    {/* Animated light beam */}
+                                    <div className="absolute -left-full top-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 group-hover:animate-[shine_2s_ease-in-out_infinite]" />
+
+                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-charcoal/5 to-gold/5 flex items-center justify-center mb-10 group-hover:from-gold/20 group-hover:to-gold/10 transition-all duration-700 shadow-inner">
+                                        <law.icon className="w-8 h-8 text-charcoal/20 group-hover:text-gold transition-all duration-700 group-hover:scale-110" />
                                     </div>
 
-                                    <p className="text-charcoal/80 font-serif text-2xl leading-tight italic">
+                                    <p className="text-charcoal/80 font-serif text-2xl leading-tight italic relative z-10 transition-colors duration-700 group-hover:text-charcoal">
                                         "{law.text}"
                                     </p>
 
-                                    <div className="mt-12 h-[1px] w-8 bg-gold/20 group-hover:w-full transition-all duration-1000" />
+                                    <div className="mt-12 group">
+                                        <div className="h-[2px] w-12 bg-gradient-to-r from-gold/40 to-transparent group-hover:w-full transition-all duration-1000 rounded-full" />
+                                        <div className="mt-2 text-[8px] uppercase font-black text-gold tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-opacity duration-1000">Verità Assoluta</div>
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}

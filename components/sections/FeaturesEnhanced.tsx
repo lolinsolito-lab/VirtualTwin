@@ -92,19 +92,30 @@ const FeaturesEnhanced = () => {
 
     const FeatureCard = ({ feature, index }: { feature: typeof coreFeatures[0], index: number }) => (
         <div
-            className={`group relative ${feature.cardBg} backdrop-blur-3xl rounded-[2rem] p-8 lg:p-12 border border-white/40 shadow-2xl transition-all duration-1000 hover:border-gold/30 hover:-translate-y-2`}
+            className={`group relative ${feature.cardBg} backdrop-blur-3xl rounded-[3rem] p-10 lg:p-14 border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.03)] transition-all duration-1000 hover:border-gold/50 hover:-translate-y-4 hover:shadow-[0_40px_100px_rgba(212,175,55,0.2)] overflow-hidden`}
             style={{ animationDelay: `${index * 100}ms` }}
         >
-            <div className={`w-14 h-14 ${feature.iconBg} rounded-2xl flex items-center justify-center mb-10 group-hover:bg-gold/10 transition-all duration-500`}>
-                <feature.icon className="w-6 h-6 text-charcoal/20 group-hover:text-gold transition-colors" />
+            {/* Inner Vibrant Glows */}
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-gold/20 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-champagne/20 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+
+            <div className={`w-20 h-20 ${feature.iconBg} rounded-[2rem] flex items-center justify-center mb-12 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 shadow-inner border border-white/20 group-hover:bg-gold group-hover:border-gold/50`}>
+                <feature.icon className="w-10 h-10 text-charcoal/20 group-hover:text-white transition-all duration-700" />
             </div>
 
-            <h3 className="font-serif text-2xl lg:text-3xl text-charcoal mb-4 italic group-hover:text-gold transition-colors">
+            <h3 className="font-serif text-3xl lg:text-4xl text-charcoal mb-6 italic group-hover:text-gold transition-colors duration-700 tracking-tight">
                 {feature.title}
             </h3>
-            <p className="text-charcoal/40 text-lg leading-relaxed italic font-light">
+            <p className="text-charcoal/40 text-xl leading-relaxed italic font-light group-hover:text-charcoal/70 transition-colors duration-700">
                 "{feature.desc}"
             </p>
+
+            {/* Neural activity indicator */}
+            <div className="absolute bottom-8 right-8 flex gap-1">
+                <div className="w-1 h-1 rounded-full bg-gold/40 animate-pulse" />
+                <div className="w-1 h-1 rounded-full bg-gold/20 animate-pulse delay-75" />
+                <div className="w-1 h-1 rounded-full bg-gold/10 animate-pulse delay-150" />
+            </div>
         </div>
     );
 
