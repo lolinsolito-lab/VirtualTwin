@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, Brain, Target, Shield, Zap } from 'lucide-react';
 
 interface Message {
     role: 'user' | 'bot';
@@ -125,17 +125,17 @@ const SolutionEnhanced = () => {
                         {/* Features */}
                         <div className="space-y-4">
                             {[
-                                { emoji: "⚡", title: "Risponde prima che finiscano di digitare", desc: "Meno di 2 secondi, sempre" },
-                                { emoji: "🎯", title: "Capisce chi vale il tuo tempo", desc: "Qualifica automaticamente ogni lead" },
-                                { emoji: "🎭", title: "Usa le tue parole, il tuo stile", desc: "Nessuno saprà la differenza" },
-                                { emoji: "🌙", title: "Lavora mentre sogni", desc: "24 ore, 7 giorni, 365 giorni" }
+                                { icon: Brain, title: "Precisione Neurale d'Élite", desc: "Meno di 2 secondi per risposte indistinguibili da te." },
+                                { icon: Target, title: "Qualifica Lead Intelligente", desc: "Separa istantaneamente i curiosi dai buyer reali." },
+                                { icon: Shield, title: "Protezione della Reputazione", desc: "Usa il tuo stile e la tua etica in ogni parola." },
+                                { icon: Zap, title: "Iniziativa H24 Senza Burnout", desc: "Il tuo gemello lavora mentre tu preservi la tua energia." }
                             ].map((feature, i) => (
                                 <div
                                     key={i}
                                     className="flex items-start gap-4 group cursor-default p-3 -mx-3 rounded-xl hover:bg-white/60 transition-all duration-300"
                                 >
                                     <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold group-hover:scale-110 transition-all duration-300 flex-shrink-0">
-                                        <span className="text-lg">{feature.emoji}</span>
+                                        <feature.icon className="w-5 h-5 text-gold group-hover:text-white transition-colors" />
                                     </div>
                                     <div>
                                         <p className="text-charcoal font-medium text-sm">{feature.title}</p>
@@ -160,10 +160,10 @@ const SolutionEnhanced = () => {
                                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="font-medium text-charcoal text-sm">Il VirtualTwin di Sarah</p>
+                                    <p className="font-medium text-charcoal text-sm">VirtualTwin Identity</p>
                                     <p className="text-xs text-green-600 flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                        Online ora
+                                        Configurazione Neurale Attiva
                                     </p>
                                 </div>
                                 <span className="px-2.5 py-1 bg-green-100 text-green-700 text-[8px] uppercase tracking-wider font-bold rounded-full">
@@ -260,7 +260,7 @@ const SolutionEnhanced = () => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     );
 };
 

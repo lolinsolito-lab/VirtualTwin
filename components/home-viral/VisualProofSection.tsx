@@ -14,40 +14,28 @@ import { MessageCircle, Check, ArrowRight } from 'lucide-react';
 export default function VisualProofSection() {
     const conversations = [
         {
-            title: "Qualifica in 2 Minuti",
-            description: "Il gemello capisce subito se il lead è serio",
-            messages: [
-                { from: "lead", text: "Ciao, mi mandi info sul servizio?" },
-                { from: "clone", text: "Certo! Prima di inviarti tutto, una domanda veloce: hai già un sistema per gestire i lead o parti da zero?" },
-                { from: "lead", text: "Parto da zero, ricevo 20-30 DM al giorno ma non riesco a gestirli" },
-                { from: "clone", text: "Perfetto, è esattamente il caso d'uso ideale. Ti mando il link con tutte le info e un video di 3 minuti che spiega come funziona. Quando preferisci una call per vedere il sistema live?" }
-            ],
-            annotation: "✅ Lead qualificato e call fissata in 2 min",
-            color: "from-green-500 to-emerald-600"
+            title: "Qualifica & Appuntamento",
+            description: "WhatsApp d'Élite",
+            image: "/whatsapp_proof_real_mockup_1768242467395.png",
+            annotation: "✅ Lead qualificato e link pagamento inviato in 2 min",
+            color: "from-green-500/10 to-emerald-500/5",
+            borderColor: "border-green-400/20"
         },
         {
-            title: "Gestisce Obiezioni",
-            description: "Risponde all'obiezione 'è troppo caro' come faresti tu",
-            messages: [
-                { from: "lead", text: "Interessante, ma € 147/mese mi sembra caro..." },
-                { from: "clone", text: "Ti capisco! Considera però: se risparmi anche solo 5 ore al mese (che puoi dedicare a clienti paganti), stai già recuperando l'investimento. Molti nostri clienti hanno calcolato che perdevano €2-4K/mese in vendite perse per lentezza nelle risposte." },
-                { from: "lead", text: "È vero, non ci avevo pensato così. Fammi vedere meglio" },
-                { from: "clone", text: "Certo! Hai 14 giorni di prova, zero rischi. Se non ti convince, cancelli. Ti mando il link per partire 👇" }
-            ],
-            annotation: "✅ Obiezione gestita + conversione",
-            color: "from-blue-500 to-indigo-600"
+            title: "Gestione Obiezioni",
+            description: "Instagram Direct",
+            image: "/instagram_proof_real_mockup_1768242485974.png",
+            annotation: "✅ Obiezione prezzo gestita con empatia",
+            color: "from-purple-500/10 to-pink-500/5",
+            borderColor: "border-purple-400/20"
         },
         {
-            title: "Chiude la Vendita",
-            description: "Invia link pagamento e chiude autonomamente",
-            messages: [
-                { from: "lead", text: "Ok, voglio provare. Come faccio?" },
-                { from: "clone", text: "Perfetto! 🎉 Ecco come parti:\n\n1. Attivi il piano Pioniere (€147/mese, cancelli quando vuoi)\n2. Setup guidato in 10 minuti\n3. Sei live\n\n👉 Link diretto: virtualtwin.app/start\n\nProva 14 giorni gratis, nessun vincolo." },
-                { from: "lead", text: "Fatto! Ho completato l'acquisto 👍" },
-                { from: "clone", text: "Grande! 🚀 Riceverai email con accesso. Benvenuto in VirtualTwin!" }
-            ],
-            annotation: "✅ Vendita completata autonomamente",
-            color: "from-purple-500 to-violet-600"
+            title: "Supporto H24",
+            description: "Messenger Notturno",
+            image: "/messenger_proof_real_mockup_1768242505400.png",
+            annotation: "✅ Risposta tecnica precisa alle 3:14 AM",
+            color: "from-blue-500/10 to-cyan-500/5",
+            borderColor: "border-blue-400/20"
         }
     ];
 
@@ -94,25 +82,16 @@ export default function VisualProofSection() {
                                     </p>
                                 </div>
 
-                                {/* Chat Mockup */}
-                                <div className="p-6 bg-gray-50 min-h-[400px] space-y-3">
-                                    {conv.messages.map((msg, i) => (
-                                        <div
-                                            key={i}
-                                            className={`flex ${msg.from === 'clone' ? 'justify-end' : 'justify-start'}`}
-                                        >
-                                            <div
-                                                className={`max-w-[85%] rounded-2xl px-4 py-3 ${msg.from === 'clone'
-                                                        ? 'bg-gradient-to-r ' + conv.color + ' text-white rounded-br-sm'
-                                                        : 'bg-white border-2 border-charcoal/10 text-charcoal/80 rounded-bl-sm'
-                                                    }`}
-                                            >
-                                                <p className="text-sm leading-relaxed whitespace-pre-line">
-                                                    {msg.text}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
+                                {/* iPhone Mockup Visual */}
+                                <div className="p-4 bg-charcoal/5 min-h-[450px]">
+                                    <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-charcoal aspect-[9/19.5]">
+                                        <img
+                                            src={conv.image}
+                                            alt={conv.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/20 to-transparent pointer-events-none" />
+                                    </div>
                                 </div>
 
                                 {/* Annotation */}
@@ -127,6 +106,39 @@ export default function VisualProofSection() {
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* Dashboard Neural Hub Preview */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="mt-32 relative"
+                    >
+                        <div className="text-center mb-12">
+                            <h3 className="font-serif text-3xl md:text-5xl text-charcoal mb-4">
+                                Un Pannello di Comando <span className="italic gold-text-gradient">Imperiale</span>
+                            </h3>
+                            <p className="text-charcoal/50 max-w-2xl mx-auto">
+                                Neural Hub: Dove l'intelligenza artificiale incontra il controllo assoluto. <br />
+                                Monitora ogni conversazione, analisi e conversione in tempo reale.
+                            </p>
+                        </div>
+
+                        <div className="relative group p-4 bg-charcoal rounded-[2.5rem] shadow-3xl border border-gold/20 overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-gold/10 to-transparent pointer-events-none" />
+                            <img
+                                src="/elite_dashboard_mockup_1_1768242446427.png"
+                                alt="Neural Hub Dashboard"
+                                className="w-full h-auto rounded-3xl shadow-2xl group-hover:scale-[1.01] transition-transform duration-1000"
+                            />
+
+                            {/* Dashboard Floating Badges */}
+                            <div className="absolute top-10 left-10 hidden md:flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                                <div className="w-3 h-3 bg-gold rounded-full animate-pulse" />
+                                <span className="text-xs text-white font-bold uppercase tracking-widest">Neural Link Active</span>
+                            </div>
+                        </div>
+                    </motion.div>
 
                     {/* CTA */}
                     <motion.div
