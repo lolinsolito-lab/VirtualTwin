@@ -85,13 +85,14 @@ export default function HeroEmotionalPunch() {
                     >
                         {/* The Existential Shift */}
                         <div className="relative py-12 px-6">
-                            <h1 className="font-serif text-5xl md:text-9xl text-charcoal mb-8 leading-[0.85] tracking-tighter">
-                                Sii <span className="text-gold italic">Ovunque.</span><br />
-                                Torna a <span className="text-gold">Casa.</span>
+                            <h1 className="font-serif text-5xl md:text-[8.5rem] text-charcoal mb-12 leading-[0.85] tracking-tighter">
+                                Sii Ovunque. <br />
+                                <span className="text-gold italic">Sii Libero.</span>
                             </h1>
-                            <p className="text-xl md:text-3xl text-charcoal/40 max-w-2xl mx-auto leading-relaxed font-light">
-                                "La tecnologia dovrebbe essere magia invisibile. <br />
-                                <strong className="text-charcoal/80">Affidale il mondo, riprenditi la tua vita."</strong>
+
+                            <p className="text-xl md:text-3xl text-charcoal/40 max-w-4xl mx-auto leading-relaxed font-light italic mb-16 px-4">
+                                "La tecnologia è la <span className="text-gold font-medium">magia invisibile</span> che hai sempre desiderato: <br />
+                                <span className="text-charcoal/60">scala il mondo per te, mentre tu finalmente ti riprendi la tua vita."</span>
                             </p>
                         </div>
 
@@ -221,7 +222,7 @@ export default function HeroEmotionalPunch() {
                         </div>
                     </motion.div>
                 </div>
-            </div>
-        </section>
+            </div >
+        </section >
     );
 }
