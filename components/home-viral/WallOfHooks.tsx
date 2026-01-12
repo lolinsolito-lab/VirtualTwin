@@ -14,11 +14,11 @@ import { Sparkles, Bot, Shield, Unlock, Moon, Zap, Infinity } from 'lucide-react
 export default function WallOfHooks() {
     const laws = [
         {
-            text: "Presenza Neurale Permanente. Tu vivi. Il Genio espande l'Impero.",
+            text: "Ubiquità Sovrana. Tu vivi. Il Genio espande l'Impero.",
             icon: Bot
         },
         {
-            text: "Oltre il Bot. Oltre l'Umano. L'Identità che non conosce stanchezza.",
+            text: "Presenza Inviolabile. L'Identità che non conosce stanchezza.",
             icon: Infinity
         },
         {
@@ -26,12 +26,20 @@ export default function WallOfHooks() {
             icon: Zap
         },
         {
-            text: "L'Autorità è Silenziosa. Un'Intelligenza che agisce esattamente come te.",
+            text: "L'Autorità è Silenziosa. Un'Essenza che agisce esattamente come te.",
             icon: Shield
         },
         {
-            text: "L'Eccellenza non dorme. Massimizza l'impatto mentre ti rigeneri.",
+            text: "L'Eccellenza Permanente. Massimizza l'impatto mentre ti rigeneri.",
             icon: Moon
+        },
+        {
+            text: "Il Monopolio del Genio. Sei ovunque, ma resti unico.",
+            icon: Sparkles
+        },
+        {
+            text: "BONUS: Il Silenzio dei Risultati. Parla la tua visione, non il tuo sforzo.",
+            icon: Unlock
         }
     ];
 
@@ -53,16 +61,16 @@ export default function WallOfHooks() {
                         </h2>
                     </motion.div>
 
-                    {/* Hooks Grid - LUXURY STYLE (Flexbox for centering) */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
+                    {/* Hooks Grid - LUXURY STYLE (Centering 7 items) */}
+                    <div className="flex flex-wrap justify-center gap-12 max-w-7xl mx-auto">
                         {laws.map((law, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, scale: 0.98 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="group relative"
+                                className="group relative w-full md:w-[calc(33.333%-2rem)] lg:w-[calc(33.333%-2rem)] min-h-[400px]"
                             >
                                 {/* Sovereign Glow Background - PERSISTENT */}
                                 <div className="absolute -inset-4 bg-gradient-to-tr from-gold/10 via-transparent to-champagne/5 blur-2xl opacity-100 group-hover:from-gold/30 group-hover:to-gold/10 transition-all duration-1000" />
@@ -88,18 +96,7 @@ export default function WallOfHooks() {
                         ))}
                     </div>
 
-                    {/* Usage Note */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.6 }}
-                        className="mt-12 text-center"
-                    >
-                        <p className="text-charcoal/50 text-sm italic">
-                            💡 Ogni frase = Hook pronto per ads, headline, primary text
-                        </p>
-                    </motion.div>
+
                 </div>
             </div>
         </section>

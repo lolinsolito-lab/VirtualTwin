@@ -10,6 +10,7 @@ import DualOptionOverlay from '@/components/DualOptionOverlay';
 import CountdownTimer from '@/components/CountdownTimer';
 import { isAspiranteVisible } from '@/lib/features';
 import PlanDetailModal from '@/components/PlanDetailModal';
+import FuturePricingUrgency from './FuturePricingUrgency';
 
 // =============================================
 // PROPS: pricingMode controls display behavior
@@ -389,6 +390,9 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                             </p>
                         </div>
                     )}
+
+                    {/* Future Pricing Urgency Widget */}
+                    {isShowingFounder && <FuturePricingUrgency />}
                 </div>
 
                 {/* PRICING GRID */}
