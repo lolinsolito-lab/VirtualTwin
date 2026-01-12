@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { X, Check, TrendingUp, Clock, Moon } from 'lucide-react';
+import { X, Check, TrendingUp, Clock, Moon, Sparkles } from 'lucide-react';
 
 /**
  * Today Tomorrow Stories Component - LUXURY EDITION
