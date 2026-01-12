@@ -14,36 +14,34 @@ import { MessageSquare, Brain, Link2, Rocket, CheckCircle2 } from 'lucide-react'
 export default function SetupStoryNarrative() {
     const genesis = [
         {
-            time: "3 MIN",
+            minutes: "Capitolo I",
             icon: MessageSquare,
-            title: "Trascrizione del Genio",
-            story: "Niente codici. Solo una conversazione guidata sul tuo business. Trascriviamo il tuo modo unico di vendere.",
-            detail: "La tua etica, le tue chiusure, la tua anima commerciale riversata nel silicio.",
-            color: "text-gold"
+            title: "L'Essenza Neurale",
+            story: "Il sistema estrae il tuo DNA imprenditoriale attraverso domande profonde. Non è un database, è il tuo modo di guardare il mercato.",
+            example: "Esempio: 'Qual è la tua verità inconfutabile che nessun concorrente osa dire?'",
+            detail: "Tu riversi la tua visione. Il sistema la cristallizza nel silenzio.",
+            color: "from-blue-500 to-indigo-600",
+            bg: "bg-blue-50"
         },
         {
-            time: "3 MIN",
-            icon: Brain,
-            title: "Sincronizzazione Neurale",
-            story: "Il sistema assorbe la tua voce. Studia il battito delle tue parole e la tua autorità.",
-            detail: "Non crea un assistente. Crea una proiezione digitale che parla esattamente come te.",
-            color: "text-gold"
+            minutes: "Capitolo II",
+            icon: Mic2,
+            title: "L'Iniezione della Voce",
+            story: "Il Gemello assorbe ogni sfumatura, ogni silenzio, ogni tua intuizione. Impara a pensare con la tua logica strategica.",
+            example: "Esempio: 'Come trasformi un'obiezione in una conferma di prestigio?'",
+            detail: "Il tuo stile diventa un algoritmo di persuasione immortale.",
+            color: "from-purple-500 to-pink-600",
+            bg: "bg-purple-50"
         },
         {
-            time: "3 MIN",
-            icon: Link2,
-            title: "Integrazione Invisibile",
-            story: "WhatsApp, Instagram, il tuo ecosistema. Un solo click per dare vita al tuo gemello.",
-            detail: "La tecnologia scompare. Resta solo l'efficienza pura in ogni canale.",
-            color: "text-gold"
-        },
-        {
-            time: "1 MIN",
+            minutes: "Capitolo III",
             icon: Rocket,
-            title: "Metamorfosi Live",
-            story: "Supervisioni le prime parole. Sorridi. E lo lasci dominare il mercato mentre tu torni a vivere.",
-            detail: "Lui vende. Tu scali. Il limite biologico è ufficialmente infranto.",
-            color: "text-gold"
+            title: "La Nascita del Gemello",
+            story: "La metamorfosi è completa. Hai appena ottenuto il dono dell'ubiquità. Il tuo impero ora scala nel silenzio.",
+            example: "Risultato: 'Un'identità che vince al posto tuo, mentre tu finalmente respiri.'",
+            detail: "La tecnologia diventa invisibile. La tua libertà diventa assoluta.",
+            color: "from-amber-500 to-orange-600",
+            bg: "bg-amber-50"
         }
     ];
 

@@ -13,9 +13,9 @@ export default function SocialProofHuman() {
     const caseStudy = {
         name: "Marco G.",
         role: "Founder & High-Performance Coach",
-        transformation: "Dalla saturazione digitale alla libertà creativa assoluta.",
-        story: "Marco gestiva 150+ DM al giorno. Il suo business cresceva, ma la sua vita si restringeva allo schermo di uno smartphone. L'eccellenza era diventata una prigione biologica.",
-        outcome: "Oggi, il suo gemello digitale gestisce l'80% del primo contatto e della qualifica. Marco è tornato a guidare la visione, mentre la sua presenza neurale protegge e scala il suo brand, senza che lui debba digitare una sola parola."
+        transformation: "Dalla saturazione operativa alla sovranità creativa.",
+        story: "Marco gestiva 150+ interazioni al giorno. Il suo business cresceva, ma la sua vita era ostaggio di uno schermo. L'eccellenza era diventata un limite biologico invalicabile.",
+        outcome: "Oggi, la sua Essenza Neurale governa il mercato mentre lui governa la visione. Il suo gemello non si limita a rispondere: protegge il suo brand e scala la sua influenza nel silenzio assoluto dei risultati."
     };
 
     return (
@@ -37,7 +37,7 @@ export default function SocialProofHuman() {
                             </div>
 
                             <h3 className="font-serif text-4xl md:text-6xl text-charcoal leading-[1.1]">
-                                Il Fondatore <br /> <span className="text-gold italic">Liberato.</span>
+                                La Metamorfosi <br /> <span className="text-gold italic">del Fondatore.</span>
                             </h3>
 
                             <div className="space-y-6 text-charcoal/70 text-lg leading-relaxed italic">
@@ -142,8 +142,8 @@ export default function SocialProofHuman() {
 
                             {/* Info */}
                             <div className="absolute bottom-10 left-10 text-left">
-                                <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mb-1">Authentic Audit</p>
-                                <h5 className="text-white font-serif text-2xl italic">Vedi la Trasformazione in Tempo Reale</h5>
+                                <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mb-1">Elite Insight</p>
+                                <h5 className="text-white font-serif text-2xl italic">L'Inconfutabile: La Magia in Azione</h5>
                             </div>
                         </div>
                     </motion.div>
@@ -178,7 +178,7 @@ export default function SocialProofHuman() {
                                     href="#pricing"
                                     className="inline-flex items-center gap-4 px-10 py-5 bg-gold text-charcoal rounded-2xl font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all shadow-luxury-gold"
                                 >
-                                    Richiedi Accesso Genesis
+                                    Inizia la tua Trasformazione
                                     <TrendingUp className="w-5 h-5" />
                                 </a>
                             </div>
