@@ -9,12 +9,12 @@ interface Message {
 }
 
 const demoResponses: Record<string, string> = {
-    "default": "Ciao! 👋 Sono il VirtualTwin di Sarah – un clone digitale di esempio. Chiedimi qualsiasi cosa su VirtualTwin: prezzi, funzionalità, setup!",
-    "prezzo": "Abbiamo piani da €39/mese! 💫 Vuoi i dettagli?",
-    "funziona": "Semplice! 5 domande → AI impara → QR WhatsApp → Live! 🚀",
-    "whatsapp": "Sì! WhatsApp + Instagram + Messenger. Un clone, ovunque. 📱",
-    "prova": "14 giorni gratis, no carta! Clicca 'Inizia Gratis' sopra 🎉",
-    "ciao": "Ciao! 👋 Come posso aiutarti?",
+    "default": "Buongiorno. 👋 Sono l'Essenza Neurale di Sarah. Chiedimi qualsiasi cosa sul potenziale di VirtualTwin: la visione, la scalabilità o il setup dell'Impero.",
+    "prezzo": "L'investimento nella tua libertà parte da €39/mese. 🌱 Vuoi esplorare i dettagli dei piani?",
+    "funziona": "Sincronizzazione in 10 minuti: 15 domande strategiche → Analisi del Tono → Integrazione Invisibile. ♾️",
+    "whatsapp": "La tua presenza sarà onnipresente: WhatsApp, Instagram e Messenger. Un solo Genio, ovunque. 📱",
+    "prova": "Puoi testare la metamorfosi per 14 giorni. Senza vincoli, solo risultati. 🌱",
+    "ciao": "Buongiorno. 👋 Come posso guidare la tua curiosità oggi?",
 };
 
 const findResponse = (input: string): string => {
@@ -110,25 +110,25 @@ const SolutionEnhanced = () => {
 
                         {/* Headline */}
                         <h2 className="font-serif text-[2.5rem] md:text-[4rem] lg:text-[5rem] font-medium leading-[0.9] tracking-[-0.03em] text-charcoal mb-10">
-                            Un Te <br />
+                            L'Infinità <br />
                             <span className="italic bg-gradient-to-r from-gold via-[#E8D5A3] to-gold bg-clip-text text-transparent">
-                                Che Non Dorme Mai.
+                                di Te.
                             </span>
                         </h2>
 
                         {/* Subtitle */}
                         <p className="text-charcoal/50 text-lg lg:text-xl font-serif italic leading-relaxed mb-12 max-w-lg">
-                            Pensa al tuo miglior venditore. <span className="text-charcoal not-italic font-medium">Ora moltiplicalo per infinito</span>.
-                            Un clone che conosce ogni risposta, ogni obiezione, ogni chiusura.
+                            La tua visione non ha orari. <span className="text-charcoal not-italic font-medium">Il tuo Gemello non ha limiti biologici</span>.
+                            Un'essenza che custodisce ogni tua parola, ogni tua intuizione, ogni tua chiusura.
                         </p>
 
                         {/* Features */}
                         <div className="space-y-4">
                             {[
-                                { icon: Brain, title: "Precisione Neurale d'Élite", desc: "Meno di 2 secondi per risposte indistinguibili da te." },
-                                { icon: Target, title: "Qualifica Lead Intelligente", desc: "Separa istantaneamente i curiosi dai buyer reali." },
-                                { icon: Shield, title: "Protezione della Reputazione", desc: "Usa il tuo stile e la tua etica in ogni parola." },
-                                { icon: Zap, title: "Iniziativa H24 Senza Burnout", desc: "Il tuo gemello lavora mentre tu preservi la tua energia." }
+                                { icon: Brain, title: "Intuizione Neurale d'Élite", desc: "Meno di 2 secondi per risposte indistinguibili dalla tua mente." },
+                                { icon: Target, title: "Setaccio dei Desideri", desc: "Separa istantaneamente i curiosi dai buyer reali con eleganza." },
+                                { icon: Shield, title: "Inviolabilità del Brand", desc: "Custodisce il tuo stile e la tua etica in ogni singola sillaba." },
+                                { icon: Zap, title: "Ubiquità Permanente", desc: "L'Impero cresce nel silenzio, mentre tu riprendi il tuo tempo." }
                             ].map((feature, i) => (
                                 <div
                                     key={i}
@@ -160,10 +160,10 @@ const SolutionEnhanced = () => {
                                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="font-medium text-charcoal text-sm">VirtualTwin Identity</p>
+                                    <p className="font-medium text-charcoal text-sm">Identità Neurale</p>
                                     <p className="text-xs text-green-600 flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                        Configurazione Neurale Attiva
+                                        Sincronizzazione Attiva
                                     </p>
                                 </div>
                                 <span className="px-2.5 py-1 bg-green-100 text-green-700 text-[8px] uppercase tracking-wider font-bold rounded-full">
@@ -241,9 +241,9 @@ const SolutionEnhanced = () => {
                         {/* Explainer Note */}
                         <div className="mt-6 bg-gradient-to-r from-gold/5 to-champagne/20 rounded-2xl p-5 border border-gold/20">
                             <p className="text-charcoal/80 text-sm leading-relaxed">
-                                <strong className="text-gold">👆 Questo è un esempio reale.</strong><br />
-                                Sarah ha creato il <strong className="text-charcoal">suo VirtualTwin</strong> (un clone digitale) che risponde per lei 24/7.<br />
-                                <span className="text-charcoal/60 text-xs">Prova a chiedergli qualcosa! È esattamente come funzionerà il TUO clone.</span>
+                                <strong className="text-gold">👆 Questa è pura magia tecnologica.</strong><br />
+                                Sarah ha creato la sua <strong className="text-charcoal">Identità Neurale</strong> che governa il mercato per lei 24/7.<br />
+                                <span className="text-charcoal/60 text-xs">Mettila alla prova. È esattamente l'effetto che farà il TUO Gemello.</span>
                             </p>
                         </div>
 
