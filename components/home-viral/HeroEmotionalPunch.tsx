@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Moon, Sun, Bell, MapPin, Sparkles, Zap } from 'lucide-react';
+import { Moon, Sun, Bell, MapPin, Sparkles, Zap, Globe } from 'lucide-react';
 
 /**
  * Hero Emotional Punch Component
@@ -55,9 +55,9 @@ export default function HeroEmotionalPunch() {
 
                         <div className="relative z-10 flex flex-col items-center group">
                             <div className="w-12 h-12 rounded-full border border-charcoal/10 bg-white flex items-center justify-center text-charcoal/40 group-hover:text-gold group-hover:border-gold transition-all duration-700">
-                                <Moon className="w-5 h-5" />
+                                <Globe className="w-5 h-5" />
                             </div>
-                            <span className="mt-4 text-[9px] uppercase tracking-[0.4em] text-charcoal/30">Mondo</span>
+                            <span className="mt-4 text-[9px] uppercase tracking-[0.4em] text-charcoal/30">Il Mercato</span>
                         </div>
 
                         <div className="relative z-10 flex flex-col items-center">
@@ -65,14 +65,14 @@ export default function HeroEmotionalPunch() {
                                 <div className="absolute inset-0 bg-gold/20 rounded-full animate-ping opacity-20" />
                                 <Sparkles className="w-6 h-6 text-gold" />
                             </div>
-                            <span className="mt-4 text-[10px] uppercase tracking-[0.5em] text-gold font-black">Genio</span>
+                            <span className="mt-4 text-[10px] uppercase tracking-[0.5em] text-gold font-black">La Magia</span>
                         </div>
 
                         <div className="relative z-10 flex flex-col items-center group">
                             <div className="w-12 h-12 rounded-full border border-charcoal/10 bg-white flex items-center justify-center text-charcoal/40 group-hover:text-gold group-hover:border-gold transition-all duration-700">
                                 <Sun className="w-5 h-5" />
                             </div>
-                            <span className="mt-4 text-[9px] uppercase tracking-[0.4em] text-charcoal/30">Casa</span>
+                            <span className="mt-4 text-[9px] uppercase tracking-[0.4em] text-charcoal/30">La Vita</span>
                         </div>
                     </motion.div>
 
