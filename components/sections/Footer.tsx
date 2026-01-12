@@ -100,7 +100,7 @@ const Footer = () => {
 
                         {/* Center: Essential Links */}
                         <nav className="flex items-center gap-6 text-[10px] uppercase tracking-widest text-white/40 font-bold">
-                            <a href="#solution" className="hover:text-gold transition-colors">Vision</a>
+                            <Link href="/vision" className="hover:text-gold transition-colors">Vision</Link>
                             <a href="#pricing" className="hover:text-gold transition-colors">Piani</a>
                             <Link href="/contact" className="hover:text-gold transition-colors">Supporto</Link>
                         </nav>

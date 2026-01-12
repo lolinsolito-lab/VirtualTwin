@@ -11,10 +11,10 @@ import { TrendingUp, Play, CheckCircle2 } from 'lucide-react';
  */
 export default function SocialProofHuman() {
     const caseStudy = {
-        name: "Marco G.",
-        role: "Founder & High-Performance Coach",
+        name: "Michael J.",
+        role: "Founder & Visionary",
         transformation: "Dalla saturazione operativa alla sovranità creativa.",
-        story: "Marco gestiva 150+ interazioni al giorno. Il suo business cresceva, ma la sua vita era ostaggio di uno schermo. L'eccellenza era diventata un limite biologico invalicabile.",
+        story: "Michael gestiva 150+ interazioni al giorno. Il suo business cresceva, ma la sua vita era ostaggio di uno schermo. L'eccellenza era diventata un limite biologico invalicabile.",
         outcome: "Oggi, la sua Essenza Sovrana governa il mercato mentre lui governa la visione. Il suo gemello non si limita a rispondere: protegge il suo brand e scala la sua influenza nel silenzio assoluto dei risultati."
     };
 
@@ -48,7 +48,7 @@ export default function SocialProofHuman() {
                             </div>
 
                             <div className="pt-8 flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-charcoal flex items-center justify-center text-white font-serif font-bold">MG</div>
+                                <div className="w-12 h-12 rounded-full gold-gradient flex items-center justify-center text-white font-serif font-bold">MJ</div>
                                 <div>
                                     <p className="font-serif text-xl text-charcoal font-bold leading-none">{caseStudy.name}</p>
                                     <p className="text-gold text-[10px] uppercase tracking-widest mt-1 font-black">{caseStudy.role}</p>
@@ -65,9 +65,9 @@ export default function SocialProofHuman() {
                             <div className="absolute -inset-4 bg-gradient-to-tr from-gold/20 via-transparent to-gold/10 blur-3xl opacity-50" />
                             <div className="relative rounded-[3rem] overflow-hidden border border-gold/20 shadow-3xl aspect-[4/5] bg-charcoal">
                                 <img
-                                    src="/avatar_coaching_elite_man_1768245490457.png"
-                                    alt="Elite Founder Transformation"
-                                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000"
+                                    src="/images/michael-founder.png"
+                                    alt="Michael - VirtualTwin Founder"
+                                    className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
                                 />
 
                                 {/* Floating Label */}
