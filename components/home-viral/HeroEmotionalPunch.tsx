@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Moon, Sun, Bell } from 'lucide-react';
+import { Moon, Sun, Bell, MapPin, Sparkles, Zap } from 'lucide-react';
 
 /**
  * Hero Emotional Punch Component
@@ -12,6 +12,29 @@ import { Moon, Sun, Bell } from 'lucide-react';
  * Usage: Homepage hero - emotional hook for cold audience
  */
 export default function HeroEmotionalPunch() {
+    const chapters = [
+        {
+            title: "Milano · Visione",
+            location: "Porta Nuova Skyline",
+            desc: "Addestramento neurale e scalabilità.",
+            position: "object-top",
+            icon: Zap
+        },
+        {
+            title: "Roma · Storytelling",
+            location: "Terrazza Colosseo",
+            desc: "Empatia e vendita strategica.",
+            position: "object-center",
+            icon: Sparkles
+        },
+        {
+            title: "Firenze · Unicità",
+            location: "Studio Artistico",
+            desc: "Identità e voce inconfondibile.",
+            position: "object-bottom",
+            icon: MapPin
+        }
+    ];
     return (
         <section className="relative z-10 py-20 md:py-32 bg-gradient-to-b from-champagne/30 via-white to-champagne/20">
             <div className="container mx-auto px-6">
@@ -101,31 +124,64 @@ export default function HeroEmotionalPunch() {
                             </p>
                         </div>
 
-                        {/* DIGITAL TWIN VISUAL HOOK - Italian Elite Edition */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, ease: "easeOut" }}
-                            className="relative group mt-12 mb-16"
-                        >
-                            <div className="absolute -inset-2 bg-gold/10 blur-2xl rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                            <div className="relative rounded-[2.5rem] overflow-hidden border border-gold/30 shadow-luxury-gold aspect-[4/3] md:aspect-auto">
-                                <img
-                                    src="/digital_twin_hologram.png"
-                                    alt="VirtualTwin in Action - Milano, Roma, Firenze"
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent pointer-events-none" />
+                        {/* DIGITAL TWIN STORYBOARD - Responsive Fix */}
+                        <div className="mt-16 mb-20">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {chapters.map((chapter, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.2 }}
+                                        className="relative group rounded-[2rem] overflow-hidden border border-gold/20 shadow-xl bg-charcoal"
+                                    >
+                                        <div className="aspect-[16/10] md:aspect-[3/4] lg:aspect-[3/5] relative">
+                                            <img
+                                                src="/hero_storyboard.jpg"
+                                                alt={chapter.title}
+                                                className={`absolute inset-0 w-full h-[300%] max-w-none ${chapter.position === 'object-top' ? 'top-0' : chapter.position === 'object-center' ? '-top-[100%]' : '-top-[200%]'} object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700`}
+                                            />
+                                            {/* Overlays */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent opacity-80" />
+                                            <div className="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                                <div className="absolute bottom-8 left-0 right-0 px-8 text-center">
-                                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal/80 backdrop-blur-md rounded-full border border-gold/20 mb-4">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-                                        <span className="text-[10px] uppercase tracking-widest text-white/90 font-black">Sovereign Presence: Live 24/7</span>
-                                    </div>
-                                </div>
+                                            {/* Info */}
+                                            <div className="absolute bottom-6 left-6 right-6 text-left">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <div className="p-1.5 rounded-lg bg-gold/20 backdrop-blur-md border border-gold/30">
+                                                        <chapter.icon className="w-3.5 h-3.5 text-gold" />
+                                                    </div>
+                                                    <span className="text-[10px] uppercase tracking-[0.2em] font-black text-white/90">
+                                                        {chapter.title}
+                                                    </span>
+                                                </div>
+                                                <h4 className="text-white font-serif italic text-lg mb-1">{chapter.location}</h4>
+                                                <p className="text-white/50 text-[10px] uppercase tracking-wider">{chapter.desc}</p>
+                                            </div>
+
+                                            {/* Badge */}
+                                            <div className="absolute top-4 right-4 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                                                <span className="text-[8px] text-white/60 font-black uppercase tracking-widest italic">Chapter 0{index + 1}</span>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
                             </div>
-                        </motion.div>
+
+                            {/* Visual Narrative Footer Badge */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                className="mt-8 flex items-center justify-center gap-4"
+                            >
+                                <div className="h-px w-12 bg-gold/20" />
+                                <p className="text-[10px] uppercase tracking-[0.4em] text-gold font-black">
+                                    Presenza Sovrana · Ovunque. Sempre.
+                                </p>
+                                <div className="h-px w-12 bg-gold/20" />
+                            </motion.div>
+                        </div>
 
                         {/* Punch Line */}
                         <motion.div
