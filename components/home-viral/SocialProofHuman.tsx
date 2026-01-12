@@ -58,7 +58,7 @@ export default function SocialProofHuman() {
                         </p>
                     </motion.div>
 
-                    {/* Community Stats */}
+                    {/* Genesis Wave Scarcity */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -66,27 +66,21 @@ export default function SocialProofHuman() {
                         transition={{ delay: 0.6 }}
                         className="bg-gradient-to-br from-gold/10 to-amber-100 rounded-3xl p-10 border-2 border-gold/40 text-center"
                     >
-                        <h3 className="text-3xl font-serif text-charcoal mb-6">
-                            Unisciti a <span className="text-gold">500+ Professionisti</span>
+                        <h3 className="text-3xl font-serif text-charcoal mb-4">
+                            🚀 Pre-Lancio <span className="text-gold">Wave Genesis</span>
                         </h3>
+                        <p className="text-xl text-charcoal/60 max-w-2xl mx-auto mb-8">
+                            VirtualTwin è in fase di lancio esclusivo. <br />
+                            I primi <strong className="text-charcoal">20 Founder</strong> della Wave Genesis bloccano il prezzo per sempre.
+                        </p>
 
-                        <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-                            <div>
-                                <p className="text-5xl font-black text-gold mb-2">500+</p>
-                                <p className="text-charcoal/70">Gemelli Digitali Attivi</p>
-                            </div>
-                            <div>
-                                <p className="text-5xl font-black text-gold mb-2">1.2M+</p>
-                                <p className="text-charcoal/70">Conversazioni Gestite</p>
-                            </div>
-                            <div>
-                                <p className="text-5xl font-black text-gold mb-2">€3.4M+</p>
-                                <p className="text-charcoal/70">Vendite Automatizzate</p>
-                            </div>
+                        <div className="flex flex-col items-center justify-center">
+                            <p className="text-6xl font-black text-gold mb-2">20</p>
+                            <p className="text-charcoal/70 uppercase tracking-widest text-xs font-bold">Posti Disponibili in Wave Genesis</p>
                         </div>
 
                         <p className="text-charcoal/50 text-sm mt-8 italic">
-                            📊 Dati aggiornati - Gennaio 2026
+                            ⏳ L'opportunità Founder si chiude al completamento della wave.
                         </p>
                     </motion.div>
 

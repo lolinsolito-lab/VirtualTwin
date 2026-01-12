@@ -106,7 +106,7 @@ export default function TodayTomorrowStories() {
                             La Tua Giornata <span className="text-gold italic">Trasformata</span>
                         </h2>
                         <p className="text-xl text-charcoal/60 max-w-3xl mx-auto">
-                            Non sono promesse. Sono scenari reali che vivono <strong className="text-charcoal">500+ professionisti</strong> ogni giorno.
+                            Questo è il futuro del business conversazionale. <strong className="text-gold italic">E sta arrivando.</strong>
                         </p>
                     </motion.div>
 
@@ -209,7 +209,7 @@ export default function TodayTomorrowStories() {
                         className="text-center mt-12"
                     >
                         <p className="text-charcoal/50 text-sm italic">
-                            📊 Dati basati su oltre <strong className="text-gold">500+ professionisti</strong> che usano VirtualTwin
+                            📈 Basato su proiezioni di mercato e analisi dell'automazione neurale.
                         </p>
                     </motion.div>
                 </div>

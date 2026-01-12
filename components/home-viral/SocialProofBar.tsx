@@ -27,18 +27,18 @@ export default function SocialProofBar() {
     const stats = [
         {
             value: foundersCount.toString(),
-            label: "Beta-Tester Monitorati",
+            label: "Founder Wave Genesis",
             icon: Users
         },
         {
-            value: "1.200h+",
-            label: "Addestramento Neurale",
-            icon: TrendingUp
+            value: "1.2M+",
+            label: "Messaggi per Addestramento",
+            icon: MessageSquare
         },
         {
-            value: "1.2M+",
-            label: "Messaggi Analizzati",
-            icon: MessageSquare
+            value: "24/7",
+            label: "Operatività Neurale",
+            icon: TrendingUp
         }
     ];
 
@@ -49,10 +49,10 @@ export default function SocialProofBar() {
                     {/* Header */}
                     <div className="text-center mb-12">
                         <p className="text-gold text-[10px] uppercase tracking-[0.4em] font-black mb-4">
-                            Sviluppo Basato su Dati Reali
+                            Dall'Idea alla Realtà Digitale
                         </p>
                         <h2 className="font-serif text-2xl md:text-3xl text-white italic">
-                            Nato da un Audit su <span className="text-gold">250+ Agenzie</span> e Professionisti
+                            Sviluppato con <span className="text-gold">Tecnologia AI d'Avanguardia</span>
                         </h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">

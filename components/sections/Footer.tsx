@@ -76,7 +76,7 @@ const Footer = () => {
                                 <h3 className="font-serif text-xl text-charcoal italic">{modalContent[activeModal].title}</h3>
                             </div>
                             {modalContent[activeModal].content}
-                            <p className="mt-6 text-charcoal/30 text-xs">Ultimo aggiornamento: Dicembre 2025</p>
+                            <p className="mt-6 text-charcoal/30 text-xs">Ultimo aggiornamento: Gennaio 2026</p>
                         </div>
                     </div>
                 </div>

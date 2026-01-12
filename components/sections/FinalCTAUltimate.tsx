@@ -111,7 +111,7 @@ const FinalCTAUltimate = () => {
                                     </div>
                                 </div>
                                 <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black">
-                                    Sviluppo Basato su Audit Reale
+                                    Sviluppato con Tecnologia AI d'Avanguardia
                                 </p>
                             </div>
                         </div>
