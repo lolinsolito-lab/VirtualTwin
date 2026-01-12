@@ -382,11 +382,8 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
                                     </div>
                                 </button>
                             </div>
-
-                    )}
                         </div>
-
-                {/* PRICING GRID */}
+                    )}
 
                     {/* PRICING GRID */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-x-8 lg:gap-y-16 max-w-6xl mx-auto auto-rows-fr">
