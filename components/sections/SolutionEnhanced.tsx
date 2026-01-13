@@ -174,12 +174,26 @@ const SolutionEnhanced = () => {
                             {/* Messages */}
                             <div className="h-[280px] overflow-y-auto p-4 space-y-3">
                                 {messages.map((msg, i) => (
-                                    <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                                        <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-charcoal text-white' : 'gold-gradient text-white'}`}>
-                                            {msg.role === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
+                                    <div key={i} className={`flex gap-2 ${msg.type === 'user' ? 'flex-row-reverse' : ''}`}>
+                                        <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${msg.type === 'user' ? 'bg-charcoal text-white' : 'gold-gradient text-white'}`}>
+                                            {msg.type === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
                                         </div>
-                                        <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${msg.role === 'user' ? 'bg-charcoal text-white rounded-tr-sm' : 'bg-champagne text-charcoal rounded-tl-sm'}`}>
-                                            <p className="text-sm">{msg.content}</p>
+                                        <div className={`p-4 rounded-2xl ${msg.type === 'user' ? 'bg-charcoal text-white rounded-tr-none' : 'bg-white border border-charcoal/5 rounded-tl-none shadow-sm'}`}>
+                                            <p className="text-sm md:text-base">{msg.text}</p>
+
+                                            {/* VIRAL TRIGGER #1 & #2: AI Signature & Powered By */}
+                                            {msg.type === 'ai' && (
+                                                <div className="mt-4 pt-3 border-t border-charcoal/5 flex flex-col gap-2">
+                                                    <p className="text-[10px] text-charcoal/30 flex items-center gap-1">
+                                                        <span className="inline-block w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
+                                                        Risposta via VirtualTwin AI · Sarah ha risparmiato 15h questa settimana
+                                                    </p>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-[9px] font-black uppercase tracking-widest text-gold opacity-50">Powered by VirtualTwin</span>
+                                                        <button className="text-[9px] font-bold text-blue-600 hover:underline">Voglio il mio Clone AI →</button>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
