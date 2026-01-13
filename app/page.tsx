@@ -15,6 +15,8 @@ import SetupStoryNarrative from "@/components/home-viral/SetupStoryNarrative";
 import FeaturesEnhanced from "@/components/sections/FeaturesEnhanced";
 import CommonMistakes from "@/components/home-viral/CommonMistakes";
 import SuperiorityMatrix from "@/components/home-viral/SuperiorityMatrix";
+import ViralCompareMode from "@/components/home-viral/ViralCompareMode";
+import ReferralElite from "@/components/home-viral/ReferralElite";
 import PricingUltimate from "@/components/sections/PricingUltimate";
 import SocialProofHuman from "@/components/home-viral/SocialProofHuman";
 import FinalCTAUltimate from "@/components/sections/FinalCTAUltimate";
@@ -87,11 +89,17 @@ export default function Home() {
         {/* COMMON MISTAKES - Educational pain amplification */}
         <CommonMistakes />
 
+        {/* VIRAL COMPARE MODE - The Proof */}
+        <ViralCompareMode />
+
         {/* SUPERIORITY MATRIX - The Logic Closer */}
         <SuperiorityMatrix />
 
         {/* PRICING (NON TOCCARE - user requirement) */}
         <PricingUltimate showToggle={true} />
+
+        {/* REFERRAL PROGRAM - The Viral Loop */}
+        <ReferralElite />
 
         {/* SOCIAL PROOF HUMAN - warm testimonials */}
         <SocialProofHuman />
