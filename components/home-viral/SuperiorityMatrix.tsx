@@ -15,36 +15,36 @@ export default function SuperiorityMatrix() {
     const features = [
         {
             name: "Tempo di Setup",
-            vt: "10 Minuti",
-            bot: "2-4 Settimane",
+            vt: "10 Minuti (Zero Code)",
+            bot: "2-4 Settimane (Complicato)",
             va: "Mesi (Recruiting + Training)",
             icon: Clock
         },
         {
             name: "Qualità del Tono",
             vt: "Indistinguibile (Tu al 100%)",
-            bot: "Robotico / Scriptato",
+            bot: "Robotico / ManyChat Style",
             va: "Variabile / Errore Umano",
             icon: Shield
         },
         {
-            name: "Disponibilità",
-            vt: "24/7/365 (Senza pause)",
-            bot: "24/7 (Ma limitato)",
-            va: "8h/giorno (Fuso orario limitante)",
-            icon: Infinity
+            name: "Intelligenza",
+            vt: "Creatività Strategica d'Élite",
+            bot: "Regole Rigide / Flow limitati",
+            va: "Dipendente dall'operatore",
+            icon: Zap
         },
         {
             name: "Scalabilità",
-            vt: "Infinita istantanea",
-            bot: "Bassa (Limiti tecnici)",
+            vt: "Infinita (Mille conversazioni insieme)",
+            bot: "Mediocre (Difficile da gestire)",
             va: "Nulla (Richiede nuove assunzioni)",
             icon: TrendingUp
         },
         {
             name: "Costo Operativo",
             vt: "Fisso Elite (ROI immediato)",
-            bot: "Basso (Ma basso valore)",
+            bot: "Basso (Ma valore nullo)",
             va: "Elevato (Stipendio + Stress)",
             icon: Zap
         }
@@ -61,7 +61,7 @@ export default function SuperiorityMatrix() {
                         <span className="text-gold italic">Compromesso.</span>
                     </h2>
                     <p className="text-xl text-charcoal/30 max-w-2xl mx-auto italic font-light">
-                        "Perché accontentarsi di un'ombra quando puoi avere il tuo Genio moltiplicato all'infinito?"
+                        "Perché accontentarsi di un bot ManyChat quando puoi avere il tuo Genio moltiplicato all'infinito?"
                     </p>
                 </div>
 
@@ -84,7 +84,7 @@ export default function SuperiorityMatrix() {
                                     <th className="py-10 px-8">
                                         <div className="flex items-center gap-3 text-charcoal/40">
                                             <Bot className="w-5 h-5" />
-                                            <span className="text-sm uppercase tracking-widest font-bold">Standard Bot</span>
+                                            <span className="text-sm uppercase tracking-widest font-bold">ManyChat / Std AI</span>
                                         </div>
                                     </th>
                                     <th className="py-10 px-8">
