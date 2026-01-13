@@ -182,7 +182,7 @@ const SolutionEnhanced = () => {
                                             <p className="text-sm md:text-base">{msg.content}</p>
 
                                             {/* VIRAL TRIGGER #1 & #2: AI Signature & Powered By */}
-                                            {msg.role === 'assistant' && (
+                                            {msg.role === 'bot' && (
                                                 <div className="mt-4 pt-3 border-t border-charcoal/5 flex flex-col gap-2">
                                                     <p className="text-[10px] text-charcoal/30 flex items-center gap-1">
                                                         <span className="inline-block w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
