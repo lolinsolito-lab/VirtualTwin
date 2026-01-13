@@ -1,12 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, User, Mail, Lock, Check } from 'lucide-react';
+import { ArrowRight, Sparkles, User, Mail, Lock, Check, Loader2 } from 'lucide-react';
 
-export default function RegisterPage() {
+// Loading fallback for Suspense
+function RegisterLoading() {
+    return (
+        <div className="min-h-screen bg-champagne flex items-center justify-center">
+            <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        </div>
+    );
+}
+
+function RegisterContent() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
@@ -243,5 +252,14 @@ export default function RegisterPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+// Main export wrapped in Suspense for useSearchParams compatibility
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={<RegisterLoading />}>
+            <RegisterContent />
+        </Suspense>
     );
 }
