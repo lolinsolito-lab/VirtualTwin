@@ -26,18 +26,18 @@ export default function SocialProofBar() {
 
     const stats = [
         {
-            value: foundersCount.toString(),
-            label: "Founder Wave Genesis",
+            value: `${foundersCount}/20`,
+            label: "Posti Genesis Occupati",
             icon: Users
         },
         {
-            value: "1.2M+",
-            label: "Messaggi per Addestramento",
-            icon: MessageSquare
+            value: "847+",
+            label: "Imprenditori in Waitlist",
+            icon: Crown
         },
         {
             value: "24/7",
-            label: "Operatività Neurale",
+            label: "Operatività del Clone",
             icon: TrendingUp
         }
     ];

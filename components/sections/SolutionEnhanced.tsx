@@ -32,9 +32,13 @@ const SolutionEnhanced = () => {
     const [inView, setInView] = useState(false);
     const sectionRef = useRef<HTMLElement>(null);
 
-    // Interactive Chat State
+    // Interactive Chat State - PRE-POPULATED with example exchange
     const [messages, setMessages] = useState<Message[]>([
-        { role: 'bot', content: demoResponses.default }
+        { role: 'bot', content: demoResponses.default },
+        { role: 'user', content: "Quanto costa VirtualTwin?" },
+        { role: 'bot', content: demoResponses.prezzo },
+        { role: 'user', content: "Come funziona l'addestramento?" },
+        { role: 'bot', content: demoResponses.funziona }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);

@@ -48,17 +48,24 @@ const CountdownTimer = () => {
     );
 
     return (
-        <div className="inline-flex items-center gap-4 md:gap-8 px-8 md:px-12 py-4 md:py-6 bg-gold/5 border border-gold/10 rounded-2xl md:rounded-[2rem] backdrop-blur-sm self-center">
-            <Clock className="w-5 h-5 md:w-6 md:h-6 text-gold/60" />
-            <div className="flex items-center gap-3 md:gap-6">
-                <TimeUnit label="Days" value={timeLeft.days} />
-                <span className="text-gold/30 font-serif text-xl border-none">:</span>
-                <TimeUnit label="Hours" value={timeLeft.hours} />
-                <span className="text-gold/30 font-serif text-xl border-none">:</span>
-                <TimeUnit label="Min" value={timeLeft.minutes} />
-                <span className="text-gold/30 font-serif text-xl border-none">:</span>
-                <TimeUnit label="Sec" value={timeLeft.seconds} />
+        <div className="flex flex-col items-center">
+            <div className="inline-flex items-center gap-4 md:gap-8 px-8 md:px-12 py-4 md:py-6 bg-gold/5 border border-gold/10 rounded-2xl md:rounded-[2rem] backdrop-blur-sm self-center">
+                <Clock className="w-5 h-5 md:w-6 md:h-6 text-gold/60" />
+                <div className="flex items-center gap-3 md:gap-6">
+                    <TimeUnit label="Days" value={timeLeft.days} />
+                    <span className="text-gold/30 font-serif text-xl border-none">:</span>
+                    <TimeUnit label="Hours" value={timeLeft.hours} />
+                    <span className="text-gold/30 font-serif text-xl border-none">:</span>
+                    <TimeUnit label="Min" value={timeLeft.minutes} />
+                    <span className="text-gold/30 font-serif text-xl border-none">:</span>
+                    <TimeUnit label="Sec" value={timeLeft.seconds} />
+                </div>
             </div>
+            {/* Countdown Context - PRIORITY IMPROVEMENT */}
+            <p className="text-center text-charcoal/50 text-xs md:text-sm mt-4 max-w-md">
+                ☝️ <strong className="text-charcoal/70">Ultimo giorno</strong> per bloccare il prezzo Genesis a <strong className="text-gold">€147/mese</strong>.<br />
+                <span className="text-charcoal/40">Dopo paghi €197/mese (per sempre).</span>
+            </p>
         </div>
     );
 };

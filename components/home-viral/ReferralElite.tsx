@@ -1,15 +1,68 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Share2, Users, Gift, Star, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Share2, Users, Gift, Star, ArrowRight, ShieldCheck, Copy, Check, Loader2 } from 'lucide-react';
+
+interface ReferralData {
+    referralCode: string | null;
+    referralsCount: number;
+    referralLink: string | null;
+    rewardStatus: {
+        message: string;
+        progress: number;
+        unlocked: boolean;
+    };
+}
 
 /**
  * Referral Elite Component (Model A: Founder Privilege)
  * 
  * Strategic incentivization for early adopters.
+ * Now connected to real API for link generation.
  */
 export default function ReferralElite() {
+    const [referralData, setReferralData] = useState<ReferralData | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [userId, setUserId] = useState<string | null>(null);
+
+    // For demo purposes, use a mock userId. In production, get from auth.
+    useEffect(() => {
+        // In production: const { data: { user } } = await supabase.auth.getUser();
+        setUserId('demo-user-12345');
+    }, []);
+
+    const handleGenerateLink = async () => {
+        if (!userId) return;
+        setLoading(true);
+
+        try {
+            const response = await fetch('/api/referral/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setReferralData(data);
+            }
+        } catch (error) {
+            console.error('Failed to generate referral link:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCopyLink = () => {
+        if (referralData?.referralLink) {
+            navigator.clipboard.writeText(referralData.referralLink);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
     return (
         <section id="referral" className="relative py-24 bg-charcoal text-white overflow-hidden">
             {/* Background luxury accents */}
@@ -89,10 +142,53 @@ export default function ReferralElite() {
                                 </div>
                             </div>
 
-                            <button className="w-full bg-gold text-charcoal font-bold py-6 rounded-2xl flex items-center justify-center gap-3 hover:bg-white transition-all shadow-xl shadow-gold/10 group">
-                                <Share2 className="w-5 h-5 group-hover:animate-pulse" />
-                                <span>Genera Link d'Élite</span>
-                            </button>
+                            {!referralData ? (
+                                <button
+                                    onClick={handleGenerateLink}
+                                    disabled={loading}
+                                    className="w-full bg-gold text-charcoal font-bold py-6 rounded-2xl flex items-center justify-center gap-3 hover:bg-white transition-all shadow-xl shadow-gold/10 group disabled:opacity-50"
+                                >
+                                    {loading ? (
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                    ) : (
+                                        <Share2 className="w-5 h-5 group-hover:animate-pulse" />
+                                    )}
+                                    <span>{loading ? 'Generando...' : "Genera Link d'Élite"}</span>
+                                </button>
+                            ) : (
+                                <div className="space-y-4">
+                                    {/* Generated Link */}
+                                    <div className="p-4 rounded-xl bg-white/10 border border-gold/30">
+                                        <p className="text-[10px] uppercase tracking-widest text-gold mb-2 font-black">Il Tuo Link Esclusivo</p>
+                                        <div className="flex items-center gap-2">
+                                            <code className="flex-1 text-sm text-white/80 bg-white/5 px-3 py-2 rounded-lg truncate">
+                                                {referralData.referralLink}
+                                            </code>
+                                            <button
+                                                onClick={handleCopyLink}
+                                                className="p-2 bg-gold/20 rounded-lg hover:bg-gold/30 transition"
+                                            >
+                                                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gold" />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Progress */}
+                                    <div className="p-4 rounded-xl bg-white/5">
+                                        <div className="flex justify-between text-sm mb-2">
+                                            <span className="text-white/60">Inviti completati</span>
+                                            <span className="text-gold font-bold">{referralData.referralsCount}/3</span>
+                                        </div>
+                                        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-gold rounded-full transition-all duration-500"
+                                                style={{ width: `${referralData.rewardStatus.progress}%` }}
+                                            />
+                                        </div>
+                                        <p className="text-xs text-white/40 mt-2">{referralData.rewardStatus.message}</p>
+                                    </div>
+                                </div>
+                            )}
 
                             <p className="text-center text-[10px] text-white/20 uppercase tracking-widest mt-6">
                                 Riservato ai Membri della Genesis Wave
