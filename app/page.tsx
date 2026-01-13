@@ -14,6 +14,7 @@ import SolutionEnhanced from "@/components/sections/SolutionEnhanced";
 import SetupStoryNarrative from "@/components/home-viral/SetupStoryNarrative";
 import FeaturesEnhanced from "@/components/sections/FeaturesEnhanced";
 import CommonMistakes from "@/components/home-viral/CommonMistakes";
+import SuperiorityMatrix from "@/components/home-viral/SuperiorityMatrix";
 import PricingUltimate from "@/components/sections/PricingUltimate";
 import SocialProofHuman from "@/components/home-viral/SocialProofHuman";
 import FinalCTAUltimate from "@/components/sections/FinalCTAUltimate";
@@ -85,6 +86,9 @@ export default function Home() {
 
         {/* COMMON MISTAKES - Educational pain amplification */}
         <CommonMistakes />
+
+        {/* SUPERIORITY MATRIX - The Logic Closer */}
+        <SuperiorityMatrix />
 
         {/* PRICING (NON TOCCARE - user requirement) */}
         <PricingUltimate showToggle={true} />
