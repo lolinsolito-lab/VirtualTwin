@@ -35,7 +35,7 @@ export default function SetupStoryNarrative() {
         },
         {
             minutes: "Capitolo III",
-            icon: Libertà Online,
+            icon: Rocket,
             title: "Sei Libero. 24/7.",
             story: "Il tuo Gemello è online su WhatsApp e Instagram. Da questo momento, ogni lead riceve la tua attenzione d'élite, mentre tu ti riprendi la tua vita.",
             example: "Risultato: 'Un'identità che vince per te, mentre tu finalmente respiri.'",
