@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowRight, Sparkles, User, Mail, Lock, Check } from 'lucide-react';
 
@@ -15,6 +15,10 @@ export default function RegisterPage() {
     const [error, setError] = useState<string | null>(null);
     const [mounted, setMounted] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    // Capture referral code from URL (?ref=VT-XXXXXX)
+    const referralCode = searchParams.get('ref');
 
     useEffect(() => {
         setMounted(true);
@@ -57,6 +61,24 @@ export default function RegisterPage() {
                     product_service: 'Servizi di Lusso',
                     is_active: true
                 });
+
+                // 3. Track referral if user came from a referral link
+                if (referralCode) {
+                    try {
+                        await fetch('/api/referral/track', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                referralCode,
+                                newUserId: authData.user.id,
+                                newUserEmail: email
+                            })
+                        });
+                    } catch (refError) {
+                        // Don't block registration if referral tracking fails
+                        console.warn('Referral tracking failed:', refError);
+                    }
+                }
 
                 // Profile is auto-created by trigger
                 // Redirect to dashboard

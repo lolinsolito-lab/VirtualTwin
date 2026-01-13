@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Share2, Users, Gift, Star, ArrowRight, ShieldCheck, Copy, Check, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 interface ReferralData {
     referralCode: string | null;
@@ -26,11 +27,18 @@ export default function ReferralElite() {
     const [loading, setLoading] = useState(false);
     const [copied, setCopied] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // For demo purposes, use a mock userId. In production, get from auth.
+    // Get real userId from Supabase Auth
     useEffect(() => {
-        // In production: const { data: { user } } = await supabase.auth.getUser();
-        setUserId('demo-user-12345');
+        const checkAuth = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                setUserId(user.id);
+                setIsLoggedIn(true);
+            }
+        };
+        checkAuth();
     }, []);
 
     const handleGenerateLink = async () => {
