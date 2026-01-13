@@ -16,30 +16,30 @@ export default function SetupStoryNarrative() {
         {
             minutes: "Capitolo I",
             icon: MessageSquare,
-            title: "L'Essenza Pura",
-            story: "Il sistema estrae il tuo DNA imprenditoriale attraverso domande profonde. Non è un database, è il tuo modo di guardare il mercato.",
-            example: "Esempio: 'Qual è la tua verità inconfutabile che nessun concorrente osa dire?'",
-            detail: "Tu riversi la tua visione. Il sistema la cristallizza nel silenzio.",
+            title: "Trasferimento d'Anima",
+            story: "Rispondi a 15 domande strategiche che estraggono il tuo DNA imprenditoriale. In 3 minuti, l'AI capisce la tua visione, i tuoi punti di forza e la tua offerta.",
+            example: "Esempio: 'Qual è il valore unico che solo tu porti sul mercato?'",
+            detail: "Tu versi la tua conoscenza. Il sistema la cristallizza istantaneamente.",
             color: "from-blue-500 to-indigo-600",
             bg: "bg-blue-50"
         },
         {
             minutes: "Capitolo II",
             icon: Mic2,
-            title: "L'Iniezione della Voce",
-            story: "Il Gemello assorbe ogni sfumatura, ogni silenzio, ogni tua intuizione. Impara a pensare con la tua logica strategica.",
-            example: "Esempio: 'Come trasformi un'obiezione in una conferma di prestigio?'",
-            detail: "Il tuo stile diventa un algoritmo di persuasione immortale.",
+            title: "Sincronizzazione Stile",
+            story: "Il sistema analizza il tuo modo di parlare e di vendere. Assorbe le tue espressioni tipiche e il tuo tono unico per diventare indistinguibile da te.",
+            example: "Esempio: 'Come chiudi una vendita con un cliente alto-spendente?'",
+            detail: "Il tuo stile diventa un algoritmo di persuasione automatizzato.",
             color: "from-purple-500 to-pink-600",
             bg: "bg-purple-50"
         },
         {
             minutes: "Capitolo III",
-            icon: Rocket,
-            title: "La Nascita del Gemello",
-            story: "La metamorfosi è completa. Hai appena ottenuto il dono dell'ubiquità. Il tuo impero ora scala nel silenzio.",
-            example: "Risultato: 'Un'identità che vince al posto tuo, mentre tu finalmente respiri.'",
-            detail: "La tecnologia diventa invisibile. La tua libertà diventa assoluta.",
+            icon: Libertà Online,
+            title: "Sei Libero. 24/7.",
+            story: "Il tuo Gemello è online su WhatsApp e Instagram. Da questo momento, ogni lead riceve la tua attenzione d'élite, mentre tu ti riprendi la tua vita.",
+            example: "Risultato: 'Un'identità che vince per te, mentre tu finalmente respiri.'",
+            detail: "Setup finito. Inizia la tua nuova era di ubiquità sovrana.",
             color: "from-amber-500 to-orange-600",
             bg: "bg-amber-50"
         }

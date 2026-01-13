@@ -9,12 +9,12 @@ interface Message {
 }
 
 const demoResponses: Record<string, string> = {
-    "default": "Buongiorno. 👋 Sono l'Essenza Neurale di Sarah. Chiedimi qualsiasi cosa sul potenziale di VirtualTwin: la visione, la scalabilità o il setup dell'Impero.",
-    "prezzo": "L'investimento nella tua libertà parte da €39/mese. 🌱 Vuoi esplorare i dettagli dei piani?",
-    "funziona": "Sincronizzazione in 10 minuti: 15 domande strategiche → Analisi del Tono → Integrazione Invisibile. ♾️",
-    "whatsapp": "La tua presenza sarà onnipresente: WhatsApp, Instagram e Messenger. Un solo Genio, ovunque. 📱",
-    "prova": "Puoi testare la metamorfosi per 14 giorni. Senza vincoli, solo risultati. 🌱",
-    "ciao": "Buongiorno. 👋 Come posso guidare la tua curiosità oggi?",
+    "default": "Buongiorno. 👋 Sono il Clone AI di Sarah. Chiedimi come posso gestire i tuoi lead, automatizzare le vendite o liberarmi il tempo.",
+    "prezzo": "L'accesso alla Genesis Wave parte da €147/m (bloccato a vita). Un investimento che si ripaga con la prima vendita automatizzata. 📈",
+    "funziona": "10 min di setup: Rispondi a 15 domande → Il sistema assorbe il tuo stile → Sei online su WhatsApp. Semplice. Invisibile. ♾️",
+    "whatsapp": "Sempre attivo su WhatsApp e IG. Risponde, educa e vende col tuo tono di voce, 24/7. 📱",
+    "prova": "14 giorni di test reale. Nessun rischio, solo la prova concreta che puoi scalare senza lavorare di più. 🌱",
+    "ciao": "Buongiorno. 👋 Come posso aiutarti a scalare il tuo business oggi?",
 };
 
 const findResponse = (input: string): string => {

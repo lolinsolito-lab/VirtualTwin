@@ -18,28 +18,12 @@ export default function WallOfHooks() {
             icon: Bot
         },
         {
-            text: "Presenza Inviolabile. L'Identità che non conosce stanchezza.",
+            text: "Presenza Inviolabile. L'Identità che non conosce stanchezza, parlando esattamente come te.",
             icon: Infinity
         },
         {
-            text: "Sovranità Temporale. Riprenditi l'energia che il mercato ti ha sottratto.",
-            icon: Zap
-        },
-        {
-            text: "L'Autorità è Silenziosa. Un'Essenza che agisce esattamente come te.",
-            icon: Shield
-        },
-        {
-            text: "L'Eccellenza Permanente. Massimizza l'impatto mentre ti rigeneri.",
-            icon: Moon
-        },
-        {
-            text: "Il Monopolio del Genio. Sei ovunque, ma resti unico.",
+            text: "Il Monopolio del Genio. 24/7 su WhatsApp e Instagram, chiudendo vendite mentre respiri.",
             icon: Sparkles
-        },
-        {
-            text: "BONUS: Il Silenzio dei Risultati. Parla la tua visione, non il tuo sforzo.",
-            icon: Unlock
         }
     ];
 

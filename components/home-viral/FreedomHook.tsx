@@ -110,10 +110,10 @@ export default function FreedomHook() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="text-sm md:text-lg text-charcoal/50 font-medium tracking-wide max-w-2xl mb-12"
+                        className="text-lg md:text-2xl text-charcoal/80 font-medium tracking-tight max-w-3xl mb-12"
                     >
-                        14 giorni per provare. Nessuna carta richiesta.{' '}
-                        <span className="text-charcoal font-bold">Zero rischi.</span>
+                        Il Tuo Clone AI che Risponde ai Clienti su WhatsApp 24/7. <br />
+                        <span className="text-gold font-serif italic">Setup in 10 Minuti. Senza Codice.</span>
                     </motion.p>
 
                     {/* Countdown */}
