@@ -2,223 +2,253 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, TrendingUp, Clock, Moon, Sparkles, ChevronDown } from 'lucide-react';
+import { X, Sparkles, Clock, Moon, TrendingUp, Check, ArrowRight } from 'lucide-react';
 
 /**
- * Today Tomorrow Stories Component - INTERACTIVE ACCORDION
+ * Today Tomorrow Stories Component - DIGITAL WOW EDITION
  * 
- * ELITE DESIGN: 4 collapsible cards that expand on click
- * 
- * Usage: Homepage transformation section - click to reveal before/after
+ * DESIGN: 4 immersive cards with flip/transform animations
+ * Hover reveals the transformation with glassmorphism effects
  */
 export default function TodayTomorrowStories() {
-    const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const [activeCard, setActiveCard] = useState<number | null>(null);
 
     const stories = [
         {
             title: "L'Erosione della Vita",
-            subtitle: "Cena con la famiglia interrotta",
             icon: Clock,
-            color: "from-amber-500 to-orange-600",
+            gradient: "from-rose-500 via-red-500 to-orange-500",
+            bgGlow: "bg-rose-500/20",
             today: {
-                scene: "Cena sacra con la famiglia. Una vibrazione interrompe il presente.",
-                result: "Presenza distrutta. Energia dissipata."
+                label: "OGGI",
+                scene: "Cena con la famiglia. Una notifica interrompe tutto.",
+                result: "Presenza distrutta."
             },
             tomorrow: {
-                scene: "Il telefono resta silenzioso. Il presente è intatto.",
-                result: "Tu proteggi il tuo tempo. Lui fa crescere il business."
+                label: "CON VIRTUALTWIN",
+                scene: "Il telefono è silenzioso. Il Clone risponde per te.",
+                result: "Il tuo tempo è sacro."
             }
         },
         {
-            title: "Il Fallimento del Limite",
-            subtitle: "Client alle 3 di notte",
+            title: "Il Limite Biologico",
             icon: Moon,
-            color: "from-indigo-500 to-purple-600",
+            gradient: "from-indigo-500 via-purple-500 to-violet-500",
+            bgGlow: "bg-indigo-500/20",
             today: {
-                scene: "Il mercato richiede verità alle 3 del mattino. Tu dormi (perché sei umano).",
-                result: "Silenzio assordante. Lead congelato o perso."
+                label: "OGGI",
+                scene: "Alle 3 di notte un cliente cerca aiuto. Tu dormi.",
+                result: "Lead perso per sempre."
             },
             tomorrow: {
-                scene: "Un buyer in un altro fuso orario cerca la tua autorità.",
-                result: "Ti svegli davanti a una realtà già espansa. Senza sforzo biologico."
+                label: "CON VIRTUALTWIN",
+                scene: "Il Clone risponde alle 3AM con la tua voce.",
+                result: "Ti svegli con un nuovo cliente."
             }
         },
         {
             title: "Saturazione Cognitiva",
-            subtitle: "20+ messaggi ogni mattina",
             icon: TrendingUp,
-            color: "from-emerald-500 to-teal-600",
+            gradient: "from-emerald-500 via-teal-500 to-cyan-500",
+            bgGlow: "bg-emerald-500/20",
             today: {
-                scene: "20+ anime cercano la tua attenzione. Il rumore è insopportabile.",
-                result: "Saturazione. Creatività annientata dalla routine."
+                label: "OGGI",
+                scene: "20+ messaggi ogni mattina. Rispondi uno a uno.",
+                result: "3 ore bruciate. Zero creatività."
             },
             tomorrow: {
-                scene: "I 20 messaggi sono già stati filtrati, educati e convertiti dal Clone.",
-                result: "Lavori SUL futuro, non NEL passato. 15 ore di ossigeno recuperate."
+                label: "CON VIRTUALTWIN",
+                scene: "Il Clone ha già filtrato, risposto e qualificato.",
+                result: "15 ore/settimana recuperate."
             }
         },
         {
-            title: "Il Deserto del 'Ci Penso'",
-            subtitle: "Follow-up che non tornano",
+            title: "Il Deserto del Follow-up",
             icon: Check,
-            color: "from-rose-500 to-pink-600",
+            gradient: "from-amber-500 via-orange-500 to-yellow-500",
+            bgGlow: "bg-amber-500/20",
             today: {
-                scene: "Investi 15 minuti a spiegare. Scrivi con passione.",
-                result: "Frustrazione. Il valore percepito crolla nel follow-up manuale."
+                label: "OGGI",
+                scene: "Spendi 15 minuti a spiegare. 'Ci penso.'",
+                result: "Mai più sentito."
             },
             tomorrow: {
-                scene: "Il Clone gestisce l'educazione e le obiezioni con perfezione.",
-                result: "Il cliente dice: 'Indistinguibile'. Tu intervieni solo per il brindisi finale."
+                label: "CON VIRTUALTWIN",
+                scene: "Il Clone educa, gestisce obiezioni, converte.",
+                result: "Tu intervieni solo per il brindisi."
             }
         }
     ];
 
-    const handleToggle = (index: number) => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
-
     return (
-        <section className="relative z-10 py-20 bg-gradient-to-b from-white via-champagne/10 to-white">
-            <div className="container mx-auto px-6">
-                <div className="max-w-5xl mx-auto">
+        <section className="relative z-10 py-24 bg-gradient-to-b from-charcoal via-charcoal to-black overflow-hidden">
+            {/* Animated Background Grid */}
+            <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0" style={{
+                    backgroundImage: `linear-gradient(rgba(212,175,55,0.1) 1px, transparent 1px),
+                                      linear-gradient(90deg, rgba(212,175,55,0.1) 1px, transparent 1px)`,
+                    backgroundSize: '60px 60px'
+                }} />
+            </div>
+
+            {/* Floating Orbs */}
+            <div className="absolute top-20 left-10 w-72 h-72 bg-gold/10 rounded-full blur-[120px] animate-pulse" />
+            <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
+
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="max-w-7xl mx-auto">
                     {/* Section Header */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-center mb-16"
+                        className="text-center mb-20"
                     >
-                        <span className="text-gold text-[9px] uppercase tracking-[0.6em] font-black italic mb-8 block opacity-50">Prima e Dopo</span>
-                        <h2 className="font-serif text-5xl md:text-8xl text-charcoal mb-8 leading-[0.85] tracking-tighter">
-                            La Libertà del <br />
-                            <span className="text-gold italic">Silenzio.</span>
+                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/20 rounded-full mb-8">
+                            <Sparkles className="w-4 h-4 text-gold" />
+                            <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black">La Trasformazione</span>
+                        </span>
+                        <h2 className="font-serif text-5xl md:text-8xl text-white mb-6 leading-[0.9] tracking-tight">
+                            Prima e <span className="italic text-gold">Dopo.</span>
                         </h2>
-                        <p className="text-lg md:text-xl text-charcoal/40 max-w-2xl mx-auto leading-relaxed">
-                            Clicca su ogni scenario per vedere la trasformazione.
+                        <p className="text-xl text-white/40 max-w-2xl mx-auto">
+                            Passa il mouse sulle card per vedere la magia.
                         </p>
                     </motion.div>
 
-                    {/* Accordion Cards */}
-                    <div className="space-y-4">
+                    {/* Cards Grid - 2x2 */}
+                    <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
                         {stories.map((story, index) => {
-                            const isOpen = openIndex === index;
                             const Icon = story.icon;
+                            const isActive = activeCard === index;
 
                             return (
                                 <motion.div
                                     key={index}
-                                    initial={{ opacity: 0, y: 20 }}
+                                    initial={{ opacity: 0, y: 40 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="overflow-hidden"
+                                    onMouseEnter={() => setActiveCard(index)}
+                                    onMouseLeave={() => setActiveCard(null)}
+                                    className="relative group cursor-pointer"
                                 >
-                                    {/* Card Header - Always Visible */}
-                                    <button
-                                        onClick={() => handleToggle(index)}
-                                        className={`w-full flex items-center gap-6 p-6 md:p-8 rounded-2xl transition-all duration-500 group ${isOpen
-                                                ? 'bg-charcoal text-white rounded-b-none'
-                                                : 'bg-white hover:bg-charcoal/5 border-2 border-charcoal/10 hover:border-gold/30'
-                                            }`}
-                                    >
-                                        {/* Icon */}
-                                        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${isOpen
-                                                ? 'bg-gold/20'
-                                                : 'bg-gradient-to-br ' + story.color + ' bg-opacity-10'
-                                            }`}>
-                                            <Icon className={`w-7 h-7 md:w-8 md:h-8 transition-colors duration-500 ${isOpen ? 'text-gold' : 'text-white'
-                                                }`} />
-                                        </div>
+                                    {/* Card Container with 3D Effect */}
+                                    <div className={`relative h-[380px] md:h-[420px] rounded-3xl overflow-hidden transition-all duration-700 ${isActive ? 'scale-[1.02] shadow-2xl' : 'scale-100'
+                                        }`}>
 
-                                        {/* Title & Subtitle */}
-                                        <div className="flex-1 text-left">
-                                            <h3 className={`text-xl md:text-2xl font-serif italic tracking-tight transition-colors duration-500 ${isOpen ? 'text-white' : 'text-charcoal'
-                                                }`}>
-                                                {story.title}
-                                            </h3>
-                                            <p className={`text-sm mt-1 transition-colors duration-500 ${isOpen ? 'text-white/60' : 'text-charcoal/40'
-                                                }`}>
-                                                {story.subtitle}
-                                            </p>
-                                        </div>
+                                        {/* Background Glow on Hover */}
+                                        <div className={`absolute -inset-2 ${story.bgGlow} rounded-3xl blur-2xl transition-opacity duration-700 ${isActive ? 'opacity-60' : 'opacity-0'
+                                            }`} />
 
-                                        {/* Chevron */}
-                                        <motion.div
-                                            animate={{ rotate: isOpen ? 180 : 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-500 ${isOpen ? 'bg-gold/20' : 'bg-charcoal/5 group-hover:bg-gold/10'
-                                                }`}
-                                        >
-                                            <ChevronDown className={`w-5 h-5 transition-colors duration-500 ${isOpen ? 'text-gold' : 'text-charcoal/40 group-hover:text-gold'
-                                                }`} />
-                                        </motion.div>
-                                    </button>
+                                        {/* Main Card */}
+                                        <div className="relative h-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden">
 
-                                    {/* Expandable Content */}
-                                    <AnimatePresence>
-                                        {isOpen && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: 'auto', opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                                                className="overflow-hidden"
-                                            >
-                                                <div className="bg-white border-2 border-t-0 border-charcoal/10 rounded-b-2xl">
-                                                    <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-charcoal/10">
-                                                        {/* IL VECCHIO MONDO */}
-                                                        <div className="p-8 md:p-10 relative">
-                                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500/20 to-transparent" />
-                                                            <div className="flex items-center gap-3 mb-6">
-                                                                <X className="w-5 h-5 text-red-400" />
-                                                                <span className="text-[10px] uppercase font-black text-red-900/40 tracking-[0.3em]">
-                                                                    Il Vecchio Mondo
-                                                                </span>
-                                                            </div>
-                                                            <p className="text-charcoal/60 leading-relaxed mb-6 text-base">
-                                                                {story.today.scene}
-                                                            </p>
-                                                            <p className="text-red-600/80 font-serif text-lg italic border-l-2 border-red-400/30 pl-4">
+                                            {/* Gradient Top Bar */}
+                                            <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${story.gradient}`} />
+
+                                            {/* Content */}
+                                            <div className="relative h-full p-8 md:p-10 flex flex-col">
+                                                {/* Header */}
+                                                <div className="flex items-center gap-4 mb-6">
+                                                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${story.gradient} flex items-center justify-center shadow-lg`}>
+                                                        <Icon className="w-7 h-7 text-white" />
+                                                    </div>
+                                                    <h3 className="text-2xl md:text-3xl font-serif text-white italic">
+                                                        {story.title}
+                                                    </h3>
+                                                </div>
+
+                                                {/* Before/After Content with Flip */}
+                                                <div className="flex-1 relative">
+                                                    {/* TODAY State (visible by default) */}
+                                                    <motion.div
+                                                        animate={{
+                                                            opacity: isActive ? 0 : 1,
+                                                            y: isActive ? -20 : 0
+                                                        }}
+                                                        transition={{ duration: 0.4 }}
+                                                        className="absolute inset-0"
+                                                    >
+                                                        <div className="flex items-center gap-2 mb-4">
+                                                            <X className="w-4 h-4 text-red-400" />
+                                                            <span className="text-[10px] uppercase tracking-[0.3em] text-red-400 font-black">
+                                                                {story.today.label}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-lg text-white/60 leading-relaxed mb-6">
+                                                            {story.today.scene}
+                                                        </p>
+                                                        <div className="mt-auto p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
+                                                            <p className="text-red-400 font-serif text-lg italic">
                                                                 → {story.today.result}
                                                             </p>
                                                         </div>
+                                                    </motion.div>
 
-                                                        {/* LA NUOVA REALTÀ */}
-                                                        <div className="p-8 md:p-10 relative bg-gradient-to-br from-gold/5 to-transparent">
-                                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold to-transparent" />
-                                                            <div className="flex items-center gap-3 mb-6">
-                                                                <Sparkles className="w-5 h-5 text-gold" />
-                                                                <span className="text-[10px] uppercase font-black text-gold tracking-[0.3em]">
-                                                                    La Nuova Realtà
-                                                                </span>
-                                                            </div>
-                                                            <p className="text-charcoal leading-relaxed mb-6 text-base">
-                                                                {story.tomorrow.scene}
-                                                            </p>
-                                                            <p className="text-gold font-serif text-lg italic border-l-2 border-gold pl-4 font-medium">
+                                                    {/* TOMORROW State (visible on hover) */}
+                                                    <motion.div
+                                                        animate={{
+                                                            opacity: isActive ? 1 : 0,
+                                                            y: isActive ? 0 : 20
+                                                        }}
+                                                        transition={{ duration: 0.4 }}
+                                                        className="absolute inset-0"
+                                                    >
+                                                        <div className="flex items-center gap-2 mb-4">
+                                                            <Sparkles className="w-4 h-4 text-gold" />
+                                                            <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-black">
+                                                                {story.tomorrow.label}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-lg text-white leading-relaxed mb-6">
+                                                            {story.tomorrow.scene}
+                                                        </p>
+                                                        <div className="mt-auto p-4 rounded-2xl bg-gold/10 border border-gold/30">
+                                                            <p className="text-gold font-serif text-xl italic font-medium">
                                                                 → {story.tomorrow.result}
                                                             </p>
                                                         </div>
-                                                    </div>
+                                                    </motion.div>
                                                 </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
+
+                                                {/* Hover Indicator */}
+                                                <div className={`absolute bottom-4 right-4 flex items-center gap-2 transition-all duration-500 ${isActive ? 'opacity-100 translate-x-0' : 'opacity-40 -translate-x-2'
+                                                    }`}>
+                                                    <span className="text-[9px] uppercase tracking-widest text-white/40">
+                                                        {isActive ? 'La Soluzione' : 'Hover per vedere'}
+                                                    </span>
+                                                    <ArrowRight className={`w-4 h-4 transition-all duration-500 ${isActive ? 'text-gold translate-x-1' : 'text-white/40'
+                                                        }`} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </motion.div>
                             );
                         })}
                     </div>
 
-                    {/* Hint Text */}
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
+                    {/* Bottom CTA */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.5 }}
-                        className="text-center text-charcoal/30 text-sm mt-12 italic"
+                        className="text-center mt-16"
                     >
-                        💡 {openIndex === null ? 'Tocca una card per esplorare' : 'Tocca un\'altra card per vedere altri scenari'}
-                    </motion.p>
+                        <p className="text-white/30 text-sm italic mb-6">
+                            "La tecnologia perfetta scompare. Resta solo la libertà."
+                        </p>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-gold to-amber-500 text-charcoal rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:shadow-gold/30 transition-all"
+                        >
+                            Inizia la Trasformazione
+                            <ArrowRight className="w-5 h-5" />
+                        </motion.button>
+                    </motion.div>
                 </div>
             </div>
         </section>
