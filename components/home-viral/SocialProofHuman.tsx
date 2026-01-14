@@ -13,9 +13,11 @@ export default function SocialProofHuman() {
     const caseStudy = {
         name: "Michael J.",
         role: "Founder & Visionary",
-        transformation: "Dalla saturazione operativa al tempo per creare.",
-        story: "Michael gestiva 150+ interazioni al giorno. Il suo business cresceva, ma la sua vita era ostaggio di uno schermo. L'eccellenza era diventata un limite biologico invalicabile.",
-        outcome: "Oggi, il suo Clone AI gestisce il mercato mentre lui guida la visione. Il clone non si limita a rispondere: protegge il suo brand e fa crescere l'influenza nel silenzio dei risultati."
+        transformation: "Dalla saturazione operativa alla libertà creativa.",
+        story: "Gestivo 150+ interazioni al giorno. Il mio business cresceva, ma la mia vita era ostaggio di uno schermo. Rispondevo ai messaggi alle 3 di notte, perdevo compleanni, sacrificavo la salute. L'eccellenza era diventata la mia prigione.",
+        mission: "Ho creato VirtualTwin per una ragione semplice: nessun fondatore dovrebbe scegliere tra il successo del business e la propria vita. La tecnologia esiste per liberarci, non per incatenarci.",
+        outcome: "Oggi il mio Clone AI non solo risponde come me — vende, qualifica, chiude. Protegge il mio brand 24/7 mentre io torno a essere un visionario, non un operatore.",
+        quote: "Il mondo digitale dovrebbe servire l'uomo, non schiavizzarlo. VirtualTwin è la mia risposta."
     };
 
     return (
@@ -37,14 +39,26 @@ export default function SocialProofHuman() {
                             </div>
 
                             <h3 className="font-serif text-4xl md:text-6xl text-charcoal leading-[1.1]">
-                                La Metamorfosi <br /> <span className="text-gold italic">del Fondatore.</span>
+                                Perché Ho Creato <br /> <span className="text-gold italic">VirtualTwin.</span>
                             </h3>
 
-                            <div className="space-y-6 text-charcoal/70 text-lg leading-relaxed italic">
-                                <p>"{caseStudy.story}"</p>
-                                <p className="not-italic font-medium text-charcoal border-l-4 border-gold pl-6 py-2 bg-gold/5 rounded-r-2xl">
-                                    "{caseStudy.outcome}"
+                            <div className="space-y-6 text-charcoal/70 text-lg leading-relaxed">
+                                <p className="italic">"{caseStudy.story}"</p>
+
+                                <p className="not-italic text-charcoal/80">
+                                    {caseStudy.mission}
                                 </p>
+
+                                <p className="not-italic font-medium text-charcoal border-l-4 border-gold pl-6 py-3 bg-gold/5 rounded-r-2xl">
+                                    {caseStudy.outcome}
+                                </p>
+
+                                {/* Quote Block */}
+                                <div className="pt-4">
+                                    <p className="font-serif text-xl md:text-2xl text-charcoal italic leading-relaxed">
+                                        "{caseStudy.quote}"
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="pt-8 flex items-center gap-4">

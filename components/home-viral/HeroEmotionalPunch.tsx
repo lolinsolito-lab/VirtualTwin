@@ -42,39 +42,7 @@ export default function HeroEmotionalPunch() {
         <section className="relative z-10 py-20 md:py-32 bg-gradient-to-b from-champagne/30 via-white to-champagne/20">
             <div className="container mx-auto px-6">
                 <div className="max-w-5xl mx-auto">
-                    {/* The Jobs Timeline: Pure Silence & Magic */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1.5 }}
-                        className="flex items-center justify-between max-w-2xl mx-auto mb-20 relative"
-                    >
-                        <div className="absolute inset-0 flex items-center px-8">
-                            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-                        </div>
-
-                        <div className="relative z-10 flex flex-col items-center group">
-                            <div className="w-12 h-12 rounded-full border border-charcoal/10 bg-white flex items-center justify-center text-charcoal/40 group-hover:text-gold group-hover:border-gold transition-all duration-700">
-                                <Globe className="w-5 h-5" />
-                            </div>
-                            <span className="mt-4 text-[9px] uppercase tracking-[0.4em] text-charcoal/30">Il Mercato</span>
-                        </div>
-
-                        <div className="relative z-10 flex flex-col items-center">
-                            <div className="w-16 h-16 rounded-full bg-charcoal flex items-center justify-center shadow-2xl relative">
-                                <div className="absolute inset-0 bg-gold/20 rounded-full animate-ping opacity-20" />
-                                <Sparkles className="w-6 h-6 text-gold" />
-                            </div>
-                            <span className="mt-4 text-[10px] uppercase tracking-[0.5em] text-gold font-black">La Magia</span>
-                        </div>
-
-                        <div className="relative z-10 flex flex-col items-center group">
-                            <div className="w-12 h-12 rounded-full border border-charcoal/10 bg-white flex items-center justify-center text-charcoal/40 group-hover:text-gold group-hover:border-gold transition-all duration-700">
-                                <Sun className="w-5 h-5" />
-                            </div>
-                            <span className="mt-4 text-[9px] uppercase tracking-[0.4em] text-charcoal/30">La Vita</span>
-                        </div>
-                    </motion.div>
+                    {/* Visual Separator - removed confusing Il Mercato/La Magia/La Vita */}
 
                     {/* Main Story */}
                     <motion.div
