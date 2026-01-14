@@ -3,11 +3,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, Target, CreditCard, Globe, Calendar, Brain, Mic, BarChart3, Zap, ChevronDown, ChevronUp, Sparkles, Play } from 'lucide-react';
+import Image from 'next/image';
 
 /**
- * Features Enhanced - VISUAL STORYTELLING VERSION
+ * Features Enhanced - REAL IMAGES VERSION
  * 
- * Each feature has a visual illustration + animated reveal
+ * Each feature has a real 3D illustration + smooth animations
+ * Fixed: animation loop bug on mouse movement
  */
 const FeaturesEnhanced = () => {
     const [inView, setInView] = useState(false);
@@ -30,29 +32,26 @@ const FeaturesEnhanced = () => {
         {
             icon: MessageCircle,
             title: "Identità Indistinguibile",
-            desc: "L'AI assorbe il tuo battito verbale. I clienti non parlano con un bot, ma con il tuo genio digitale.",
-            visual: "💬",
-            gradient: "from-violet-500 to-purple-600",
-            demo: "Ciao! Sono il clone di Marco. Come posso aiutarti oggi?",
-            stat: "98% non distingue dall'originale"
+            desc: "L'AI assorbe il tuo stile. I clienti parlano con il tuo genio digitale, non con un bot.",
+            image: "/images/features/feature_identity.png",
+            stat: "98% indistinguibile",
+            demo: "Ciao! Sono il clone di Marco. Come posso aiutarti oggi?"
         },
         {
             icon: Target,
             title: "Filtro dell'Élite",
-            desc: "Separa istantaneamente il valore dal rumore. Il sistema seleziona chi è pronto.",
-            visual: "🎯",
-            gradient: "from-amber-500 to-orange-600",
-            demo: "Lead qualificato: Budget ✓ Urgenza ✓ Decisore ✓",
-            stat: "3x più conversioni"
+            desc: "Separa il valore dal rumore. Il sistema seleziona chi è pronto all'acquisto.",
+            image: "/images/features/feature_filter.png",
+            stat: "3x più conversioni",
+            demo: "Lead qualificato: Budget ✓ Urgenza ✓ Decisore ✓"
         },
         {
             icon: CreditCard,
             title: "Conversione Silenziosa",
-            desc: "Dalla gestione del desiderio alla transazione. Ogni interazione è un passo verso l'impatto.",
-            visual: "💳",
-            gradient: "from-emerald-500 to-green-600",
-            demo: "Pagamento completato! €2.497 ricevuti.",
-            stat: "+47% vendite automatiche"
+            desc: "Dal desiderio alla transazione. Ogni interazione è un passo verso la vendita.",
+            image: "/images/features/feature_conversion.png",
+            stat: "+47% vendite",
+            demo: "Pagamento completato! €2.497 ricevuti."
         }
     ];
 
@@ -60,49 +59,43 @@ const FeaturesEnhanced = () => {
         {
             icon: Globe,
             title: "Ubiquità Linguistica",
-            desc: "Italiano, inglese, spagnolo, tedesco. Il tuo business parla ogni lingua.",
-            visual: "🌍",
-            gradient: "from-blue-500 to-cyan-600",
+            desc: "Italiano, inglese, spagnolo, tedesco e 50+ lingue del mondo.",
+            image: "/images/features/feature_globe.png",
             stat: "50+ lingue"
         },
         {
             icon: Calendar,
             title: "Grazia Logistica",
-            desc: "Prenotazioni senza frizione. Calendly, Google, Cal.com integrati.",
-            visual: "📅",
-            gradient: "from-pink-500 to-rose-600",
+            desc: "Prenotazioni automatiche. Calendly, Google, Cal.com integrati.",
+            image: "/images/features/feature_calendar.png",
             stat: "Zero no-show"
         },
         {
             icon: Brain,
             title: "Evoluzione Continua",
-            desc: "Ogni conversazione è apprendimento. Il sistema si affina col tuo successo.",
-            visual: "🧠",
-            gradient: "from-indigo-500 to-blue-600",
-            stat: "Auto-miglioramento"
+            desc: "Ogni conversazione è apprendimento. Il sistema migliora col tuo successo.",
+            image: "/images/features/feature_brain.png",
+            stat: "Auto-learning"
         },
         {
             icon: Mic,
             title: "Presenza Multimodale",
             desc: "Audio, immagini, documenti. Comprensione totale senza limiti.",
-            visual: "🎙️",
-            gradient: "from-red-500 to-rose-600",
+            image: "/images/features/feature_microphone.png",
             stat: "Voice + Vision"
         },
         {
             icon: BarChart3,
             title: "Verità Statistica",
-            desc: "Metrics d'élite in tempo reale. Ogni lead tracciato con precisione.",
-            visual: "📊",
-            gradient: "from-teal-500 to-emerald-600",
+            desc: "Metrics in tempo reale. Ogni lead tracciato con precisione chirurgica.",
+            image: "/images/features/feature_analytics.png",
             stat: "Dashboard live"
         },
         {
             icon: Zap,
             title: "Risonanza Infinita",
-            desc: "Follow-up che non dimenticano mai. Mantieni vivo il desiderio.",
-            visual: "⚡",
-            gradient: "from-yellow-500 to-amber-600",
+            desc: "Follow-up automatici che non dimenticano mai. Zero lead persi.",
+            image: "/images/features/feature_lightning.png",
             stat: "0% lead persi"
         }
     ];
@@ -112,8 +105,7 @@ const FeaturesEnhanced = () => {
             icon: any;
             title: string;
             desc: string;
-            visual: string;
-            gradient: string;
+            image: string;
             stat: string;
             demo?: string;
         },
@@ -125,52 +117,42 @@ const FeaturesEnhanced = () => {
         return (
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
                 onMouseEnter={() => setActiveFeature(index)}
                 onMouseLeave={() => setActiveFeature(null)}
-                className={`group relative bg-white rounded-3xl overflow-hidden border border-charcoal/5 shadow-lg hover:shadow-2xl transition-all duration-500 ${isCore ? 'min-h-[380px]' : 'min-h-[280px]'
+                className={`group relative bg-white rounded-3xl overflow-hidden border border-charcoal/5 shadow-lg hover:shadow-2xl transition-all duration-500 ${isCore ? 'min-h-[420px]' : 'min-h-[320px]'
                     }`}
             >
-                {/* Visual Header with Gradient */}
-                <div className={`relative h-32 bg-gradient-to-br ${feature.gradient} overflow-hidden`}>
-                    {/* Animated Background Pattern */}
-                    <div className="absolute inset-0 opacity-20">
-                        <div className="absolute inset-0" style={{
-                            backgroundImage: `radial-gradient(circle at 30% 50%, rgba(255,255,255,0.3) 0%, transparent 50%),
-                                              radial-gradient(circle at 70% 80%, rgba(255,255,255,0.2) 0%, transparent 40%)`
-                        }} />
-                    </div>
+                {/* Image Header */}
+                <div className="relative h-40 overflow-hidden">
+                    <Image
+                        src={feature.image}
+                        alt={feature.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
 
-                    {/* Large Emoji Visual */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <motion.span
-                            className="text-6xl opacity-90 group-hover:scale-125 transition-transform duration-500"
-                            animate={isActive ? { y: [0, -10, 0] } : {}}
-                            transition={{ duration: 1, repeat: Infinity }}
-                        >
-                            {feature.visual}
-                        </motion.span>
-                    </div>
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
 
                     {/* Stat Badge */}
-                    <div className="absolute bottom-3 right-3 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full">
-                        <span className="text-white text-[10px] font-bold uppercase tracking-wider">
+                    <div className="absolute top-3 right-3 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg">
+                        <span className="text-charcoal text-[11px] font-black uppercase tracking-wider">
                             {feature.stat}
                         </span>
                     </div>
 
-                    {/* Shimmer Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                    {/* Shimmer on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000" />
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
                     {/* Icon + Title */}
                     <div className="flex items-center gap-3 mb-4">
-                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center shadow-lg`}>
-                            <feature.icon className="w-5 h-5 text-white" />
+                        <div className="w-10 h-10 rounded-xl bg-charcoal/5 flex items-center justify-center group-hover:bg-gold/10 transition-colors">
+                            <feature.icon className="w-5 h-5 text-charcoal/40 group-hover:text-gold transition-colors" />
                         </div>
                         <h3 className="font-serif text-xl text-charcoal italic group-hover:text-gold transition-colors">
                             {feature.title}
@@ -184,26 +166,32 @@ const FeaturesEnhanced = () => {
 
                     {/* Demo Preview (only for core features) */}
                     {isCore && feature.demo && (
-                        <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={isActive ? { opacity: 1, height: 'auto' } : { opacity: 0, height: 0 }}
-                            className="overflow-hidden"
-                        >
-                            <div className="p-3 bg-charcoal/5 rounded-xl border border-charcoal/10 mt-2">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Play className="w-3 h-3 text-gold" />
-                                    <span className="text-[10px] uppercase tracking-wider text-charcoal/40 font-bold">Demo Live</span>
-                                </div>
-                                <p className="text-sm text-charcoal/80 font-medium italic">
-                                    "{feature.demo}"
-                                </p>
-                            </div>
-                        </motion.div>
+                        <AnimatePresence>
+                            {isActive && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="overflow-hidden"
+                                >
+                                    <div className="p-3 bg-gold/5 rounded-xl border border-gold/20 mt-2">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Play className="w-3 h-3 text-gold" />
+                                            <span className="text-[10px] uppercase tracking-wider text-gold font-bold">Demo Live</span>
+                                        </div>
+                                        <p className="text-sm text-charcoal/80 font-medium italic">
+                                            "{feature.demo}"
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     )}
                 </div>
 
                 {/* Active Indicator */}
-                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`} />
+                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gold transform ${isActive ? 'scale-x-100' : 'scale-x-0'} transition-transform duration-300 origin-left`} />
             </motion.div>
         );
     };
@@ -216,42 +204,23 @@ const FeaturesEnhanced = () => {
                 <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-[150px]" />
             </div>
 
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={inView ? { opacity: 1 } : {}}
-                className="max-w-7xl mx-auto relative z-10"
-            >
+            <div className={`max-w-7xl mx-auto relative z-10 transition-all duration-1000 ${inView ? 'opacity-100' : 'opacity-0'}`}>
                 {/* Header */}
                 <div className="text-center mb-20">
-                    <motion.span
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal/5 rounded-full mb-8"
-                    >
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal/5 rounded-full mb-8">
                         <Sparkles className="w-4 h-4 text-gold" />
                         <span className="text-charcoal/60 text-[10px] uppercase tracking-[0.4em] font-black">Arsenal Completo</span>
-                    </motion.span>
+                    </span>
 
-                    <motion.h2
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="font-serif text-5xl md:text-8xl text-charcoal mb-8 leading-[0.9] tracking-tight"
-                    >
+                    <h2 className="font-serif text-5xl md:text-8xl text-charcoal mb-8 leading-[0.9] tracking-tight">
                         Strumenti <br />
                         <span className="text-gold italic">di Potere.</span>
-                    </motion.h2>
+                    </h2>
 
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-xl text-charcoal/40 max-w-2xl mx-auto italic"
-                    >
+                    <p className="text-xl text-charcoal/40 max-w-2xl mx-auto italic">
                         "La perfezione non è quando non c'è più nulla da aggiungere.<br />
                         <strong className="text-charcoal/60">Ma quando non c'è più nulla da togliere."</strong>
-                    </motion.p>
+                    </p>
                 </div>
 
                 {/* Core Features - 3 large cards */}
@@ -268,8 +237,8 @@ const FeaturesEnhanced = () => {
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setExpanded(!expanded)}
                         className={`inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-black uppercase tracking-wider transition-all duration-300 ${expanded
-                            ? 'bg-charcoal text-white'
-                            : 'bg-gold/10 text-gold hover:bg-gold hover:text-white'
+                                ? 'bg-charcoal text-white'
+                                : 'bg-gold/10 text-gold hover:bg-gold hover:text-white'
                             }`}
                     >
                         <Sparkles className="w-4 h-4" />
@@ -296,17 +265,12 @@ const FeaturesEnhanced = () => {
                 </AnimatePresence>
 
                 {/* Bottom CTA */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mt-16"
-                >
-                    <p className="text-charcoal/40 italic mb-6">
+                <div className="text-center mt-16">
+                    <p className="text-charcoal/40 italic">
                         Tutto questo, <strong className="text-charcoal/60">senza scrivere una riga di codice.</strong>
                     </p>
-                </motion.div>
-            </motion.div>
+                </div>
+            </div>
         </section>
     );
 };
