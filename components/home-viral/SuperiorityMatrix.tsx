@@ -54,10 +54,10 @@ export default function SuperiorityMatrix() {
         example: "VirtualTwin",
         icon: Crown,
         objective: "Vendita + Brand + Libertà",
-        usp: "Risponde con il TUO tono, vende 24/7, protegge il tuo brand",
+        usp: "Risponde come risponderesti TU, vende 24/7, protegge il tuo brand",
         interaction: "Personale: È TE in versione digitale",
         features: [
-            "Addestrato sul TUO tono e stile",
+            "Addestrato sulla TUA personalità",
             "Vende, qualifica e chiude",
             "24/7 su WhatsApp, Instagram, Messenger",
             "Setup in 10 minuti, zero codice"
