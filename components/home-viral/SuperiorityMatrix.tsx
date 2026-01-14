@@ -36,16 +36,16 @@ export default function SuperiorityMatrix() {
             limits: ["Non vende, risolve", "Impersonale", "Costoso per PMI"]
         },
         {
-            category: "AI Conversazionale",
-            example: "ChatGPT / Claude",
+            category: "AI Generiche",
+            example: "Chatbot Standard",
             icon: Bot,
             color: "from-purple-500 to-violet-500",
             bgColor: "bg-purple-50",
             borderColor: "border-purple-200",
             objective: "Assistenza generica",
-            usp: "Conoscenza enciclopedica e creatività",
-            interaction: "Libera: Dialogo aperto su ogni tema",
-            limits: ["Non conosce il TUO business", "Nessuna integrazione", "Zero follow-up"]
+            usp: "Risposte basate su conoscenza generale",
+            interaction: "Libera: Dialogo generico su ogni tema",
+            limits: ["Non conosce il TUO business", "Zero personalità", "Nessun follow-up"]
         }
     ];
 
@@ -54,10 +54,10 @@ export default function SuperiorityMatrix() {
         example: "VirtualTwin",
         icon: Crown,
         objective: "Vendita + Brand + Libertà",
-        usp: "Parla con la TUA voce, vende 24/7, protegge il tuo brand",
+        usp: "Risponde con il TUO tono, vende 24/7, protegge il tuo brand",
         interaction: "Personale: È TE in versione digitale",
         features: [
-            "Addestrato sulla TUA voce e stile",
+            "Addestrato sul TUO tono e stile",
             "Vende, qualifica e chiude",
             "24/7 su WhatsApp, Instagram, Messenger",
             "Setup in 10 minuti, zero codice"
