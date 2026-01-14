@@ -122,14 +122,31 @@ Non devi sapere programmare.
 
 VirtualTwin fa parte di un progetto più grande chiamato **Insolito Experiences**:
 
-| Progetto | Cosa Fa | Status |
-|----------|---------|--------|
-| **VirtualTwin** | Clone AI che risponde ai clienti per te, 24/7 | ✅ Attivo |
-| **VirtualBNB** | Gestione affitti brevi e proprietà | ✅ Attivo |
-| **LuminelCoach** | Un coach AI personale per la tua crescita | 🔜 In arrivo |
-| **Lumina Manager** | Gestione team e progetti con AI | 🔜 In arrivo |
-| **Insolita Academy** | Corsi e formazione personalizzata | 🔜 In arrivo |
-| **MichaelLuminels** | Costruzione del tuo brand personale | 🔜 In arrivo |
+### VirtualTwin ✅ Attivo
+**L'Elite dell'AI Conversazionale**  
+→ Un clone AI che risponde ai tuoi clienti su WhatsApp, Instagram e Messenger 24/7, con il tuo tono.
+
+### VirtualBNB ✅ Attivo
+**Luxury Property Management**  
+→ Gestione professionale di affitti brevi e proprietà, con standard di servizio elevati.
+
+### LuminelCoach 🔜 In arrivo
+**Transformational AI Coach**  
+→ Un coach AI personale che ti guida nella crescita personale e professionale.
+
+### Lumina Manager 🔜 In arrivo
+**The Elite Operating System**  
+→ Gestione intelligente di team, progetti e operazioni aziendali con supporto AI.
+
+### Insolita Academy 🔜 In arrivo
+**Formazione Personalizzata**  
+→ Corsi e percorsi formativi su misura per chi vuole crescere e imparare.
+
+### MichaelLuminels 🔜 In arrivo
+**Virtual Coach Image**  
+→ Costruzione del tuo brand personale e della tua immagine professionale.
+
+---
 
 L'idea è semplice: **un ecosistema di strumenti che ti aiutano a lavorare meglio, non di più.**
 
