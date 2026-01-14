@@ -1,100 +1,86 @@
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { X, Check, TrendingUp, Clock, Moon, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Check, TrendingUp, Clock, Moon, Sparkles, ChevronDown } from 'lucide-react';
 
 /**
- * Today Tomorrow Stories Component - LUXURY EDITION
+ * Today Tomorrow Stories Component - INTERACTIVE ACCORDION
  * 
- * ELITE DESIGN: Sophisticated before/after scenarios with elegant palette
+ * ELITE DESIGN: 4 collapsible cards that expand on click
  * 
- * Usage: Homepage transformation section - relatable pain → solution stories
+ * Usage: Homepage transformation section - click to reveal before/after
  */
 export default function TodayTomorrowStories() {
+    const [openIndex, setOpenIndex] = useState<number | null>(null);
+
     const stories = [
         {
             title: "L'Erosione della Vita",
+            subtitle: "Cena con la famiglia interrotta",
             icon: Clock,
+            color: "from-amber-500 to-orange-600",
             today: {
-                time: "Sabato Sera · Attrito",
                 scene: "Cena sacra con la famiglia. Una vibrazione interrompe il presente.",
-                message: "'Mi mandi info? Vorrei iniziare subito.'",
-                dilemma: "La scelta è tra il furto di tempo ai tuoi cari o l'abbandono di un'opportunità.",
-                result: "Presenza distrutta. Energia dissipata.",
-                emotion: "Schiavitù Operativa"
+                result: "Presenza distrutta. Energia dissipata."
             },
             tomorrow: {
-                time: "Sabato Sera · Grazia",
                 scene: "Il telefono resta silenzioso. Il presente è intatto.",
-                action: "Il tuo Clone accoglie il cliente, educa, risolve dubbi e posiziona il valore.",
-                result: "Tu proteggi il tuo tempo. Lui fa crescere il business.",
-                emotion: "Libertà"
+                result: "Tu proteggi il tuo tempo. Lui fa crescere il business."
             }
         },
         {
             title: "Il Fallimento del Limite",
+            subtitle: "Client alle 3 di notte",
             icon: Moon,
+            color: "from-indigo-500 to-purple-600",
             today: {
-                time: "Ore 03:00 · Vulnerabilità",
                 scene: "Il mercato richiede verità alle 3 del mattino. Tu dormi (perché sei umano).",
-                message: "Il potenziale buyer cerca una connessione immediata.",
-                dilemma: "Il mondo non tace mentre tu ti rigeneri. Il tempo è il nemico.",
-                result: "Silenzio assordante. Lead congelato o perso.",
-                emotion: "Impoverimento Strategico"
+                result: "Silenzio assordante. Lead congelato o perso."
             },
             tomorrow: {
-                time: "Ore 03:00 · Presenza d'Anima",
                 scene: "Un buyer in un altro fuso orario cerca la tua autorità.",
-                action: "Il gemello risponde con la tua saggezza istantanea. Qualifica e chiude.",
-                result: "Ti svegli davanti a una realtà già espansa. Senza sforzo biologico.",
-                emotion: "Evoluzione Continua"
+                result: "Ti svegli davanti a una realtà già espansa. Senza sforzo biologico."
             }
         },
         {
             title: "Saturazione Cognitiva",
+            subtitle: "20+ messaggi ogni mattina",
             icon: TrendingUp,
+            color: "from-emerald-500 to-teal-600",
             today: {
-                time: "Lunedì Mattina · Caos",
                 scene: "20+ anime cercano la tua attenzione. Il rumore è insopportabile.",
-                message: "3 ore di digitazione meccanica, template sterili, ripetizioni estenuanti.",
-                dilemma: "Sei un Fondatore o un operatore di data-entry dei tuoi stessi pensieri?",
-                result: "Saturazione. Creatività annientata dalla routine.",
-                emotion: "Burnout Aziendale"
+                result: "Saturazione. Creatività annientata dalla routine."
             },
             tomorrow: {
-                time: "Lunedì Mattina · Purezza",
-                scene: "I 20 messaggi sono già stati filtrati, educati e convertiti dal gemello.",
-                action: "Solo il 5% che richiede il tuo genio creativo arriva alla tua attenzione.",
-                result: "Lavori SUL futuro, non NEL passato. 15 ore di ossigeno recuperate.",
-                emotion: "Chiarezza Mentale"
+                scene: "I 20 messaggi sono già stati filtrati, educati e convertiti dal Clone.",
+                result: "Lavori SUL futuro, non NEL passato. 15 ore di ossigeno recuperate."
             }
         },
         {
             title: "Il Deserto del 'Ci Penso'",
+            subtitle: "Follow-up che non tornano",
             icon: Check,
+            color: "from-rose-500 to-pink-600",
             today: {
-                time: "Pomeriggio · Ghosting",
                 scene: "Investi 15 minuti a spiegare. Scrivi con passione.",
-                message: "Cliente: 'Grazie, ci farò sapere.' Mai più visto.",
-                dilemma: "Hai scambiato il tuo ossigeno per un 'forse'. Un baratto fallimentare.",
-                result: "Frustrazione. Il valore percepito crolla nel follow-up manuale.",
-                emotion: "Svalutazione del Sé"
+                result: "Frustrazione. Il valore percepito crolla nel follow-up manuale."
             },
             tomorrow: {
-                time: "Pomeriggio · Autorità",
-                scene: "Il gemello gestisce l'educazione e le obiezioni con perfezione neutrale.",
-                action: "Case study, FAQ e link arrivano in tempo reale, mantenendo il desiderio al massimo.",
-                result: "Il cliente dice: 'Indistinguibile'. Tu intervieni solo per il brindisi finale.",
-                emotion: "Eccellenza Sistematica"
+                scene: "Il Clone gestisce l'educazione e le obiezioni con perfezione.",
+                result: "Il cliente dice: 'Indistinguibile'. Tu intervieni solo per il brindisi finale."
             }
         }
     ];
 
+    const handleToggle = (index: number) => {
+        setOpenIndex(openIndex === index ? null : index);
+    };
+
     return (
         <section className="relative z-10 py-20 bg-gradient-to-b from-white via-champagne/10 to-white">
             <div className="container mx-auto px-6">
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-5xl mx-auto">
                     {/* Section Header */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -102,106 +88,139 @@ export default function TodayTomorrowStories() {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1 }}
-                            className="text-center mb-24"
-                        >
-                            <span className="text-gold text-[9px] uppercase tracking-[0.6em] font-black italic mb-8 block opacity-50">L'Invisibile Potere del Genio</span>
-                            <h2 className="font-serif text-5xl md:text-9xl text-charcoal mb-12 leading-[0.8] tracking-tighter">
-                                La Libertà del <br />
-                                <span className="text-gold italic">Silenzio.</span>
-                            </h2>
-                            <p className="text-xl md:text-2xl text-charcoal/20 max-w-4xl mx-auto leading-relaxed font-light italic">
-                                "La tecnologia perfetta è quella che scompare. <br />
-                                <strong className="text-charcoal/40 font-medium">Non aggiungiamo rumore al tuo business. Lo eliminiamo alla radice."</strong>
-                            </p>
-                        </motion.div>
+                        <span className="text-gold text-[9px] uppercase tracking-[0.6em] font-black italic mb-8 block opacity-50">Prima e Dopo</span>
+                        <h2 className="font-serif text-5xl md:text-8xl text-charcoal mb-8 leading-[0.85] tracking-tighter">
+                            La Libertà del <br />
+                            <span className="text-gold italic">Silenzio.</span>
+                        </h2>
+                        <p className="text-lg md:text-xl text-charcoal/40 max-w-2xl mx-auto leading-relaxed">
+                            Clicca su ogni scenario per vedere la trasformazione.
+                        </p>
                     </motion.div>
 
-                    {/* Story Cards - LUXURY GRID */}
-                    <div className="grid md:grid-cols-2 gap-8">
-                        {stories.map((story, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className="bg-white rounded-3xl overflow-hidden shadow-xl border-2 border-charcoal/10 hover:shadow-2xl transition-all"
-                            >
-                                {/* Story Title - LUXURY HEADER */}
-                                <div className="bg-charcoal px-12 py-10 relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-gold/5" />
+                    {/* Accordion Cards */}
+                    <div className="space-y-4">
+                        {stories.map((story, index) => {
+                            const isOpen = openIndex === index;
+                            const Icon = story.icon;
 
-                                    <div className="flex items-center gap-8 relative z-10">
-                                        <div className="w-20 h-20 rounded-full border border-white/5 flex items-center justify-center backdrop-blur-3xl group-hover:border-gold/30 transition-all duration-1000">
-                                            <story.icon className="w-8 h-8 text-gold" />
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className="overflow-hidden"
+                                >
+                                    {/* Card Header - Always Visible */}
+                                    <button
+                                        onClick={() => handleToggle(index)}
+                                        className={`w-full flex items-center gap-6 p-6 md:p-8 rounded-2xl transition-all duration-500 group ${isOpen
+                                                ? 'bg-charcoal text-white rounded-b-none'
+                                                : 'bg-white hover:bg-charcoal/5 border-2 border-charcoal/10 hover:border-gold/30'
+                                            }`}
+                                    >
+                                        {/* Icon */}
+                                        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${isOpen
+                                                ? 'bg-gold/20'
+                                                : 'bg-gradient-to-br ' + story.color + ' bg-opacity-10'
+                                            }`}>
+                                            <Icon className={`w-7 h-7 md:w-8 md:h-8 transition-colors duration-500 ${isOpen ? 'text-gold' : 'text-white'
+                                                }`} />
                                         </div>
-                                        <div>
-                                            <h3 className="text-4xl font-serif text-white italic tracking-tight">
+
+                                        {/* Title & Subtitle */}
+                                        <div className="flex-1 text-left">
+                                            <h3 className={`text-xl md:text-2xl font-serif italic tracking-tight transition-colors duration-500 ${isOpen ? 'text-white' : 'text-charcoal'
+                                                }`}>
                                                 {story.title}
                                             </h3>
+                                            <p className={`text-sm mt-1 transition-colors duration-500 ${isOpen ? 'text-white/60' : 'text-charcoal/40'
+                                                }`}>
+                                                {story.subtitle}
+                                            </p>
                                         </div>
-                                    </div>
-                                </div>
 
-                                {/* TODAY (Problem) - Subtle red accents */}
-                                <div className="p-12 border-b border-charcoal/5 group-hover:bg-rose-50/10 transition-colors duration-1000">
-                                    <div className="flex items-start gap-6 mb-4">
-                                        <X className="w-5 h-5 text-red-900/20 flex-shrink-0 mt-2" />
-                                        <div className="flex-1">
-                                            <h4 className="text-[9px] uppercase font-black text-charcoal/20 tracking-[0.4em] mb-4">
-                                                Il Vecchio Mondo
-                                            </h4>
-                                            <p className="text-charcoal/40 leading-relaxed mb-4 text-lg italic">
-                                                {story.today.scene}
-                                            </p>
-                                            <p className="text-red-900/60 font-serif text-xl italic mb-4">
-                                                → {story.today.result}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                                        {/* Chevron */}
+                                        <motion.div
+                                            animate={{ rotate: isOpen ? 180 : 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-500 ${isOpen ? 'bg-gold/20' : 'bg-charcoal/5 group-hover:bg-gold/10'
+                                                }`}
+                                        >
+                                            <ChevronDown className={`w-5 h-5 transition-colors duration-500 ${isOpen ? 'text-gold' : 'text-charcoal/40 group-hover:text-gold'
+                                                }`} />
+                                        </motion.div>
+                                    </button>
 
-                                {/* TOMORROW (Solution) - Pure Magic */}
-                                <div className="p-12 group-hover:bg-gold/5 transition-colors duration-1000">
-                                    <div className="flex items-start gap-6">
-                                        <Sparkles className="w-5 h-5 text-gold flex-shrink-0 mt-2" />
-                                        <div className="flex-1">
-                                            <h4 className="text-[9px] uppercase font-black text-gold tracking-[0.4em] mb-4">
-                                                La Nuova Realtà
-                                            </h4>
-                                            <p className="text-charcoal leading-relaxed mb-4 text-lg italic">
-                                                {story.tomorrow.scene}
-                                            </p>
-                                            <p className="text-gold font-serif text-2xl italic">
-                                                → {story.tomorrow.result}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
+                                    {/* Expandable Content */}
+                                    <AnimatePresence>
+                                        {isOpen && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="bg-white border-2 border-t-0 border-charcoal/10 rounded-b-2xl">
+                                                    <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-charcoal/10">
+                                                        {/* IL VECCHIO MONDO */}
+                                                        <div className="p-8 md:p-10 relative">
+                                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500/20 to-transparent" />
+                                                            <div className="flex items-center gap-3 mb-6">
+                                                                <X className="w-5 h-5 text-red-400" />
+                                                                <span className="text-[10px] uppercase font-black text-red-900/40 tracking-[0.3em]">
+                                                                    Il Vecchio Mondo
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-charcoal/60 leading-relaxed mb-6 text-base">
+                                                                {story.today.scene}
+                                                            </p>
+                                                            <p className="text-red-600/80 font-serif text-lg italic border-l-2 border-red-400/30 pl-4">
+                                                                → {story.today.result}
+                                                            </p>
+                                                        </div>
+
+                                                        {/* LA NUOVA REALTÀ */}
+                                                        <div className="p-8 md:p-10 relative bg-gradient-to-br from-gold/5 to-transparent">
+                                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold to-transparent" />
+                                                            <div className="flex items-center gap-3 mb-6">
+                                                                <Sparkles className="w-5 h-5 text-gold" />
+                                                                <span className="text-[10px] uppercase font-black text-gold tracking-[0.3em]">
+                                                                    La Nuova Realtà
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-charcoal leading-relaxed mb-6 text-base">
+                                                                {story.tomorrow.scene}
+                                                            </p>
+                                                            <p className="text-gold font-serif text-lg italic border-l-2 border-gold pl-4 font-medium">
+                                                                → {story.tomorrow.result}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
+                            );
+                        })}
                     </div>
 
-                    {/* Source Note */}
-                    <motion.div
+                    {/* Hint Text */}
+                    <motion.p
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.6 }}
-                        className="text-center mt-12"
+                        transition={{ delay: 0.5 }}
+                        className="text-center text-charcoal/30 text-sm mt-12 italic"
                     >
-                        <p className="text-charcoal/50 text-sm italic">
-                            📈 Basato su proiezioni di mercato e analisi dell'automazione AI.
-                        </p>
-                    </motion.div>
+                        💡 {openIndex === null ? 'Tocca una card per esplorare' : 'Tocca un\'altra card per vedere altri scenari'}
+                    </motion.p>
                 </div>
             </div>
         </section>
     );
 }
-
