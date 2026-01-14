@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Zap, Headphones, Bot, Crown, ArrowRight, Sparkles, Clock, Euro, AlertTriangle } from 'lucide-react';
+import { Check, Zap, Headphones, Bot, Crown, ArrowRight, Sparkles, Clock, Euro, AlertTriangle, Gift } from 'lucide-react';
+import Image from 'next/image';
 
 /**
  * Superiority Matrix Component - 2026 COMPARISON + SETUP SECTION
@@ -178,8 +179,14 @@ export default function SuperiorityMatrix() {
                             {/* Header */}
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-16 h-16 rounded-2xl bg-gold flex items-center justify-center shadow-lg">
-                                        <Crown className="w-8 h-8 text-charcoal" />
+                                    <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg border-2 border-gold/50">
+                                        <Image
+                                            src="/images/virtualtwin_icon.png"
+                                            alt="VirtualTwin"
+                                            width={64}
+                                            height={64}
+                                            className="object-cover"
+                                        />
                                     </div>
                                     <div>
                                         <p className="text-gold text-[10px] uppercase tracking-widest font-black">
@@ -279,19 +286,32 @@ export default function SuperiorityMatrix() {
 
                         {/* Premium Setup */}
                         <div className="p-8 bg-gradient-to-br from-gold/10 to-amber-50 rounded-3xl border-2 border-gold/30 hover:border-gold/50 transition-all relative overflow-hidden">
-                            <div className="absolute top-4 right-4 px-3 py-1 bg-gold text-charcoal text-[9px] font-black uppercase tracking-widest rounded-full">
-                                Done-for-you
+                            {/* Concierge Image */}
+                            <div className="absolute -right-8 -bottom-8 w-40 h-40 opacity-20">
+                                <Image
+                                    src="/images/setup_premium.png"
+                                    alt="Setup Premium"
+                                    width={160}
+                                    height={160}
+                                    className="object-contain"
+                                />
                             </div>
-                            <div className="flex items-center gap-3 mb-6">
+
+                            <div className="absolute top-4 right-4 flex items-center gap-2">
+                                <span className="px-3 py-1 bg-red-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full animate-pulse">Promo Wave</span>
+                                <span className="px-3 py-1 bg-gold text-charcoal text-[9px] font-black uppercase tracking-widest rounded-full">Done-for-you</span>
+                            </div>
+
+                            <div className="flex items-center gap-3 mb-6 mt-4">
                                 <div className="w-12 h-12 rounded-2xl bg-gold flex items-center justify-center">
-                                    <Sparkles className="w-6 h-6 text-charcoal" />
+                                    <Gift className="w-6 h-6 text-charcoal" />
                                 </div>
                                 <div>
                                     <p className="text-[10px] uppercase tracking-widest text-gold font-black">Opzione 2</p>
                                     <h4 className="text-xl font-serif italic text-charcoal">Setup Premium</h4>
                                 </div>
                             </div>
-                            <ul className="space-y-3 mb-6">
+                            <ul className="space-y-3 mb-6 relative z-10">
                                 <li className="flex items-center gap-3 text-charcoal">
                                     <Check className="w-4 h-4 text-gold" />
                                     <span className="font-medium">Configuriamo tutto noi in 48h</span>
@@ -309,10 +329,13 @@ export default function SuperiorityMatrix() {
                                     <span className="font-medium">Call 1:1 di onboarding</span>
                                 </li>
                             </ul>
-                            <div className="flex items-center justify-between">
-                                <p className="text-charcoal font-serif text-2xl italic">
-                                    €297 <span className="text-sm text-charcoal/50">una tantum</span>
-                                </p>
+                            <div className="flex items-center justify-between relative z-10">
+                                <div>
+                                    <p className="text-charcoal font-serif text-2xl italic">
+                                        <span className="line-through text-charcoal/40 text-lg">€297</span> €99*
+                                    </p>
+                                    <p className="text-[10px] text-charcoal/50 mt-1">*Piani Starter e Creator. Altri piani da €197.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
