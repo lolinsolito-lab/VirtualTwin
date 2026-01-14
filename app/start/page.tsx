@@ -3,13 +3,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import FounderStoryTimeline from '@/components/viral-sections/FounderStoryTimeline';
-import DayInLifeTimeline from '@/components/viral-sections/DayInLifeTimeline';
-import HowItWorks3Step from '@/components/viral-sections/HowItWorks3Step';
-import MythVsReality from '@/components/viral-sections/MythVsReality';
-import FounderTestimonials from '@/components/viral-sections/FounderTestimonials';
-import FAQVideoReady from '@/components/viral-sections/FAQVideoReady';
-import CommunityFOMO from '@/components/viral-sections/CommunityFOMO';
+import Image from 'next/image';
+import Navbar from '@/components/sections/Navbar';
+import Footer from '@/components/sections/Footer';
 import PricingUltimate from '@/components/sections/PricingUltimate';
 import SocialProofHuman from '@/components/home-viral/SocialProofHuman';
 import FinalCTAUltimate from '@/components/sections/FinalCTAUltimate';
@@ -19,15 +15,22 @@ import {
     Shield,
     Sparkles,
     MessageSquare,
-    Bot,
     Crown,
     Star,
     Users,
-    Award
+    Check,
+    Zap,
+    Target,
+    Brain
 } from 'lucide-react';
 
 import { getDaysUntilPriceIncrease, getCurrentWaveSpotsRemaining } from '@/lib/waves';
 
+/**
+ * START PAGE - PUBLIC FACING
+ * 
+ * Upgraded with new visual DNA and communication style
+ */
 export default function StartPage() {
     const [daysUntilIncrease, setDaysUntilIncrease] = useState(0);
     const [founderSpotsLeft, setFounderSpotsLeft] = useState(0);
@@ -37,94 +40,143 @@ export default function StartPage() {
         getCurrentWaveSpotsRemaining().then(setFounderSpotsLeft);
     }, []);
 
+    const features = [
+        {
+            icon: MessageSquare,
+            title: "Identità Indistinguibile",
+            desc: "Il Clone parla esattamente come te, 24/7",
+            image: "/images/features/feature_identity.png"
+        },
+        {
+            icon: Target,
+            title: "Filtro dell'Élite",
+            desc: "Qualifica automaticamente chi è pronto all'acquisto",
+            image: "/images/features/feature_filter.png"
+        },
+        {
+            icon: Zap,
+            title: "Conversione Silenziosa",
+            desc: "Ogni interazione è un passo verso la vendita",
+            image: "/images/features/feature_conversion.png"
+        }
+    ];
+
+    const howItWorks = [
+        {
+            step: "01",
+            title: "Addestra il Clone",
+            desc: "Carica le tue FAQ, il tuo stile, la tua personalità. 10 minuti.",
+            image: "/images/stages/stage_awakening.png"
+        },
+        {
+            step: "02",
+            title: "Collega i Canali",
+            desc: "WhatsApp, Instagram, Messenger. Un click.",
+            image: "/images/stages/stage_bicycle.png"
+        },
+        {
+            step: "03",
+            title: "Scala il Business",
+            desc: "Il Clone vende mentre tu vivi la tua vita.",
+            image: "/images/stages/stage_soul.png"
+        }
+    ];
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-champagne via-white to-champagne/30">
-            {/* Decorative Elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-20 right-20 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-20 left-20 w-80 h-80 bg-rose-200/10 rounded-full blur-3xl" />
-            </div>
+            <Navbar />
 
-            {/* Header */}
-            <header className="relative z-10">
-                <div className="container mx-auto px-6 py-8">
-                    <div className="flex items-center justify-between">
-                        <Link href="/" className="flex items-center gap-3 group">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
-                                <Bot className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="font-serif text-2xl text-charcoal tracking-tight">VirtualTwin</span>
-                        </Link>
-                        {founderSpotsLeft > 0 && (
-                            <Link
-                                href="/founder"
-                                className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-charcoal text-white rounded-full text-sm font-medium hover:bg-charcoal/90 transition"
-                            >
-                                <Crown className="w-4 h-4 text-gold" />
-                                🔥 {founderSpotsLeft} Posti Founder!
-                            </Link>
-                        )}
-                    </div>
+            {/* Hero Section */}
+            <section className="relative z-10 pt-32 pb-20 overflow-hidden">
+                {/* Background Elements */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-20 right-20 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+                    <div className="absolute bottom-20 left-20 w-80 h-80 bg-purple-200/10 rounded-full blur-3xl" />
                 </div>
-            </header>
 
-            {/* Hero */}
-            <section className="relative z-10 container mx-auto px-6 pt-12 pb-20">
-                <div className="max-w-5xl mx-auto text-center">
-                    {/* Scarcity Tag */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-5 py-2 bg-red-50 border-2 border-red-200 rounded-full mb-6 animate-pulse"
-                    >
-                        <Clock className="w-4 h-4 text-red-600" />
-                        <span className="text-red-700 text-sm font-black tracking-wider uppercase">
-                            Prezzi aumentano tra {daysUntilIncrease} giorni
-                        </span>
-                    </motion.div>
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="max-w-5xl mx-auto text-center">
+                        {/* Urgency Tag */}
+                        {daysUntilIncrease > 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="inline-flex items-center gap-2 px-5 py-2 bg-red-50 border-2 border-red-200 rounded-full mb-8"
+                            >
+                                <Clock className="w-4 h-4 text-red-600 animate-pulse" />
+                                <span className="text-red-700 text-sm font-black tracking-wider uppercase">
+                                    Prezzi aumentano tra {daysUntilIncrease} giorni
+                                </span>
+                            </motion.div>
+                        )}
 
-                    {/* Main Headline */}
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="font-serif text-5xl md:text-7xl lg:text-8xl text-charcoal mb-6 leading-[0.95]"
-                    >
-                        Altri Lavorano 12h/giorno.
-                        <br />
-                        <span className="italic text-gold">Tu Hai un Clone AI.</span>
-                    </motion.h1>
+                        {/* Main Headline */}
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="font-serif text-5xl md:text-7xl lg:text-8xl text-charcoal mb-8 leading-[0.9]"
+                        >
+                            Sii Ovunque. <br />
+                            <span className="italic text-gold">Sii Libero.</span>
+                        </motion.h1>
 
-                    {/* Social Proof */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="flex items-center justify-center gap-2 mb-8"
-                    >
-                        <div className="flex -space-x-2">
-                            {[...Array(5)].map((_, i) => (
-                                <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amber-600 border-2 border-white flex items-center justify-center">
-                                    <Star className="w-4 h-4 text-white fill-white" />
-                                </div>
-                            ))}
-                        </div>
-                        <span className="text-charcoal/70 font-medium text-sm">
-                            <strong className="text-gold font-black">200+ imprenditori</strong> hanno già attivato il loro Clone
-                        </span>
-                    </motion.div>
+                        {/* Subheadline */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="text-xl md:text-2xl text-charcoal/50 max-w-3xl mx-auto mb-12 leading-relaxed italic"
+                        >
+                            "Il tuo Clone AI risponde come te, vende come te, <br />
+                            <strong className="text-charcoal/70">mentre tu ti riprendi la tua vita."</strong>
+                        </motion.p>
 
-                    {/* Subheadline */}
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-lg md:text-xl text-charcoal/70 max-w-3xl mx-auto mb-10 leading-relaxed"
-                    >
-                        Mentre la concorrenza perde <strong className="text-red-600">3-5 ore al giorno</strong> in risposte manuali,
-                        <br className="hidden md:block" />
-                        tu <strong className="text-gold">scala il business</strong>, chiudi più clienti, e vivi la tua vita.
-                    </motion.p>
+                        {/* CTA Buttons */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+                        >
+                            <Link
+                                href="/auth/register"
+                                className="group inline-flex items-center gap-3 px-10 py-5 bg-gold text-white rounded-full font-black uppercase tracking-widest text-sm hover:scale-105 transition-all shadow-xl"
+                            >
+                                <Sparkles className="w-5 h-5" />
+                                Inizia Gratis · 14 Giorni
+                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+
+                            {founderSpotsLeft > 0 && (
+                                <Link
+                                    href="/founder"
+                                    className="inline-flex items-center gap-2 px-6 py-4 bg-charcoal text-white rounded-full text-sm font-medium hover:bg-charcoal/90 transition"
+                                >
+                                    <Crown className="w-4 h-4 text-gold" />
+                                    🔥 {founderSpotsLeft} Posti Founder Rimasti
+                                </Link>
+                            )}
+                        </motion.div>
+
+                        {/* Trust Badges */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="flex flex-wrap justify-center gap-6 text-charcoal/40 text-sm"
+                        >
+                            <span className="flex items-center gap-2">
+                                <Check className="w-4 h-4 text-green-600" /> No carta richiesta
+                            </span>
+                            <span className="flex items-center gap-2">
+                                <Check className="w-4 h-4 text-green-600" /> Setup in 10 minuti
+                            </span>
+                            <span className="flex items-center gap-2">
+                                <Check className="w-4 h-4 text-green-600" /> Cancella quando vuoi
+                            </span>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 
@@ -148,25 +200,113 @@ export default function StartPage() {
                 </div>
             </section>
 
-            {/* Story Sections */}
-            <FounderStoryTimeline />
-            <DayInLifeTimeline />
-            <HowItWorks3Step />
+            {/* Features Section with Images */}
+            <section className="py-20 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <div className="text-center mb-16">
+                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal/5 rounded-full mb-6">
+                            <Sparkles className="w-4 h-4 text-gold" />
+                            <span className="text-charcoal/60 text-[10px] uppercase tracking-[0.4em] font-black">Strumenti di Potere</span>
+                        </span>
+                        <h2 className="font-serif text-4xl md:text-6xl text-charcoal mb-4">
+                            Il Clone Che <span className="text-gold italic">Lavora Per Te.</span>
+                        </h2>
+                    </div>
 
-            {/* ============================================= */}
-            {/* PRICING - Uses PricingUltimate Component */}
-            {/* pricingMode='public' ensures public prices */}
-            {/* ============================================= */}
+                    <div className="grid md:grid-cols-3 gap-6">
+                        {features.map((feature, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="group bg-white rounded-3xl overflow-hidden border border-charcoal/5 shadow-lg hover:shadow-2xl transition-all"
+                            >
+                                <div className="relative h-40 overflow-hidden">
+                                    <Image
+                                        src={feature.image}
+                                        alt={feature.title}
+                                        fill
+                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+                                </div>
+                                <div className="p-6 text-center">
+                                    <div className="w-12 h-12 mx-auto rounded-xl bg-gold/10 flex items-center justify-center mb-4 group-hover:bg-gold transition-colors">
+                                        <feature.icon className="w-6 h-6 text-gold group-hover:text-white transition-colors" />
+                                    </div>
+                                    <h3 className="font-serif text-xl text-charcoal italic mb-2">{feature.title}</h3>
+                                    <p className="text-charcoal/60 text-sm">{feature.desc}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* How It Works with Images */}
+            <section className="py-20 px-6 bg-charcoal">
+                <div className="max-w-6xl mx-auto">
+                    <div className="text-center mb-16">
+                        <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black mb-4 block">Come Funziona</span>
+                        <h2 className="font-serif text-4xl md:text-6xl text-white mb-4">
+                            Tre Passi Verso la <span className="text-gold italic">Libertà.</span>
+                        </h2>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {howItWorks.map((step, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="group relative bg-white/5 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/10 hover:border-gold/30 transition-all"
+                            >
+                                <div className="relative h-48 overflow-hidden">
+                                    <Image
+                                        src={step.image}
+                                        alt={step.title}
+                                        fill
+                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/50 to-transparent" />
+                                    <div className="absolute top-4 left-4 px-3 py-1 bg-gold text-charcoal text-[10px] font-black uppercase rounded-full">
+                                        Passo {step.step}
+                                    </div>
+                                </div>
+                                <div className="p-6 text-center">
+                                    <h3 className="font-serif text-xl text-white italic mb-2">{step.title}</h3>
+                                    <p className="text-white/60 text-sm">{step.desc}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Quote Section */}
+            <section className="py-20 px-6">
+                <div className="max-w-4xl mx-auto text-center">
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="font-serif text-3xl md:text-5xl text-charcoal/30 italic leading-tight"
+                    >
+                        "Il mondo digitale dovrebbe <span className="text-gold">servire l'uomo</span>, <br />
+                        non <span className="text-charcoal/10">schiavizzarlo.</span>"
+                    </motion.p>
+                </div>
+            </section>
+
+            {/* PRICING */}
             <PricingUltimate pricingMode="public" />
 
-            {/* SOCIAL PROOF HUMAN - warm testimonials */}
+            {/* SOCIAL PROOF */}
             <SocialProofHuman />
-
-            {/* More Story Sections */}
-            <MythVsReality />
-            <FounderTestimonials />
-            <FAQVideoReady />
-            <CommunityFOMO />
 
             {/* FINAL CTA */}
             <FinalCTAUltimate />
@@ -184,32 +324,14 @@ export default function StartPage() {
                             <span className="font-medium">Attivazione Istantanea</span>
                         </div>
                         <div className="flex items-center gap-3 text-charcoal/50">
-                            <Award className="w-6 h-6" />
-                            <span className="font-medium">Garanzia 30 Giorni</span>
+                            <Brain className="w-6 h-6" />
+                            <span className="font-medium">AI che Impara da Te</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-
-
-            {/* Footer */}
-            <footer className="relative z-10 py-12 border-t border-charcoal/5">
-                <div className="container mx-auto px-6">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-2 text-charcoal/40">
-                            <Bot className="w-5 h-5" />
-                            <span className="font-medium">VirtualTwin</span>
-                            <span>© 2026</span>
-                        </div>
-                        <div className="flex items-center gap-6 text-charcoal/40 text-sm">
-                            <Link href="/privacy" className="hover:text-charcoal transition">Privacy</Link>
-                            <Link href="/terms" className="hover:text-charcoal transition">Termini</Link>
-                            <Link href="mailto:support@virtualtwin.app" className="hover:text-charcoal transition">Contatti</Link>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }
