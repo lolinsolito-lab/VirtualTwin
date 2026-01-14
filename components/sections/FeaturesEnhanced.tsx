@@ -108,7 +108,15 @@ const FeaturesEnhanced = () => {
     ];
 
     const FeatureCard = ({ feature, index, isCore = false }: {
-        feature: typeof coreFeatures[0],
+        feature: {
+            icon: any;
+            title: string;
+            desc: string;
+            visual: string;
+            gradient: string;
+            stat: string;
+            demo?: string;
+        },
         index: number,
         isCore?: boolean
     }) => {
@@ -175,7 +183,7 @@ const FeaturesEnhanced = () => {
                     </p>
 
                     {/* Demo Preview (only for core features) */}
-                    {isCore && 'demo' in feature && (
+                    {isCore && feature.demo && (
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={isActive ? { opacity: 1, height: 'auto' } : { opacity: 0, height: 0 }}
@@ -187,7 +195,7 @@ const FeaturesEnhanced = () => {
                                     <span className="text-[10px] uppercase tracking-wider text-charcoal/40 font-bold">Demo Live</span>
                                 </div>
                                 <p className="text-sm text-charcoal/80 font-medium italic">
-                                    "{(feature as any).demo}"
+                                    "{feature.demo}"
                                 </p>
                             </div>
                         </motion.div>
@@ -260,8 +268,8 @@ const FeaturesEnhanced = () => {
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setExpanded(!expanded)}
                         className={`inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-black uppercase tracking-wider transition-all duration-300 ${expanded
-                                ? 'bg-charcoal text-white'
-                                : 'bg-gold/10 text-gold hover:bg-gold hover:text-white'
+                            ? 'bg-charcoal text-white'
+                            : 'bg-gold/10 text-gold hover:bg-gold hover:text-white'
                             }`}
                     >
                         <Sparkles className="w-4 h-4" />
