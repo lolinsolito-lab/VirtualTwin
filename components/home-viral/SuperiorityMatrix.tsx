@@ -15,9 +15,9 @@ export default function SuperiorityMatrix() {
             category: "Marketing Automation",
             example: "ManyChat",
             icon: Zap,
-            color: "from-blue-500 to-cyan-500",
-            bgColor: "bg-blue-50",
-            borderColor: "border-blue-200",
+            color: "from-gray-400 to-gray-500",
+            bgColor: "bg-gray-50",
+            borderColor: "border-gray-200",
             objective: "Conversione e Vendita",
             usp: "Automazione massiva su Instagram/WhatsApp",
             interaction: "Ibrida: Pulsanti, menu e risposte AI guidate",
@@ -31,9 +31,9 @@ export default function SuperiorityMatrix() {
             category: "Customer Support",
             example: "Zendesk / Tidio",
             icon: Headphones,
-            color: "from-emerald-500 to-teal-500",
-            bgColor: "bg-emerald-50",
-            borderColor: "border-emerald-200",
+            color: "from-gray-400 to-gray-500",
+            bgColor: "bg-gray-50",
+            borderColor: "border-gray-200",
             objective: "Efficienza e Risoluzione",
             usp: "Integrazione con ticket e logistica",
             interaction: "Risolutiva: Basata su database di conoscenza",
@@ -47,9 +47,9 @@ export default function SuperiorityMatrix() {
             category: "AI Generiche",
             example: "Chatbot Standard",
             icon: Bot,
-            color: "from-purple-500 to-violet-500",
-            bgColor: "bg-purple-50",
-            borderColor: "border-purple-200",
+            color: "from-gray-400 to-gray-500",
+            bgColor: "bg-gray-50",
+            borderColor: "border-gray-200",
             objective: "Assistenza generica",
             usp: "Risposte basate su conoscenza generale",
             interaction: "Libera: Dialogo generico su ogni tema",
@@ -110,7 +110,7 @@ export default function SuperiorityMatrix() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className={`relative ${comp.bgColor} ${comp.borderColor} border rounded-3xl p-8 overflow-hidden group hover:shadow-lg transition-all`}
+                                className={`relative ${comp.bgColor} ${comp.borderColor} border rounded-3xl p-8 overflow-hidden group hover:shadow-lg transition-all grayscale-[30%] opacity-90 hover:grayscale-0 hover:opacity-100`}
                             >
                                 {/* Category Header */}
                                 <div className="flex items-center gap-3 mb-6">
@@ -163,7 +163,7 @@ export default function SuperiorityMatrix() {
                     viewport={{ once: true }}
                     className="relative mb-16"
                 >
-                    <div className="absolute -inset-2 bg-gradient-to-r from-gold via-amber-500 to-gold rounded-[3rem] blur-xl opacity-30" />
+                    <div className="absolute -inset-4 bg-gradient-to-r from-gold via-amber-500 to-gold rounded-[3rem] blur-2xl opacity-50 animate-pulse" />
                     <div className="relative bg-charcoal rounded-[2.5rem] p-10 md:p-16 overflow-hidden">
                         {/* Background Pattern */}
                         <div className="absolute inset-0 opacity-10">
