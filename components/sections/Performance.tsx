@@ -12,7 +12,7 @@ const Performance = () => {
 
             <div className="max-w-7xl mx-auto px-10 relative z-10 animate-soft-focus">
                 <div className="text-center mb-64">
-                    <span className="text-gold text-[10px] uppercase tracking-[2em] mb-12 block font-black italic opacity-60">Architettura Finanziaria Neurale</span>
+                    <span className="text-gold text-[10px] uppercase tracking-[2em] mb-12 block font-black italic opacity-60">Numeri che Contano</span>
                     <h3 className="font-serif text-[5rem] lg:text-[9.5rem] font-medium text-charcoal italic leading-[0.85] tracking-tighter">Valore <br /> <span className="gold-text-gradient drop-shadow-2xl">Liquido.</span></h3>
                     <div className="w-[0.5px] h-32 bg-gold/20 mx-auto mt-16"></div>
                 </div>
@@ -21,7 +21,7 @@ const Performance = () => {
                     <div className="lg:col-span-7 silk-card p-20 lg:p-28 rounded-[4.5rem] flex flex-col justify-center border border-white shadow-luxury holographic-glimmer perspective-3d group">
                         <div className="flex items-center gap-8 mb-16 border-b border-charcoal/5 pb-10">
                             <div className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse"></div>
-                            <h4 className="text-3xl font-serif italic tracking-tight">Proiezione Sovrana</h4>
+                            <h4 className="text-3xl font-serif italic tracking-tight">Le Tue Proiezioni</h4>
                             <div className="h-px flex-1 bg-gold/10"></div>
                         </div>
 
@@ -56,7 +56,7 @@ const Performance = () => {
                         {[
                             { label: "Elite Access", val: "150", sub: "Licenze Annuali", color: "gold" },
                             { label: "Maintenance", val: "€56", sub: "Cloud Fee", color: "charcoal" },
-                            { label: "Scalabilità", val: "∞", sub: "Neural Node", color: "charcoal" },
+                            { label: "Scalabilità", val: "∞", sub: "Senza Limiti", color: "charcoal" },
                             { label: "Rendimento", val: "94%", sub: "Efficiency AI", color: "gold" }
                         ].map((stat, i) => (
                             <div key={i} className="silk-card p-12 rounded-[3.5rem] group border border-white hover:bg-white/50 duration-1000 flex flex-col justify-between holographic-glimmer perspective-3d hover:-translate-y-4 shadow-luxury">

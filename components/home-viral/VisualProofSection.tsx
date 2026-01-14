@@ -13,7 +13,7 @@ import { MessageCircle, Check, ArrowRight } from 'lucide-react';
  */
 export default function VisualProofSection() {
     const demoResponses: Record<string, string> = {
-        "default": "Buongiorno. 👋 Sono l'Essenza Sovrana di Sarah. Chiedimi qualsiasi cosa sul potenziale di VirtualTwin: la visione, la scalabilità o il setup dell'Impero.",
+        "default": "Buongiorno. 👋 Sono il Clone AI di Sarah. Chiedimi qualsiasi cosa su VirtualTwin: come funziona, i prezzi o come iniziare.",
         "prezzo": "L'investimento nella tua libertà parte da €39/mese. 🌱 Vuoi esplorare i dettagli dei piani?",
         "funziona": "Sincronizzazione in 10 minuti: 15 domande strategiche → Analisi del Tono → Integrazione Invisibile. ♾️",
     };
@@ -103,8 +103,8 @@ export default function VisualProofSection() {
                                 <div className="mt-6 bg-gradient-to-r from-gold/5 to-champagne/20 rounded-2xl p-5 border border-gold/20">
                                     <p className="text-charcoal/80 text-sm leading-relaxed">
                                         <strong className="text-gold">👆 Questa è pura magia tecnologica.</strong><br />
-                                        Sarah ha creato la sua <strong className="text-charcoal">Presenza Sovrana</strong> che governa il mercato per lei 24/7.<br />
-                                        <span className="text-charcoal/60 text-xs">Mettila alla prova. È esattamente l'effetto che farà il TUO Gemello.</span>
+                                        Sarah ha creato il suo <strong className="text-charcoal">Clone AI</strong> che gestisce il mercato per lei 24/7.<br />
+                                        <span className="text-charcoal/60 text-xs">Mettilo alla prova. È esattamente l'effetto che farà il TUO Clone.</span>
                                     </p>
                                 </div>
                                 {/* Annotation */}
@@ -129,11 +129,11 @@ export default function VisualProofSection() {
                     >
                         <div className="text-center mb-12">
                             <h3 className="font-serif text-3xl md:text-5xl text-charcoal mb-4">
-                                Un Pannello di Comando <span className="italic gold-text-gradient">Imperiale</span>
+                                La Tua <span className="italic gold-text-gradient">Dashboard</span>
                             </h3>
                             <p className="text-charcoal/50 max-w-2xl mx-auto">
-                                Sovereign Hub: Dove la tua visione incontra il controllo assoluto. <br />
-                                Monitora ogni conversazione, analisi e conversione in tempo reale.
+                                Tutto sotto controllo: conversazioni, analisi e conversioni in tempo reale. <br />
+                                Semplice da usare, potente nei risultati.
                             </p>
                         </div>
 

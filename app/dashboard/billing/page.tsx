@@ -205,7 +205,7 @@ export default function BillingPage() {
                     transition={{ duration: 0.8 }}
                     className="font-serif text-3xl lg:text-7xl italic text-charcoal leading-none tracking-tight mb-6"
                 >
-                    La tua <span className="gold-text-gradient">Sovranità</span> d&apos;Elite.
+                    La tua <span className="gold-text-gradient">Libertà</span> inizia qui.
                 </motion.h1>
 
                 <motion.p

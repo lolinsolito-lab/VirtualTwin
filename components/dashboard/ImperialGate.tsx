@@ -83,7 +83,7 @@ export const ImperialGate: React.FC<ImperialGateProps> = ({
 
                     <div className="mt-6 flex items-center justify-center gap-2 text-[8px] uppercase tracking-widest text-charcoal/30 font-extrabold">
                         <Sparkles className="w-3 h-3 text-gold/50" />
-                        Imperial Protocol Standard
+                        Funzione disponibile con altri piani
                         <Sparkles className="w-3 h-3 text-gold/50" />
                     </div>
                 </div>

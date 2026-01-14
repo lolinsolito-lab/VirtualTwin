@@ -52,7 +52,7 @@ export default function MarketUniversalTruths() {
         },
         {
             stage: "STADIO VI",
-            title: "La Fusione Sovrana",
+            title: "Quando Tutto Funziona Insieme",
             icon: ShieldCheck,
             truth: "L'Unione Sacra. Dove il pensiero diventa algoritmo e l'algoritmo diventa destino.",
             impact: "Alchimia Mondiale",

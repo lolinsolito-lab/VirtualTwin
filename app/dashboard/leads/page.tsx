@@ -118,7 +118,7 @@ export default function LeadsPage() {
             {loading ? (
                 <div className={`h-96 flex flex-col items-center justify-center gap-6 transition-all duration-1000 ${inView ? 'opacity-100' : 'opacity-0'}`}>
                     <Loader2 className="w-12 h-12 text-gold animate-spin" />
-                    <p className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic">Sincronizzazione d'Elite...</p>
+                    <p className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic">Sincronizzazione...</p>
                 </div>
             ) : hasData ? (
                 <>
@@ -228,7 +228,7 @@ export default function LeadsPage() {
                             className="px-12 py-5 bg-charcoal text-gold border border-gold/20 rounded-full font-black uppercase tracking-[0.3em] hover:bg-gold hover:text-white transition-all shadow-luxury text-[10px] flex items-center gap-4"
                         >
                             <Sparkles className="w-4 h-4" />
-                            Aggiorna Neural Link
+                            Aggiorna
                         </button>
                     </div>
                 </div>

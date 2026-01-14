@@ -81,7 +81,7 @@ export default function SocialProofBar() {
                     </div>
 
                     <div className="mt-12 pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-center gap-8 opacity-40 grayscale contrast-125">
-                        <span className="text-[10px] uppercase tracking-[0.6em] text-white/40 font-black mb-4 md:mb-0">Powered by Elite Ecosystem:</span>
+                        <span className="text-[10px] uppercase tracking-[0.6em] text-white/40 font-black mb-4 md:mb-0">Le tecnologie dietro VirtualTwin:</span>
                         <div className="flex flex-wrap items-center justify-center gap-12">
                             <div className="flex items-center gap-2">
                                 <ShieldCheck className="w-4 h-4 text-white" />

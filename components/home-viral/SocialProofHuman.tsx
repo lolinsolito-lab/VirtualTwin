@@ -13,9 +13,9 @@ export default function SocialProofHuman() {
     const caseStudy = {
         name: "Michael J.",
         role: "Founder & Visionary",
-        transformation: "Dalla saturazione operativa alla sovranità creativa.",
+        transformation: "Dalla saturazione operativa al tempo per creare.",
         story: "Michael gestiva 150+ interazioni al giorno. Il suo business cresceva, ma la sua vita era ostaggio di uno schermo. L'eccellenza era diventata un limite biologico invalicabile.",
-        outcome: "Oggi, la sua Essenza Sovrana governa il mercato mentre lui governa la visione. Il suo gemello non si limita a rispondere: protegge il suo brand e scala la sua influenza nel silenzio assoluto dei risultati."
+        outcome: "Oggi, il suo Clone AI gestisce il mercato mentre lui guida la visione. Il clone non si limita a rispondere: protegge il suo brand e fa crescere l'influenza nel silenzio dei risultati."
     };
 
     return (
@@ -73,7 +73,7 @@ export default function SocialProofHuman() {
                                 {/* Floating Label */}
                                 <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl flex items-center gap-3">
                                     <CheckCircle2 className="w-5 h-5 text-gold" />
-                                    <span className="text-white text-[10px] uppercase font-black tracking-widest">Status: Presenza Sovrana Attiva</span>
+                                    <span className="text-white text-[10px] uppercase font-black tracking-widest">Status: Clone Attivo 24/7</span>
                                 </div>
 
                                 <div className="absolute bottom-10 left-10 right-10 bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl">
@@ -142,8 +142,8 @@ export default function SocialProofHuman() {
 
                             {/* Info */}
                             <div className="absolute bottom-10 left-10 text-left">
-                                <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mb-1">Elite Insight</p>
-                                <h5 className="text-white font-serif text-2xl italic">L'Inconfutabile: La Sovranità in Azione</h5>
+                                <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mb-1">Caso Studio</p>
+                                <h5 className="text-white font-serif text-2xl italic">Risultati Reali: Il Clone in Azione</h5>
                             </div>
                         </div>
                     </motion.div>

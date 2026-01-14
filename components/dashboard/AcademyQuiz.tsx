@@ -102,7 +102,7 @@ export function AcademyQuiz({ moduleId, moduleName, questions, onComplete, onClo
                                 </div>
                                 <h1 className="text-3xl font-serif italic text-charcoal mb-4">Pronto alla Prova?</h1>
                                 <p className="text-charcoal/50 leading-relaxed mb-10 max-w-sm mx-auto">
-                                    Completa questo quiz con il punteggio massimo per convalidare il modulo e ottenere **200 XP** e il tuo prossimo **Imperial Badge**.
+                                    Completa questo quiz con il punteggio massimo per convalidare il modulo e ottenere **200 XP** e il tuo prossimo **Badge**.
                                 </p>
                                 <button
                                     onClick={() => setQuizState('active')}
@@ -212,7 +212,7 @@ export function AcademyQuiz({ moduleId, moduleName, questions, onComplete, onClo
                                             Hai dimostrato di avere la mentalità corretta. {submissionResult?.xpEarned > 0
                                                 ? `Ti sono stati assegnati **${submissionResult.xpEarned} XP** e sei ora **Livello ${submissionResult.newLevel || 2}**!`
                                                 : isSubmitting
-                                                    ? 'Sincronizzazione imperiale in corso...'
+                                                    ? 'Salvataggio in corso...'
                                                     : 'Competenza convalidata! (XP già riscattati precedentemente).'}
                                         </p>
                                         {submissionResult?.newBadges?.length > 0 && (

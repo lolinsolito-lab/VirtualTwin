@@ -113,7 +113,7 @@ const channelConfig = {
         steps: []
     },
     webchat: {
-        name: 'Neural Webchat',
+        name: 'Webchat Integrata',
         icon: Globe,
         color: 'bg-gold',
         description: 'Widget AI avanzato da integrare nel tuo sito',
@@ -349,7 +349,7 @@ function ConnectionModal({ channel, onClose, onSuccess }: ConnectionModalProps) 
                     {step.webhookUrl && (
                         <div className="mb-8 md:mb-10">
                             <label className="block text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-charcoal/40 font-black mb-2 md:mb-3 italic">
-                                Webhook Neural URL
+                                Webhook URL
                             </label>
                             <div className="flex items-center gap-2 md:gap-3">
                                 <code className="flex-1 px-4 md:px-6 py-3 md:py-4 bg-white border border-charcoal/5 rounded-xl md:rounded-2xl text-[9px] md:text-[11px] font-mono text-charcoal overflow-x-auto shadow-sm">
@@ -374,7 +374,7 @@ function ConnectionModal({ channel, onClose, onSuccess }: ConnectionModalProps) 
                             {/* API Key */}
                             <div>
                                 <label className="block text-[9px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">
-                                    API Key Imperiale *
+                                    API Key *
                                 </label>
                                 <div className="relative">
                                     <input
@@ -535,13 +535,13 @@ export default function ChannelsPage() {
                     <div className="max-w-2xl flex-1 w-full">
                         <div className="flex items-center gap-4 mb-4 md:mb-6">
                             <span className="h-[1px] w-12 bg-gold/30"></span>
-                            <span className="text-gold text-[8px] md:text-[9px] uppercase tracking-[0.6em] md:tracking-[0.8em] font-black">Neural Network</span>
+                            <span className="text-gold text-[8px] md:text-[9px] uppercase tracking-[0.6em] md:tracking-[0.8em] font-black">I Tuoi Canali</span>
                         </div>
                         <h1 className="font-serif text-3xl md:text-5xl lg:text-7xl italic text-charcoal leading-[1.1] tracking-tight">
                             Canali <span className="gold-text-gradient">Connessi.</span>
                         </h1>
                         <p className="mt-4 md:mt-6 text-charcoal/40 font-serif italic text-sm md:text-lg tracking-wide max-w-xl border-l border-gold/20 pl-4 md:pl-6">
-                            &ldquo;La tua voce imperiale, riverberata attraverso ogni frequenza digitale.&rdquo;
+                            &ldquo;La tua voce, su ogni canale digitale.&rdquo;
                         </p>
                     </div>
 
@@ -549,7 +549,7 @@ export default function ChannelsPage() {
                     {user && (
                         <div className="bg-white/40 backdrop-blur-md p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-white/60 shadow-luxury-sm min-w-full sm:min-w-[280px]">
                             <div className="flex justify-between items-center mb-4">
-                                <span className="text-[8px] md:text-[9px] uppercase tracking-widest text-charcoal/40 font-black">Neural Capacity</span>
+                                <span className="text-[8px] md:text-[9px] uppercase tracking-widest text-charcoal/40 font-black">Capacità</span>
                                 <span className={`text-[9px] md:text-[10px] font-black ${isLimitReached ? 'text-red-500' : 'text-gold'}`}>
                                     {activeChannels.length} / {channelLimit === -1 ? '∞' : channelLimit}
                                 </span>
@@ -602,7 +602,7 @@ export default function ChannelsPage() {
                                     {isActive ? (
                                         <>
                                             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-sm" />
-                                            Live Neural Link
+                                            Collegato
                                         </>
                                     ) : isComingSoon ? (
                                         (config as any).imperialOnly ? 'Exclusive Access' : 'Coming Soon'
@@ -676,7 +676,7 @@ export default function ChannelsPage() {
                                 {/* Webhook Info */}
                                 {isActive && (
                                     <div className="mt-8 p-5 bg-charcoal/[0.02] rounded-2xl border border-charcoal/5 group-hover:border-gold/20 transition-colors">
-                                        <p className="text-[9px] uppercase tracking-[0.3em] text-charcoal/40 mb-2 font-black italic">Neural Webhook Path</p>
+                                        <p className="text-[9px] uppercase tracking-[0.3em] text-charcoal/40 mb-2 font-black italic">Webhook Path</p>
                                         <code className="text-[10px] text-gold font-mono font-black">{config.webhookPath}</code>
                                     </div>
                                 )}
@@ -706,7 +706,7 @@ export default function ChannelsPage() {
                             <h4 className="font-serif italic text-xl text-charcoal">Frequenza WhatsApp</h4>
                         </div>
                         <p className="text-charcoal/50 text-sm leading-relaxed">
-                            Registrati su 360Dialog, ottieni le chiavi neurali (API) e sincronizzale nel wizard d'accesso.
+                            Registrati su 360Dialog, ottieni le chiavi API e sincronizzale nel wizard d'accesso.
                         </p>
                     </div>
                     <div className="p-8 bg-white/40 rounded-[2.5rem] border border-white/60 relative group overflow-hidden opacity-60">

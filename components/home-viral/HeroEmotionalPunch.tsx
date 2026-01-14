@@ -100,7 +100,7 @@ export default function HeroEmotionalPunch() {
                             <div className="p-10 rounded-[3rem] bg-white border border-charcoal/5 shadow-2xl hover:border-gold/20 transition-all duration-1000 group">
                                 <p className="text-[10px] uppercase tracking-[0.5em] text-charcoal/30 mb-6 group-hover:text-gold transition-colors">La Tecnica</p>
                                 <p className="text-2xl font-serif text-charcoal leading-tight italic">
-                                    "Il tuo Gemello Neurale non dorme. <br />
+                                    "Il tuo Clone lavora mentre tu dormi. <br />
                                     Vende, educa, converte."
                                 </p>
                             </div>
@@ -192,7 +192,7 @@ export default function HeroEmotionalPunch() {
                             >
                                 <div className="h-px hidden md:block w-12 bg-gold/20" />
                                 <p className="text-[10px] uppercase tracking-[0.4em] text-gold font-black">
-                                    Presenza Sovrana · Ovunque. Sempre.
+                                    Sempre Presente · Ovunque. 24/7.
                                 </p>
                                 <div className="h-px hidden md:block w-12 bg-gold/20" />
                             </motion.div>

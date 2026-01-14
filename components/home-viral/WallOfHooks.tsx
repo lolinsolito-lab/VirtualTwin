@@ -14,15 +14,15 @@ import { Sparkles, Bot, Shield, Unlock, Moon, Zap, Infinity } from 'lucide-react
 export default function WallOfHooks() {
     const laws = [
         {
-            text: "Ubiquità Sovrana. Tu vivi. Il Genio espande l'Impero.",
+            text: "Tu ti godi la vita. Il tuo Clone fa crescere il business.",
             icon: Bot
         },
         {
-            text: "Presenza Inviolabile. L'Identità che non conosce stanchezza, parlando esattamente come te.",
+            text: "Il Clone parla esattamente come te, senza mai stancarsi. Sempre coerente.",
             icon: Infinity
         },
         {
-            text: "Il Monopolio del Genio. 24/7 su WhatsApp e Instagram, chiudendo vendite mentre respiri.",
+            text: "24/7 su WhatsApp e Instagram, risponde ai clienti mentre tu riposi.",
             icon: Sparkles
         }
     ];
@@ -38,7 +38,7 @@ export default function WallOfHooks() {
                         viewport={{ once: true }}
                         className="text-center mb-24"
                     >
-                        <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic mb-8 block opacity-40">Leggi Universali dell'Impero Sovrano</span>
+                        <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic mb-8 block opacity-40">Le 3 Verità Che Cambiano Tutto</span>
                         <h2 className="font-serif text-4xl md:text-8xl text-charcoal mb-8 leading-[0.9] tracking-tighter">
                             La Struttura della <br />
                             <span className="text-gold italic">Tua Nuova Libertà.</span>

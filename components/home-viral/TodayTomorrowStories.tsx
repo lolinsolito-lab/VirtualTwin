@@ -27,9 +27,9 @@ export default function TodayTomorrowStories() {
             tomorrow: {
                 time: "Sabato Sera · Grazia",
                 scene: "Il telefono resta silenzioso. Il presente è intatto.",
-                action: "Il tuo gemello sovrano accoglie il lead, educa, risolve dubbi e posiziona il valore.",
-                result: "Tu proteggi il tuo tempo sacro. Lui costruisce il tuo impero.",
-                emotion: "Sovranità"
+                action: "Il tuo Clone accoglie il cliente, educa, risolve dubbi e posiziona il valore.",
+                result: "Tu proteggi il tuo tempo. Lui fa crescere il business.",
+                emotion: "Libertà"
             }
         },
         {
@@ -196,7 +196,7 @@ export default function TodayTomorrowStories() {
                         className="text-center mt-12"
                     >
                         <p className="text-charcoal/50 text-sm italic">
-                            📈 Basato su proiezioni di mercato e analisi dell'automazione sovrana.
+                            📈 Basato su proiezioni di mercato e analisi dell'automazione AI.
                         </p>
                     </motion.div>
                 </div>

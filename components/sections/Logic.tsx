@@ -14,7 +14,7 @@ const Logic = () => {
                     <div className="relative">
                         <div className="flex items-center gap-10 mb-16">
                             <span className="h-px w-24 bg-gold/30"></span>
-                            <span className="text-gold text-[10px] uppercase tracking-[1.5em] block font-black italic opacity-60">Architettura Neurale</span>
+                            <span className="text-gold text-[10px] uppercase tracking-[1.5em] block font-black italic opacity-60">Come Funziona</span>
                         </div>
                         <h2 className="font-serif text-[4rem] lg:text-[8rem] leading-[0.9] font-medium text-charcoal tracking-tighter">
                             Pensiero <br /> <span className="italic gold-text-gradient drop-shadow-2xl">Maestro.</span>
@@ -26,7 +26,7 @@ const Logic = () => {
                     <div className="grid grid-cols-2 gap-16 pt-24">
                         <div className="silk-card px-12 py-10 rounded-[3.5rem] border border-white/80 shadow-luxury holographic-glimmer transform transition-all duration-700 hover:-translate-y-4 hover:translate-z-10 group">
                             <div className="w-8 h-px bg-gold/30 mb-8 transition-all group-hover:w-16"></div>
-                            <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-black mb-4 block italic opacity-50">Latenza Neurale</span>
+                            <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-black mb-4 block italic opacity-50">Velocità di Risposta</span>
                             <p className="text-4xl font-serif text-charcoal italic tracking-tight">Real-time</p>
                         </div>
                         <div className="silk-card px-12 py-10 rounded-[3.5rem] border border-white/80 shadow-luxury holographic-glimmer transform transition-all duration-700 hover:-translate-y-4 hover:translate-z-10 group">
@@ -65,7 +65,7 @@ const Logic = () => {
                             </div>
                             <div>
                                 <p className="text-2xl font-serif italic text-charcoal tracking-tight">Mastermind Intelligence</p>
-                                <p className="text-[10px] uppercase tracking-[0.5em] text-gold font-black opacity-40">Neural Node: Active</p>
+                                <p className="text-[10px] uppercase tracking-[0.5em] text-gold font-black opacity-40">Sistema Attivo</p>
                             </div>
                         </div>
 
@@ -78,7 +78,7 @@ const Logic = () => {
                                     <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
                                     AI Mastermind
                                 </p>
-                                <p className="text-lg leading-relaxed text-charcoal font-medium tracking-tight italic">"Certamente. Il protocollo assimila la sua autorità naturale per agire con sovranità in ogni interazione."</p>
+                                <p className="text-lg leading-relaxed text-charcoal font-medium tracking-tight italic">"Certamente. Il sistema assimila la tua autorità naturale per agire con coerenza in ogni risposta."</p>
                             </div>
                         </div>
                     </div>

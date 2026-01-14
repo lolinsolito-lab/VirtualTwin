@@ -37,9 +37,9 @@ export default function SetupStoryNarrative() {
             minutes: "Capitolo III",
             icon: Rocket,
             title: "Sei Libero. 24/7.",
-            story: "Il tuo Gemello è online su WhatsApp e Instagram. Da questo momento, ogni lead riceve la tua attenzione d'élite, mentre tu ti riprendi la tua vita.",
-            example: "Risultato: 'Un'identità che vince per te, mentre tu finalmente respiri.'",
-            detail: "Setup finito. Inizia la tua nuova era di ubiquità sovrana.",
+            story: "Il tuo Clone è online su WhatsApp e Instagram. Da questo momento, ogni cliente riceve la tua attenzione, mentre tu ti riprendi la tua vita.",
+            example: "Risultato: 'Un clone che lavora per te, mentre tu finalmente respiri.'",
+            detail: "Setup finito. Inizia la tua nuova era di libertà.",
             color: "from-amber-500 to-orange-600",
             bg: "bg-amber-50"
         }
@@ -58,8 +58,8 @@ export default function SetupStoryNarrative() {
                     >
                         <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black italic mb-8 block opacity-40">L'Efficienza senza Sforzo</span>
                         <h2 className="font-serif text-5xl md:text-9xl text-charcoal mb-12 leading-[0.8] tracking-tighter">
-                            Genesi <br />
-                            <span className="text-gold italic">Sovrana.</span>
+                            Setup in <br />
+                            <span className="text-gold italic">10 Minuti.</span>
                         </h2>
                         <p className="text-xl md:text-2xl text-charcoal/30 max-w-4xl mx-auto leading-relaxed font-light italic">
                             "10 minuti non sono il tempo di configurazione. <br />

@@ -15,8 +15,8 @@ export default function PhilosophyAdvantage() {
     const pillars = [
         {
             icon: <ShieldCheck className="w-8 h-8 text-gold" />,
-            title: "Sovranità Digitale",
-            description: "Mentre il mondo si affida a modelli generalisti e algoritmi pubblici, i Founder costruiscono una rete neurale privata. I tuoi dati, la tua voce, il tuo impero — protetti per sempre."
+            title: "Indipendenza Digitale",
+            description: "Mentre il mondo si affida a modelli generalisti, i Founder costruiscono la propria AI personalizzata. I tuoi dati, la tua voce, il tuo business — protetti per sempre."
         },
         {
             icon: <Target className="w-8 h-8 text-gold" />,
@@ -48,7 +48,7 @@ export default function PhilosophyAdvantage() {
                                 della <span className="text-gold italic">Maestria</span>
                             </h2>
                             <p className="text-xl text-charcoal/60 leading-relaxed font-medium">
-                                Non abbiamo creato il Programma Founder per vendere abbonamenti. Lo abbiamo creato per identificare l&apos;elite di professionisti che guiderà la rivoluzione dell&apos;AI in Italia.
+                                Non abbiamo creato il Programma Founder per vendere abbonamenti. Lo abbiamo creato per identificare i professionisti che guideranno la rivoluzione dell&apos;AI in Italia.
                             </p>
                         </motion.div>
 

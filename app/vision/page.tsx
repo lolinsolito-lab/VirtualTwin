@@ -10,7 +10,7 @@ const BRAND_ECOSYSTEM = [
     {
         name: "Virtualtwin",
         tagline: "L'Elite dell'AI Conversazionale",
-        description: "Cloni digitali ad alte prestazioni per coach e agenzie che non accettano compromessi.",
+        description: "Clone AI che risponde ai tuoi clienti su WhatsApp, Instagram e Messenger 24/7, con il tuo tono.",
         icon: Crown,
         status: "Live",
         color: "text-gold"
@@ -18,7 +18,7 @@ const BRAND_ECOSYSTEM = [
     {
         name: "VirtualBNB",
         tagline: "Luxury Property Management",
-        description: "Operazioni immobiliari di prestigio a Milano e oltre, con standard di servizio imperiali.",
+        description: "Gestione professionale di affitti brevi e proprietà, con standard di servizio elevati.",
         icon: Building2,
         status: "Live",
         color: "text-amber-600"
@@ -26,7 +26,7 @@ const BRAND_ECOSYSTEM = [
     {
         name: "LuminelCoach",
         tagline: "Transformational AI Coach",
-        description: "L'intelligenza artificiale al servizio dell'evoluzione personale e del coaching trasformativo.",
+        description: "Un coach AI personale che ti guida nella crescita personale e professionale.",
         icon: Sparkles,
         status: "Coming Soon",
         color: "text-purple-400"
@@ -34,15 +34,15 @@ const BRAND_ECOSYSTEM = [
     {
         name: "Lumina Manager",
         tagline: "The Elite Operating System",
-        description: "Un gestionale di nuova generazione. Il cervello operativo d'élite per la tua impresa.",
+        description: "Gestione intelligente di team, progetti e operazioni aziendali con supporto AI.",
         icon: Layout,
         status: "Coming Soon",
         color: "text-blue-400"
     },
     {
         name: "Insolita Academy",
-        tagline: "Formazione Personalizzata d'Elite",
-        description: "Oltre l'e-learning: percorsi formativi su misura per aspiranti leader ed executive.",
+        tagline: "Formazione Personalizzata",
+        description: "Corsi e percorsi formativi su misura per chi vuole crescere e imparare.",
         icon: GraduationCap,
         status: "Coming Soon",
         color: "text-emerald-400"
@@ -50,7 +50,7 @@ const BRAND_ECOSYSTEM = [
     {
         name: "MichaelLuminels",
         tagline: "Virtual Coach Image",
-        description: "La fusione tra immagine, stile e coaching virtuale per un brand personale d'impatto.",
+        description: "Costruzione del tuo brand personale e della tua immagine professionale.",
         icon: Star,
         status: "Coming Soon",
         color: "text-pink-400"
@@ -68,7 +68,7 @@ export default function VisionPage() {
                     <div className="text-center mb-24">
                         <span className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal/5 rounded-full mb-8">
                             <Star className="w-3 h-3 text-gold animate-pulse" />
-                            <span className="text-charcoal text-[10px] uppercase tracking-[0.5em] font-black">La Visione Imperiale</span>
+                            <span className="text-charcoal text-[10px] uppercase tracking-[0.5em] font-black">La Nostra Visione</span>
                         </span>
                         <h1 className="font-serif text-[4rem] lg:text-[7rem] text-charcoal leading-[0.85] tracking-tighter mb-8">
                             Un Ecosistema di <br />

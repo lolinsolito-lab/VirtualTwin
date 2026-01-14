@@ -129,10 +129,10 @@ const SolutionEnhanced = () => {
                         {/* Features */}
                         <div className="space-y-4">
                             {[
-                                { icon: Brain, title: "Intuizione Neurale d'Élite", desc: "Meno di 2 secondi per risposte indistinguibili dalla tua mente." },
-                                { icon: Target, title: "Setaccio dei Desideri", desc: "Separa istantaneamente i curiosi dai buyer reali con eleganza." },
-                                { icon: Shield, title: "Inviolabilità del Brand", desc: "Custodisce il tuo stile e la tua etica in ogni singola sillaba." },
-                                { icon: Zap, title: "Ubiquità Permanente", desc: "L'Impero cresce nel silenzio, mentre tu riprendi il tuo tempo." }
+                                { icon: Brain, title: "Risposte Rapide e Precise", desc: "Meno di 2 secondi per risposte indistinguibili dalla tua mente." },
+                                { icon: Target, title: "Filtra i Clienti Giusti", desc: "Separa istantaneamente i curiosi dai buyer reali con eleganza." },
+                                { icon: Shield, title: "Protegge il Tuo Brand", desc: "Custodisce il tuo stile e la tua etica in ogni singola risposta." },
+                                { icon: Zap, title: "Sempre Attivo", desc: "Il business cresce mentre tu riprendi il tuo tempo." }
                             ].map((feature, i) => (
                                 <div
                                     key={i}
@@ -164,7 +164,7 @@ const SolutionEnhanced = () => {
                                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="font-medium text-charcoal text-sm">Identità Neurale</p>
+                                    <p className="font-medium text-charcoal text-sm">Il Clone di Sarah</p>
                                     <p className="text-xs text-green-600 flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
                                         Sincronizzazione Attiva
@@ -260,7 +260,7 @@ const SolutionEnhanced = () => {
                         <div className="mt-6 bg-gradient-to-r from-gold/5 to-champagne/20 rounded-2xl p-5 border border-gold/20">
                             <p className="text-charcoal/80 text-sm leading-relaxed">
                                 <strong className="text-gold">👆 Questa è pura magia tecnologica.</strong><br />
-                                Sarah ha creato la sua <strong className="text-charcoal">Identità Neurale</strong> che governa il mercato per lei 24/7.<br />
+                                Sarah ha creato il suo <strong className="text-charcoal">Clone AI</strong> che gestisce il mercato per lei 24/7.<br />
                                 <span className="text-charcoal/60 text-xs">Mettila alla prova. È esattamente l'effetto che farà il TUO Gemello.</span>
                             </p>
                         </div>

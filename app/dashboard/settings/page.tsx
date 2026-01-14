@@ -231,7 +231,7 @@ export default function SettingsPage() {
         { id: 'profile', label: 'Profilo', icon: User },
         { id: 'company', label: 'Dati Aziendali', icon: Building2 },
         { id: 'billing', label: 'Fatturazione', icon: FileText },
-        { id: 'ai', label: 'Neural Training Hub', icon: Zap },
+        { id: 'ai', label: 'Addestramento Clone', icon: Zap },
         { id: 'localization', label: 'Lingua & Regione', icon: Globe },
         { id: 'notifications', label: 'Notifiche', icon: Bell },
         ...(role === 'admin' ? [{ id: 'platform', label: 'Admin Piattaforma', icon: Database }] : []),
@@ -247,7 +247,7 @@ export default function SettingsPage() {
         return (
             <div className="p-12 lg:p-24 min-h-screen bg-champagne flex flex-col items-center justify-center gap-8">
                 <div className="w-20 h-20 gold-gradient rounded-full animate-pulse shadow-luxury" />
-                <p className="text-gold text-[10px] uppercase tracking-[1em] font-black animate-pulse">Neural Matrix Loading...</p>
+                <p className="text-gold text-[10px] uppercase tracking-[1em] font-black animate-pulse">Caricamento...</p>
             </div>
         );
     }
@@ -260,7 +260,7 @@ export default function SettingsPage() {
                     <span className="text-gold text-[10px] uppercase tracking-[0.8em] font-black">Configurazione</span>
                 </div>
                 <h1 className="font-serif text-5xl lg:text-6xl italic text-charcoal leading-[1.1] tracking-tight">
-                    Impostazioni <span className="gold-text-gradient">Imperiali.</span>
+                    Impostazioni <span className="gold-text-gradient">Clone.</span>
                 </h1>
                 <div className="mt-4 flex items-center gap-3">
                     <p className="text-charcoal/40 font-medium text-sm tracking-wide">
@@ -510,8 +510,8 @@ export default function SettingsPage() {
                                             <Zap className="w-7 h-7 text-gold" />
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-serif italic text-charcoal">Neural Training Hub</h2>
-                                            <p className="text-charcoal/40 text-sm">Configura l'identità neurale e la base di conoscenza del tuo clone</p>
+                                            <h2 className="text-2xl font-serif italic text-charcoal">Addestramento Clone</h2>
+                                            <p className="text-charcoal/40 text-sm">Configura la personalità e la base di conoscenza del tuo clone</p>
                                         </div>
                                     </div>
 
@@ -561,7 +561,7 @@ export default function SettingsPage() {
                                     {/* Custom Personality */}
                                     <div>
                                         <label className="block text-[10px] uppercase tracking-[0.3em] text-charcoal/40 font-black mb-3">
-                                            Identità Neurale Personalizzata
+                                            Personalità del Clone
                                         </label>
                                         <textarea
                                             value={settings.customPersonality}
@@ -658,7 +658,7 @@ export default function SettingsPage() {
 
                                     <div className="mt-8 p-5 bg-gold/5 border border-gold/10 rounded-2xl">
                                         <p className="text-charcoal/60 text-xs leading-relaxed">
-                                            💡 <strong>Sovereign Tip:</strong> Carica il tuo manuale operativo o le slide dei tuoi servizi. Il clone userà questi dati come fonte di verità assoluta.
+                                            💡 <strong>Suggerimento:</strong> Carica il tuo manuale operativo o le slide dei tuoi servizi. Il clone userà questi dati come fonte di verità.
                                         </p>
                                     </div>
                                 </div>
@@ -691,7 +691,7 @@ export default function SettingsPage() {
                                             <div key={faq.id} className="p-6 bg-white/40 rounded-2xl border border-charcoal/5 group/faq transition-all hover:border-gold/20">
                                                 <div className="flex items-center justify-between mb-4">
                                                     <span className="text-[9px] font-black text-gold uppercase tracking-[0.3em]">
-                                                        Neural Path #{index + 1}
+                                                        Domanda #{index + 1}
                                                     </span>
                                                     {settings.faqs.length > 1 && (
                                                         <button

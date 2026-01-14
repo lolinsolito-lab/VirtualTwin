@@ -17,7 +17,7 @@ const Infrastructure = () => {
                 <div className="text-center mb-56">
                     <div className="flex items-center justify-center gap-10 mb-12">
                         <span className="h-[1px] w-16 bg-gold/40"></span>
-                        <span className="text-gold text-[12px] uppercase tracking-[1.5em] block font-black italic">Architettura Sovrana</span>
+                        <span className="text-gold text-[12px] uppercase tracking-[1.5em] block font-black italic">Sicurezza e Affidabilità</span>
                         <span className="h-[1px] w-16 bg-gold/40"></span>
                     </div>
                     <h3 className="font-serif text-[5.5rem] lg:text-[11rem] text-charcoal italic leading-none tracking-tighter">Mente Maestra <br /> <span className="gold-text-gradient">Automata.</span></h3>
@@ -33,10 +33,10 @@ const Infrastructure = () => {
                         {
                             cat: "Caveau Digitale",
                             tech: "Supabase",
-                            desc: "Crittografia militare per la sovranità assoluta di ogni bit del tuo impero."
+                            desc: "Crittografia bancaria per la protezione totale dei tuoi dati."
                         },
                         {
-                            cat: "Motore Neurale",
+                            cat: "Motore AI",
                             tech: "Gemini 2.5",
                             desc: "L'apice dell'intelligenza, sintetizzando il tuo pensiero in logica pura."
                         },

@@ -465,7 +465,7 @@ function ChatContent() {
                             <input
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder={activeConversation ? `Trasmetti comando a ${activeConversation.contact_name}...` : "Invia un comando neurale..."}
+                                placeholder={activeConversation ? `Scrivi a ${activeConversation.contact_name}...` : "Invia un messaggio..."}
                                 className="w-full bg-white border border-charcoal/10 rounded-full md:rounded-[2.5rem] pl-16 md:pl-24 pr-12 md:pr-36 py-4 md:py-6 outline-none focus:border-gold/40 focus:shadow-luxury-sm transition-all text-xs md:text-sm font-medium text-charcoal shadow-inner"
                             />
                             <div className="absolute right-6 md:right-10 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-4">
@@ -509,7 +509,7 @@ function ChatContent() {
                             <Brain className="w-6 h-6 md:w-8 md:h-8 text-gold animate-neural-pulse" />
                         </div>
                         <div>
-                            <p className="text-gold text-[8px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] font-black mb-1">Neural Core</p>
+                            <p className="text-gold text-[8px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] font-black mb-1">Controllo AI</p>
                             <h3 className="text-xl md:text-2xl font-serif italic text-white tracking-tight">Lead Analysis</h3>
                         </div>
                     </div>
@@ -552,7 +552,7 @@ function ChatContent() {
                             ? "bg-red-50 text-red-600 border-red-200"
                             : "bg-green-50 text-green-600 border-green-200"
                     )}>
-                        {activeLeadId ? '🔴 COMANDO LIVE' : '🟢 SIMULAZIONE NEURALE'}
+                        {activeLeadId ? '🔴 COMANDO LIVE' : '🟢 MODALITÀ TEST'}
                     </div>
 
                     {activeConversation && (
@@ -589,7 +589,7 @@ export default function ChatPage() {
             <div className="h-screen flex items-center justify-center bg-champagne">
                 <div className="text-center">
                     <div className="w-16 h-16 gold-gradient rounded-full animate-pulse mx-auto mb-4"></div>
-                    <p className="text-gold text-[10px] uppercase tracking-[0.6em] font-black">Caricamento Neural Pulse...</p>
+                    <p className="text-gold text-[10px] uppercase tracking-[0.6em] font-black">Caricamento...</p>
                 </div>
             </div>
         }>

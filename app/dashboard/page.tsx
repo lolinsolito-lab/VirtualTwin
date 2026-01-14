@@ -122,7 +122,7 @@ export default function DashboardPage() {
                     <div className="flex-1">
                         <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-8">
                             <span className="h-[1px] w-12 md:w-16 bg-gold/30"></span>
-                            <span className="text-gold text-[8px] md:text-[10px] uppercase tracking-[0.6em] md:tracking-[1em] font-black italic">Imperial Intelligence</span>
+                            <span className="text-gold text-[8px] md:text-[10px] uppercase tracking-[0.6em] md:tracking-[1em] font-black italic">La Tua Dashboard</span>
                         </div>
                         <h1 className="font-serif text-3xl md:text-5xl lg:text-7xl italic text-charcoal leading-[1.1] tracking-tight mb-4 md:mb-6">
                             Il tuo Impero, <br className="sm:hidden" /> <span className="gold-text-gradient">Sincronizzato.</span>
@@ -253,7 +253,7 @@ export default function DashboardPage() {
                         Benvenuto nel tuo <span className="gold-text-gradient">Impero.</span>
                     </h2>
                     <p className="text-charcoal/50 text-xl font-serif italic max-w-md mb-12 leading-relaxed">
-                        &ldquo;Anche il più grande sovrano inizia con una singola pietra.&rdquo; Configura il tuo clone per iniziare.
+                        &ldquo;Anche il più grande imprenditore inizia con una singola pietra.&rdquo; Configura il tuo clone per iniziare.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-6">
                         <Link

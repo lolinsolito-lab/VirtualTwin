@@ -38,7 +38,7 @@ const Hero = () => {
                             </div>
                             <div className="h-px flex-1 bg-gold/20"></div>
                         </div>
-                        <p className="text-[10px] uppercase tracking-[0.5em] text-gold font-black mb-4 italic">Neural Mastermind</p>
+                        <p className="text-[10px] uppercase tracking-[0.5em] text-gold font-black mb-4 italic">AI Personalizzata</p>
                         <p className="text-base text-charcoal/40 font-serif italic tracking-wide leading-relaxed mb-6">
                             "L'architettura metabolizza il tuo pensiero, rendendo l'automazione un'opera d'arte."
                         </p>

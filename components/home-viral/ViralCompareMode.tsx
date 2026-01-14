@@ -79,7 +79,7 @@ export default function ViralCompareMode() {
                                         <div className="text-5xl font-serif text-gold">😎</div>
                                         <div>
                                             <p className="text-[10px] uppercase tracking-widest text-gold/40 font-black mb-1">Stress Livello</p>
-                                            <p className="text-xl font-bold text-charcoal italic">Tranquillità Sovrana</p>
+                                            <p className="text-xl font-bold text-charcoal italic">Serenità Totale</p>
                                         </div>
                                     </div>
                                     <div className="flex items-end gap-4">
