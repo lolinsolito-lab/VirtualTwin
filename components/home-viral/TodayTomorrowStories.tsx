@@ -1,17 +1,34 @@
 "use client";
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { X, Sparkles, Clock, Moon, TrendingUp, Check, ArrowRight } from 'lucide-react';
 
 /**
- * Today Tomorrow Stories Component - DIGITAL WOW EDITION
+ * Today Tomorrow Stories Component - AUTO-ANIMATED EDITION
  * 
- * DESIGN: 4 immersive cards with flip/transform animations
- * Hover reveals the transformation with glassmorphism effects
+ * DESIGN: Cards auto-animate between "today" and "tomorrow" states
+ * No user interaction required - perfect for mobile
  */
 export default function TodayTomorrowStories() {
-    const [activeCard, setActiveCard] = useState<number | null>(null);
+    const [activeStates, setActiveStates] = useState<boolean[]>([false, false, false, false]);
+
+    // Auto-animate each card with staggered timing
+    useEffect(() => {
+        const intervals = [
+            setInterval(() => setActiveStates(prev => [!prev[0], prev[1], prev[2], prev[3]]), 4000),
+            setInterval(() => setActiveStates(prev => [prev[0], !prev[1], prev[2], prev[3]]), 4000),
+            setInterval(() => setActiveStates(prev => [prev[0], prev[1], !prev[2], prev[3]]), 4000),
+            setInterval(() => setActiveStates(prev => [prev[0], prev[1], prev[2], !prev[3]]), 4000),
+        ];
+
+        // Stagger the start times
+        setTimeout(() => intervals[1], 1000);
+        setTimeout(() => intervals[2], 2000);
+        setTimeout(() => intervals[3], 3000);
+
+        return () => intervals.forEach(clearInterval);
+    }, []);
 
     const stories = [
         {
@@ -42,7 +59,7 @@ export default function TodayTomorrowStories() {
             },
             tomorrow: {
                 label: "CON VIRTUALTWIN",
-                scene: "Il Clone risponde alle 3AM con la tua voce.",
+                scene: "Il Clone risponde alle 3AM con il tuo stile.",
                 result: "Ti svegli con un nuovo cliente."
             }
         },
@@ -112,7 +129,7 @@ export default function TodayTomorrowStories() {
                             Prima e <span className="italic text-gold">Dopo.</span>
                         </h2>
                         <p className="text-xl text-white/40 max-w-2xl mx-auto">
-                            Passa il mouse sulle card per vedere la magia.
+                            Guarda come cambia tutto con il tuo Clone AI.
                         </p>
                     </motion.div>
 
@@ -120,7 +137,7 @@ export default function TodayTomorrowStories() {
                     <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
                         {stories.map((story, index) => {
                             const Icon = story.icon;
-                            const isActive = activeCard === index;
+                            const isActive = activeStates[index];
 
                             return (
                                 <motion.div
@@ -129,16 +146,19 @@ export default function TodayTomorrowStories() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.1 }}
-                                    onMouseEnter={() => setActiveCard(index)}
-                                    onMouseLeave={() => setActiveCard(null)}
+                                    onClick={() => setActiveStates(prev => {
+                                        const newStates = [...prev];
+                                        newStates[index] = !newStates[index];
+                                        return newStates;
+                                    })}
                                     className="relative group cursor-pointer"
                                 >
-                                    {/* Card Container with 3D Effect */}
-                                    <div className={`relative h-[380px] md:h-[420px] rounded-3xl overflow-hidden transition-all duration-700 ${isActive ? 'scale-[1.02] shadow-2xl' : 'scale-100'
+                                    {/* Card Container */}
+                                    <div className={`relative h-[340px] md:h-[380px] rounded-3xl overflow-hidden transition-all duration-700 ${isActive ? 'scale-[1.02] shadow-2xl' : 'scale-100'
                                         }`}>
 
-                                        {/* Background Glow on Hover */}
-                                        <div className={`absolute -inset-2 ${story.bgGlow} rounded-3xl blur-2xl transition-opacity duration-700 ${isActive ? 'opacity-60' : 'opacity-0'
+                                        {/* Background Glow */}
+                                        <div className={`absolute -inset-2 ${story.bgGlow} rounded-3xl blur-2xl transition-opacity duration-700 ${isActive ? 'opacity-60' : 'opacity-20'
                                             }`} />
 
                                         {/* Main Card */}
@@ -151,23 +171,24 @@ export default function TodayTomorrowStories() {
                                             <div className="relative h-full p-8 md:p-10 flex flex-col">
                                                 {/* Header */}
                                                 <div className="flex items-center gap-4 mb-6">
-                                                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${story.gradient} flex items-center justify-center shadow-lg`}>
-                                                        <Icon className="w-7 h-7 text-white" />
+                                                    <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${story.gradient} flex items-center justify-center shadow-lg`}>
+                                                        <Icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
                                                     </div>
-                                                    <h3 className="text-2xl md:text-3xl font-serif text-white italic">
+                                                    <h3 className="text-xl md:text-2xl font-serif text-white italic">
                                                         {story.title}
                                                     </h3>
                                                 </div>
 
-                                                {/* Before/After Content with Flip */}
+                                                {/* Before/After Content with Animation */}
                                                 <div className="flex-1 relative">
-                                                    {/* TODAY State (visible by default) */}
+                                                    {/* TODAY State */}
                                                     <motion.div
                                                         animate={{
                                                             opacity: isActive ? 0 : 1,
-                                                            y: isActive ? -20 : 0
+                                                            y: isActive ? -20 : 0,
+                                                            scale: isActive ? 0.95 : 1
                                                         }}
-                                                        transition={{ duration: 0.4 }}
+                                                        transition={{ duration: 0.5, ease: "easeInOut" }}
                                                         className="absolute inset-0"
                                                     >
                                                         <div className="flex items-center gap-2 mb-4">
@@ -176,23 +197,24 @@ export default function TodayTomorrowStories() {
                                                                 {story.today.label}
                                                             </span>
                                                         </div>
-                                                        <p className="text-lg text-white/60 leading-relaxed mb-6">
+                                                        <p className="text-base md:text-lg text-white/60 leading-relaxed mb-4">
                                                             {story.today.scene}
                                                         </p>
-                                                        <div className="mt-auto p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
+                                                        <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
                                                             <p className="text-red-400 font-serif text-lg italic">
                                                                 → {story.today.result}
                                                             </p>
                                                         </div>
                                                     </motion.div>
 
-                                                    {/* TOMORROW State (visible on hover) */}
+                                                    {/* TOMORROW State */}
                                                     <motion.div
                                                         animate={{
                                                             opacity: isActive ? 1 : 0,
-                                                            y: isActive ? 0 : 20
+                                                            y: isActive ? 0 : 20,
+                                                            scale: isActive ? 1 : 0.95
                                                         }}
-                                                        transition={{ duration: 0.4 }}
+                                                        transition={{ duration: 0.5, ease: "easeInOut" }}
                                                         className="absolute inset-0"
                                                     >
                                                         <div className="flex items-center gap-2 mb-4">
@@ -201,10 +223,10 @@ export default function TodayTomorrowStories() {
                                                                 {story.tomorrow.label}
                                                             </span>
                                                         </div>
-                                                        <p className="text-lg text-white leading-relaxed mb-6">
+                                                        <p className="text-base md:text-lg text-white leading-relaxed mb-4">
                                                             {story.tomorrow.scene}
                                                         </p>
-                                                        <div className="mt-auto p-4 rounded-2xl bg-gold/10 border border-gold/30">
+                                                        <div className="p-4 rounded-2xl bg-gold/10 border border-gold/30">
                                                             <p className="text-gold font-serif text-xl italic font-medium">
                                                                 → {story.tomorrow.result}
                                                             </p>
@@ -212,14 +234,10 @@ export default function TodayTomorrowStories() {
                                                     </motion.div>
                                                 </div>
 
-                                                {/* Hover Indicator */}
-                                                <div className={`absolute bottom-4 right-4 flex items-center gap-2 transition-all duration-500 ${isActive ? 'opacity-100 translate-x-0' : 'opacity-40 -translate-x-2'
-                                                    }`}>
-                                                    <span className="text-[9px] uppercase tracking-widest text-white/40">
-                                                        {isActive ? 'La Soluzione' : 'Hover per vedere'}
-                                                    </span>
-                                                    <ArrowRight className={`w-4 h-4 transition-all duration-500 ${isActive ? 'text-gold translate-x-1' : 'text-white/40'
-                                                        }`} />
+                                                {/* State Indicator */}
+                                                <div className="flex items-center justify-center gap-2 mt-4">
+                                                    <div className={`w-2 h-2 rounded-full transition-all duration-500 ${!isActive ? 'bg-red-400 scale-100' : 'bg-white/20 scale-75'}`} />
+                                                    <div className={`w-2 h-2 rounded-full transition-all duration-500 ${isActive ? 'bg-gold scale-100' : 'bg-white/20 scale-75'}`} />
                                                 </div>
                                             </div>
                                         </div>

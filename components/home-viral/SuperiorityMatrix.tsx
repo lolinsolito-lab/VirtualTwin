@@ -2,12 +2,12 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Zap, Headphones, Bot, Crown, ArrowRight, Sparkles } from 'lucide-react';
+import { Check, Zap, Headphones, Bot, Crown, ArrowRight, Sparkles, Clock, Euro, AlertTriangle } from 'lucide-react';
 
 /**
- * Superiority Matrix Component - 2026 COMPARISON TABLE
+ * Superiority Matrix Component - 2026 COMPARISON + SETUP SECTION
  * 
- * 4 Categories: Marketing Automation, Customer Support, AI Conversazionale, VirtualTwin
+ * Quantified time/money for competitors + Setup pro/contra section
  */
 export default function SuperiorityMatrix() {
     const competitors = [
@@ -21,7 +21,11 @@ export default function SuperiorityMatrix() {
             objective: "Conversione e Vendita",
             usp: "Automazione massiva su Instagram/WhatsApp",
             interaction: "Ibrida: Pulsanti, menu e risposte AI guidate",
-            limits: ["Flussi rigidi e robotici", "Zero personalità", "Setup complesso"]
+            limits: [
+                { text: "Flussi rigidi e robotici", icon: "❌" },
+                { text: "Setup: 40+ ore di lavoro", icon: "⏱️" },
+                { text: "€50-200/mese + consulente", icon: "💸" }
+            ]
         },
         {
             category: "Customer Support",
@@ -33,7 +37,11 @@ export default function SuperiorityMatrix() {
             objective: "Efficienza e Risoluzione",
             usp: "Integrazione con ticket e logistica",
             interaction: "Risolutiva: Basata su database di conoscenza",
-            limits: ["Non vende, risolve", "Impersonale", "Costoso per PMI"]
+            limits: [
+                { text: "Non vende, solo risolve", icon: "❌" },
+                { text: "Configurazione: settimane", icon: "⏱️" },
+                { text: "€500+/mese enterprise", icon: "💸" }
+            ]
         },
         {
             category: "AI Generiche",
@@ -45,7 +53,11 @@ export default function SuperiorityMatrix() {
             objective: "Assistenza generica",
             usp: "Risposte basate su conoscenza generale",
             interaction: "Libera: Dialogo generico su ogni tema",
-            limits: ["Non conosce il TUO business", "Zero personalità", "Nessun follow-up"]
+            limits: [
+                { text: "Non conosce il TUO business", icon: "❌" },
+                { text: "Ore di prompt engineering", icon: "⏱️" },
+                { text: "O paghi un esperto €€€", icon: "💸" }
+            ]
         }
     ];
 
@@ -83,7 +95,7 @@ export default function SuperiorityMatrix() {
                         <span className="text-gold italic">Il Resto del Mondo.</span>
                     </h2>
                     <p className="text-xl text-charcoal/40 max-w-3xl mx-auto">
-                        Non tutti i bot sono uguali. Ecco cosa distingue ogni categoria.
+                        Non tutti i bot sono uguali. Ecco cosa perdi con la concorrenza.
                     </p>
                 </motion.div>
 
@@ -125,19 +137,15 @@ export default function SuperiorityMatrix() {
                                         <p className="text-[9px] uppercase tracking-widest text-charcoal/40 font-black mb-1">Punto di Forza</p>
                                         <p className="text-charcoal/80 text-sm">{comp.usp}</p>
                                     </div>
-                                    <div>
-                                        <p className="text-[9px] uppercase tracking-widest text-charcoal/40 font-black mb-1">Interazione</p>
-                                        <p className="text-charcoal/60 text-sm italic">{comp.interaction}</p>
-                                    </div>
 
-                                    {/* Limits */}
+                                    {/* Limits with icons */}
                                     <div className="pt-4 border-t border-charcoal/10">
-                                        <p className="text-[9px] uppercase tracking-widest text-red-600/60 font-black mb-2">Limiti</p>
-                                        <ul className="space-y-1">
+                                        <p className="text-[9px] uppercase tracking-widest text-red-600/60 font-black mb-3">Cosa perdi</p>
+                                        <ul className="space-y-2">
                                             {comp.limits.map((limit, i) => (
-                                                <li key={i} className="text-red-600/70 text-sm flex items-center gap-2">
-                                                    <span className="w-1 h-1 bg-red-400 rounded-full" />
-                                                    {limit}
+                                                <li key={i} className="text-red-700/80 text-sm flex items-center gap-2 font-medium">
+                                                    <span className="text-base">{limit.icon}</span>
+                                                    {limit.text}
                                                 </li>
                                             ))}
                                         </ul>
@@ -153,7 +161,7 @@ export default function SuperiorityMatrix() {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="relative"
+                    className="relative mb-16"
                 >
                     <div className="absolute -inset-2 bg-gradient-to-r from-gold via-amber-500 to-gold rounded-[3rem] blur-xl opacity-30" />
                     <div className="relative bg-charcoal rounded-[2.5rem] p-10 md:p-16 overflow-hidden">
@@ -214,20 +222,112 @@ export default function SuperiorityMatrix() {
 
                             {/* CTA */}
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <p className="text-white/40 italic">
+                                <p className="text-white/40 italic text-center">
                                     "{virtualTwin.usp}"
                                 </p>
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                                    className="inline-flex items-center gap-3 px-8 py-4 bg-gold text-charcoal rounded-full font-black uppercase tracking-widest text-sm shadow-xl"
-                                >
-                                    Inizia Ora
-                                    <ArrowRight className="w-5 h-5" />
-                                </motion.button>
                             </div>
                         </div>
+                    </div>
+                </motion.div>
+
+                {/* SETUP SECTION - Pro/Contra */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="max-w-4xl mx-auto"
+                >
+                    <div className="text-center mb-10">
+                        <h3 className="font-serif text-3xl md:text-5xl text-charcoal mb-4 italic">
+                            Non hai tempo di configurare?
+                        </h3>
+                        <p className="text-charcoal/50 text-lg">
+                            Scegli come iniziare. Zero stress, zero codice.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {/* Self Setup */}
+                        <div className="p-8 bg-white rounded-3xl border-2 border-charcoal/10 hover:border-charcoal/20 transition-all">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-12 h-12 rounded-2xl bg-charcoal/5 flex items-center justify-center">
+                                    <Clock className="w-6 h-6 text-charcoal/60" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] uppercase tracking-widest text-charcoal/40 font-black">Opzione 1</p>
+                                    <h4 className="text-xl font-serif italic text-charcoal">Self-Setup</h4>
+                                </div>
+                            </div>
+                            <ul className="space-y-3 mb-6">
+                                <li className="flex items-center gap-3 text-charcoal/70">
+                                    <Check className="w-4 h-4 text-green-600" />
+                                    <span>Incluso nel tuo piano</span>
+                                </li>
+                                <li className="flex items-center gap-3 text-charcoal/70">
+                                    <Check className="w-4 h-4 text-green-600" />
+                                    <span>10 minuti di configurazione</span>
+                                </li>
+                                <li className="flex items-center gap-3 text-charcoal/70">
+                                    <Check className="w-4 h-4 text-green-600" />
+                                    <span>Guide e tutorial disponibili</span>
+                                </li>
+                            </ul>
+                            <p className="text-charcoal/40 text-sm italic">
+                                Perfetto se ami fare le cose da solo.
+                            </p>
+                        </div>
+
+                        {/* Premium Setup */}
+                        <div className="p-8 bg-gradient-to-br from-gold/10 to-amber-50 rounded-3xl border-2 border-gold/30 hover:border-gold/50 transition-all relative overflow-hidden">
+                            <div className="absolute top-4 right-4 px-3 py-1 bg-gold text-charcoal text-[9px] font-black uppercase tracking-widest rounded-full">
+                                Done-for-you
+                            </div>
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-12 h-12 rounded-2xl bg-gold flex items-center justify-center">
+                                    <Sparkles className="w-6 h-6 text-charcoal" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] uppercase tracking-widest text-gold font-black">Opzione 2</p>
+                                    <h4 className="text-xl font-serif italic text-charcoal">Setup Premium</h4>
+                                </div>
+                            </div>
+                            <ul className="space-y-3 mb-6">
+                                <li className="flex items-center gap-3 text-charcoal">
+                                    <Check className="w-4 h-4 text-gold" />
+                                    <span className="font-medium">Configuriamo tutto noi in 48h</span>
+                                </li>
+                                <li className="flex items-center gap-3 text-charcoal">
+                                    <Check className="w-4 h-4 text-gold" />
+                                    <span className="font-medium">Training personalità + FAQ</span>
+                                </li>
+                                <li className="flex items-center gap-3 text-charcoal">
+                                    <Check className="w-4 h-4 text-gold" />
+                                    <span className="font-medium">Integrazione canali completa</span>
+                                </li>
+                                <li className="flex items-center gap-3 text-charcoal">
+                                    <Check className="w-4 h-4 text-gold" />
+                                    <span className="font-medium">Call 1:1 di onboarding</span>
+                                </li>
+                            </ul>
+                            <div className="flex items-center justify-between">
+                                <p className="text-charcoal font-serif text-2xl italic">
+                                    €297 <span className="text-sm text-charcoal/50">una tantum</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Final CTA */}
+                    <div className="text-center mt-12">
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="inline-flex items-center gap-3 px-10 py-5 bg-charcoal text-white rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:shadow-2xl transition-all border border-gold/20 hover:border-gold/40"
+                        >
+                            Vedi i Piani
+                            <ArrowRight className="w-5 h-5" />
+                        </motion.button>
                     </div>
                 </motion.div>
             </div>
