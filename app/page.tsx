@@ -18,6 +18,10 @@ import SuperiorityMatrix from "@/components/home-viral/SuperiorityMatrix";
 import ViralCompareMode from "@/components/home-viral/ViralCompareMode";
 import ReferralElite from "@/components/home-viral/ReferralElite";
 import PricingUltimate from "@/components/sections/PricingUltimate";
+import PlanComparisonTable from "@/components/sections/PlanComparisonTable";
+import FounderWavesSection from "@/components/sections/FounderWavesSection";
+import FuturePricingWarning from "@/components/sections/FuturePricingWarning";
+import PricingFinalCTA from "@/components/sections/PricingFinalCTA";
 import SocialProofHuman from "@/components/home-viral/SocialProofHuman";
 import FinalCTAUltimate from "@/components/sections/FinalCTAUltimate";
 import Footer from "@/components/sections/Footer";
@@ -97,6 +101,12 @@ export default function Home() {
 
         {/* PRICING (NON TOCCARE - user requirement) */}
         <PricingUltimate showToggle={true} />
+
+        {/* NEW ELEGANT PRICING SUBSECTIONS */}
+        <PlanComparisonTable />
+        <FounderWavesSection />
+        <FuturePricingWarning />
+        <PricingFinalCTA />
 
         {/* REFERRAL PROGRAM - The Viral Loop */}
         <ReferralElite />
