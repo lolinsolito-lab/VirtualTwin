@@ -237,120 +237,83 @@ export default function SuperiorityMatrix() {
                     </div>
                 </motion.div>
 
-                {/* SETUP SECTION - Pro/Contra */}
+                {/* SETUP SECTION - Premium Only */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="max-w-4xl mx-auto"
+                    className="max-w-3xl mx-auto"
                 >
                     <div className="text-center mb-10">
+                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold text-charcoal rounded-full mb-6">
+                            <Gift className="w-4 h-4" />
+                            <span className="text-[10px] font-black tracking-[0.3em] uppercase">Done-For-You</span>
+                        </span>
                         <h3 className="font-serif text-3xl md:text-5xl text-charcoal mb-4 italic">
-                            Non hai tempo di configurare?
+                            Noi Configuriamo. Tu Scali.
                         </h3>
                         <p className="text-charcoal/50 text-lg">
-                            Scegli come iniziare. Zero stress, zero codice.
+                            Il nostro team prepara il tuo Clone in 48h. Tu ti godi i risultati.
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                        {/* Self Setup */}
-                        <div className="p-8 bg-white rounded-3xl border-2 border-charcoal/10 hover:border-charcoal/20 transition-all">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="w-12 h-12 rounded-2xl bg-charcoal/5 flex items-center justify-center">
-                                    <Clock className="w-6 h-6 text-charcoal/60" />
-                                </div>
-                                <div>
-                                    <p className="text-[10px] uppercase tracking-widest text-charcoal/40 font-black">Opzione 1</p>
-                                    <h4 className="text-xl font-serif italic text-charcoal">Self-Setup</h4>
-                                </div>
-                            </div>
-                            <ul className="space-y-3 mb-6">
-                                <li className="flex items-center gap-3 text-charcoal/70">
-                                    <Check className="w-4 h-4 text-green-600" />
-                                    <span>Incluso nel tuo piano</span>
-                                </li>
-                                <li className="flex items-center gap-3 text-charcoal/70">
-                                    <Check className="w-4 h-4 text-green-600" />
-                                    <span>10 minuti di configurazione</span>
-                                </li>
-                                <li className="flex items-center gap-3 text-charcoal/70">
-                                    <Check className="w-4 h-4 text-green-600" />
-                                    <span>Guide e tutorial disponibili</span>
-                                </li>
-                            </ul>
-                            <p className="text-charcoal/40 text-sm italic">
-                                Perfetto se ami fare le cose da solo.
-                            </p>
+                    {/* Premium Setup Card - Centered */}
+                    <div className="p-10 bg-gradient-to-br from-charcoal via-charcoal to-black rounded-[2rem] border border-gold/30 relative overflow-hidden shadow-2xl">
+                        {/* Background Glow */}
+                        <div className="absolute -inset-4 bg-gold/20 rounded-[3rem] blur-3xl" />
+
+                        {/* Concierge Image */}
+                        <div className="absolute -right-8 -bottom-8 w-48 h-48 opacity-30">
+                            <Image
+                                src="/images/setup_premium.png"
+                                alt="Setup Premium"
+                                width={192}
+                                height={192}
+                                className="object-contain"
+                            />
                         </div>
 
-                        {/* Premium Setup */}
-                        <div className="p-8 bg-gradient-to-br from-gold/10 to-amber-50 rounded-3xl border-2 border-gold/30 hover:border-gold/50 transition-all relative overflow-hidden">
-                            {/* Concierge Image */}
-                            <div className="absolute -right-8 -bottom-8 w-40 h-40 opacity-20">
-                                <Image
-                                    src="/images/setup_premium.png"
-                                    alt="Setup Premium"
-                                    width={160}
-                                    height={160}
-                                    className="object-contain"
-                                />
+                        <div className="absolute top-4 right-4">
+                            <span className="px-4 py-1.5 bg-gold text-charcoal text-[10px] font-black uppercase tracking-widest rounded-full">
+                                Promo Wave · €99
+                            </span>
+                        </div>
+
+                        <div className="relative z-10">
+                            <h4 className="text-2xl font-serif italic text-white mb-8">Setup Premium</h4>
+
+                            <div className="grid md:grid-cols-2 gap-4 mb-8">
+                                {[
+                                    "Configurazione completa in 48h",
+                                    "Training personalità + Tone of Voice",
+                                    "Integrazione di tutti i canali",
+                                    "Call 1:1 strategica di onboarding",
+                                    "Importazione FAQ e knowledge base",
+                                    "Test e ottimizzazione iniziale"
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-center gap-3 text-white/80">
+                                        <Check className="w-5 h-5 text-gold flex-shrink-0" />
+                                        <span>{item}</span>
+                                    </div>
+                                ))}
                             </div>
 
-                            <div className="absolute top-4 right-4 flex items-center gap-2">
-                                <span className="px-3 py-1 bg-red-500 text-white text-[9px] font-black uppercase tracking-widest rounded-full animate-pulse">Promo Wave</span>
-                                <span className="px-3 py-1 bg-gold text-charcoal text-[9px] font-black uppercase tracking-widest rounded-full">Done-for-you</span>
-                            </div>
-
-                            <div className="flex items-center gap-3 mb-6 mt-4">
-                                <div className="w-12 h-12 rounded-2xl bg-gold flex items-center justify-center">
-                                    <Gift className="w-6 h-6 text-charcoal" />
-                                </div>
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-6 border-t border-white/10">
                                 <div>
-                                    <p className="text-[10px] uppercase tracking-widest text-gold font-black">Opzione 2</p>
-                                    <h4 className="text-xl font-serif italic text-charcoal">Setup Premium</h4>
-                                </div>
-                            </div>
-                            <ul className="space-y-3 mb-6 relative z-10">
-                                <li className="flex items-center gap-3 text-charcoal">
-                                    <Check className="w-4 h-4 text-gold" />
-                                    <span className="font-medium">Configuriamo tutto noi in 48h</span>
-                                </li>
-                                <li className="flex items-center gap-3 text-charcoal">
-                                    <Check className="w-4 h-4 text-gold" />
-                                    <span className="font-medium">Training personalità + FAQ</span>
-                                </li>
-                                <li className="flex items-center gap-3 text-charcoal">
-                                    <Check className="w-4 h-4 text-gold" />
-                                    <span className="font-medium">Integrazione canali completa</span>
-                                </li>
-                                <li className="flex items-center gap-3 text-charcoal">
-                                    <Check className="w-4 h-4 text-gold" />
-                                    <span className="font-medium">Call 1:1 di onboarding</span>
-                                </li>
-                            </ul>
-                            <div className="flex items-center justify-between relative z-10">
-                                <div>
-                                    <p className="text-charcoal font-serif text-2xl italic">
-                                        <span className="line-through text-charcoal/40 text-lg">€297</span> €99*
+                                    <p className="text-white font-serif text-3xl italic">
+                                        <span className="line-through text-white/30 text-xl">€297</span> €99
                                     </p>
-                                    <p className="text-[10px] text-charcoal/50 mt-1">*Piani Starter e Creator. Altri piani da €197.</p>
+                                    <p className="text-[11px] text-white/40 mt-1">Piani Starter e Creator. Altri piani da €197.</p>
                                 </div>
+                                <button
+                                    onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                                    className="inline-flex items-center gap-2 px-8 py-4 gold-gradient text-charcoal rounded-full font-black uppercase tracking-widest text-sm hover:scale-105 transition-all"
+                                >
+                                    <Gift className="w-4 h-4" />
+                                    Aggiungi al Piano
+                                </button>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Final CTA */}
-                    <div className="text-center mt-12">
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                            className="inline-flex items-center gap-3 px-10 py-5 bg-charcoal text-white rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:shadow-2xl transition-all border border-gold/20 hover:border-gold/40"
-                        >
-                            Vedi i Piani
-                            <ArrowRight className="w-5 h-5" />
-                        </motion.button>
                     </div>
                 </motion.div>
             </div>

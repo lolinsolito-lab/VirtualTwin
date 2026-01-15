@@ -107,9 +107,9 @@ export default function SocialProofHuman() {
 
                     <div className="grid md:grid-cols-3 gap-12 mb-32">
                         {[
-                            { image: "/whatsapp_proof_real_mockup_1768242467395.png", label: "Relazioni su WhatsApp" },
-                            { image: "/instagram_proof_real_mockup_1768242485974.png", label: "Ingaggio su Instagram" },
-                            { image: "/messenger_proof_real_mockup_1768242505400.png", label: "Scalabilità su Messenger" }
+                            { image: "/proof_whatsapp.png", label: "Automazione Conversazioni" },
+                            { image: "/proof_instagram.png", label: "Engagement Intelligente" },
+                            { image: "/proof_messenger.png", label: "Scalabilità Istantanea" }
                         ].map((proof, i) => (
                             <motion.div
                                 key={i}
@@ -162,42 +162,7 @@ export default function SocialProofHuman() {
                         </div>
                     </motion.div>
 
-                    {/* ELITE SCARCITY - WAVE GENESIS */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        className="mt-32 p-12 rounded-[3.5rem] bg-gradient-to-br from-charcoal to-black border border-gold/30 text-center relative overflow-hidden shadow-3xl"
-                    >
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[100px]" />
-                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-[80px]" />
-
-                        <div className="relative z-10">
-                            <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black mb-6 block">Genesis Founders Wave</span>
-                            <h3 className="text-3xl md:text-5xl font-serif text-white mb-6">
-                                Unisciti ai <span className="text-gold italic">Primi 20 Visionari.</span>
-                            </h3>
-                            <p className="text-white/60 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-                                Stiamo aprendo le porte a soli 20 fondatori per addestrare i primi Gemelli Digitali con accesso prioritario e prezzo bloccato a vita. <br />
-                                <span className="text-white font-medium">L'opportunità di scalare senza limiti biologici inizia qui.</span>
-                            </p>
-
-                            <div className="inline-flex flex-col items-center">
-                                <div className="text-7xl font-serif text-gold font-black mb-2">20</div>
-                                <p className="text-white/40 text-[10px] uppercase tracking-[0.3em] font-bold">Posti Disponibili • Wave Genesis</p>
-                            </div>
-
-                            <div className="mt-12">
-                                <a
-                                    href="#pricing"
-                                    className="inline-flex items-center gap-4 px-10 py-5 bg-gold text-charcoal rounded-2xl font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all shadow-luxury-gold"
-                                >
-                                    Inizia la tua Trasformazione
-                                    <TrendingUp className="w-5 h-5" />
-                                </a>
-                            </div>
-                        </div>
-                    </motion.div>
+                    {/* Genesis Wave CTA moved to dedicated section */}
 
                 </div>
             </div>
