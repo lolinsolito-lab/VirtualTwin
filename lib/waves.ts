@@ -240,6 +240,17 @@ export async function getFoundersSold(): Promise<number> {
     return count || 0;
 }
 
+export async function getWaitlistCount(): Promise<number> {
+    const { supabase } = await import('@/lib/supabase');
+    // Count users who registered but haven't subscribed yet (waitlist)
+    const { count } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_founder', false)
+        .is('stripe_subscription_id', null);
+    return count || 0;
+}
+
 export async function getCurrentWave(): Promise<Wave | null> {
     const foundersSold = await getFoundersSold();
     const now = getCurrentDate();

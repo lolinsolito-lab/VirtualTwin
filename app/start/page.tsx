@@ -107,7 +107,7 @@ export default function StartPage() {
                             >
                                 <Bot className="w-4 h-4" />
                                 <span className="text-sm font-black tracking-wider uppercase">
-                                    Il Tuo Clone AI Digitale
+                                    VirtualTwin · Il Tuo Clone AI
                                 </span>
                             </motion.div>
 
@@ -144,7 +144,7 @@ export default function StartPage() {
                                     className="group inline-flex items-center gap-3 px-12 py-6 bg-charcoal text-white rounded-full font-black uppercase tracking-widest text-sm hover:bg-gold hover:scale-105 transition-all shadow-xl"
                                 >
                                     <Sparkles className="w-5 h-5 text-gold group-hover:text-white" />
-                                    Inizia Gratis · 14 Giorni
+                                    Inizia Ora · 14 Giorni Free
                                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
 
@@ -343,9 +343,9 @@ export default function StartPage() {
                         className="max-w-4xl mx-auto px-6 text-center"
                     >
                         <p className="font-serif text-3xl md:text-5xl text-white/30 italic leading-tight">
-                            "I mediocri rispondono ai messaggi. <br />
-                            <span className="text-gold">Gli élite costruiscono sistemi</span> <br />
-                            che rispondono per loro."
+                            "Chi rincorre i messaggi, perde il tempo. <br />
+                            <span className="text-gold">Chi costruisce sistemi,</span> <br />
+                            conquista la libertà."
                         </p>
                     </motion.div>
                 </div>
@@ -391,7 +391,7 @@ export default function StartPage() {
                                         className="group inline-flex items-center gap-4 gold-gradient text-white px-12 py-6 rounded-2xl text-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-gold/30"
                                     >
                                         <Sparkles className="w-6 h-6" />
-                                        Inizia Gratis
+                                        Inizia Ora
                                         <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                                     </Link>
 

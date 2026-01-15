@@ -2,23 +2,26 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Crown, Users, TrendingUp, MessageSquare, ShieldCheck, Cpu } from 'lucide-react';
+import { Crown, Users, TrendingUp, MessageSquare, Globe, Send, Linkedin, MessageCircle } from 'lucide-react';
 
-import { getFoundersSold } from '@/lib/waves';
+import { getFoundersSold, getWaitlistCount } from '@/lib/waves';
 
 export default function SocialProofBar() {
     const [foundersCount, setFoundersCount] = React.useState(0);
+    const [waitlistCount, setWaitlistCount] = React.useState(0);
 
     React.useEffect(() => {
-        const fetchFounders = async () => {
+        const fetchStats = async () => {
             const sold = await getFoundersSold();
+            const waitlist = await getWaitlistCount();
             setFoundersCount(sold);
+            setWaitlistCount(waitlist);
         };
-        fetchFounders();
+        fetchStats();
 
-        // Simula la crescita "Live" ogni tanto
+        // Aggiorna ogni 30 secondi
         const interval = setInterval(() => {
-            setFoundersCount(prev => prev + (Math.random() > 0.9 ? 1 : 0));
+            fetchStats();
         }, 30000);
 
         return () => clearInterval(interval);
@@ -31,8 +34,8 @@ export default function SocialProofBar() {
             icon: Users
         },
         {
-            value: "847+",
-            label: "Imprenditori in Waitlist",
+            value: waitlistCount > 0 ? `${waitlistCount}+` : "—",
+            label: "In Lista d'Attesa",
             icon: Crown
         },
         {
@@ -40,6 +43,15 @@ export default function SocialProofBar() {
             label: "Operatività del Clone",
             icon: TrendingUp
         }
+    ];
+
+    const channels = [
+        { name: "WhatsApp", icon: MessageSquare },
+        { name: "Instagram", icon: MessageCircle },
+        { name: "Messenger", icon: MessageCircle },
+        { name: "Telegram", icon: Send },
+        { name: "Webchat", icon: Globe },
+        { name: "LinkedIn", icon: Linkedin }
     ];
 
     return (
@@ -80,23 +92,15 @@ export default function SocialProofBar() {
                         ))}
                     </div>
 
-                    <div className="mt-12 pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-center gap-8 opacity-40 grayscale contrast-125">
-                        <span className="text-[10px] uppercase tracking-[0.6em] text-white/40 font-black mb-4 md:mb-0">Le tecnologie dietro VirtualTwin:</span>
-                        <div className="flex flex-wrap items-center justify-center gap-12">
-                            <div className="flex items-center gap-2">
-                                <ShieldCheck className="w-4 h-4 text-white" />
-                                <span className="text-white font-serif text-xl italic opacity-80 uppercase tracking-widest">Meta</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Cpu className="w-4 h-4 text-white" />
-                                <span className="text-white font-serif text-xl italic opacity-80 uppercase tracking-widest">OpenAI</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-white font-serif text-xl italic opacity-80 uppercase tracking-widest">Stripe</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-white font-serif text-xl italic opacity-80 uppercase tracking-widest">WhatsApp</span>
-                            </div>
+                    <div className="mt-12 pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-center gap-8">
+                        <span className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-black mb-4 md:mb-0">Canali Integrati:</span>
+                        <div className="flex flex-wrap items-center justify-center gap-6">
+                            {channels.map((channel, i) => (
+                                <div key={i} className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
+                                    <channel.icon className="w-4 h-4 text-gold" />
+                                    <span className="text-white font-medium text-sm uppercase tracking-widest">{channel.name}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
