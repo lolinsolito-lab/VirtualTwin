@@ -44,7 +44,7 @@ const Navbar = () => {
         { id: 'problem', label: 'La Tua Sfida', type: 'anchor' },
         { id: 'solution', label: 'Zero Stress', type: 'anchor' },
         { id: 'vision', label: 'Vision', href: '/vision', type: 'link' },
-        { id: 'pricing', label: 'Inizia Gratis', type: 'anchor' },
+        { id: 'pricing', label: 'Inizia Ora', type: 'anchor' },
     ];
 
     const handleNavClick = (e: React.MouseEvent, link: any) => {

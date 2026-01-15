@@ -179,7 +179,7 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
             story: "Prova Gratuita",
             subtitle: "Zero rischio, zero carta di credito. Scopri se l'AI funziona per te.",
             features: ["1 Clone AI (demo)", "100 msg totali", "PDF Gratuito", "Community", "3 Template"],
-            cta: "Inizia Gratis →",
+            cta: "Prova Ora →",
             isTrial: true,
             bg: "bg-gradient-to-br from-gray-50 to-gray-100",
             border: "border-gray-200",

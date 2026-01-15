@@ -40,7 +40,7 @@ const HeroRedesigned = () => {
                         href="/auth/register"
                         className="gold-gradient px-12 py-5 rounded-full text-white font-black text-[10px] uppercase tracking-[0.4em] shadow-luxury hover:scale-105 transition-all duration-500"
                     >
-                        Inizia Gratis
+                        Inizia Ora
                     </Link>
                     <Link
                         href="#demo"
