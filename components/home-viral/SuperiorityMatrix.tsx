@@ -247,13 +247,14 @@ export default function SuperiorityMatrix() {
                     <div className="text-center mb-10">
                         <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold text-charcoal rounded-full mb-6">
                             <Gift className="w-4 h-4" />
-                            <span className="text-[10px] font-black tracking-[0.3em] uppercase">Done-For-You</span>
+                            <span className="text-[10px] font-black tracking-[0.3em] uppercase">Done-For-You · Su Appuntamento</span>
                         </span>
                         <h3 className="font-serif text-3xl md:text-5xl text-charcoal mb-4 italic">
-                            Noi Configuriamo. Tu Scali.
+                            Non hai tempo? <span className="text-gold">Ci pensiamo noi.</span>
                         </h3>
-                        <p className="text-charcoal/50 text-lg">
-                            Il nostro team prepara il tuo Clone in 48h. Tu ti godi i risultati.
+                        <p className="text-charcoal/50 text-lg max-w-xl mx-auto">
+                            Il nostro team configura il tuo Clone in 48h con una call strategica dedicata. <br />
+                            <strong className="text-charcoal/70">Tu ti godi i risultati.</strong>
                         </p>
                     </div>
 
