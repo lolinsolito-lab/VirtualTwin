@@ -362,8 +362,8 @@ export default function StartPage() {
                 {/* SOCIAL PROOF */}
                 <SocialProofHuman />
 
-                {/* FINAL CTA - Premium */}
-                <section className="py-24 px-6 bg-charcoal">
+                {/* FINAL CTA - Premium (flows from video section above) */}
+                <section className="pb-24 pt-8 px-6 bg-charcoal">
                     <div className="max-w-4xl mx-auto">
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}

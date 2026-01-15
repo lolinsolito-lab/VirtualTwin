@@ -131,41 +131,45 @@ export default function SocialProofHuman() {
                             </motion.div>
                         ))}
                     </div>
+                </div>
+            </div>
 
-                    {/* VIDEO DEMO - THE FINAL TOUCH */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="relative max-w-5xl mx-auto"
-                    >
-                        <div className="absolute -inset-10 bg-gold/5 rounded-[4rem] blur-[100px] pointer-events-none" />
+            {/* VIDEO DEMO SECTION - Full Width Dark for Flow */}
+            <div className="bg-charcoal py-20 -mx-6 px-6">
+                <div className="container mx-auto">
+                    <div className="max-w-5xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="relative"
+                        >
+                            <div className="absolute -inset-10 bg-gold/10 rounded-[4rem] blur-[100px] pointer-events-none" />
 
-                        <div className="relative bg-charcoal rounded-[3rem] overflow-hidden shadow-3xl border border-white/10 aspect-video flex items-center justify-center group cursor-pointer">
-                            <img
-                                src="/video_testimonial_frame_elite_1768245512073.png"
-                                alt="Neural Training Demo"
-                                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-[2000ms]"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent" />
+                            <div className="relative bg-black rounded-[3rem] overflow-hidden shadow-3xl border border-gold/20 aspect-video flex items-center justify-center group cursor-pointer">
+                                <img
+                                    src="/video_testimonial_frame_elite_1768245512073.png"
+                                    alt="Neural Training Demo"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-[2000ms]"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
 
-                            {/* Play Button */}
-                            <div className="relative z-10 w-24 h-24 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-gold transition-all duration-500 shadow-2xl">
-                                <Play className="w-10 h-10 text-white fill-white group-hover:text-charcoal group-hover:fill-charcoal transition-colors" />
+                                {/* Play Button */}
+                                <div className="relative z-10 w-24 h-24 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-gold transition-all duration-500 shadow-2xl">
+                                    <Play className="w-10 h-10 text-white fill-white group-hover:text-charcoal group-hover:fill-charcoal transition-colors" />
+                                </div>
+
+                                {/* Info */}
+                                <div className="absolute bottom-10 left-10 text-left">
+                                    <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mb-1">Caso Studio</p>
+                                    <h5 className="text-white font-serif text-2xl italic">Risultati Reali: Il Clone in Azione</h5>
+                                </div>
                             </div>
-
-                            {/* Info */}
-                            <div className="absolute bottom-10 left-10 text-left">
-                                <p className="text-gold text-[10px] uppercase tracking-[0.3em] font-black mb-1">Caso Studio</p>
-                                <h5 className="text-white font-serif text-2xl italic">Risultati Reali: Il Clone in Azione</h5>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Genesis Wave CTA moved to dedicated section */}
-
+                        </motion.div>
+                    </div>
                 </div>
             </div>
         </section>
     );
 }
+
