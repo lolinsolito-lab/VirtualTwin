@@ -11,22 +11,78 @@ import FeaturesEnhanced from "@/components/sections/FeaturesEnhanced";
 import SuperiorityMatrix from "@/components/home-viral/SuperiorityMatrix";
 import PricingUltimate from "@/components/sections/PricingUltimate";
 import SocialProofHuman from "@/components/home-viral/SocialProofHuman";
-import { ArrowRight, Sparkles, Check, Users, MessageSquare, Star, Clock, Shield, Zap, Heart } from 'lucide-react';
+import {
+    ArrowRight, Sparkles, Check, Clock, Shield, Zap, Heart,
+    MessageSquare, Send, Globe, Linkedin, Bot, Radio
+} from 'lucide-react';
 
 /**
- * START PAGE - IL BENVENUTO UNIVERSALE
+ * START PAGE - BENVENUTO UNIVERSALE
  * 
- * Pagina per campagne pubblicitarie post-founder
- * Tono: Accogliente, "Inizia Ora", Autosufficiente
- * Focus: AZIONE + Comparazione (non puoi fare a meno di noi)
+ * Slogan: "Quanto Vale la Tua Libertà?"
+ * Focus: Canali, Clone AI, Setup Veloce
  */
+
+const channels = [
+    {
+        name: "WhatsApp Business",
+        icon: MessageSquare,
+        color: "from-green-500 to-green-600",
+        status: "live",
+        desc: "Rispondi automaticamente ai messaggi WhatsApp"
+    },
+    {
+        name: "Instagram Direct",
+        icon: () => (
+            <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" />
+            </svg>
+        ),
+        color: "from-pink-500 via-purple-500 to-orange-500",
+        status: "coming",
+        desc: "Gestisci i DM Instagram con l'AI"
+    },
+    {
+        name: "Facebook Messenger",
+        icon: () => (
+            <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.145 2 11.243c0 2.886 1.276 5.462 3.322 7.254V22l3.405-1.862c.907.252 1.872.39 2.873.39 5.523 0 10-4.145 10-9.243S17.523 2 12 2z" />
+            </svg>
+        ),
+        color: "from-blue-500 to-blue-600",
+        status: "coming",
+        desc: "Automatizza le conversazioni Messenger"
+    },
+    {
+        name: "Telegram Bot",
+        icon: Send,
+        color: "from-sky-400 to-sky-500",
+        status: "vip",
+        desc: "Connetti il tuo bot Telegram per assistenze rapide"
+    },
+    {
+        name: "Webchat Integrata",
+        icon: Globe,
+        color: "from-gold to-amber-600",
+        status: "vip",
+        desc: "Widget AI avanzato da integrare nel tuo sito"
+    },
+    {
+        name: "LinkedIn Direct",
+        icon: Linkedin,
+        color: "from-blue-700 to-blue-800",
+        status: "exclusive",
+        desc: "Espandi il tuo network con messaggi AI"
+    }
+];
+
 export default function StartPage() {
     return (
         <div className="selection:bg-gold selection:text-black min-h-screen bg-champagne overflow-x-hidden">
             <Navbar />
 
             <main>
-                {/* WELCOMING HERO - Caldo e Invitante */}
+                {/* HERO - "Quanto Vale la Tua Libertà?" */}
                 <section className="relative pt-32 pb-20 overflow-hidden">
                     <div className="absolute inset-0 pointer-events-none">
                         <div className="absolute top-20 right-20 w-96 h-96 bg-gold/10 rounded-full blur-3xl animate-pulse" />
@@ -35,15 +91,15 @@ export default function StartPage() {
 
                     <div className="container mx-auto px-6 relative z-10">
                         <div className="max-w-5xl mx-auto text-center">
-                            {/* Welcome Badge */}
+                            {/* Badge */}
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className="inline-flex items-center gap-2 px-5 py-2 bg-gold/10 border border-gold/30 rounded-full mb-8"
                             >
-                                <Heart className="w-4 h-4 text-gold" />
+                                <Bot className="w-4 h-4 text-gold" />
                                 <span className="text-gold text-sm font-black tracking-wider uppercase">
-                                    Benvenuto nel Futuro
+                                    Il Tuo Clone AI Digitale
                                 </span>
                             </motion.div>
 
@@ -54,43 +110,26 @@ export default function StartPage() {
                                 transition={{ delay: 0.1 }}
                                 className="font-serif text-5xl md:text-7xl lg:text-8xl text-charcoal mb-8 leading-[0.9]"
                             >
-                                Finalmente <span className="text-gold italic">Libero.</span>
+                                Quanto Vale la <br />
+                                <span className="text-gold italic">Tua Libertà?</span>
                             </motion.h1>
 
                             <motion.p
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="text-xl md:text-2xl text-charcoal/50 max-w-3xl mx-auto mb-6 leading-relaxed"
+                                className="text-xl md:text-2xl text-charcoal/50 max-w-3xl mx-auto mb-10 leading-relaxed"
                             >
-                                Mentre gli altri rispondono manualmente a ogni messaggio, <br />
-                                <strong className="text-charcoal/70">tu scali il business con il tuo Clone AI.</strong>
+                                Il Tuo Clone AI Digitale che <strong className="text-charcoal/70">Risponde per te ai Clienti 24/7</strong>. <br />
+                                Su tutti i canali. Senza mai dormire.
                             </motion.p>
-
-                            {/* Comparison Line */}
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.3 }}
-                                className="flex flex-wrap justify-center gap-6 mb-10 text-sm"
-                            >
-                                <span className="flex items-center gap-2 text-red-500/70 line-through">
-                                    ❌ 5+ ore/giorno in chat
-                                </span>
-                                <span className="flex items-center gap-2 text-red-500/70 line-through">
-                                    ❌ Clienti persi di notte
-                                </span>
-                                <span className="flex items-center gap-2 text-red-500/70 line-through">
-                                    ❌ Burnout garantito
-                                </span>
-                            </motion.div>
 
                             {/* CTA */}
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                                className="flex flex-col items-center gap-4"
+                                transition={{ delay: 0.3 }}
+                                className="flex flex-col items-center gap-4 mb-12"
                             >
                                 <Link
                                     href="/auth/register"
@@ -101,12 +140,78 @@ export default function StartPage() {
                                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
 
-                                <div className="flex items-center gap-6 text-charcoal/40 text-xs">
-                                    <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-600" /> No carta richiesta</span>
-                                    <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-600" /> Setup 10 minuti</span>
-                                    <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-600" /> Cancella quando vuoi</span>
+                                <div className="flex items-center gap-2 text-charcoal/40 text-sm">
+                                    <Clock className="w-4 h-4" />
+                                    <span>Setup in 10 Minuti. <strong>Senza Codice.</strong></span>
                                 </div>
                             </motion.div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* CHANNELS SHOWCASE */}
+                <section className="py-20 px-6 bg-charcoal">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="text-center mb-16">
+                            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 rounded-full mb-6">
+                                <Radio className="w-4 h-4 text-gold" />
+                                <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-black">Canali Supportati</span>
+                            </span>
+                            <h2 className="font-serif text-4xl md:text-6xl text-white mb-4">
+                                Un Clone, <span className="text-gold italic">Tutti i Canali.</span>
+                            </h2>
+                            <p className="text-white/50 text-lg max-w-2xl mx-auto">
+                                Rispondi ai tuoi clienti ovunque si trovino. <br />
+                                Il tuo Clone AI parla la tua lingua su ogni piattaforma.
+                            </p>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {channels.map((channel, i) => {
+                                const IconComponent = channel.icon;
+                                return (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, y: 30 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: i * 0.1 }}
+                                        className="group relative bg-white/5 backdrop-blur-sm rounded-3xl p-6 border border-white/10 hover:border-gold/30 transition-all"
+                                    >
+                                        {/* Status Badge */}
+                                        <div className="absolute top-4 right-4">
+                                            {channel.status === 'live' && (
+                                                <span className="px-2 py-1 bg-green-500 text-white text-[8px] font-black uppercase rounded-full">
+                                                    Live
+                                                </span>
+                                            )}
+                                            {channel.status === 'coming' && (
+                                                <span className="px-2 py-1 bg-white/20 text-white/60 text-[8px] font-black uppercase rounded-full">
+                                                    Coming Soon
+                                                </span>
+                                            )}
+                                            {channel.status === 'vip' && (
+                                                <span className="px-2 py-1 bg-gold text-charcoal text-[8px] font-black uppercase rounded-full">
+                                                    Tier 4 & 5
+                                                </span>
+                                            )}
+                                            {channel.status === 'exclusive' && (
+                                                <span className="px-2 py-1 bg-purple-500 text-white text-[8px] font-black uppercase rounded-full">
+                                                    Exclusive
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Icon */}
+                                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${channel.color} flex items-center justify-center mb-4 text-white shadow-lg`}>
+                                            {typeof IconComponent === 'function' ? <IconComponent /> : <IconComponent className="w-6 h-6" />}
+                                        </div>
+
+                                        <h3 className="text-white font-bold text-lg mb-2">{channel.name}</h3>
+                                        <p className="text-white/50 text-sm">{channel.desc}</p>
+                                    </motion.div>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
@@ -114,7 +219,7 @@ export default function StartPage() {
                 {/* SOCIAL PROOF BAR */}
                 <SocialProofBar />
 
-                {/* WHY THEY CAN'T LIVE WITHOUT US */}
+                {/* LORO vs NOI */}
                 <section className="py-20 px-6">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-16">
@@ -186,7 +291,7 @@ export default function StartPage() {
                     </div>
                 </section>
 
-                {/* QUOTE - Welcoming */}
+                {/* QUOTE */}
                 <div className="py-20 text-center bg-gradient-to-b from-white to-champagne/50">
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -206,7 +311,7 @@ export default function StartPage() {
                 {/* SUPERIORITY MATRIX */}
                 <SuperiorityMatrix />
 
-                {/* PRICING - PUBLIC MODE */}
+                {/* PRICING - PUBLIC MODE (NON TOCCARE) */}
                 <PricingUltimate pricingMode="public" />
 
                 {/* SOCIAL PROOF */}
@@ -226,11 +331,11 @@ export default function StartPage() {
                             <div className="relative z-10">
                                 <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-black mb-6 block">Il Tuo Momento</span>
                                 <h2 className="text-4xl md:text-5xl font-serif text-white italic mb-6">
-                                    Sei Pronto a Essere <span className="text-gold">Ovunque</span>?
+                                    Pronto a Essere <span className="text-gold">Ovunque</span>?
                                 </h2>
                                 <p className="text-white/50 text-lg mb-10 max-w-2xl mx-auto">
-                                    Migliaia di imprenditori stanno già scalando con il loro Clone. <br />
-                                    L'unica domanda è: tu quando inizi?
+                                    Setup in 10 minuti. Senza codice. Senza stress. <br />
+                                    Il tuo Clone AI ti aspetta.
                                 </p>
 
                                 <Link
@@ -241,9 +346,10 @@ export default function StartPage() {
                                     <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                                 </Link>
 
-                                <div className="flex items-center justify-center gap-8 mt-8 text-white/30 text-xs font-black uppercase tracking-widest">
+                                <div className="flex flex-wrap items-center justify-center gap-8 mt-8 text-white/30 text-xs font-black uppercase tracking-widest">
                                     <span className="flex items-center gap-2"><Shield className="w-3 h-3 text-gold" /> Pagamento Sicuro</span>
                                     <span className="flex items-center gap-2"><Clock className="w-3 h-3 text-gold" /> Setup 10 Min</span>
+                                    <span className="flex items-center gap-2"><Check className="w-3 h-3 text-gold" /> No Carta Richiesta</span>
                                 </div>
                             </div>
                         </motion.div>
