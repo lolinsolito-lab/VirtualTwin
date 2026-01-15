@@ -56,9 +56,33 @@ export default function FounderPage() {
             }
         }
         fetchData();
-        const interval = setInterval(fetchData, 1000); // Live countdown
+        const interval = setInterval(fetchData, 1000);
         return () => clearInterval(interval);
     }, []);
+
+    const founderBenefits = [
+        {
+            icon: Lock,
+            title: "Prezzo Bloccato a Vita",
+            desc: "Mai aumenti. Mai sorprese. Il prezzo di oggi, per sempre. Mentre gli altri pagheranno €29+/mese, tu resterai a €7.",
+            badge: "LIFETIME",
+            image: "/images/founder/founder_lifetime.png"
+        },
+        {
+            icon: Flame,
+            title: "Accesso Prioritario",
+            desc: "Nuove feature prima di chiunque altro. Sei nella cerchia ristretta che plasma il futuro del prodotto.",
+            badge: "VIP ACCESS",
+            image: "/images/founder/founder_vip.png"
+        },
+        {
+            icon: Crown,
+            title: "Setup Premium Incluso",
+            desc: "Configuriamo tutto noi in 48h. Training personalità, integrazione canali, call 1:1. Gratis per te.",
+            badge: "€297 VALUE",
+            image: "/images/founder/founder_setup.png"
+        }
+    ];
 
     return (
         <div className="selection:bg-gold selection:text-black min-h-screen bg-charcoal overflow-x-hidden">
@@ -81,12 +105,11 @@ export default function FounderPage() {
             </div>
 
             <main>
-                {/* EXCLUSIVE HERO - Dark & Elite */}
+                {/* EXCLUSIVE HERO */}
                 <section className="relative pt-20 pb-32 overflow-hidden bg-charcoal">
                     <div className="absolute inset-0 pointer-events-none">
                         <div className="absolute top-20 right-20 w-96 h-96 bg-gold/10 rounded-full blur-3xl animate-pulse" />
                         <div className="absolute bottom-20 left-20 w-80 h-80 bg-gold/5 rounded-full blur-3xl" />
-                        {/* Grid pattern */}
                         <div className="absolute inset-0 opacity-5" style={{
                             backgroundImage: `linear-gradient(rgba(212,175,55,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.3) 1px, transparent 1px)`,
                             backgroundSize: '60px 60px'
@@ -147,7 +170,7 @@ export default function FounderPage() {
                                 <strong className="text-white/80">tu avrai il prezzo bloccato per sempre.</strong>
                             </motion.p>
 
-                            {/* Comparison: Founders vs Latecomers */}
+                            {/* Price Comparison */}
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -220,7 +243,7 @@ export default function FounderPage() {
                     </div>
                 </section>
 
-                {/* WHY FOUNDERS WIN */}
+                {/* WHY FOUNDERS WIN - WITH IMAGES */}
                 <section className="py-20 px-6 bg-gradient-to-b from-black via-charcoal to-champagne">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-16">
@@ -234,49 +257,47 @@ export default function FounderPage() {
                         </div>
 
                         <div className="grid md:grid-cols-3 gap-6">
-                            {[
-                                {
-                                    icon: Lock,
-                                    title: "Prezzo Bloccato a Vita",
-                                    desc: "Mai aumenti. Mai sorprese. Il prezzo di oggi, per sempre. Mentre gli altri pagheranno €29+/mese, tu resterai a €7.",
-                                    badge: "LIFETIME"
-                                },
-                                {
-                                    icon: Flame,
-                                    title: "Accesso Prioritario",
-                                    desc: "Nuove feature prima di chiunque altro. Sei nella cerchia ristretta che plasma il futuro del prodotto.",
-                                    badge: "VIP ACCESS"
-                                },
-                                {
-                                    icon: Crown,
-                                    title: "Setup Premium Incluso",
-                                    desc: "Configuriamo tutto noi in 48h. Training personalità, integrazione canali, call 1:1. Gratis per te.",
-                                    badge: "€297 VALUE"
-                                }
-                            ].map((benefit, i) => (
+                            {founderBenefits.map((benefit, i) => (
                                 <motion.div
                                     key={i}
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="group relative bg-white rounded-3xl p-8 border border-charcoal/5 shadow-2xl hover:shadow-3xl transition-all"
+                                    className="group relative bg-white rounded-3xl overflow-hidden border border-charcoal/5 shadow-2xl hover:shadow-3xl transition-all"
                                 >
-                                    <div className="absolute top-4 right-4 px-3 py-1 bg-gold text-charcoal text-[9px] font-black uppercase rounded-full">
-                                        {benefit.badge}
+                                    {/* Image Header */}
+                                    <div className="relative h-40 overflow-hidden">
+                                        <Image
+                                            src={benefit.image}
+                                            alt={benefit.title}
+                                            fill
+                                            className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+                                        {/* Badge */}
+                                        <div className="absolute top-4 right-4 px-3 py-1 bg-gold text-charcoal text-[9px] font-black uppercase rounded-full shadow-lg">
+                                            {benefit.badge}
+                                        </div>
+                                        {/* Shimmer effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                     </div>
-                                    <div className="w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center mb-6 group-hover:bg-gold transition-colors">
-                                        <benefit.icon className="w-7 h-7 text-gold group-hover:text-charcoal transition-colors" />
+
+                                    {/* Content */}
+                                    <div className="p-6 text-center">
+                                        <div className="w-12 h-12 mx-auto rounded-xl bg-gold/10 flex items-center justify-center mb-4 group-hover:bg-gold transition-colors">
+                                            <benefit.icon className="w-6 h-6 text-gold group-hover:text-charcoal transition-colors" />
+                                        </div>
+                                        <h3 className="font-serif text-xl text-charcoal italic mb-3">{benefit.title}</h3>
+                                        <p className="text-charcoal/60 text-sm leading-relaxed">{benefit.desc}</p>
                                     </div>
-                                    <h3 className="font-serif text-xl text-charcoal italic mb-3">{benefit.title}</h3>
-                                    <p className="text-charcoal/60 text-sm leading-relaxed">{benefit.desc}</p>
                                 </motion.div>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* QUOTE - Exclusive */}
+                {/* QUOTE */}
                 <div className="py-20 text-center bg-champagne">
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -317,7 +338,6 @@ export default function FounderPage() {
                             viewport={{ once: true }}
                             className="relative overflow-hidden"
                         >
-                            {/* Glow Effect */}
                             <div className="absolute -inset-4 bg-gradient-to-r from-gold via-amber-500 to-gold rounded-[4rem] blur-2xl opacity-40 animate-pulse" />
 
                             <div className="relative bg-black rounded-[3rem] p-12 md:p-16 text-center border border-gold/30">
@@ -341,7 +361,7 @@ export default function FounderPage() {
                                     <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                                 </a>
 
-                                <div className="flex items-center justify-center gap-8 mt-8 text-white/30 text-xs font-black uppercase tracking-widest">
+                                <div className="flex flex-wrap items-center justify-center gap-8 mt-8 text-white/30 text-xs font-black uppercase tracking-widest">
                                     <span className="flex items-center gap-2"><Check className="w-3 h-3 text-gold" /> Nessuna Carta</span>
                                     <span className="flex items-center gap-2"><Check className="w-3 h-3 text-gold" /> 14 Giorni Trial</span>
                                     <span className="flex items-center gap-2"><Check className="w-3 h-3 text-gold" /> Prezzo Bloccato</span>
