@@ -55,8 +55,9 @@ interface Module {
     display_order: number;
 }
 
-const TIERS = ['solopreneur', 'entrepreneur', 'conquistatore', 'imperatore'];
+const TIERS = ['curioso', 'solopreneur', 'entrepreneur', 'conquistatore', 'imperatore'];
 const TIER_COLORS: Record<string, string> = {
+    curioso: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
     solopreneur: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
     entrepreneur: 'bg-green-500/20 text-green-400 border-green-500/30',
     conquistatore: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
@@ -607,15 +608,15 @@ export default function AdminAcademy() {
 
                                     <div>
                                         <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-3">Tier Minimo</label>
-                                        <div className="grid grid-cols-4 gap-2">
+                                        <div className="grid grid-cols-5 gap-2">
                                             {TIERS.map(tier => (
                                                 <button
                                                     key={tier}
                                                     type="button"
                                                     onClick={() => setCourseForm(prev => ({ ...prev, min_tier: tier }))}
                                                     className={`p-3 rounded-xl text-center transition-all capitalize text-xs font-bold ${courseForm.min_tier === tier
-                                                            ? TIER_COLORS[tier]
-                                                            : 'bg-white/5 text-white/30 border border-white/10 hover:bg-white/10'
+                                                        ? TIER_COLORS[tier]
+                                                        : 'bg-white/5 text-white/30 border border-white/10 hover:bg-white/10'
                                                         }`}
                                                 >
                                                     {tier}
@@ -729,8 +730,8 @@ export default function AdminAcademy() {
                                                     type="button"
                                                     onClick={() => setModuleForm(prev => ({ ...prev, content_type: ct.value }))}
                                                     className={`p-3 rounded-xl flex flex-col items-center gap-1 transition-all ${moduleForm.content_type === ct.value
-                                                            ? 'bg-purple-500/20 border-2 border-purple-500 text-purple-300'
-                                                            : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10'
+                                                        ? 'bg-purple-500/20 border-2 border-purple-500 text-purple-300'
+                                                        : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10'
                                                         }`}
                                                 >
                                                     <ct.Icon className="w-5 h-5" />
