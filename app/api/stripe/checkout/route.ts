@@ -74,7 +74,10 @@ export async function POST(req: NextRequest) {
                         isFounder: (tier === 'founder').toString(),
                     },
                 },
-                success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/onboarding?success=true&session_id={CHECKOUT_SESSION_ID}`,
+                // Redirect to booking page if Setup Premium purchased, otherwise normal onboarding
+                success_url: hasAddOns
+                    ? `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/onboarding/book-setup?setup_success=true&session_id={CHECKOUT_SESSION_ID}`
+                    : `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/onboarding?success=true&session_id={CHECKOUT_SESSION_ID}`,
                 cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/checkout?plan=${plan}&priceId=${directPriceId}&tier=${tier}&canceled=true`,
                 allow_promotion_codes: true,
                 billing_address_collection: 'auto',
