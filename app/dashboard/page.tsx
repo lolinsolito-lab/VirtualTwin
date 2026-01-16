@@ -151,6 +151,11 @@ export default function DashboardPage() {
                 </div>
             </header>
 
+            {/* I Miei Acquisti - Always visible regardless of leads */}
+            <div className="mb-12">
+                <MyPurchases />
+            </div>
+
             {hasData ? (
                 <div className="space-y-16">
                     {/* Metric Cards */}
@@ -181,11 +186,6 @@ export default function DashboardPage() {
                                 </div>
                             </div>
                         ))}
-                    </div>
-
-                    {/* I Miei Acquisti - Add-ons purchased */}
-                    <div className="mb-8">
-                        <MyPurchases />
                     </div>
 
                     {/* Main Content Grid */}
