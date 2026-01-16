@@ -44,6 +44,11 @@ export async function POST(req: NextRequest) {
                 }
             }
 
+            // If customer has add-ons, NO TRIAL - they pay subscription immediately
+            // This ensures we collect payment upfront when upselling
+            const hasAddOns = addOnPriceIds && addOnPriceIds.length > 0;
+            const trialDays = hasAddOns ? undefined : 14; // No trial if buying add-ons
+
             // Create session with direct priceId
             // Note: When mixing subscription + one-time items, Stripe handles it automatically
             const session = await stripe.checkout.sessions.create({
@@ -56,10 +61,12 @@ export async function POST(req: NextRequest) {
                     tier: tier || 'public',
                     isFounder: (tier === 'founder').toString(),
                     source: 'direct_priceId_checkout',
-                    hasAddOns: (addOnPriceIds.length > 0).toString()
+                    hasAddOns: hasAddOns.toString(),
+                    paidUpfront: hasAddOns.toString() // Track that they paid immediately
                 },
                 subscription_data: {
-                    trial_period_days: 14,
+                    // Only add trial if NO add-ons selected
+                    ...(trialDays && { trial_period_days: trialDays }),
                     metadata: {
                         userId,
                         plan: tier === 'aspirante' ? 'aspirante' : (plan || tier),

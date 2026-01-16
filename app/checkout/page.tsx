@@ -352,14 +352,40 @@ function CheckoutContent() {
 
                                 {/* Totals */}
                                 <div className="space-y-2 mb-6">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-white/50">Oggi paghi</span>
-                                        <span className="text-gold font-bold">€{oneTimeTotal}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-white/50">Dopo 14 giorni</span>
-                                        <span>€{monthlyTotal}/mese</span>
-                                    </div>
+                                    {selectedAddOns.length > 0 ? (
+                                        <>
+                                            {/* With add-ons: Pay everything today */}
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-white/50">Piano (primo mese)</span>
+                                                <span>€{planPrice}</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-white/50">Add-ons</span>
+                                                <span className="text-gold">+€{addOnsTotal}</span>
+                                            </div>
+                                            <div className="border-t border-white/10 my-2" />
+                                            <div className="flex justify-between font-bold">
+                                                <span className="text-white">Oggi paghi</span>
+                                                <span className="text-gold text-lg">€{planPrice + addOnsTotal}</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-white/50">Poi ogni mese</span>
+                                                <span>€{planPrice}/mese</span>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* No add-ons: 14 day trial */}
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-white/50">Oggi paghi</span>
+                                                <span className="text-gold font-bold">€0</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-white/50">Dopo 14 giorni</span>
+                                                <span>€{planPrice}/mese</span>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
 
                                 {/* CTA */}
