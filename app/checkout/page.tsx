@@ -5,37 +5,30 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Check, Gift, ArrowRight, Shield, Clock, Sparkles, ChevronLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { SETUP_PREMIUM } from '@/lib/stripeConfig';
 
 /**
  * Checkout Upsell Page
  * Shows selected plan + optional add-ons before redirecting to Stripe
  * 
  * URL: /checkout?plan=entrepreneur&priceId=price_xxx&tier=founder
+ * 
+ * Add-ons are now loaded dynamically from the database!
  */
 
-// Add-on products configuration (scalable for future products)
-const ADD_ONS = [
-    {
-        id: 'setup_premium',
-        name: 'Setup Premium',
-        description: 'Configurazione Done-For-You in 48h con call strategica 1:1',
-        priceId: SETUP_PREMIUM.promoPriceId,
-        price: SETUP_PREMIUM.promoAmount,
-        originalPrice: SETUP_PREMIUM.regularAmount,
-        icon: Gift,
-        features: [
-            'Configurazione completa in 48h',
-            'Call 1:1 strategica di onboarding',
-            'Training personalità + Tone of Voice',
-            'Integrazione di tutti i canali',
-            'Importazione FAQ e knowledge base',
-            'Test e ottimizzazione iniziale'
-        ],
-        recommended: true,
-        preSelectedFor: ['solopreneur', 'entrepreneur', 'conquistatore', 'imperatore']
-    }
-];
+// Add-on type from database
+interface Addon {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    promo_price: number; // cents
+    regular_price: number; // cents
+    stripe_promo_price_id: string;
+    features: string[];
+    available_for_tiers: string[];
+    pre_selected_for: string[];
+    is_recommended: boolean;
+}
 
 // Plan display names
 const PLAN_NAMES: Record<string, string> = {
@@ -44,6 +37,15 @@ const PLAN_NAMES: Record<string, string> = {
     entrepreneur: 'Entrepreneur',
     conquistatore: 'Conquistatore',
     imperatore: 'Imperatore'
+};
+
+// Map icon names to Lucide components
+const LucideIcons: Record<string, React.ElementType> = {
+    Gift: Gift,
+    Clock: Clock,
+    Sparkles: Sparkles,
+    Shield: Shield,
+    // Add other icons as needed
 };
 
 // Loading fallback component
@@ -67,23 +69,45 @@ function CheckoutContent() {
     const tier = searchParams.get('tier') || 'public';
     const planPrice = parseInt(searchParams.get('price') || '0');
 
-    // State for selected add-ons
+    // State
+    const [addons, setAddons] = useState<Addon[]>([]);
+    const [addonsLoading, setAddonsLoading] = useState(true);
     const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Pre-select add-ons based on plan
+    // Fetch add-ons from database
     useEffect(() => {
-        const preSelected = ADD_ONS
-            .filter(addon => addon.preSelectedFor.includes(planId))
-            .map(addon => addon.id);
-        setSelectedAddOns(preSelected);
+        const fetchAddons = async () => {
+            try {
+                const res = await fetch('/api/admin/addons?active=true');
+                const data = await res.json();
+                const availableAddons = (data.addons || []).filter(
+                    (addon: Addon) => addon.available_for_tiers.includes(planId)
+                );
+                setAddons(availableAddons);
+
+                // Pre-select based on plan
+                const preSelected = availableAddons
+                    .filter((addon: Addon) => addon.pre_selected_for.includes(planId))
+                    .map((addon: Addon) => addon.id);
+                setSelectedAddOns(preSelected);
+            } catch (err) {
+                console.error('Failed to fetch addons:', err);
+            } finally {
+                setAddonsLoading(false);
+            }
+        };
+
+        if (planId) {
+            fetchAddons();
+        }
     }, [planId]);
 
     // Calculate totals
     const addOnsTotal = selectedAddOns.reduce((total, addonId) => {
-        const addon = ADD_ONS.find(a => a.id === addonId);
-        return total + (addon?.price || 0);
+        const addon = addons.find(a => a.id === addonId);
+        return total + ((addon?.promo_price || 0) / 100); // Convert cents to euros
     }, 0);
 
     const monthlyTotal = planPrice;
@@ -110,8 +134,9 @@ function CheckoutContent() {
 
         try {
             // Get selected add-on price IDs
+            // Get selected add-on price IDs from database addons
             const addOnPriceIds = selectedAddOns
-                .map(addonId => ADD_ONS.find(a => a.id === addonId)?.priceId)
+                .map(addonId => addons.find((a: Addon) => a.id === addonId)?.stripe_promo_price_id)
                 .filter(Boolean) as string[];
 
             const response = await fetch('/api/stripe/checkout', {
@@ -236,9 +261,14 @@ function CheckoutContent() {
                                 </h3>
 
                                 <div className="space-y-4">
-                                    {ADD_ONS.map((addon) => {
+                                    {addonsLoading ? (
+                                        <div className="flex items-center justify-center py-8">
+                                            <Loader2 className="w-6 h-6 animate-spin text-gold" />
+                                        </div>
+                                    ) : addons.length === 0 ? (
+                                        <p className="text-charcoal/40 text-sm text-center py-4">Nessun add-on disponibile per questo piano.</p>
+                                    ) : addons.map((addon: Addon) => {
                                         const isSelected = selectedAddOns.includes(addon.id);
-                                        const Icon = addon.icon;
 
                                         return (
                                             <div
@@ -253,7 +283,7 @@ function CheckoutContent() {
                                                 `}
                                             >
                                                 {/* Recommended Badge */}
-                                                {addon.recommended && (
+                                                {addon.is_recommended && (
                                                     <div className="absolute -top-3 left-6 px-3 py-1 bg-gold text-charcoal text-[10px] uppercase tracking-widest font-black rounded-full">
                                                         ⚡ Consigliato
                                                     </div>
@@ -276,7 +306,7 @@ function CheckoutContent() {
                                                         <div className="flex items-center justify-between mb-2">
                                                             <div className="flex items-center gap-3">
                                                                 <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
-                                                                    <Icon className="w-5 h-5 text-gold" />
+                                                                    <Gift className="w-5 h-5 text-gold" />
                                                                 </div>
                                                                 <div>
                                                                     <h4 className="font-serif text-lg text-charcoal">{addon.name}</h4>
@@ -285,10 +315,10 @@ function CheckoutContent() {
                                                             </div>
                                                             <div className="text-right">
                                                                 <p className="text-xl font-serif text-charcoal">
-                                                                    <span className="text-sm text-charcoal/30 line-through mr-2">€{addon.originalPrice}</span>
-                                                                    €{addon.price}
+                                                                    <span className="text-sm text-charcoal/30 line-through mr-2">€{addon.regular_price / 100}</span>
+                                                                    €{addon.promo_price / 100}
                                                                 </p>
-                                                                <p className="text-xs text-green-600">Risparmia €{addon.originalPrice - addon.price}</p>
+                                                                <p className="text-xs text-green-600">Risparmia €{(addon.regular_price - addon.promo_price) / 100}</p>
                                                             </div>
                                                         </div>
 
@@ -300,7 +330,7 @@ function CheckoutContent() {
                                                                 className="mt-4 pt-4 border-t border-charcoal/5"
                                                             >
                                                                 <div className="grid grid-cols-2 gap-2">
-                                                                    {addon.features.map((feature, i) => (
+                                                                    {addon.features.map((feature: string, i: number) => (
                                                                         <div key={i} className="flex items-center gap-2 text-sm text-charcoal/70">
                                                                             <Check className="w-3 h-3 text-gold flex-shrink-0" />
                                                                             <span>{feature}</span>
@@ -336,12 +366,12 @@ function CheckoutContent() {
                                     </div>
 
                                     {selectedAddOns.map(addonId => {
-                                        const addon = ADD_ONS.find(a => a.id === addonId);
+                                        const addon = addons.find((a: Addon) => a.id === addonId);
                                         if (!addon) return null;
                                         return (
                                             <div key={addonId} className="flex justify-between">
                                                 <span className="text-white/70">{addon.name}</span>
-                                                <span className="text-gold">+€{addon.price}</span>
+                                                <span className="text-gold">+€{addon.promo_price / 100}</span>
                                             </div>
                                         );
                                     })}
