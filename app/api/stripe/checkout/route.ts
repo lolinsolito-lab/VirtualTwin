@@ -15,11 +15,12 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
 
         // Support both old format {plan, billing, userId} and new format {priceId, tier}
-        const { plan, billing = 'monthly', userId, isFounder = false, priceId: directPriceId, tier } = body;
+        // addOnPriceIds: optional array of one-time price IDs to add to checkout
+        const { plan, billing = 'monthly', userId, isFounder = false, priceId: directPriceId, tier, addOnPriceIds = [] } = body;
 
         // Scenario A: Direct priceId provided (new format from homepage/start)
         if (directPriceId) {
-            console.log(`[Checkout] Direct priceId mode: ${directPriceId}, tier: ${tier || 'public'}`);
+            console.log(`[Checkout] Direct priceId mode: ${directPriceId}, tier: ${tier || 'public'}, addOns: ${addOnPriceIds.length}`);
 
             // Validate priceId format
             if (!directPriceId.startsWith('price_')) {
@@ -29,17 +30,33 @@ export async function POST(req: NextRequest) {
                 );
             }
 
+            // Build line items: subscription plan + any one-time add-ons
+            const lineItems: Array<{ price: string; quantity: number }> = [
+                { price: directPriceId, quantity: 1 }
+            ];
+
+            // Add any add-ons (one-time prices)
+            if (addOnPriceIds && Array.isArray(addOnPriceIds)) {
+                for (const addonPriceId of addOnPriceIds) {
+                    if (addonPriceId && addonPriceId.startsWith('price_')) {
+                        lineItems.push({ price: addonPriceId, quantity: 1 });
+                    }
+                }
+            }
+
             // Create session with direct priceId
+            // Note: When mixing subscription + one-time items, Stripe handles it automatically
             const session = await stripe.checkout.sessions.create({
                 mode: 'subscription',
                 payment_method_types: ['card'],
-                line_items: [{ price: directPriceId, quantity: 1 }],
+                line_items: lineItems,
                 metadata: {
                     userId,
                     plan: tier === 'aspirante' ? 'aspirante' : (plan || tier), // Ensure plan is set
                     tier: tier || 'public',
                     isFounder: (tier === 'founder').toString(),
-                    source: 'direct_priceId_checkout'
+                    source: 'direct_priceId_checkout',
+                    hasAddOns: (addOnPriceIds.length > 0).toString()
                 },
                 subscription_data: {
                     trial_period_days: 14,
@@ -51,7 +68,7 @@ export async function POST(req: NextRequest) {
                     },
                 },
                 success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/dashboard/onboarding?success=true&session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/?canceled=true`,
+                cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://virtualtwin.vercel.app'}/checkout?plan=${plan}&priceId=${directPriceId}&tier=${tier}&canceled=true`,
                 allow_promotion_codes: true,
                 billing_address_collection: 'auto',
             });

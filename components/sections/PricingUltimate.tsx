@@ -124,29 +124,13 @@ const PricingUltimate = ({ pricingMode = 'auto', showToggle = false }: PricingUl
 
     const handleCheckout = async (planId: string, priceId: string, tier: 'public' | 'founder' = 'public') => {
         setIsCheckoutLoading(planId);
-        try {
-            const response = await fetch('/api/stripe/checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    priceId,
-                    tier: tier || (displayPricing?.tier === 'founder' ? 'founder' : 'public'),
-                    plan: planId
-                })
-            });
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || 'Checkout failed');
-            }
+        // Get the price for the plan
+        const price = isShowingFounder ? getPriceForPlan(planId) : getPublicPriceForPlan(planId);
 
-            const { url } = await response.json();
-            window.location.href = url;
-        } catch (error) {
-            console.error('[Checkout Error]:', error);
-            alert(error instanceof Error ? error.message : 'Errore durante il checkout. Riprova.');
-            setIsCheckoutLoading(null);
-        }
+        // Redirect to upsell checkout page with plan details
+        const checkoutUrl = `/checkout?plan=${planId}&priceId=${priceId}&tier=${tier}&price=${price}`;
+        window.location.href = checkoutUrl;
     };
 
     const publicRef = getCurrentPublicPricing();
