@@ -646,7 +646,7 @@ export default function AcademyPage() {
                         </div>
 
                         <ImperialGate
-                            tier={module.tier}
+                            tier={module.tier as PlanTier}
                             waveId={module.waveId}
                             featureName={module.name}
                             className="space-y-8"
