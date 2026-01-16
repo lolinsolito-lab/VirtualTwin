@@ -161,23 +161,14 @@ export default function BillingPage() {
                 return;
             }
 
-            const response = await fetch('/api/stripe/checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    plan: planId,
-                    userId: user.id,
-                    billing: 'monthly',
-                    priceId: displayPricing?.stripePriceIds?.[planId],
-                    tier: planId === 'solopreneur' ? 'public' : displayPricing?.tier // Solopreneur is always public pricing logic
-                })
-            });
-            const data = await response.json();
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                throw new Error(data.error);
-            }
+            // Get the price info
+            const priceId = displayPricing?.stripePriceIds?.[planId];
+            const price = displayPricing?.prices?.[planId] || 0;
+            const tier = planId === 'solopreneur' ? 'public' : displayPricing?.tier;
+
+            // Redirect to upsell checkout page
+            const checkoutUrl = `/checkout?plan=${planId}&priceId=${priceId}&tier=${tier}&price=${price}`;
+            window.location.href = checkoutUrl;
         } catch (error) {
             console.error("Sub Error:", error);
             alert("Errore durante l'avvio del checkout.");

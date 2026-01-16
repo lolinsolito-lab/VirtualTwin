@@ -36,32 +36,11 @@ export default function StripeCheckoutButton({
         setError(null);
 
         try {
-            const response = await fetch('/api/stripe/checkout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    plan,
-                    billing,
-                    userId,
-                    isFounder,
-                }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to create checkout');
-            }
-
-            // Redirect to Stripe Checkout
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                throw new Error('No checkout URL returned');
-            }
-
+            // Redirect to upsell checkout page
+            // Note: This component doesn't have priceId, so we pass plan name
+            // The checkout page will need to handle this or you should update the component props
+            const checkoutUrl = `/checkout?plan=${plan}&tier=${isFounder ? 'founder' : 'public'}`;
+            window.location.href = checkoutUrl;
         } catch (err: any) {
             console.error('Checkout error:', err);
             setError(err.message || 'Something went wrong');
