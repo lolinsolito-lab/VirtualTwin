@@ -23,6 +23,7 @@ import { IMPERIAL_PRICES } from '@/lib/pricing';
 // Helper for currency formatting
 const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(val);
 
+
 export default function AdminOverview() {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [stats, setStats] = useState({
@@ -45,6 +46,13 @@ export default function AdminOverview() {
             whatsapp: 0,
             infra: 0,
             stripe: 0
+        },
+        // Add-on stats
+        addons: {
+            setupPremiumSold: 0,
+            setupPremiumRevenue: 0,
+            upsellConversionRate: 0,
+            pendingSetups: 0
         }
     });
 
@@ -108,6 +116,18 @@ export default function AdminOverview() {
             const cac = 35; // Target CAC
             const cacLtvRatio = cac > 0 ? `1:${Math.round(ltv / cac)}` : 'N/A';
 
+            // 6. ADD-ON STATS (Setup Premium)
+            const { data: setupPremiumUsers } = await supabase
+                .from('profiles')
+                .select('id, setup_premium_purchased_at')
+                .eq('setup_premium_purchased', true);
+
+            const setupPremiumSold = setupPremiumUsers?.length || 0;
+            const setupPremiumRevenue = setupPremiumSold * 99; // €99 each
+            const upsellConversionRate = activeUserCount > 0
+                ? Number(((setupPremiumSold / activeUserCount) * 100).toFixed(1))
+                : 0;
+
             setStats({
                 revenue: totalRev,
                 mrr: totalRev,
@@ -128,6 +148,12 @@ export default function AdminOverview() {
                     whatsapp: Math.round(aiWaCosts * 0.55),
                     infra: infraCosts,
                     stripe: Math.round(stripeFees)
+                },
+                addons: {
+                    setupPremiumSold,
+                    setupPremiumRevenue,
+                    upsellConversionRate,
+                    pendingSetups: setupPremiumSold // TODO: Track actual pending vs completed
                 }
             });
         } catch (error) {
@@ -243,6 +269,38 @@ export default function AdminOverview() {
                         <p className="text-[10px] text-white/20 italic">{m.sub}</p>
                     </div>
                 ))}
+            </div>
+
+            {/* UPSELL / ADD-ONS STATS */}
+            <div className="bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent border border-purple-500/20 p-8 rounded-[2rem] mb-12">
+                <div className="flex items-center gap-4 mb-6">
+                    <Sparkles className="w-6 h-6 text-purple-400" />
+                    <h3 className="font-serif text-2xl italic text-white">Upsell Intelligence</h3>
+                    <span className="text-[8px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded font-black uppercase tracking-widest">Setup Premium</span>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="bg-white/5 p-6 rounded-2xl">
+                        <p className="text-[9px] text-white/30 uppercase tracking-widest font-black mb-2">Sold</p>
+                        <p className="text-4xl font-serif text-white tabular-nums">{stats.addons.setupPremiumSold}</p>
+                        <p className="text-[10px] text-purple-400 mt-1">Setup Premium</p>
+                    </div>
+                    <div className="bg-white/5 p-6 rounded-2xl">
+                        <p className="text-[9px] text-white/30 uppercase tracking-widest font-black mb-2">Revenue</p>
+                        <p className="text-4xl font-serif text-gold tabular-nums">{formatCurrency(stats.addons.setupPremiumRevenue)}</p>
+                        <p className="text-[10px] text-white/40 mt-1">One-time</p>
+                    </div>
+                    <div className="bg-white/5 p-6 rounded-2xl">
+                        <p className="text-[9px] text-white/30 uppercase tracking-widest font-black mb-2">Conversion</p>
+                        <p className="text-4xl font-serif text-green-400 tabular-nums">{stats.addons.upsellConversionRate}%</p>
+                        <p className="text-[10px] text-white/40 mt-1">Upsell Rate</p>
+                    </div>
+                    <div className="bg-white/5 p-6 rounded-2xl">
+                        <p className="text-[9px] text-white/30 uppercase tracking-widest font-black mb-2">Pending</p>
+                        <p className="text-4xl font-serif text-orange-400 tabular-nums">{stats.addons.pendingSetups}</p>
+                        <p className="text-[10px] text-white/40 mt-1">Da configurare</p>
+                    </div>
+                </div>
             </div>
 
             {/* Bottom Grid - ACTIVITY */}
