@@ -526,211 +526,136 @@ export default function ChannelsPage() {
     };
 
     return (
-        <div className="p-4 md:p-8 lg:p-16 min-h-screen bg-champagne">
-            <header className="mb-16 relative">
-                {/* Ambient Glow */}
-                <div className="absolute -top-20 -left-10 w-64 h-64 bg-gold/10 blur-[100px] rounded-full pointer-events-none" />
-
-                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 relative z-10">
-                    <div className="max-w-2xl flex-1 w-full">
-                        <div className="flex items-center gap-4 mb-4 md:mb-6">
-                            <span className="h-[1px] w-12 bg-gold/30"></span>
-                            <span className="text-gold text-[8px] md:text-[9px] uppercase tracking-[0.6em] md:tracking-[0.8em] font-black">I Tuoi Canali</span>
+        <div className="h-[calc(100vh-60px)] flex flex-col bg-champagne overflow-hidden">
+            {/* Compact Header */}
+            <header className="flex-shrink-0 px-4 lg:px-8 py-4 bg-white/50 backdrop-blur-sm border-b border-charcoal/5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div className="flex items-center gap-3 mb-1">
+                            <span className="h-[1px] w-8 bg-gold/30"></span>
+                            <span className="text-gold text-[9px] uppercase tracking-[0.5em] font-black">Canali</span>
                         </div>
-                        <h1 className="font-serif text-3xl md:text-5xl lg:text-7xl italic text-charcoal leading-[1.1] tracking-tight">
-                            Canali <span className="gold-text-gradient">Connessi.</span>
+                        <h1 className="font-serif text-2xl lg:text-3xl italic text-charcoal">
+                            Connessioni <span className="gold-text-gradient">Attive</span>
                         </h1>
-                        <p className="mt-4 md:mt-6 text-charcoal/40 font-serif italic text-sm md:text-lg tracking-wide max-w-xl border-l border-gold/20 pl-4 md:pl-6">
-                            &ldquo;La tua voce, su ogni canale digitale.&rdquo;
-                        </p>
                     </div>
 
-                    {/* Quota Meter - Imperial Visual */}
+                    {/* Compact Quota */}
                     {user && (
-                        <div className="bg-white/40 backdrop-blur-md p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-white/60 shadow-luxury-sm min-w-full sm:min-w-[280px]">
-                            <div className="flex justify-between items-center mb-4">
-                                <span className="text-[8px] md:text-[9px] uppercase tracking-widest text-charcoal/40 font-black">Capacità</span>
-                                <span className={`text-[9px] md:text-[10px] font-black ${isLimitReached ? 'text-red-500' : 'text-gold'}`}>
-                                    {activeChannels.length} / {channelLimit === -1 ? '∞' : channelLimit}
-                                </span>
+                        <div className="flex items-center gap-4 bg-white rounded-xl px-4 py-2 border border-charcoal/5">
+                            <div className="flex items-center gap-2">
+                                <Zap className="w-4 h-4 text-gold" />
+                                <span className="text-[10px] text-charcoal/50 uppercase tracking-wider font-bold">Canali</span>
                             </div>
-                            <div className="h-1.5 md:h-2 w-full bg-charcoal/5 rounded-full overflow-hidden mb-4">
-                                <div
-                                    className={`h-full bg-gold-gradient transition-all duration-1000 ${isLimitReached ? 'from-red-500 to-red-400' : ''}`}
-                                    style={{ width: `${channelLimit === -1 ? 100 : (activeChannels.length / channelLimit) * 100}%` }}
-                                />
+                            <div className={`text-sm font-bold ${isLimitReached ? 'text-red-500' : 'text-charcoal'}`}>
+                                {activeChannels.length} / {channelLimit === -1 ? '∞' : channelLimit}
                             </div>
-                            <p className="text-[7px] md:text-[8px] text-charcoal/30 uppercase tracking-[0.2em] font-bold italic">
-                                {isLimitReached ? '⚠️ Quota raggiunta. Potenzia il tuo Impero.' : 'Connessione stabile attraverso la rete.'}
-                            </p>
                         </div>
                     )}
                 </div>
             </header>
 
             {loading ? (
-                <div className="flex items-center justify-center h-64">
-                    <Loader2 className="w-12 h-12 text-gold animate-spin" />
+                <div className="flex-1 flex items-center justify-center">
+                    <Loader2 className="w-10 h-10 text-gold animate-spin" />
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {Object.entries(channelConfig).map(([type, config]) => {
-                        const isActive = getChannelStatus(type);
-                        const Icon = config.icon;
-                        const isComingSoon = config.comingSoon;
+                <div className="flex-1 overflow-y-auto p-4 lg:p-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {Object.entries(channelConfig).map(([type, config]) => {
+                            const isActive = getChannelStatus(type);
+                            const Icon = config.icon;
+                            const isComingSoon = config.comingSoon;
 
-                        return (
-                            <div
-                                key={type}
-                                className={`bg-white/40 backdrop-blur-md p-10 rounded-[3rem] border transition-all duration-700 relative group overflow-hidden ${isActive
-                                    ? 'border-green-500/20 shadow-luxury-sm'
-                                    : isComingSoon || (isLimitReached && !isActive)
-                                        ? 'border-charcoal/5 opacity-60 grayscale'
-                                        : 'border-white/60 hover:border-gold/30 hover:shadow-luxury'
-                                    }`}
-                            >
-                                {/* Glow Effect on Hover */}
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-gold/[0.02] group-hover:bg-gold/[0.08] blur-2xl transition-colors pointer-events-none" />
+                            return (
+                                <div
+                                    key={type}
+                                    className={`bg-white/60 backdrop-blur-sm p-5 rounded-2xl border transition-all relative group ${isActive
+                                        ? 'border-green-500/30'
+                                        : isComingSoon || (isLimitReached && !isActive)
+                                            ? 'border-charcoal/5 opacity-50'
+                                            : 'border-charcoal/5 hover:border-gold/30'
+                                        }`}
+                                >
+                                    {/* Status Badge */}
+                                    <div className={`absolute top-4 right-4 flex items-center gap-1 px-2 py-1 rounded-lg text-[8px] uppercase tracking-wider font-bold ${isActive
+                                        ? 'bg-green-50 text-green-600'
+                                        : isComingSoon
+                                            ? 'bg-gold/10 text-gold'
+                                            : 'bg-charcoal/5 text-charcoal/40'
+                                        }`}>
+                                        {isActive ? (
+                                            <><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> On</>
+                                        ) : isComingSoon ? (
+                                            (config as any).imperialOnly ? 'VIP' : 'Soon'
+                                        ) : 'Off'}
+                                    </div>
 
-                                {/* Status Badge */}
-                                <div className={`absolute top-8 right-8 flex items-center gap-2 px-4 py-2 rounded-full text-[9px] uppercase tracking-[0.2em] font-black border ${isActive
-                                    ? 'bg-green-50 text-green-600 border-green-200'
-                                    : isComingSoon
-                                        ? 'bg-gold/10 text-gold border-gold/20'
-                                        : 'bg-charcoal/5 text-charcoal/40 border-charcoal/5'
-                                    }`}>
+                                    {/* Icon */}
+                                    <div className={`w-12 h-12 ${config.color} rounded-xl flex items-center justify-center text-white mb-3`}>
+                                        <Icon className="w-6 h-6" />
+                                    </div>
+
+                                    {/* Info */}
+                                    <h3 className="font-serif text-lg italic text-charcoal mb-1">{config.name}</h3>
+                                    <p className="text-[9px] text-charcoal/40 uppercase tracking-wider font-bold mb-2">{config.provider}</p>
+                                    <p className="text-charcoal/50 text-xs mb-4 line-clamp-2">{config.description}</p>
+
+                                    {/* Actions - Compact */}
                                     {isActive ? (
-                                        <>
-                                            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-sm" />
-                                            Collegato
-                                        </>
+                                        <div className="flex gap-2">
+                                            <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-charcoal text-white rounded-xl text-[9px] font-bold uppercase tracking-wider hover:bg-gold transition-all">
+                                                <Settings className="w-3.5 h-3.5" />
+                                                Configura
+                                            </button>
+                                            <button
+                                                onClick={() => handleDisconnect(type)}
+                                                className="p-2.5 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     ) : isComingSoon ? (
-                                        (config as any).imperialOnly ? 'Exclusive Access' : 'Coming Soon'
+                                        <button
+                                            disabled
+                                            className={cn(
+                                                "w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[9px] font-bold uppercase tracking-wider cursor-not-allowed",
+                                                (config as any).imperialOnly
+                                                    ? "bg-gold/10 text-gold"
+                                                    : "bg-charcoal/5 text-charcoal/30"
+                                            )}
+                                        >
+                                            {(config as any).imperialOnly ? <>VIP Only</> : '🚀 Soon'}
+                                        </button>
+                                    ) : isLimitReached ? (
+                                        <button
+                                            disabled
+                                            className="w-full bg-red-50 py-2.5 rounded-xl text-red-400 text-[9px] font-bold uppercase tracking-wider cursor-not-allowed"
+                                        >
+                                            Quota Esaurita
+                                        </button>
                                     ) : (
-                                        <>
-                                            <Activity className="w-3 h-3" />
-                                            Inattivo
-                                        </>
+                                        <button
+                                            onClick={() => setConnectingChannel(type as keyof typeof channelConfig)}
+                                            className="w-full gold-gradient py-2.5 rounded-xl text-white text-[9px] font-bold uppercase tracking-wider flex items-center justify-center gap-2 hover:opacity-90 transition-all"
+                                        >
+                                            <Zap className="w-3.5 h-3.5" />
+                                            Connetti
+                                        </button>
+                                    )}
+
+                                    {/* Webhook Info - Compact */}
+                                    {isActive && (
+                                        <div className="mt-3 p-3 bg-charcoal/[0.02] rounded-lg">
+                                            <code className="text-[9px] text-gold font-mono">{config.webhookPath}</code>
+                                        </div>
                                     )}
                                 </div>
-
-                                {/* Icon */}
-                                <div className={`w-14 h-14 md:w-20 md:h-20 ${config.color} rounded-2xl md:rounded-3xl flex items-center justify-center text-white mb-6 md:mb-8 shadow-luxury group-hover:scale-110 transition-transform duration-700 flex-shrink-0`}>
-                                    <Icon className="w-7 h-7 md:w-10 md:h-10" />
-                                </div>
-
-                                {/* Info */}
-                                <h3 className="text-xl md:text-2xl font-serif italic text-charcoal mb-2 md:mb-3 tracking-tight">{config.name}</h3>
-                                <p className="text-charcoal/40 text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-3 md:mb-4 italic">{config.provider}</p>
-                                <p className="text-charcoal/50 text-xs md:text-sm mb-8 md:mb-10 leading-relaxed line-clamp-2 md:line-clamp-none">{config.description}</p>
-
-                                {/* Actions */}
-                                {isActive ? (
-                                    <div className="flex gap-4">
-                                        <button className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-charcoal text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gold transition-all shadow-luxury">
-                                            <Settings className="w-4 h-4" />
-                                            Configura
-                                        </button>
-                                        <button
-                                            onClick={() => handleDisconnect(type)}
-                                            className="px-5 py-4 bg-red-50 text-red-500 rounded-2xl border border-red-100 hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                                        >
-                                            <X className="w-5 h-5" />
-                                        </button>
-                                    </div>
-                                ) : isComingSoon ? (
-                                    <button
-                                        disabled
-                                        className={cn(
-                                            "w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest cursor-not-allowed transition-all",
-                                            (config as any).imperialOnly
-                                                ? "bg-gold/10 border border-gold/20 text-gold"
-                                                : "bg-charcoal/5 border border-charcoal/5 text-charcoal/30 shadow-none border-none"
-                                        )}
-                                    >
-                                        {(config as any).imperialOnly ? (
-                                            <>
-                                                <Shield className="w-4 h-4" />
-                                                Tier 4 & 5 VIP
-                                            </>
-                                        ) : '🚀 Orbita Futura'}
-                                    </button>
-                                ) : isLimitReached ? (
-                                    <button
-                                        disabled
-                                        className="w-full bg-red-50 border border-red-100 px-6 py-4 rounded-2xl text-red-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 cursor-not-allowed"
-                                    >
-                                        <Shield className="w-4 h-4" />
-                                        Quota Esaurita
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={() => setConnectingChannel(type as keyof typeof channelConfig)}
-                                        className="w-full gold-gradient px-6 py-4 rounded-2xl text-white text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:scale-105 transition-all shadow-luxury"
-                                    >
-                                        <Zap className="w-4 h-4" />
-                                        Connetti Frequenza
-                                    </button>
-                                )}
-
-                                {/* Webhook Info */}
-                                {isActive && (
-                                    <div className="mt-8 p-5 bg-charcoal/[0.02] rounded-2xl border border-charcoal/5 group-hover:border-gold/20 transition-colors">
-                                        <p className="text-[9px] uppercase tracking-[0.3em] text-charcoal/40 mb-2 font-black italic">Webhook Path</p>
-                                        <code className="text-[10px] text-gold font-mono font-black">{config.webhookPath}</code>
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
             )}
-
-            {/* Quick Setup Guide - Sovereign Visual */}
-            <div className="mt-20 bg-white/40 backdrop-blur-md p-12 rounded-[4rem] border border-white/60 shadow-luxury-sm">
-                <div className="flex items-center gap-6 mb-12">
-                    <div className="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center border border-gold/20 shadow-sm">
-                        <HelpCircle className="w-8 h-8 text-gold" />
-                    </div>
-                    <div>
-                        <h3 className="text-3xl font-serif italic text-charcoal tracking-tight">Guida Strategica.</h3>
-                        <p className="text-charcoal/40 text-[10px] uppercase tracking-[0.4em] font-black italic mt-1">Connessione rapida in 120 secondi</p>
-                    </div>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-10">
-                    <div className="p-8 bg-white/40 rounded-[2.5rem] border border-white/60 relative group overflow-hidden">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-green-500/[0.02] group-hover:bg-green-500/[0.05] transition-colors blur-xl" />
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-10 h-10 bg-green-500 text-white rounded-xl flex items-center justify-center font-serif italic text-lg shadow-lg">1</div>
-                            <h4 className="font-serif italic text-xl text-charcoal">Frequenza WhatsApp</h4>
-                        </div>
-                        <p className="text-charcoal/50 text-sm leading-relaxed">
-                            Registrati su 360Dialog, ottieni le chiavi API e sincronizzale nel wizard d'accesso.
-                        </p>
-                    </div>
-                    <div className="p-8 bg-white/40 rounded-[2.5rem] border border-white/60 relative group overflow-hidden opacity-60">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-purple-500/[0.02] group-hover:bg-purple-500/[0.05] transition-colors blur-xl" />
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-10 h-10 bg-purple-500 text-white rounded-xl flex items-center justify-center font-serif italic text-lg shadow-lg">2</div>
-                            <h4 className="font-serif italic text-xl text-charcoal">Risonanza Instagram</h4>
-                        </div>
-                        <p className="text-charcoal/50 text-sm leading-relaxed italic">
-                            In arrivo: Collega il tuo avatar business di Instagram per automatizzare ogni interazione diretta.
-                        </p>
-                    </div>
-                    <div className="p-8 bg-white/40 rounded-[2.5rem] border border-white/60 relative group overflow-hidden opacity-60">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-blue-500/[0.02] group-hover:bg-blue-500/[0.05] transition-colors blur-xl" />
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-serif italic text-lg shadow-lg">3</div>
-                            <h4 className="font-serif italic text-xl text-charcoal">Network Messenger</h4>
-                        </div>
-                        <p className="text-charcoal/50 text-sm leading-relaxed italic">
-                            In arrivo: Estendi la tua presenza automatizzata su Facebook Messenger per una copertura globale.
-                        </p>
-                    </div>
-                </div>
-            </div>
 
             {/* Connection Modal */}
             {connectingChannel && (
