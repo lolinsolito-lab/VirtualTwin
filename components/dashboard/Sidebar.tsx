@@ -173,88 +173,82 @@ export function Sidebar() {
                 <div className="bg-white/60 backdrop-blur-sm p-5 lg:p-6 rounded-2xl lg:rounded-3xl border border-gold/10 mb-4 lg:mb-8 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-16 h-16 bg-gold/5 blur-xl" />
 
-                    {/* Sovereign Status Header */}
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center">
-                                <Crown className="w-4 h-4 text-gold" />
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-[8px] uppercase tracking-widest text-gold font-black">Sovereign Rank</span>
-                                <span className="text-[10px] font-bold text-charcoal">Livello {userPlan.level}</span>
-                            </div>
-                        </div>
-                        <div className="text-[10px] font-mono text-gold/60">{userPlan.xp} XP</div>
-                    </div>
-
-                    {/* XP Progress Bar */}
-                    <div className="h-1.5 bg-charcoal/5 rounded-full overflow-hidden mb-5">
-                        <div
-                            className="h-full gold-gradient transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(212,175,55,0.3)]"
-                            style={{ width: `${(userPlan.xp % 1000) / 10}%` }} // Simplified XP/Level logic
-                        />
-                    </div>
-
-                    {/* Badge Wall */}
-                    {user?.badges && user.badges.length > 0 && (
-                        <div className="mb-6">
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="text-[8px] uppercase tracking-widest text-charcoal/30 font-black">Achievements</span>
-                                <span className="text-[9px] font-bold text-gold">{user.badges.length}</span>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                {user.badges.map((badgeId: string) => {
-                                    const iconMap: any = {
-                                        'pioniere_fondatore': Crown,
-                                        'apprendista_sovrano': GraduationCap,
-                                        'architetto_ai': Cpu,
-                                        'sovereign_streak': Flame,
-                                        'maestro_outreach': Send
-                                    };
-                                    const Icon = iconMap[badgeId] || Award;
-                                    return (
-                                        <div
-                                            key={badgeId}
-                                            className="w-7 h-7 rounded-lg bg-gold/5 border border-gold/10 flex items-center justify-center group relative cursor-help"
-                                            title={badgeId.replace('_', ' ')}
-                                        >
-                                            <Icon className="w-3.5 h-3.5 text-gold/60 group-hover:text-gold transition-colors" />
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Plan Header */}
-                    <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4 relative pt-4 border-t border-charcoal/5">
+                    {/* Plan Info - Clear and Simple */}
+                    <div className="flex items-center gap-3 mb-5">
                         {(() => {
                             const planConfig = PLAN_DISPLAY[userPlan.tier] || PLAN_DISPLAY['curioso'];
                             const PlanIcon = planConfig.icon;
                             return (
                                 <>
-                                    <PlanIcon className={`w-4 h-4 ${planConfig.color}`} />
-                                    <span className={`text-[9px] lg:text-[9px] uppercase tracking-widest font-black ${planConfig.color}`}>
-                                        {userPlan.isFounder ? 'Genesis Founder' : planConfig.name}
-                                    </span>
+                                    <div className={`w-10 h-10 rounded-xl ${userPlan.tier === 'curioso' ? 'bg-emerald-100' : 'bg-gold/10'} flex items-center justify-center`}>
+                                        <PlanIcon className={`w-5 h-5 ${planConfig.color}`} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className={`text-sm font-bold ${planConfig.color}`}>
+                                            {userPlan.isFounder ? 'Genesis Founder' : planConfig.name}
+                                        </span>
+                                        <span className="text-[9px] uppercase tracking-widest text-charcoal/40 font-bold">
+                                            Il tuo piano
+                                        </span>
+                                    </div>
                                 </>
                             );
                         })()}
                     </div>
 
-                    {/* Usage Info */}
-                    <div className="space-y-2">
-                        <div className="flex justify-between text-[9px] uppercase tracking-wider font-bold text-charcoal/40">
-                            <span>Messaggi AI</span>
-                            <span>{userPlan.messagesUsed} / {userPlan.messagesLimit}</span>
+                    {/* Messages Usage - Clear Visual */}
+                    <div className="bg-charcoal/[0.02] rounded-xl p-4 mb-4">
+                        <div className="flex justify-between items-center mb-2">
+                            <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal/50">
+                                Messaggi AI
+                            </span>
+                            <span className="text-xs font-mono font-bold text-charcoal">
+                                {userPlan.messagesUsed.toLocaleString()} / {userPlan.messagesLimit.toLocaleString()}
+                            </span>
                         </div>
-                        <div className="h-1 bg-charcoal/5 rounded-full overflow-hidden">
+                        <div className="h-2 bg-charcoal/5 rounded-full overflow-hidden">
                             <div
-                                className="h-full bg-gold transition-all duration-300"
+                                className={`h-full transition-all duration-500 rounded-full ${(userPlan.messagesUsed / userPlan.messagesLimit) > 0.8
+                                        ? 'bg-red-400'
+                                        : 'bg-gold'
+                                    }`}
                                 style={{ width: `${Math.min((userPlan.messagesUsed / userPlan.messagesLimit) * 100, 100)}%` }}
                             />
                         </div>
+                        {(userPlan.messagesUsed / userPlan.messagesLimit) > 0.8 && (
+                            <p className="text-[9px] text-red-500 mt-2 font-medium">
+                                ⚠️ Quota quasi esaurita
+                            </p>
+                        )}
                     </div>
+
+                    {/* Academy Progress - Simple Link */}
+                    {userPlan.level > 1 && (
+                        <Link
+                            href="/dashboard/academy"
+                            className="flex items-center justify-between p-3 bg-gold/5 rounded-xl hover:bg-gold/10 transition-colors group"
+                        >
+                            <div className="flex items-center gap-2">
+                                <Award className="w-4 h-4 text-gold" />
+                                <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal/60">
+                                    Livello {userPlan.level}
+                                </span>
+                            </div>
+                            <div className="text-[9px] font-mono text-gold group-hover:translate-x-1 transition-transform">
+                                {userPlan.xp} XP →
+                            </div>
+                        </Link>
+                    )}
+
+                    {/* Upgrade CTA for free users */}
+                    {userPlan.tier === 'curioso' && (
+                        <Link
+                            href="/dashboard/billing"
+                            className="block mt-4 p-3 gold-gradient rounded-xl text-white text-center text-[10px] uppercase tracking-widest font-black hover:scale-[1.02] transition-transform shadow-luxury"
+                        >
+                            Sblocca Piano Pro →
+                        </Link>
+                    )}
                 </div>
 
                 <button
