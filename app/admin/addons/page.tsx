@@ -474,8 +474,8 @@ export default function AdminAddons() {
                                                         type="button"
                                                         onClick={() => setForm(prev => ({ ...prev, icon: value }))}
                                                         className={`p-3 rounded-xl flex flex-col items-center gap-1 transition-all ${form.icon === value
-                                                                ? 'bg-gold/20 border-2 border-gold text-gold'
-                                                                : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10'
+                                                            ? 'bg-gold/20 border-2 border-gold text-gold'
+                                                            : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10'
                                                             }`}
                                                         title={label}
                                                     >
@@ -487,18 +487,27 @@ export default function AdminAddons() {
                                         </div>
                                     </div>
 
-                                    {/* Product Type */}
+                                    {/* Product Type - Visual Grid */}
                                     <div>
-                                        <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-2">Tipo Prodotto</label>
-                                        <select
-                                            value={form.product_type}
-                                            onChange={e => setForm(prev => ({ ...prev, product_type: e.target.value }))}
-                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold/50 focus:outline-none"
-                                        >
+                                        <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-3">Tipo Prodotto</label>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                             {PRODUCT_TYPES.map(pt => (
-                                                <option key={pt.value} value={pt.value}>{pt.label}</option>
+                                                <button
+                                                    key={pt.value}
+                                                    type="button"
+                                                    onClick={() => setForm(prev => ({ ...prev, product_type: pt.value }))}
+                                                    className={`p-4 rounded-xl text-left transition-all ${form.product_type === pt.value
+                                                        ? 'bg-gold/20 border-2 border-gold ring-2 ring-gold/20'
+                                                        : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20'
+                                                        }`}
+                                                >
+                                                    <span className="text-2xl block mb-1">{pt.label.split(' ')[0]}</span>
+                                                    <span className={`text-xs ${form.product_type === pt.value ? 'text-gold' : 'text-white/60'}`}>
+                                                        {pt.label.split(' ').slice(1).join(' ')}
+                                                    </span>
+                                                </button>
                                             ))}
-                                        </select>
+                                        </div>
                                     </div>
 
                                     <div>
@@ -598,44 +607,62 @@ export default function AdminAddons() {
                                         </div>
                                     </div>
 
-                                    {/* Tiers */}
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <div>
-                                            <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-2">Disponibile per</label>
-                                            <div className="flex flex-wrap gap-2">
-                                                {TIERS.map(tier => (
-                                                    <button
-                                                        key={tier}
-                                                        type="button"
-                                                        onClick={() => toggleTier(tier, 'available_for_tiers')}
-                                                        className={`px-3 py-1.5 rounded-lg text-xs capitalize transition-all ${form.available_for_tiers.includes(tier)
-                                                            ? 'bg-white/10 text-white border border-white/20'
-                                                            : 'bg-white/5 text-white/30 border border-transparent'
-                                                            }`}
-                                                    >
-                                                        {tier}
-                                                    </button>
-                                                ))}
-                                            </div>
+                                    {/* Tiers - Interactive Cards */}
+                                    <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Visibilità per Tier</span>
+                                            <span className="text-[9px] text-white/20 italic">Clicca per attivare/disattivare</span>
                                         </div>
-                                        <div>
-                                            <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-2">Pre-selezionato per</label>
-                                            <div className="flex flex-wrap gap-2">
-                                                {TIERS.map(tier => (
-                                                    <button
-                                                        key={tier}
-                                                        type="button"
-                                                        onClick={() => toggleTier(tier, 'pre_selected_for')}
-                                                        className={`px-3 py-1.5 rounded-lg text-xs capitalize transition-all ${form.pre_selected_for.includes(tier)
-                                                            ? 'bg-gold/20 text-gold border border-gold/30'
-                                                            : 'bg-white/5 text-white/30 border border-transparent'
-                                                            }`}
-                                                    >
-                                                        {tier}
-                                                    </button>
-                                                ))}
-                                            </div>
+
+                                        <div className="grid grid-cols-4 gap-3">
+                                            {TIERS.map(tier => {
+                                                const isAvailable = form.available_for_tiers.includes(tier);
+                                                const isPreSelected = form.pre_selected_for.includes(tier);
+
+                                                return (
+                                                    <div key={tier} className="space-y-2">
+                                                        {/* Tier Name */}
+                                                        <div className={`text-center py-2 px-3 rounded-lg font-bold text-xs uppercase tracking-wide ${isAvailable ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white' : 'bg-white/5 text-white/30'
+                                                            }`}>
+                                                            {tier}
+                                                        </div>
+
+                                                        {/* Disponibile Toggle */}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => toggleTier(tier, 'available_for_tiers')}
+                                                            className={`w-full p-2 rounded-lg text-[10px] flex items-center justify-center gap-2 transition-all ${isAvailable
+                                                                    ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                                                    : 'bg-white/5 text-white/30 border border-white/10 hover:bg-white/10'
+                                                                }`}
+                                                        >
+                                                            {isAvailable ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                                                            Visibile
+                                                        </button>
+
+                                                        {/* Pre-selezionato Toggle */}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => toggleTier(tier, 'pre_selected_for')}
+                                                            disabled={!isAvailable}
+                                                            className={`w-full p-2 rounded-lg text-[10px] flex items-center justify-center gap-2 transition-all ${!isAvailable
+                                                                    ? 'bg-white/5 text-white/10 cursor-not-allowed border border-transparent'
+                                                                    : isPreSelected
+                                                                        ? 'bg-gold/20 text-gold border border-gold/30'
+                                                                        : 'bg-white/5 text-white/30 border border-white/10 hover:bg-white/10'
+                                                                }`}
+                                                        >
+                                                            {isPreSelected ? <Check className="w-3 h-3" /> : null}
+                                                            Pre-check
+                                                        </button>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
+
+                                        <p className="text-[9px] text-white/30 mt-4 italic">
+                                            💡 <strong>Visibile</strong> = appare nella lista add-on del tier • <strong>Pre-check</strong> = selezionato di default al checkout
+                                        </p>
                                     </div>
 
                                     {/* Options */}
