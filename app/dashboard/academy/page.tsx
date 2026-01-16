@@ -652,7 +652,7 @@ export default function AcademyPage() {
                             className="space-y-8"
                         >
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {module.videos.map((lesson) => {
+                                {module.videos.map((lesson: any) => {
                                     const isCompleted = user?.completed_video_ids?.includes(lesson.id);
                                     return (
                                         <div
