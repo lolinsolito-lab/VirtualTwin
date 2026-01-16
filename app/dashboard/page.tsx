@@ -3,282 +3,349 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-    TrendingUp,
-    TrendingDown,
     Users,
     MessageSquare,
     Zap,
-    Plus,
-    Download,
-    RefreshCw,
     ArrowRight,
     Sparkles,
-    DollarSign,
-    XCircle,
-    AlertTriangle
+    Radio,
+    School,
+    Settings,
+    CheckCircle2,
+    Circle,
+    Play,
+    Package,
+    TrendingUp,
+    Clock,
+    Target,
+    Crown
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { useSovereign } from '@/components/providers/SovereignProvider';
 import MyPurchases from '@/components/dashboard/MyPurchases';
+import { motion } from 'framer-motion';
 
-// Mini Chart Component
-const MiniChart = ({ data = [], color = "gold" }: { data?: number[], color?: string }) => {
-    const displayData = data && data.length > 0 ? data : [20, 40, 30, 50, 45, 60, 55];
-    const max = Math.max(...displayData);
-    const min = Math.min(...displayData);
-    const range = max - min || 1;
+// Onboarding Steps
+const ONBOARDING_STEPS = [
+    { id: 'profile', label: 'Completa il tuo profilo', href: '/dashboard/settings', icon: Settings },
+    { id: 'academy', label: 'Inizia la Founder Academy', href: '/dashboard/academy', icon: School },
+    { id: 'channels', label: 'Connetti un canale', href: '/dashboard/channels', icon: Radio },
+    { id: 'chat', label: 'Prova il tuo AI Clone', href: '/dashboard/chat', icon: MessageSquare },
+];
 
-    return (
-        <div className="flex items-end gap-1 h-12">
-            {displayData.map((value, i) => {
-                const height = ((value - min) / range) * 100;
-                return (
-                    <div
-                        key={i}
-                        className={`w-1.5 rounded-full transition-all duration-500 ${color === "gold" ? "bg-gold/40 group-hover:bg-gold" : "bg-green-500/40 group-hover:bg-green-500"
-                            }`}
-                        style={{ height: `${Math.max(20, height)}%` }}
-                    />
-                );
-            })}
-        </div>
-    );
-};
-
-// Status Badge Component
-const StatusBadge = ({ status }: { status: string }) => {
-    const statusConfig: Record<string, { bg: string, text: string, dot: string, label: string }> = {
-        'Qualifica': { bg: 'bg-green-500/10', text: 'text-green-600', dot: 'bg-green-500', label: 'QUALIFICATO' },
-        'qualified': { bg: 'bg-green-500/10', text: 'text-green-600', dot: 'bg-green-500', label: 'QUALIFICATO' },
-        'Inquiry': { bg: 'bg-blue-500/10', text: 'text-blue-600', dot: 'bg-blue-500', label: 'INTERESSATO' },
-        'active': { bg: 'bg-blue-500/10', text: 'text-blue-600', dot: 'bg-blue-500', label: 'ATTIVO' },
-        'Negoziazione': { bg: 'bg-amber-500/10', text: 'text-amber-600', dot: 'bg-amber-500', label: 'TRATTATIVA' },
-        'Chiuso': { bg: 'bg-purple-500/10', text: 'text-purple-600', dot: 'bg-purple-500', label: 'CONVERSO' },
-        'Perso': { bg: 'bg-red-500/10', text: 'text-red-600', dot: 'bg-red-500', label: 'PERSO' },
-    };
-
-    const config = statusConfig[status] || { bg: 'bg-charcoal/5', text: 'text-charcoal/60', dot: 'bg-charcoal/30', label: status.toUpperCase() };
-
-    return (
-        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg ${config.bg} ${config.text} text-[8px] tracking-[0.2em] font-black border border-white/20 shadow-sm`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${config.dot} shadow-sm animate-pulse`}></span>
-            {config.label}
-        </span>
-    );
-};
+// Quick Actions
+const QUICK_ACTIONS = [
+    {
+        label: 'Founder Academy',
+        description: 'Impara le strategie per dominare',
+        href: '/dashboard/academy',
+        icon: School,
+        color: 'bg-purple-500/10 text-purple-600 border-purple-500/20',
+        iconBg: 'bg-purple-500/20'
+    },
+    {
+        label: 'Prova AI Chat',
+        description: 'Testa il tuo clone AI',
+        href: '/dashboard/chat',
+        icon: MessageSquare,
+        color: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+        iconBg: 'bg-blue-500/20'
+    },
+    {
+        label: 'Connetti Canali',
+        description: 'WhatsApp, Instagram, Messenger',
+        href: '/dashboard/channels',
+        icon: Radio,
+        color: 'bg-green-500/10 text-green-600 border-green-500/20',
+        iconBg: 'bg-green-500/20'
+    },
+    {
+        label: 'Impostazioni',
+        description: 'Configura il tuo profilo',
+        href: '/dashboard/settings',
+        icon: Settings,
+        color: 'bg-charcoal/5 text-charcoal/60 border-charcoal/10',
+        iconBg: 'bg-charcoal/10'
+    },
+];
 
 export default function DashboardPage() {
-    const [isRefreshing, setIsRefreshing] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const { user, loading: userLoading } = useSovereign();
     const [stats, setStats] = useState({
         totalLeads: 0,
         conversations: 0,
-        aiAccuracy: 0,
-        potentialRevenue: 0,
-        recentLeads: [] as any[]
+        completedVideos: 0,
+        totalVideos: 14, // Total in Academy
     });
 
     useEffect(() => {
-        fetchDashboardData();
-    }, []);
+        if (!userLoading && user?.id) {
+            fetchDashboardData();
+        }
+    }, [user?.id, userLoading]);
 
     const fetchDashboardData = async () => {
-        setIsLoading(true);
+        if (!user?.id) return;
+
         try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
+            const { count: leadCount } = await supabase
+                .from('conversations')
+                .select('*', { count: 'exact', head: true })
+                .eq('user_id', user.id);
 
-            const { count: leadCount } = await supabase.from('conversations').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
-            const { count: messageCount } = await supabase.from('messages').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
-            const { data: recentLeads } = await supabase.from('conversations').select('*').eq('user_id', user.id).order('last_message_at', { ascending: false }).limit(4);
-
-            const revenue = (leadCount || 0) * 500;
+            const { count: messageCount } = await supabase
+                .from('messages')
+                .select('*', { count: 'exact', head: true })
+                .eq('user_id', user.id);
 
             setStats({
                 totalLeads: leadCount || 0,
                 conversations: messageCount || 0,
-                aiAccuracy: 98.2,
-                potentialRevenue: revenue,
-                recentLeads: recentLeads || []
+                completedVideos: user?.completed_video_ids?.length || 0,
+                totalVideos: 14,
             });
         } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
+            console.error('Dashboard data error:', error);
         }
     };
 
-    const handleRefresh = async () => {
-        setIsRefreshing(true);
-        await fetchDashboardData();
-        setTimeout(() => setIsRefreshing(false), 800);
+    // Calculate onboarding progress
+    const getOnboardingProgress = () => {
+        let completed = 0;
+        if (user?.full_name) completed++;
+        if (user?.completed_video_ids?.length > 0) completed++;
+        if (stats.conversations > 0) completed++;
+        // channels not tracked yet
+        return { completed, total: ONBOARDING_STEPS.length };
     };
 
-    const hasData = stats.totalLeads > 0 || stats.conversations > 0;
+    const onboarding = getOnboardingProgress();
+    const academyProgress = Math.round((stats.completedVideos / stats.totalVideos) * 100);
 
     return (
-        <div className="p-4 md:p-8 lg:p-12 bg-champagne min-h-screen">
-            {/* Header */}
-            <header className="mb-16">
-                <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-                    <div className="flex-1">
-                        <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-8">
-                            <span className="h-[1px] w-12 md:w-16 bg-gold/30"></span>
-                            <span className="text-gold text-[8px] md:text-[10px] uppercase tracking-[0.6em] md:tracking-[1em] font-black italic">La Tua Dashboard</span>
+        <div className="p-4 md:p-8 lg:p-10 bg-champagne min-h-screen">
+            {/* Compact Header */}
+            <header className="mb-8">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <div className="flex items-center gap-3 mb-2">
+                            <span className="h-[1px] w-8 bg-gold/30"></span>
+                            <span className="text-gold text-[9px] uppercase tracking-[0.5em] font-black">Dashboard</span>
                         </div>
-                        <h1 className="font-serif text-3xl md:text-5xl lg:text-7xl italic text-charcoal leading-[1.1] tracking-tight mb-4 md:mb-6">
-                            Il tuo Impero, <br className="sm:hidden" /> <span className="gold-text-gradient">Sincronizzato.</span>
+                        <h1 className="font-serif text-2xl md:text-4xl italic text-charcoal">
+                            Bentornato, <span className="gold-text-gradient">{user?.full_name?.split(' ')[0] || 'Sovrano'}</span>
                         </h1>
-                        <p className="text-charcoal/40 font-serif italic text-sm md:text-lg max-w-xl border-l border-gold/20 pl-4 md:pl-6">
-                            &ldquo;Il futuro non si aspetta, si governa. Monitora ogni battito del tuo clone digitale.&rdquo;
-                        </p>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 md:gap-4 w-full sm:w-auto">
-                        <Link
-                            href="/dashboard/leads"
-                            className="flex-1 sm:flex-none flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-4 md:py-5 gold-gradient text-white text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black rounded-full hover:scale-105 transition-all shadow-luxury"
-                        >
-                            <Plus className="w-4 h-4 md:w-5 md:h-5" />
-                            Gestisci Pipeline
-                        </Link>
-                        <button
-                            onClick={handleRefresh}
-                            className={`p-4 md:p-5 bg-white border border-charcoal/5 rounded-full text-gold shadow-sm hover:shadow-xl transition-all ${isRefreshing ? 'animate-spin' : ''}`}
-                        >
-                            <RefreshCw className="w-4 h-4 md:w-5 md:h-5" />
-                        </button>
+                    {/* Plan Badge */}
+                    <div className="flex items-center gap-3 bg-white rounded-2xl px-5 py-3 border border-charcoal/5 shadow-sm">
+                        <Crown className="w-5 h-5 text-gold" />
+                        <div>
+                            <p className="text-[10px] uppercase tracking-widest text-charcoal/40 font-bold">Piano Attivo</p>
+                            <p className="text-charcoal font-bold capitalize">{user?.plan_tier || 'Curioso'}</p>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            {/* I Miei Acquisti - Always visible regardless of leads */}
-            <div className="mb-12">
-                <MyPurchases />
-            </div>
+            {/* Main Grid - Everything visible without scrolling */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            {hasData ? (
-                <div className="space-y-16">
-                    {/* Metric Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {[
-                            { icon: DollarSign, label: "Valore Pipeline", val: `€${stats.potentialRevenue.toLocaleString()}`, change: "+12%", status: "up", data: [40, 50, 45, 60, 75, 80, 95], color: "green" },
-                            { icon: Users, label: "Total Leads", val: stats.totalLeads.toString(), change: "+8%", status: "up", data: [20, 25, 30, 28, 35, 40, 45], color: "gold" },
-                            { icon: MessageSquare, label: "Messaggi AI", val: stats.conversations.toString(), change: "+24%", status: "up", data: [100, 150, 200, 180, 250, 300, 350], color: "gold" },
-                            { icon: Zap, label: "AI Accuracy", val: `${stats.aiAccuracy}%`, change: "Optimal", status: "stable", data: [98, 98.2, 98.1, 98.2, 98.2, 98.3, 98.2], color: "gold" }
-                        ].map((stat, i) => (
-                            <div key={i} className="silk-card p-6 md:p-8 lg:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/60 group hover:border-gold/30 hover:shadow-luxury transition-all duration-700 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-gold/[0.02] group-hover:bg-gold/[0.05] transition-colors blur-2xl" />
-                                <div className="flex items-start justify-between mb-6 md:mb-8">
-                                    <div className="p-2.5 md:p-3 rounded-2xl bg-white shadow-sm border border-charcoal/5 group-hover:scale-110 transition-transform duration-500">
-                                        <stat.icon className="w-4 h-4 md:w-5 md:h-5 text-gold" />
+                {/* LEFT COLUMN - 2/3 width */}
+                <div className="lg:col-span-2 space-y-6">
+
+                    {/* Quick Actions Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {QUICK_ACTIONS.map((action, i) => (
+                            <motion.div
+                                key={action.label}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.05 }}
+                            >
+                                <Link
+                                    href={action.href}
+                                    className={`block p-5 rounded-2xl border ${action.color} hover:scale-[1.02] transition-all group`}
+                                >
+                                    <div className={`w-10 h-10 rounded-xl ${action.iconBg} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                                        <action.icon className="w-5 h-5" />
                                     </div>
-                                    <MiniChart data={stat.data} color={stat.color} />
-                                </div>
-                                <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-charcoal/30 mb-2 font-black italic">{stat.label}</p>
-                                <p className="text-3xl md:text-4xl lg:text-5xl font-serif text-charcoal group-hover:scale-105 transition-transform duration-700 origin-left mb-4 md:mb-6">{stat.val}</p>
-                                <div className="flex items-center gap-2">
-                                    <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[8px] md:text-[9px] font-black uppercase tracking-widest ${stat.status === "up" ? "bg-green-500/10 text-green-600" : stat.status === "down" ? "bg-red-500/10 text-red-600" : "bg-gold/10 text-gold"
-                                        }`}>
-                                        {stat.status === "up" ? <TrendingUp className="w-2.5 h-2.5 md:w-3 md:h-3" /> : stat.status === "down" ? <TrendingDown className="w-2.5 h-2.5 md:w-3 md:h-3" /> : <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />}
-                                        {stat.change}
-                                    </div>
-                                    <span className="text-charcoal/20 text-[8px] md:text-[9px] font-bold uppercase tracking-widest italic">vs sett. scorsa</span>
-                                </div>
-                            </div>
+                                    <p className="font-bold text-sm text-charcoal mb-1">{action.label}</p>
+                                    <p className="text-[10px] text-charcoal/40">{action.description}</p>
+                                </Link>
+                            </motion.div>
                         ))}
                     </div>
 
-                    {/* Main Content Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Lead Activity */}
-                        <div className="lg:col-span-2 silk-card p-6 md:p-10 lg:p-12 rounded-[2.5rem] md:rounded-[4rem] border border-white/60">
-                            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8 md:mb-12">
-                                <h2 className="font-serif text-2xl md:text-3xl italic text-charcoal tracking-tight">Attività <span className="gold-text-gradient">Critica</span></h2>
-                                <Link href="/dashboard/leads" className="text-gold text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] font-black hover:tracking-[0.5em] transition-all duration-500 flex items-center gap-2">
-                                    Vedi Registro
-                                    <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
-                                </Link>
+                    {/* Academy Progress Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="bg-white rounded-3xl border border-charcoal/5 p-6 shadow-sm"
+                    >
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center">
+                                    <School className="w-6 h-6 text-purple-600" />
+                                </div>
+                                <div>
+                                    <h3 className="font-serif text-xl italic text-charcoal">Founder Academy</h3>
+                                    <p className="text-charcoal/40 text-sm">{stats.completedVideos} di {stats.totalVideos} lezioni completate</p>
+                                </div>
                             </div>
-                            <div className="space-y-4 md:space-y-6">
-                                {stats.recentLeads.map((lead, i) => (
-                                    <Link
-                                        key={i}
-                                        href="/dashboard/leads"
-                                        className="flex flex-col sm:flex-row sm:items-center justify-between p-5 md:p-6 border border-charcoal/5 rounded-[1.5rem] md:rounded-[2rem] hover:bg-white/40 transition-all duration-500 group/item cursor-pointer gap-4"
-                                    >
-                                        <div className="flex items-center gap-4 md:gap-6">
-                                            <div className="w-10 h-10 md:w-14 md:h-14 gold-gradient rounded-full flex items-center justify-center font-serif text-white italic text-lg shadow-luxury group-hover/item:scale-110 transition-transform flex-shrink-0">
-                                                {(lead.contact_name || 'P')[0]}
-                                            </div>
-                                            <div className="min-w-0">
-                                                <p className="text-charcoal font-medium text-sm md:text-base tracking-tight truncate">{lead.contact_name || 'Prospect Anonimo'}</p>
-                                                <p className="text-charcoal/30 text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1 font-black italic truncate">{lead.contact_platform_id || 'Automa WhatsApp'}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center justify-between sm:justify-end gap-6 md:gap-8 border-t sm:border-t-0 pt-3 sm:pt-0 border-charcoal/5">
-                                            <StatusBadge status={lead.status} />
-                                            <div>
-                                                <p className="text-gold text-xl md:text-2xl font-serif italic tracking-tight">€500</p>
-                                                <div className="w-6 md:w-8 h-[0.5px] bg-gold/30 ml-auto mt-0.5 md:mt-1" />
-                                            </div>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Quick Setup / CTA */}
-                        <div className="silk-card p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border border-white/60 flex flex-col items-center justify-center text-center relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-gold/[0.01] group-hover:bg-gold/[0.03] transition-colors duration-700" />
-                            <div className="w-16 h-16 md:w-24 md:h-24 gold-gradient rounded-full mb-6 md:mb-10 flex items-center justify-center shadow-luxury relative z-10">
-                                <Zap className="w-7 h-7 md:w-10 md:h-10 text-white fill-white animate-pulse" />
-                            </div>
-                            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 md:mb-6 italic text-charcoal leading-tight relative z-10">
-                                L'Impero ha sete <br />di <span className="gold-text-gradient">Dati.</span>
-                            </h2>
-                            <p className="text-charcoal/40 text-[9px] md:text-[10px] uppercase tracking-[0.2em] max-w-xs mb-8 md:mb-10 leading-relaxed font-bold italic relative z-10">
-                                Per attivare il flusso automatico di vendita su WhatsApp, completa la genesi del tuo VirtualTwin.
-                            </p>
                             <Link
-                                href="/dashboard/settings"
-                                className="w-full py-4 md:py-5 gold-gradient rounded-full text-white font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:scale-105 transition-all shadow-luxury text-[10px] flex items-center justify-center gap-3 md:gap-4 relative z-10"
+                                href="/dashboard/academy"
+                                className="flex items-center gap-2 px-4 py-2 bg-purple-500/10 text-purple-600 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-purple-500/20 transition-colors"
                             >
-                                Avvia Genesi AI
-                                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                                <Play className="w-4 h-4" />
+                                Continua
                             </Link>
                         </div>
-                    </div>
+
+                        {/* Progress Bar */}
+                        <div className="bg-charcoal/5 rounded-full h-3 overflow-hidden">
+                            <motion.div
+                                className="h-full bg-purple-500 rounded-full"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${academyProgress}%` }}
+                                transition={{ duration: 1, ease: 'easeOut' }}
+                            />
+                        </div>
+                        <div className="flex justify-between mt-2">
+                            <span className="text-[10px] text-charcoal/40 uppercase tracking-wider font-bold">Progresso</span>
+                            <span className="text-[10px] text-purple-600 font-bold">{academyProgress}%</span>
+                        </div>
+                    </motion.div>
+
+                    {/* My Purchases */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        <MyPurchases />
+                    </motion.div>
+
+                    {/* Stats Row - Compact */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="grid grid-cols-3 gap-4"
+                    >
+                        {[
+                            { label: 'Lead Totali', value: stats.totalLeads, icon: Users, color: 'text-blue-600' },
+                            { label: 'Messaggi AI', value: stats.conversations, icon: MessageSquare, color: 'text-purple-600' },
+                            { label: 'XP Guadagnati', value: user?.xp || 0, icon: Zap, color: 'text-gold' },
+                        ].map((stat, i) => (
+                            <div key={stat.label} className="bg-white rounded-2xl p-5 border border-charcoal/5 shadow-sm">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <stat.icon className={`w-4 h-4 ${stat.color}`} />
+                                    <span className="text-[9px] uppercase tracking-wider text-charcoal/40 font-bold">{stat.label}</span>
+                                </div>
+                                <p className="text-2xl font-serif text-charcoal">{stat.value.toLocaleString()}</p>
+                            </div>
+                        ))}
+                    </motion.div>
                 </div>
-            ) : (
-                /* Empty State */
-                <div className="flex flex-col items-center justify-center py-24 text-center">
-                    <div className="w-32 h-32 gold-gradient rounded-full mb-12 flex items-center justify-center shadow-luxury animate-pulse">
-                        <Sparkles className="w-16 h-16 text-white" />
-                    </div>
-                    <h2 className="font-serif text-5xl lg:text-6xl italic text-charcoal mb-8">
-                        Benvenuto nel tuo <span className="gold-text-gradient">Impero.</span>
-                    </h2>
-                    <p className="text-charcoal/50 text-xl font-serif italic max-w-md mb-12 leading-relaxed">
-                        &ldquo;Anche il più grande imprenditore inizia con una singola pietra.&rdquo; Configura il tuo clone per iniziare.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-6">
+
+                {/* RIGHT COLUMN - 1/3 width */}
+                <div className="space-y-6">
+
+                    {/* Onboarding Checklist */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.15 }}
+                        className="bg-white rounded-3xl border border-charcoal/5 p-6 shadow-sm"
+                    >
+                        <div className="flex items-center justify-between mb-5">
+                            <h3 className="font-serif text-lg italic text-charcoal">Setup Iniziale</h3>
+                            <span className="text-gold text-sm font-bold">{onboarding.completed}/{onboarding.total}</span>
+                        </div>
+
+                        <div className="space-y-3">
+                            {ONBOARDING_STEPS.map((step, i) => {
+                                const isCompleted = i < onboarding.completed;
+                                return (
+                                    <Link
+                                        key={step.id}
+                                        href={step.href}
+                                        className={`flex items-center gap-3 p-3 rounded-xl transition-all ${isCompleted
+                                                ? 'bg-green-500/5 text-green-600'
+                                                : 'bg-charcoal/[0.02] text-charcoal/60 hover:bg-charcoal/[0.05]'
+                                            }`}
+                                    >
+                                        {isCompleted ? (
+                                            <CheckCircle2 className="w-5 h-5 text-green-500" />
+                                        ) : (
+                                            <Circle className="w-5 h-5 text-charcoal/20" />
+                                        )}
+                                        <span className={`text-sm font-medium ${isCompleted ? 'line-through' : ''}`}>
+                                            {step.label}
+                                        </span>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+
+                        {/* Progress indicator */}
+                        <div className="mt-5 pt-4 border-t border-charcoal/5">
+                            <div className="bg-charcoal/5 rounded-full h-2 overflow-hidden">
+                                <div
+                                    className="h-full bg-gold transition-all duration-500"
+                                    style={{ width: `${(onboarding.completed / onboarding.total) * 100}%` }}
+                                />
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Quick Tip / CTA Card */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.25 }}
+                        className="bg-gradient-to-br from-gold/10 to-gold/5 rounded-3xl border border-gold/20 p-6"
+                    >
+                        <div className="w-12 h-12 gold-gradient rounded-2xl flex items-center justify-center mb-4 shadow-luxury">
+                            <Sparkles className="w-6 h-6 text-white" />
+                        </div>
+                        <h3 className="font-serif text-lg italic text-charcoal mb-2">Consiglio del Giorno</h3>
+                        <p className="text-charcoal/60 text-sm mb-4 leading-relaxed">
+                            Completa almeno 2 lezioni dell'Academy oggi per sbloccare il badge "Apprendista Sovrano"!
+                        </p>
                         <Link
-                            href="/dashboard/settings"
-                            className="px-12 py-5 gold-gradient rounded-full text-white font-black uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-luxury text-[11px] flex items-center gap-4"
+                            href="/dashboard/academy"
+                            className="flex items-center gap-2 text-gold text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all"
                         >
-                            Inizia Genesi
-                            <ArrowRight className="w-5 h-5" />
+                            Vai all'Academy <ArrowRight className="w-4 h-4" />
                         </Link>
-                        <Link
-                            href="/dashboard/chat"
-                            className="px-12 py-5 bg-white border border-charcoal/10 rounded-full text-charcoal font-black uppercase tracking-[0.3em] hover:border-gold transition-all shadow-sm text-[11px] flex items-center gap-4"
+                    </motion.div>
+
+                    {/* Upgrade CTA for free users */}
+                    {user?.plan_tier === 'curioso' && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.35 }}
+                            className="bg-charcoal rounded-3xl p-6 text-center"
                         >
-                            Prova Chat AI
-                            <MessageSquare className="w-5 h-5" />
-                        </Link>
-                    </div>
+                            <Target className="w-10 h-10 text-gold mx-auto mb-4" />
+                            <h3 className="font-serif text-xl italic text-white mb-2">Sblocca il Pieno Potenziale</h3>
+                            <p className="text-white/40 text-sm mb-5">
+                                Passa a un piano Pro per messaggi illimitati e canali multipli
+                            </p>
+                            <Link
+                                href="/dashboard/billing"
+                                className="block w-full py-3 gold-gradient rounded-xl text-white font-bold text-xs uppercase tracking-widest hover:scale-[1.02] transition-transform shadow-luxury"
+                            >
+                                Vedi Piani →
+                            </Link>
+                        </motion.div>
+                    )}
                 </div>
-            )}
+            </div>
         </div>
     );
 }
