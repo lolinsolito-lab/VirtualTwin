@@ -155,6 +155,60 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
             metadata: { plan, tier, isFounder, hasAddOns, paidUpfront },
         });
 
+        // ========== USER ADDONS: Store purchased add-ons ==========
+        if (hasAddOns) {
+            try {
+                const stripe = getStripe();
+
+                // Retrieve line items from the checkout session
+                const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 20 });
+
+                // For each line item, check if it's an add-on (one-time price)
+                for (const item of lineItems.data) {
+                    const priceId = item.price?.id;
+                    if (!priceId) continue;
+
+                    // Find matching add-on in our database by Stripe price ID
+                    const { data: addon } = await supabase
+                        .from('addons')
+                        .select('id, name, product_type, delivery_url, delivery_instructions')
+                        .or(`stripe_promo_price_id.eq.${priceId},stripe_regular_price_id.eq.${priceId}`)
+                        .single();
+
+                    if (addon) {
+                        // Insert into user_addons
+                        const { error: addonError } = await supabase
+                            .from('user_addons')
+                            .insert({
+                                user_id: userId,
+                                addon_id: addon.id,
+                                addon_name: addon.name,
+                                addon_type: addon.product_type || 'service',
+                                price_paid: item.amount_total || 0,
+                                delivery_url: addon.delivery_url,
+                                delivery_instructions: addon.delivery_instructions,
+                                stripe_checkout_session_id: session.id,
+                                status: 'active',
+                                metadata: {
+                                    stripe_price_id: priceId,
+                                    stripe_product_id: item.price?.product
+                                }
+                            });
+
+                        if (addonError) {
+                            console.error(`[Stripe] Failed to insert user_addon for ${addon.name}:`, addonError);
+                        } else {
+                            console.log(`[Stripe] ✅ Saved add-on purchase: ${addon.name} for user ${userId}`);
+                        }
+                    }
+                }
+            } catch (addonErr) {
+                console.error('[Stripe] Error processing add-ons:', addonErr);
+            }
+        }
+        // ============================================================
+
+
         // ========== WAITLIST: Check if new wave just opened ==========
         if (isFounder && session.metadata?.waitlistToken) {
             // This purchase was from waitlist - mark token as USED
