@@ -41,6 +41,7 @@ import { PlanTier } from '@/lib/pricing';
  * Academy Élite Page
  * Private section for premium users to access growth templates
  * Upgraded with Wave 2: The Academy Gate gating & progress tracking
+ * NOW CONNECTED TO DATABASE
  */
 export default function AcademyPage() {
     const { user, loading, refreshProfile } = useSovereign();
@@ -52,6 +53,32 @@ export default function AcademyPage() {
     const [activeSector, setActiveSector] = useState('Generale');
     const [templateSearch, setTemplateSearch] = useState('');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    // NEW: Courses from database
+    const [dbCourses, setDbCourses] = useState<any[]>([]);
+    const [loadingCourses, setLoadingCourses] = useState(true);
+
+    // Fetch courses from database
+    React.useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const tier = user?.plan_tier || 'curioso';
+                const res = await fetch(`/api/academy/courses?tier=${tier}`);
+                const data = await res.json();
+                if (data.courses) {
+                    setDbCourses(data.courses);
+                }
+            } catch (error) {
+                console.error('Failed to fetch courses:', error);
+            } finally {
+                setLoadingCourses(false);
+            }
+        };
+
+        if (!loading) {
+            fetchCourses();
+        }
+    }, [user?.plan_tier, loading]);
 
     const sectors = [
         'Generale', 'Real Estate', 'E-commerce', 'Coach/Consulenti',
@@ -74,7 +101,25 @@ export default function AcademyPage() {
         }
     };
 
-    const videoModules: { name: string; tier: PlanTier; waveId?: string; description: string; videos: any[]; quizQuestions?: any[] }[] = [
+    // Transform DB courses to videoModules format for compatibility
+    const videoModules = dbCourses.length > 0 ? dbCourses.map(course => ({
+        name: course.title,
+        tier: course.min_tier as PlanTier,
+        waveId: undefined as string | undefined,
+        description: course.description || '',
+        isLocked: course.isLocked,
+        videos: (course.modules || []).map((m: any) => ({
+            id: m.id,
+            title: m.title,
+            duration: m.duration_minutes ? `${m.duration_minutes}:00` : '10:00',
+            thumbnail: 'bg-gold/10',
+            xp: m.duration_minutes ? m.duration_minutes * 5 : 50,
+            content_url: m.content_url,
+            isLocked: m.isLocked
+        })),
+        quizQuestions: [] as any[]
+    })) : [
+        // Fallback mock if DB is empty (shouldn't happen after seed)
         {
             name: "Fondamenta dell'Impero",
             tier: "curioso",
