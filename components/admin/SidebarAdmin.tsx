@@ -14,7 +14,9 @@ import {
     Menu,
     X,
     ShieldCheck,
-    PieChart
+    PieChart,
+    Gift,
+    GraduationCap
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -29,6 +31,8 @@ const adminNavItems = [
     { icon: TrendingUp, label: 'Revenue', href: '/admin/revenue' },
     { icon: PieChart, label: 'Costs', href: '/admin/costs' },
     { icon: Users, label: 'Users', href: '/admin/users' },
+    { icon: Gift, label: 'Add-ons', href: '/admin/addons' },
+    { icon: GraduationCap, label: 'Academy', href: '/admin/academy' },
     { icon: Activity, label: 'Health', href: '/admin/health' },
     { icon: FileText, label: 'Logs', href: '/admin/logs' },
 ];
