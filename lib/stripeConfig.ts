@@ -3,6 +3,15 @@
 // Founder vs Public Price IDs
 // =============================================
 
+// Setup Premium Add-on (One-time payment)
+export const SETUP_PREMIUM = {
+    productId: 'prod_TnjD8ssoztDQXK',
+    promoPriceId: 'price_1Sq7lG7141DXdb9vPlJMv2ZQ',   // €99 promo
+    regularPriceId: 'price_1Sq7lG7141DXdb9vckVkJl0l', // €297 regular
+    promoAmount: 99,
+    regularAmount: 297,
+} as const;
+
 /**
  * Stripe Price IDs - Replace with real IDs from Stripe Dashboard
  * 

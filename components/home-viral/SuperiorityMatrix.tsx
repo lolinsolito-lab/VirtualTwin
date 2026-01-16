@@ -307,11 +307,28 @@ export default function SuperiorityMatrix() {
                                     <p className="text-[11px] text-white/40 mt-1">Piani Starter e Creator. Altri piani da €197.</p>
                                 </div>
                                 <button
-                                    onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                                    onClick={async () => {
+                                        try {
+                                            const response = await fetch('/api/stripe/setup-premium-checkout', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({})
+                                            });
+                                            const data = await response.json();
+                                            if (data.url) {
+                                                window.location.href = data.url;
+                                            } else {
+                                                alert('Errore durante il checkout. Riprova.');
+                                            }
+                                        } catch (error) {
+                                            console.error('Setup Premium checkout error:', error);
+                                            alert('Errore di connessione. Riprova.');
+                                        }
+                                    }}
                                     className="inline-flex items-center gap-2 px-8 py-4 gold-gradient text-charcoal rounded-full font-black uppercase tracking-widest text-sm hover:scale-105 transition-all"
                                 >
                                     <Gift className="w-4 h-4" />
-                                    Aggiungi al Piano
+                                    Acquista Setup Premium
                                 </button>
                             </div>
                         </div>

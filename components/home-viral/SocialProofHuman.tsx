@@ -12,12 +12,12 @@ import { TrendingUp, Play, CheckCircle2 } from 'lucide-react';
 export default function SocialProofHuman() {
     const caseStudy = {
         name: "Michael J.",
-        role: "Founder & Visionary",
-        transformation: "Dalla saturazione operativa alla libertà creativa.",
-        story: "Gestivo 150+ interazioni al giorno. Il mio business cresceva, ma la mia vita era ostaggio di uno schermo. Rispondevo ai messaggi alle 3 di notte, perdevo compleanni, sacrificavo la salute. L'eccellenza era diventata la mia prigione.",
-        mission: "Ho creato VirtualTwin per una ragione semplice: nessun fondatore dovrebbe scegliere tra il successo del business e la propria vita. La tecnologia esiste per liberarci, non per incatenarci.",
-        outcome: "Oggi il mio Clone AI non solo risponde come me — vende, qualifica, chiude. Protegge il mio brand 24/7 mentre io torno a essere un visionario, non un operatore.",
-        quote: "Il mondo digitale dovrebbe servire l'uomo, non schiavizzarlo. VirtualTwin è la mia risposta."
+        role: "Founder & Architect",
+        transformation: "Dall'operatività alla conquista.",
+        story: "Ho visto un pattern che il mercato ignorava: i fondatori più brillanti erano intrappolati nel rispondere ai messaggi invece di costruire imperi. Ho rifiutato quella logica.",
+        mission: "VirtualTwin non è nato da una necessità personale. È nato da una visione: creare l'intelligenza che permette a chi pensa in grande di operare su scala infinita. Mentre altri costruivano chatbot, io ho progettato cloni cognitivi.",
+        outcome: "Il mio gemello AI non assiste — sostituisce. Vende, qualifica, chiude. Opera con la mia esatta mentalità strategica su ogni canale, 24 ore su 24. Non ho delegato compiti. Ho moltiplicato me stesso.",
+        quote: "Il futuro appartiene a chi costruisce sistemi che pensano. VirtualTwin è la mia prima conquista."
     };
 
     return (
@@ -35,11 +35,11 @@ export default function SocialProofHuman() {
                         >
                             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/20 rounded-full">
                                 <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                                <span className="text-gold text-[10px] uppercase font-black tracking-widest">Metamorfosi dell'Anima</span>
+                                <span className="text-gold text-[10px] uppercase font-black tracking-widest">Visione del Fondatore</span>
                             </div>
 
                             <h3 className="font-serif text-4xl md:text-6xl text-charcoal leading-[1.1]">
-                                Perché Ho Creato <br /> <span className="text-gold italic">VirtualTwin.</span>
+                                Come Ho Costruito <br /> <span className="text-gold italic">VirtualTwin.</span>
                             </h3>
 
                             <div className="space-y-6 text-charcoal/70 text-lg leading-relaxed">
@@ -92,7 +92,7 @@ export default function SocialProofHuman() {
 
                                 <div className="absolute bottom-10 left-10 right-10 bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl">
                                     <p className="text-white font-serif italic text-lg leading-relaxed">
-                                        "Il gemello non ha solo aumentato il mio impatto; mi ha restituito l'energia per tornare a sognare in grande."
+                                        "Ho smesso di lavorare NEL business. Ora costruisco SOPRA di esso."
                                     </p>
                                 </div>
                             </div>
