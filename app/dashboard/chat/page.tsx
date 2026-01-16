@@ -2,19 +2,29 @@
 
 import React, { useState, useRef, useEffect, Suspense } from 'react';
 import {
-    Send, Bot, User, Brain, ShieldCheck,
+    Send, Bot, User, Brain, ShieldCheck, Sparkles,
     Search, MessageSquare, Instagram, MessageCircle,
-    Filter, Clock, Loader2, ChevronRight,
-    Zap, Activity, Plus
+    Clock, Loader2, ChevronRight, ChevronDown,
+    Zap, Plus, Phone, Mail, Target, TrendingUp,
+    Crown, Flame, Star, ArrowUpRight
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
+
+// Channel type icons and colors
+const CHANNEL_CONFIG = {
+    whatsapp: { icon: MessageCircle, color: 'bg-green-500', label: 'WhatsApp' },
+    instagram: { icon: Instagram, color: 'bg-gradient-to-br from-purple-500 to-pink-500', label: 'Instagram' },
+    sandbox: { icon: Bot, color: 'bg-charcoal', label: 'Sandbox' },
+    messenger: { icon: MessageSquare, color: 'bg-blue-500', label: 'Messenger' }
+};
 
 function ChatContent() {
     const searchParams = useSearchParams();
@@ -30,15 +40,29 @@ function ChatContent() {
     const [searchTerm, setSearchTerm] = useState('');
     const [userId, setUserId] = useState<string | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    // Mobile View State
-    const [view, setView] = useState<'list' | 'chat'>('chat');
+    // Channel filter
+    const [activeFilter, setActiveFilter] = useState<string>('all');
 
-    // AI extracted insights
+    // Expanded channel groups
+    const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+        whatsapp: true,
+        instagram: true,
+        sandbox: true
+    });
+
+    // AI Insights (enhanced)
     const [insights, setInsights] = useState({
         budget: 'In analisi...',
-        stage: 'Sandbox'
+        stage: 'Discovery',
+        sentiment: 'Neutro',
+        nextAction: 'Qualifica il lead',
+        score: 0
     });
+
+    // Typing indicator
+    const [isTyping, setIsTyping] = useState(false);
 
     useEffect(() => {
         async function getUser() {
@@ -56,7 +80,7 @@ function ChatContent() {
         try {
             const { data } = await supabase
                 .from('conversations')
-                .select('*')
+                .select('*, messages(content, created_at, sender_type)')
                 .eq('user_id', uid)
                 .order('last_message_at', { ascending: false });
 
@@ -71,13 +95,15 @@ function ChatContent() {
     useEffect(() => {
         if (activeLeadId && userId) {
             loadActiveConversation(activeLeadId);
-            setView('chat');
         } else {
             setActiveConversation(null);
             setMessages([
-                { role: 'assistant', content: 'Buongiorno! Sono il tuo Sovereign Assistant. Scrivi un messaggio per iniziare una conversazione in modalità Sandbox.' }
+                {
+                    role: 'assistant',
+                    content: 'Benvenuto nel Ponte di Comando! 🚀\n\nSono il tuo Strategic AI Clone. Posso aiutarti a:\n• Testare conversazioni in modalità Sandbox\n• Gestire lead da WhatsApp e Instagram\n• Qualificare prospect automaticamente\n\nScrivi un messaggio per iniziare!',
+                    timestamp: new Date().toISOString()
+                }
             ]);
-            setView('chat');
         }
     }, [activeLeadId, userId]);
 
@@ -92,9 +118,17 @@ function ChatContent() {
 
             if (conv) {
                 setActiveConversation(conv);
+
+                // Parse insights from conversation
+                const budgetMatch = conv.notes?.match(/Budget: (.*)/);
                 setInsights({
-                    budget: conv.notes?.match(/Budget: (.*)/)?.[1] || 'In analisi...',
-                    stage: conv.status || 'active'
+                    budget: budgetMatch?.[1] || 'Da determinare',
+                    stage: conv.status === 'qualified' ? 'Qualificato' :
+                        conv.status === 'converted' ? 'Negoziazione' :
+                            conv.status === 'closed' ? 'Chiuso' : 'Discovery',
+                    sentiment: 'Positivo',
+                    nextAction: conv.status === 'active' ? 'Qualifica il budget' : 'Chiudi la vendita',
+                    score: conv.status === 'qualified' ? 75 : conv.status === 'converted' ? 90 : 40
                 });
 
                 const { data: history } = await supabase
@@ -105,6 +139,7 @@ function ChatContent() {
 
                 if (history) {
                     setMessages(history.map(m => ({
+                        id: m.id,
                         role: m.sender_type === 'contact' ? 'user' : 'assistant',
                         content: m.content,
                         timestamp: m.created_at,
@@ -118,7 +153,7 @@ function ChatContent() {
         }
     }
 
-    // Real-time updates
+    // Real-time subscription
     useEffect(() => {
         if (!activeLeadId) return;
 
@@ -159,316 +194,475 @@ function ChatContent() {
 
         const userMessage = input;
         setInput('');
-        setLoading(true);
+        setIsTyping(true);
+
+        // Optimistic update
+        setMessages(prev => [...prev, { role: 'user', content: userMessage, timestamp: new Date().toISOString() }]);
 
         try {
-            if (activeConversation) {
-                const endpoint = activeConversation.channel_type === 'whatsapp'
-                    ? '/api/whatsapp/send'
-                    : '/api/chat';
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userInput: userMessage,
+                    userId: userId,
+                    conversationId: activeConversation?.id,
+                    history: messages.slice(-10)
+                })
+            });
 
-                await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        phone: activeConversation.contact_phone,
-                        message: userMessage,
-                        userId: userId,
-                        conversationId: activeConversation.id
-                    })
-                });
-            } else {
-                // SANDBOX MODE
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        userInput: userMessage,
-                        userId: userId,
-                        history: messages.slice(-10)
-                    })
-                });
+            const data = await response.json();
 
-                const data = await response.json();
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: data.reply,
+                timestamp: new Date().toISOString()
+            }]);
 
-                setMessages(prev => [...prev,
-                { role: 'user', content: userMessage },
-                { role: 'assistant', content: data.reply }
-                ]);
+            // Update insights from AI response
+            if (data.insights) {
+                setInsights(prev => ({
+                    ...prev,
+                    budget: data.insights.budgetRange || prev.budget,
+                    stage: data.insights.suggestedStage || prev.stage,
+                    score: data.insights.leadScore || prev.score
+                }));
+            }
 
-                // Update insights from AI response
-                if (data.insights) {
-                    setInsights({
-                        budget: data.insights.budgetRange || 'In analisi...',
-                        stage: data.insights.suggestedStage || 'active'
-                    });
-                }
-
-                if (data.conversationId && !activeConversation) {
-                    loadConversations(userId);
-                    router.push(`?leadId=${data.conversationId}`);
-                }
+            if (data.conversationId && !activeConversation) {
+                loadConversations(userId);
             }
         } catch (err) {
             console.error("Chat Error:", err);
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: 'Mi scuso, si è verificato un errore. Riprova tra un momento.',
+                timestamp: new Date().toISOString()
+            }]);
         } finally {
-            setLoading(false);
+            setIsTyping(false);
+            inputRef.current?.focus();
         }
     };
 
-    const filteredConversations = conversations.filter(c =>
+    // Group conversations by channel
+    const groupedConversations = conversations.reduce((acc, conv) => {
+        const channel = conv.channel_type || 'sandbox';
+        if (!acc[channel]) acc[channel] = [];
+        acc[channel].push(conv);
+        return acc;
+    }, {} as Record<string, any[]>);
+
+    const filteredConversations = activeFilter === 'all'
+        ? conversations
+        : conversations.filter(c => (c.channel_type || 'sandbox') === activeFilter);
+
+    const searchedConversations = filteredConversations.filter(c =>
         c.contact_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.contact_phone?.includes(searchTerm)
     );
 
-    const getStageLabel = (stage: string) => {
-        const labels: Record<string, string> = {
-            'active': 'Discovery',
-            'qualified': 'Qualificato',
-            'converted': 'Negoziazione',
-            'closed': 'Chiuso'
-        };
-        return labels[stage] || stage;
+    const getLastMessage = (conv: any) => {
+        if (conv.messages && conv.messages.length > 0) {
+            const last = conv.messages[conv.messages.length - 1];
+            return last.content?.substring(0, 40) + (last.content?.length > 40 ? '...' : '');
+        }
+        return 'Nessun messaggio';
     };
 
     return (
-        <div className="h-[calc(100vh-60px)] flex bg-champagne">
+        <div className="h-[calc(100vh-60px)] flex bg-gradient-to-br from-champagne via-white to-champagne/80">
 
-            {/* LEFT: Conversation List - Compact */}
-            <div className={cn(
-                "w-72 flex-shrink-0 bg-charcoal flex flex-col transition-all duration-300",
-                view !== 'list' && "hidden lg:flex"
-            )}>
-                {/* Header */}
-                <div className="p-4 border-b border-white/10">
-                    <div className="flex items-center justify-between mb-3">
-                        <h2 className="font-serif italic text-lg text-white">Frequenze</h2>
-                        <Filter className="w-4 h-4 text-gold/50" />
+            {/* LEFT SIDEBAR - Conversation Navigator */}
+            <div className="w-80 flex-shrink-0 bg-charcoal flex flex-col border-r border-gold/10 hidden lg:flex">
+                {/* Sidebar Header */}
+                <div className="p-5 border-b border-white/10">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gold rounded-xl flex items-center justify-center">
+                                <Brain className="w-5 h-5 text-charcoal" />
+                            </div>
+                            <div>
+                                <h2 className="font-serif italic text-white text-lg">Ponte di Comando</h2>
+                                <p className="text-[9px] text-gold uppercase tracking-widest">AI Control Center</p>
+                            </div>
+                        </div>
                     </div>
+
+                    {/* Search */}
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
                         <input
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Cerca..."
-                            className="w-full pl-9 pr-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-white/30 focus:border-gold/30 outline-none"
+                            placeholder="Cerca conversazioni..."
+                            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-white/30 focus:border-gold/40 outline-none transition-colors"
                         />
                     </div>
                 </div>
 
-                {/* Conversations */}
-                <div className="flex-1 overflow-y-auto p-2 space-y-1">
+                {/* Channel Filters */}
+                <div className="px-4 py-3 border-b border-white/5 flex gap-2 overflow-x-auto">
+                    {[
+                        { id: 'all', label: 'Tutti', count: conversations.length },
+                        { id: 'whatsapp', label: 'WA', count: groupedConversations.whatsapp?.length || 0 },
+                        { id: 'instagram', label: 'IG', count: groupedConversations.instagram?.length || 0 },
+                        { id: 'sandbox', label: 'Test', count: groupedConversations.sandbox?.length || 0 },
+                    ].map(filter => (
+                        <button
+                            key={filter.id}
+                            onClick={() => setActiveFilter(filter.id)}
+                            className={cn(
+                                "px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all flex items-center gap-2",
+                                activeFilter === filter.id
+                                    ? "bg-gold text-charcoal"
+                                    : "bg-white/5 text-white/50 hover:bg-white/10"
+                            )}
+                        >
+                            {filter.label}
+                            {filter.count > 0 && (
+                                <span className="w-4 h-4 bg-white/10 rounded-full text-[8px] flex items-center justify-center">
+                                    {filter.count}
+                                </span>
+                            )}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Conversations List */}
+                <div className="flex-1 overflow-y-auto">
                     {loadingConvs ? (
-                        Array(4).fill(0).map((_, i) => (
-                            <div key={i} className="h-14 bg-white/5 rounded-xl animate-pulse" />
-                        ))
-                    ) : filteredConversations.length > 0 ? (
-                        filteredConversations.map((conv) => (
-                            <button
-                                key={conv.id}
-                                onClick={() => router.push(`?leadId=${conv.id}`)}
-                                className={cn(
-                                    "w-full p-3 rounded-xl flex items-center gap-3 transition-all text-left",
-                                    activeLeadId === conv.id
-                                        ? "bg-gold/20 border border-gold/30"
-                                        : "hover:bg-white/5 border border-transparent"
-                                )}
-                            >
-                                <div className={cn(
-                                    "w-9 h-9 rounded-lg flex items-center justify-center",
-                                    activeLeadId === conv.id ? "bg-gold text-charcoal" : "bg-white/10 text-white/50"
-                                )}>
-                                    {conv.channel_type === 'whatsapp' ? <MessageCircle className="w-4 h-4" /> :
-                                        conv.channel_type === 'instagram' ? <Instagram className="w-4 h-4" /> :
-                                            <MessageSquare className="w-4 h-4" />}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className={cn("text-xs font-bold truncate", activeLeadId === conv.id ? "text-gold" : "text-white/80")}>
-                                        {conv.contact_name || 'Contatto'}
-                                    </p>
-                                    <p className="text-[10px] text-white/30 truncate">
-                                        {conv.last_message_at ? new Date(conv.last_message_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Nuovo'}
-                                    </p>
-                                </div>
-                            </button>
-                        ))
+                        <div className="p-4 space-y-3">
+                            {[1, 2, 3, 4].map(i => (
+                                <div key={i} className="h-16 bg-white/5 rounded-xl animate-pulse" />
+                            ))}
+                        </div>
+                    ) : searchedConversations.length > 0 ? (
+                        <div className="p-3 space-y-1">
+                            {searchedConversations.map((conv) => {
+                                const channelType = conv.channel_type || 'sandbox';
+                                const config = CHANNEL_CONFIG[channelType as keyof typeof CHANNEL_CONFIG] || CHANNEL_CONFIG.sandbox;
+                                const Icon = config.icon;
+
+                                return (
+                                    <motion.button
+                                        key={conv.id}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        onClick={() => router.push(`?leadId=${conv.id}`)}
+                                        className={cn(
+                                            "w-full p-3 rounded-xl flex items-start gap-3 transition-all text-left group",
+                                            activeLeadId === conv.id
+                                                ? "bg-gold/20 border border-gold/30"
+                                                : "hover:bg-white/5 border border-transparent"
+                                        )}
+                                    >
+                                        {/* Avatar with channel indicator */}
+                                        <div className="relative">
+                                            <div className={cn(
+                                                "w-11 h-11 rounded-xl flex items-center justify-center text-white font-serif italic",
+                                                activeLeadId === conv.id ? "bg-gold text-charcoal" : config.color
+                                            )}>
+                                                {conv.contact_name?.[0] || <Icon className="w-5 h-5" />}
+                                            </div>
+                                            <div className={cn(
+                                                "absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center border-2 border-charcoal",
+                                                config.color
+                                            )}>
+                                                <Icon className="w-2 h-2 text-white" />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center justify-between mb-0.5">
+                                                <p className={cn(
+                                                    "text-sm font-medium truncate",
+                                                    activeLeadId === conv.id ? "text-gold" : "text-white"
+                                                )}>
+                                                    {conv.contact_name || 'Lead Anonimo'}
+                                                </p>
+                                                <span className="text-[9px] text-white/30">
+                                                    {conv.last_message_at
+                                                        ? new Date(conv.last_message_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                                                        : ''}
+                                                </span>
+                                            </div>
+                                            <p className="text-[11px] text-white/40 truncate">
+                                                {getLastMessage(conv)}
+                                            </p>
+                                            {/* Status indicator */}
+                                            <div className="flex items-center gap-2 mt-1.5">
+                                                <span className={cn(
+                                                    "text-[8px] px-1.5 py-0.5 rounded uppercase tracking-wider font-bold",
+                                                    conv.status === 'qualified' ? 'bg-gold/20 text-gold' :
+                                                        conv.status === 'converted' ? 'bg-green-500/20 text-green-400' :
+                                                            'bg-white/10 text-white/40'
+                                                )}>
+                                                    {conv.status || 'active'}
+                                                </span>
+                                                {conv.conversion_value > 0 && (
+                                                    <span className="text-[9px] text-gold/60">
+                                                        €{conv.conversion_value.toLocaleString()}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </motion.button>
+                                );
+                            })}
+                        </div>
                     ) : (
-                        <div className="text-center py-8 text-white/30 text-xs italic">
-                            Nessuna conversazione
+                        <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+                            <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-4">
+                                <MessageSquare className="w-8 h-8 text-white/20" />
+                            </div>
+                            <p className="text-white/30 text-sm mb-2">Nessuna conversazione</p>
+                            <p className="text-white/20 text-xs">Attiva un canale per iniziare</p>
                         </div>
                     )}
                 </div>
 
-                {/* New Conversation */}
-                <div className="p-3 border-t border-white/10">
+                {/* New Conversation Button */}
+                <div className="p-4 border-t border-white/10">
                     <button
                         onClick={() => router.push('/dashboard/chat')}
-                        className="w-full py-2.5 bg-gold/10 text-gold border border-gold/20 rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-gold hover:text-charcoal transition-all flex items-center justify-center gap-2"
+                        className="w-full py-3 bg-gradient-to-r from-gold to-amber-500 text-charcoal rounded-xl text-[11px] font-bold uppercase tracking-wider hover:shadow-lg hover:shadow-gold/20 transition-all flex items-center justify-center gap-2"
                     >
-                        <Plus className="w-3.5 h-3.5" />
-                        Nuova Sandbox
+                        <Sparkles className="w-4 h-4" />
+                        Nuova Sandbox AI
                     </button>
                 </div>
             </div>
 
-            {/* CENTER: Chat Area */}
+            {/* CENTER - Chat Area */}
             <div className="flex-1 flex flex-col min-w-0">
-                {/* Chat Header - Compact */}
-                <div className="h-16 px-4 lg:px-6 flex items-center justify-between bg-white/50 backdrop-blur-sm border-b border-charcoal/5">
-                    <div className="flex items-center gap-3">
-                        {/* Mobile back button */}
-                        <button onClick={() => setView('list')} className="lg:hidden p-2 -ml-2">
-                            <ChevronRight className="w-5 h-5 text-charcoal rotate-180" />
-                        </button>
-
-                        <div className="w-10 h-10 bg-charcoal rounded-xl flex items-center justify-center">
+                {/* Chat Header */}
+                <div className="h-16 px-6 flex items-center justify-between bg-white border-b border-charcoal/5 flex-shrink-0">
+                    <div className="flex items-center gap-4">
+                        <div className="w-11 h-11 bg-charcoal rounded-xl flex items-center justify-center relative">
                             <Bot className="w-5 h-5 text-gold" />
+                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
                         </div>
                         <div>
-                            <h3 className="font-serif italic text-charcoal">
-                                {activeConversation?.contact_name || 'Sovereign Assistant'}
+                            <h3 className="font-serif italic text-charcoal text-lg">
+                                {activeConversation?.contact_name || 'Strategic AI Clone'}
                             </h3>
-                            <div className="flex items-center gap-2">
-                                <span className="flex items-center gap-1 text-[9px] text-green-600 font-bold uppercase tracking-wider">
+                            <div className="flex items-center gap-3">
+                                <span className="flex items-center gap-1.5 text-[10px] text-green-600 font-bold uppercase tracking-wider">
                                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                                    {activeConversation?.channel_type || 'Sandbox'}
+                                    {activeConversation?.channel_type ? CHANNEL_CONFIG[activeConversation.channel_type as keyof typeof CHANNEL_CONFIG]?.label : 'Sandbox Mode'}
+                                </span>
+                                <span className="text-[10px] text-charcoal/30">•</span>
+                                <span className="text-[10px] text-charcoal/40 flex items-center gap-1">
+                                    <ShieldCheck className="w-3 h-3" />
+                                    Cifrato E2E
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="hidden md:flex items-center gap-4">
-                        <div className="flex items-center gap-2 text-charcoal/30">
-                            <ShieldCheck className="w-4 h-4" />
-                            <span className="text-[10px] font-bold">Cifratura V2</span>
-                        </div>
+                    {/* Quick Actions */}
+                    <div className="flex items-center gap-2">
+                        {activeConversation && (
+                            <>
+                                <button className="p-2.5 bg-charcoal/5 text-charcoal/50 rounded-xl hover:bg-charcoal hover:text-gold transition-all">
+                                    <Phone className="w-4 h-4" />
+                                </button>
+                                <button className="p-2.5 bg-charcoal/5 text-charcoal/50 rounded-xl hover:bg-charcoal hover:text-gold transition-all">
+                                    <Mail className="w-4 h-4" />
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
 
-                {/* Messages */}
-                <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4">
-                    {messages.map((m, i) => (
-                        <div key={i} className={cn("flex", m.role === 'assistant' ? 'justify-start' : 'justify-end')}>
-                            <div className={cn("max-w-[85%] lg:max-w-[70%] flex gap-3", m.role === 'assistant' ? 'flex-row' : 'flex-row-reverse')}>
+                {/* Messages Area */}
+                <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-white/50 to-transparent">
+                    <AnimatePresence>
+                        {messages.map((m, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.05 }}
+                                className={cn("flex", m.role === 'assistant' ? 'justify-start' : 'justify-end')}
+                            >
                                 <div className={cn(
-                                    "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0",
-                                    m.role === 'assistant' ? 'bg-charcoal text-gold' : 'bg-gold text-white'
+                                    "max-w-[75%] flex gap-3",
+                                    m.role === 'assistant' ? 'flex-row' : 'flex-row-reverse'
                                 )}>
-                                    {m.role === 'assistant' ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                                </div>
-                                <div className="space-y-1">
                                     <div className={cn(
-                                        "px-4 py-3 rounded-2xl text-sm leading-relaxed",
-                                        m.role === 'assistant'
-                                            ? 'bg-white border border-charcoal/5 text-charcoal rounded-tl-sm'
-                                            : 'bg-charcoal text-white rounded-tr-sm'
+                                        "w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-1",
+                                        m.role === 'assistant' ? 'bg-charcoal text-gold' : 'bg-gold text-charcoal'
                                     )}>
-                                        {m.content}
+                                        {m.role === 'assistant' ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
                                     </div>
-                                    <span className={cn("text-[9px] text-charcoal/30 px-1", m.role === 'user' && 'text-right block')}>
-                                        {m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Ora'}
-                                    </span>
+                                    <div className="space-y-1">
+                                        <div className={cn(
+                                            "px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap",
+                                            m.role === 'assistant'
+                                                ? 'bg-white rounded-2xl rounded-tl-sm border border-charcoal/5 text-charcoal shadow-sm'
+                                                : 'bg-charcoal rounded-2xl rounded-tr-sm text-white'
+                                        )}>
+                                            {m.content}
+                                        </div>
+                                        <span className={cn(
+                                            "text-[9px] text-charcoal/30 px-1",
+                                            m.role === 'user' && 'text-right block'
+                                        )}>
+                                            {m.timestamp
+                                                ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                                                : 'Ora'}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    ))}
-                    {loading && (
-                        <div className="flex justify-start">
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+
+                    {/* Typing Indicator */}
+                    {isTyping && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="flex justify-start"
+                        >
                             <div className="flex gap-3 items-center">
-                                <div className="w-8 h-8 rounded-lg bg-charcoal flex items-center justify-center">
+                                <div className="w-9 h-9 rounded-xl bg-charcoal flex items-center justify-center">
                                     <Brain className="w-4 h-4 text-gold animate-pulse" />
                                 </div>
-                                <div className="px-4 py-3 bg-white border border-charcoal/5 rounded-2xl rounded-tl-sm">
-                                    <div className="flex gap-1">
+                                <div className="px-4 py-3 bg-white border border-charcoal/5 rounded-2xl rounded-tl-sm shadow-sm">
+                                    <div className="flex gap-1.5">
                                         <div className="w-2 h-2 bg-gold rounded-full animate-bounce [animation-delay:-0.3s]" />
                                         <div className="w-2 h-2 bg-gold rounded-full animate-bounce [animation-delay:-0.15s]" />
                                         <div className="w-2 h-2 bg-gold rounded-full animate-bounce" />
                                     </div>
                                 </div>
+                                <span className="text-[10px] text-charcoal/30 italic">Elaborazione strategica...</span>
                             </div>
-                        </div>
+                        </motion.div>
                     )}
                 </div>
 
-                {/* Input */}
-                <div className="p-4 bg-white/50 backdrop-blur-sm border-t border-charcoal/5">
+                {/* Input Area */}
+                <div className="p-4 bg-white border-t border-charcoal/5 flex-shrink-0">
                     <form onSubmit={handleSend} className="flex gap-3 max-w-4xl mx-auto">
                         <div className="flex-1 relative">
                             <input
+                                ref={inputRef}
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder={activeConversation ? `Scrivi a ${activeConversation.contact_name}...` : "Invia un messaggio..."}
-                                className="w-full bg-white border border-charcoal/10 rounded-2xl pl-5 pr-12 py-3.5 text-sm focus:border-gold/40 outline-none"
+                                placeholder={activeConversation
+                                    ? `Rispondi a ${activeConversation.contact_name}...`
+                                    : "Scrivi un messaggio per testare il tuo Clone AI..."
+                                }
+                                className="w-full bg-champagne/50 border border-charcoal/10 rounded-2xl pl-5 pr-14 py-4 text-sm focus:border-gold/40 focus:bg-white outline-none transition-all"
                             />
-                            <Zap className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/40" />
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                <Zap className="w-4 h-4 text-gold/40" />
+                            </div>
                         </div>
                         <button
                             type="submit"
                             disabled={loading || !input.trim()}
-                            className="w-12 h-12 bg-charcoal text-gold rounded-2xl flex items-center justify-center hover:bg-gold hover:text-white transition-all disabled:opacity-30"
+                            className="w-14 h-14 bg-charcoal text-gold rounded-2xl flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all disabled:opacity-30 disabled:cursor-not-allowed group"
                         >
-                            <Send className="w-5 h-5" />
+                            <Send className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </button>
                     </form>
                 </div>
             </div>
 
-            {/* RIGHT: Insights Panel - Compact */}
-            <div className="hidden xl:flex w-64 flex-shrink-0 flex-col gap-3 p-4 bg-charcoal/[0.02]">
-                {/* AI Status */}
-                <div className="bg-charcoal rounded-2xl p-4">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                            <Brain className="w-5 h-5 text-gold" />
+            {/* RIGHT SIDEBAR - Intelligence Panel */}
+            <div className="w-72 flex-shrink-0 bg-white border-l border-charcoal/5 hidden xl:flex flex-col">
+                {/* Panel Header */}
+                <div className="p-5 border-b border-charcoal/5">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-charcoal rounded-xl flex items-center justify-center">
+                            <Target className="w-5 h-5 text-gold" />
                         </div>
                         <div>
-                            <p className="text-[9px] text-gold uppercase tracking-widest font-bold">Lead Analysis</p>
-                            <p className="text-white font-serif italic">AI Insights</p>
-                        </div>
-                    </div>
-
-                    <div className="space-y-3">
-                        <div className="p-3 bg-white/5 rounded-xl">
-                            <p className="text-[9px] text-gold/60 uppercase tracking-wider mb-1">Budget</p>
-                            <p className="text-white font-bold text-sm">{insights.budget}</p>
-                        </div>
-                        <div className="p-3 bg-white/5 rounded-xl">
-                            <p className="text-[9px] text-gold/60 uppercase tracking-wider mb-1">Stage</p>
-                            <p className="text-white font-bold text-sm">{getStageLabel(insights.stage)}</p>
+                            <h3 className="font-serif italic text-charcoal">Neural Insights</h3>
+                            <p className="text-[9px] text-gold uppercase tracking-widest">Live Analysis</p>
                         </div>
                     </div>
                 </div>
 
-                {/* Status */}
-                <div className="bg-white rounded-2xl p-4 text-center border border-charcoal/5">
-                    <p className="text-[9px] text-charcoal/40 uppercase tracking-widest mb-2">Modalità</p>
+                {/* Lead Score */}
+                <div className="p-5 border-b border-charcoal/5">
+                    <div className="flex items-center justify-between mb-3">
+                        <span className="text-[10px] text-charcoal/50 uppercase tracking-wider font-bold">Lead Score</span>
+                        <span className="text-[10px] text-gold font-bold">{insights.score}%</span>
+                    </div>
+                    <div className="h-2 bg-charcoal/5 rounded-full overflow-hidden">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${insights.score}%` }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                            className={cn(
+                                "h-full rounded-full",
+                                insights.score >= 70 ? "bg-gradient-to-r from-green-400 to-emerald-500" :
+                                    insights.score >= 40 ? "bg-gradient-to-r from-gold to-amber-500" :
+                                        "bg-gradient-to-r from-red-400 to-rose-500"
+                            )}
+                        />
+                    </div>
+                    <p className="text-[9px] text-charcoal/40 mt-2 italic">
+                        {insights.score >= 70 ? 'Hot Lead - Pronto per la chiusura' :
+                            insights.score >= 40 ? 'Warm Lead - Continua la qualifica' :
+                                'Cold Lead - Serve più nurturing'}
+                    </p>
+                </div>
+
+                {/* Insights Cards */}
+                <div className="p-4 space-y-3 flex-1 overflow-y-auto">
+                    {[
+                        { label: 'Budget', value: insights.budget, icon: Crown, color: 'text-gold' },
+                        { label: 'Stage', value: insights.stage, icon: TrendingUp, color: 'text-purple-500' },
+                        { label: 'Sentiment', value: insights.sentiment, icon: Star, color: 'text-green-500' },
+                        { label: 'Next Action', value: insights.nextAction, icon: Flame, color: 'text-orange-500' },
+                    ].map((item, i) => (
+                        <motion.div
+                            key={item.label}
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className="p-4 bg-charcoal/[0.02] rounded-xl border border-charcoal/5 group hover:border-gold/20 transition-all"
+                        >
+                            <div className="flex items-center gap-2 mb-1.5">
+                                <item.icon className={cn("w-3.5 h-3.5", item.color)} />
+                                <span className="text-[9px] text-charcoal/40 uppercase tracking-widest font-bold">{item.label}</span>
+                            </div>
+                            <p className="text-charcoal font-medium text-sm">{item.value}</p>
+                        </motion.div>
+                    ))}
+                </div>
+
+                {/* Mode Indicator */}
+                <div className="p-4 border-t border-charcoal/5">
                     <div className={cn(
-                        "inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider",
+                        "p-4 rounded-xl text-center",
                         activeLeadId
-                            ? "bg-red-50 text-red-600 border border-red-200"
-                            : "bg-green-50 text-green-600 border border-green-200"
+                            ? "bg-gradient-to-r from-red-50 to-orange-50 border border-red-200"
+                            : "bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200"
                     )}>
-                        <div className={cn("w-2 h-2 rounded-full animate-pulse", activeLeadId ? "bg-red-500" : "bg-green-500")} />
-                        {activeLeadId ? 'Live' : 'Sandbox'}
+                        <div className="flex items-center justify-center gap-2 mb-1">
+                            <div className={cn(
+                                "w-2 h-2 rounded-full animate-pulse",
+                                activeLeadId ? "bg-red-500" : "bg-green-500"
+                            )} />
+                            <span className={cn(
+                                "text-[10px] font-bold uppercase tracking-widest",
+                                activeLeadId ? "text-red-600" : "text-green-600"
+                            )}>
+                                {activeLeadId ? 'Modalità Live' : 'Sandbox Mode'}
+                            </span>
+                        </div>
+                        <p className="text-[9px] text-charcoal/40">
+                            {activeLeadId ? 'Risposte inviate al lead reale' : 'Test sicuro senza invio'}
+                        </p>
                     </div>
                 </div>
-
-                {/* Quick Actions */}
-                {activeConversation && (
-                    <div className="bg-white rounded-2xl p-4 border border-charcoal/5">
-                        <p className="text-[9px] text-charcoal/40 uppercase tracking-widest mb-3">Info</p>
-                        <div className="space-y-2 text-xs">
-                            <div className="flex justify-between">
-                                <span className="text-charcoal/50">Canale</span>
-                                <span className="font-bold text-charcoal">{activeConversation.channel_type}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-charcoal/50">Tel</span>
-                                <span className="font-bold text-charcoal truncate max-w-[100px]">{activeConversation.contact_phone || '-'}</span>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );
@@ -479,8 +673,10 @@ export default function ChatPage() {
         <Suspense fallback={
             <div className="h-screen flex items-center justify-center bg-champagne">
                 <div className="text-center">
-                    <Loader2 className="w-10 h-10 text-gold animate-spin mx-auto mb-3" />
-                    <p className="text-gold text-[10px] uppercase tracking-widest font-bold">Caricamento...</p>
+                    <div className="w-16 h-16 bg-charcoal rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+                        <Brain className="w-8 h-8 text-gold" />
+                    </div>
+                    <p className="text-gold text-[10px] uppercase tracking-widest font-bold">Inizializzazione Clone AI...</p>
                 </div>
             </div>
         }>
