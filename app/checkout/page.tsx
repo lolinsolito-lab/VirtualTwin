@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Check, Gift, ArrowRight, Shield, Clock, Sparkles, ChevronLeft } from 'lucide-react';
+import { Check, Gift, ArrowRight, Shield, Clock, Sparkles, ChevronLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { SETUP_PREMIUM } from '@/lib/stripeConfig';
 
@@ -46,9 +46,21 @@ const PLAN_NAMES: Record<string, string> = {
     imperatore: 'Imperatore'
 };
 
-export default function CheckoutPage() {
+// Loading fallback component
+function CheckoutLoading() {
+    return (
+        <div className="min-h-screen bg-gradient-to-b from-champagne via-white to-champagne flex items-center justify-center">
+            <div className="text-center">
+                <Loader2 className="w-8 h-8 animate-spin text-gold mx-auto mb-4" />
+                <p className="text-charcoal/60">Caricamento...</p>
+            </div>
+        </div>
+    );
+}
+
+// Main checkout content component (uses useSearchParams)
+function CheckoutContent() {
     const searchParams = useSearchParams();
-    const router = useRouter();
 
     const planId = searchParams.get('plan') || '';
     const priceId = searchParams.get('priceId') || '';
@@ -390,5 +402,14 @@ export default function CheckoutPage() {
                 </div>
             </main>
         </div>
+    );
+}
+
+// Default export with Suspense boundary (required for useSearchParams)
+export default function CheckoutPage() {
+    return (
+        <Suspense fallback={<CheckoutLoading />}>
+            <CheckoutContent />
+        </Suspense>
     );
 }
