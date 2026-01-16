@@ -53,7 +53,11 @@ export async function POST(req: NextRequest) {
             available_for_tiers = ['solopreneur', 'entrepreneur', 'conquistatore', 'imperatore'],
             pre_selected_for = ['entrepreneur', 'conquistatore', 'imperatore'],
             is_recommended = true,
-            display_order = 0
+            display_order = 0,
+            // NEW: Digital product fields
+            product_type = 'service', // service, pdf, ebook, video, audio, webinar, course, template
+            delivery_url = null,
+            delivery_instructions = null
         } = body;
 
         // Validate required fields
@@ -120,7 +124,11 @@ export async function POST(req: NextRequest) {
                 pre_selected_for,
                 is_recommended,
                 is_active: true,
-                display_order
+                display_order,
+                // NEW: Digital product fields
+                product_type,
+                delivery_url,
+                delivery_instructions
             })
             .select()
             .single();

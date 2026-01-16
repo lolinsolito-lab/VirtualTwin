@@ -17,7 +17,19 @@ import {
     Sparkles,
     DollarSign,
     Save,
-    ExternalLink
+    ExternalLink,
+    Zap,
+    Crown,
+    Star,
+    Heart,
+    Rocket,
+    Award,
+    FileText,
+    Video,
+    Headphones,
+    BookOpen,
+    Layout,
+    Link as LinkIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -38,10 +50,41 @@ interface Addon {
     is_recommended: boolean;
     display_order: number;
     created_at: string;
+    // NEW: Digital product fields
+    product_type?: string;
+    delivery_url?: string;
+    delivery_instructions?: string;
 }
 
 const TIERS = ['solopreneur', 'entrepreneur', 'conquistatore', 'imperatore'];
-const ICONS = ['gift', 'sparkles', 'zap', 'crown', 'star', 'heart', 'rocket', 'award'];
+
+// Icon configuration with visual preview
+const ICON_OPTIONS = [
+    { value: 'gift', label: 'Regalo', Icon: Gift },
+    { value: 'sparkles', label: 'Sparkles', Icon: Sparkles },
+    { value: 'zap', label: 'Fulmine', Icon: Zap },
+    { value: 'crown', label: 'Corona', Icon: Crown },
+    { value: 'star', label: 'Stella', Icon: Star },
+    { value: 'heart', label: 'Cuore', Icon: Heart },
+    { value: 'rocket', label: 'Razzo', Icon: Rocket },
+    { value: 'award', label: 'Premio', Icon: Award },
+    { value: 'file-text', label: 'PDF', Icon: FileText },
+    { value: 'video', label: 'Video', Icon: Video },
+    { value: 'headphones', label: 'Audio', Icon: Headphones },
+    { value: 'book-open', label: 'Corso', Icon: BookOpen },
+    { value: 'layout', label: 'Template', Icon: Layout },
+];
+
+// Product types
+const PRODUCT_TYPES = [
+    { value: 'service', label: '🛠️ Servizio (es. Setup Premium)' },
+    { value: 'pdf', label: '📄 PDF / Document' },
+    { value: 'ebook', label: '📚 eBook' },
+    { value: 'video', label: '🎬 Video / Webinar' },
+    { value: 'audio', label: '🎧 Audio / Podcast' },
+    { value: 'course', label: '🎓 Corso Online' },
+    { value: 'template', label: '📋 Template / Checklist' },
+];
 
 const formatCurrency = (cents: number) => `€${(cents / 100).toFixed(0)}`;
 
@@ -64,7 +107,11 @@ export default function AdminAddons() {
         available_for_tiers: ['solopreneur', 'entrepreneur', 'conquistatore', 'imperatore'],
         pre_selected_for: ['entrepreneur', 'conquistatore', 'imperatore'],
         is_recommended: true,
-        display_order: 0
+        display_order: 0,
+        // NEW: Digital product fields
+        product_type: 'service',
+        delivery_url: '',
+        delivery_instructions: ''
     });
 
     useEffect(() => {
@@ -95,7 +142,10 @@ export default function AdminAddons() {
             available_for_tiers: TIERS,
             pre_selected_for: ['entrepreneur', 'conquistatore', 'imperatore'],
             is_recommended: true,
-            display_order: addons.length + 1
+            display_order: addons.length + 1,
+            product_type: 'service',
+            delivery_url: '',
+            delivery_instructions: ''
         });
         setEditingId(null);
     };
@@ -145,7 +195,10 @@ export default function AdminAddons() {
             available_for_tiers: addon.available_for_tiers,
             pre_selected_for: addon.pre_selected_for,
             is_recommended: addon.is_recommended,
-            display_order: addon.display_order
+            display_order: addon.display_order,
+            product_type: addon.product_type || 'service',
+            delivery_url: addon.delivery_url || '',
+            delivery_instructions: addon.delivery_instructions || ''
         });
         setEditingId(addon.id);
         setShowForm(true);
@@ -414,16 +467,38 @@ export default function AdminAddons() {
                                         </div>
                                         <div>
                                             <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-2">Icona</label>
-                                            <select
-                                                value={form.icon}
-                                                onChange={e => setForm(prev => ({ ...prev, icon: e.target.value }))}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold/50 focus:outline-none"
-                                            >
-                                                {ICONS.map(icon => (
-                                                    <option key={icon} value={icon}>{icon}</option>
+                                            <div className="grid grid-cols-6 gap-2">
+                                                {ICON_OPTIONS.map(({ value, label, Icon }) => (
+                                                    <button
+                                                        key={value}
+                                                        type="button"
+                                                        onClick={() => setForm(prev => ({ ...prev, icon: value }))}
+                                                        className={`p-3 rounded-xl flex flex-col items-center gap-1 transition-all ${form.icon === value
+                                                                ? 'bg-gold/20 border-2 border-gold text-gold'
+                                                                : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10'
+                                                            }`}
+                                                        title={label}
+                                                    >
+                                                        <Icon className="w-5 h-5" />
+                                                        <span className="text-[8px] uppercase tracking-wide">{label}</span>
+                                                    </button>
                                                 ))}
-                                            </select>
+                                            </div>
                                         </div>
+                                    </div>
+
+                                    {/* Product Type */}
+                                    <div>
+                                        <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-2">Tipo Prodotto</label>
+                                        <select
+                                            value={form.product_type}
+                                            onChange={e => setForm(prev => ({ ...prev, product_type: e.target.value }))}
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold/50 focus:outline-none"
+                                        >
+                                            {PRODUCT_TYPES.map(pt => (
+                                                <option key={pt.value} value={pt.value}>{pt.label}</option>
+                                            ))}
+                                        </select>
                                     </div>
 
                                     <div>
@@ -436,6 +511,38 @@ export default function AdminAddons() {
                                             placeholder="Breve descrizione per il checkout"
                                         />
                                     </div>
+
+                                    {/* Delivery URL (for digital products) */}
+                                    {form.product_type !== 'service' && (
+                                        <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <LinkIcon className="w-4 h-4 text-purple-400" />
+                                                <span className="text-[10px] text-purple-300 uppercase tracking-widest font-bold">Consegna Digitale</span>
+                                            </div>
+                                            <div className="space-y-3">
+                                                <div>
+                                                    <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-2">Link Download / Accesso *</label>
+                                                    <input
+                                                        type="url"
+                                                        value={form.delivery_url}
+                                                        onChange={e => setForm(prev => ({ ...prev, delivery_url: e.target.value }))}
+                                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:border-gold/50 focus:outline-none"
+                                                        placeholder="https://drive.google.com/... o link diretto"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] text-white/40 uppercase tracking-widest block mb-2">Istruzioni (opzionale)</label>
+                                                    <input
+                                                        type="text"
+                                                        value={form.delivery_instructions}
+                                                        onChange={e => setForm(prev => ({ ...prev, delivery_instructions: e.target.value }))}
+                                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:border-gold/50 focus:outline-none"
+                                                        placeholder="es. Riceverai il link via email entro 5 minuti"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* Pricing */}
                                     <div className="grid grid-cols-2 gap-4">
@@ -502,8 +609,8 @@ export default function AdminAddons() {
                                                         type="button"
                                                         onClick={() => toggleTier(tier, 'available_for_tiers')}
                                                         className={`px-3 py-1.5 rounded-lg text-xs capitalize transition-all ${form.available_for_tiers.includes(tier)
-                                                                ? 'bg-white/10 text-white border border-white/20'
-                                                                : 'bg-white/5 text-white/30 border border-transparent'
+                                                            ? 'bg-white/10 text-white border border-white/20'
+                                                            : 'bg-white/5 text-white/30 border border-transparent'
                                                             }`}
                                                     >
                                                         {tier}
@@ -520,8 +627,8 @@ export default function AdminAddons() {
                                                         type="button"
                                                         onClick={() => toggleTier(tier, 'pre_selected_for')}
                                                         className={`px-3 py-1.5 rounded-lg text-xs capitalize transition-all ${form.pre_selected_for.includes(tier)
-                                                                ? 'bg-gold/20 text-gold border border-gold/30'
-                                                                : 'bg-white/5 text-white/30 border border-transparent'
+                                                            ? 'bg-gold/20 text-gold border border-gold/30'
+                                                            : 'bg-white/5 text-white/30 border border-transparent'
                                                             }`}
                                                     >
                                                         {tier}
