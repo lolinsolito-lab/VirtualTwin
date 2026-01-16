@@ -18,6 +18,7 @@ import {
     AlertTriangle
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import MyPurchases from '@/components/dashboard/MyPurchases';
 
 // Mini Chart Component
 const MiniChart = ({ data = [], color = "gold" }: { data?: number[], color?: string }) => {
@@ -180,6 +181,11 @@ export default function DashboardPage() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    {/* I Miei Acquisti - Add-ons purchased */}
+                    <div className="mb-8">
+                        <MyPurchases />
                     </div>
 
                     {/* Main Content Grid */}
