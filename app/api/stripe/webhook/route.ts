@@ -87,6 +87,7 @@ export async function POST(req: Request) {
  * 1. Existing users (userId in metadata) - updates their subscription
  * 2. New users (no userId) - creates account from Stripe email (Checkout-First Flow)
  * 3. Overage purchases (overageType in metadata) - adds extra capacity
+ * 4. Add-on purchases (hasAddOns in metadata) - tracks Setup Premium etc.
  */
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     // Check if this is an overage purchase
@@ -101,11 +102,19 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     const tier = session.metadata?.tier || 'founder';
     const isFounder = tier === 'founder' || session.metadata?.isFounder === 'true';
     const waveId = session.metadata?.wave_id || null;
+    const hasAddOns = session.metadata?.hasAddOns === 'true';
+    const paidUpfront = session.metadata?.paidUpfront === 'true';
 
-    console.log(`[Stripe] Checkout completed - Email: ${customerEmail}, Plan: ${plan}, Tier: ${tier}, UserId: ${userId || 'NEW_USER'}`);
+    console.log(`[Stripe] Checkout completed - Email: ${customerEmail}, Plan: ${plan}, Tier: ${tier}, UserId: ${userId || 'NEW_USER'}, HasAddOns: ${hasAddOns}`);
 
     // CASE 1: Existing user (came from billing page while logged in)
     if (userId) {
+        // Determine trial status based on whether they paid upfront (with add-ons)
+        // If they paid upfront (add-ons), no trial - they already paid first month
+        const trialEndsAt = paidUpfront
+            ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days from now (first paid month)
+            : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(); // 14 day trial
+
         const { error } = await supabase
             .from('profiles')
             .update({
@@ -121,8 +130,11 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                         plan === 'conquistatore' ? 20000 :
                             plan === 'imperatore' ? 100000 : 100),
                 trial_started_at: new Date().toISOString(),
-                trial_ends_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-                is_trial_active: true,
+                trial_ends_at: trialEndsAt,
+                is_trial_active: !paidUpfront, // No trial if paid upfront
+                // Add-on tracking
+                setup_premium_purchased: hasAddOns ? true : undefined,
+                setup_premium_purchased_at: hasAddOns ? new Date().toISOString() : undefined,
                 updated_at: new Date().toISOString(),
             })
             .eq('id', userId);
@@ -130,17 +142,17 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         if (error) {
             console.error('[Stripe] Failed to update existing user profile:', error);
         } else {
-            console.log(`[Stripe] ✅ Updated existing user ${userId} to plan ${plan}`);
+            console.log(`[Stripe] ✅ Updated existing user ${userId} to plan ${plan}${hasAddOns ? ' + Setup Premium' : ''}`);
         }
 
         // Log billing event
         await supabase.from('billing_events').insert({
             user_id: userId,
-            event_type: 'checkout_completed',
+            event_type: hasAddOns ? 'checkout_completed_with_addon' : 'checkout_completed',
             stripe_event_id: session.id,
             amount: session.amount_total ? session.amount_total / 100 : 0,
             currency: session.currency || 'eur',
-            metadata: { plan, tier, isFounder },
+            metadata: { plan, tier, isFounder, hasAddOns, paidUpfront },
         });
 
         // ========== WAITLIST: Check if new wave just opened ==========
