@@ -113,7 +113,7 @@ export default function DashboardPage() {
     const getOnboardingProgress = () => {
         let completed = 0;
         if (user?.full_name) completed++;
-        if (user?.completed_video_ids?.length > 0) completed++;
+        if ((user?.completed_video_ids?.length ?? 0) > 0) completed++;
         if (stats.conversations > 0) completed++;
         // channels not tracked yet
         return { completed, total: ONBOARDING_STEPS.length };
@@ -273,8 +273,8 @@ export default function DashboardPage() {
                                         key={step.id}
                                         href={step.href}
                                         className={`flex items-center gap-3 p-3 rounded-xl transition-all ${isCompleted
-                                                ? 'bg-green-500/5 text-green-600'
-                                                : 'bg-charcoal/[0.02] text-charcoal/60 hover:bg-charcoal/[0.05]'
+                                            ? 'bg-green-500/5 text-green-600'
+                                            : 'bg-charcoal/[0.02] text-charcoal/60 hover:bg-charcoal/[0.05]'
                                             }`}
                                     >
                                         {isCompleted ? (
