@@ -104,18 +104,30 @@ export default function SettingsPage() {
 
                     setSettings(prev => ({
                         ...prev,
+                        // Profile basic fields
                         businessName: profile.full_name || '',
                         email: user.email || '',
+                        phone: profile.phone || '',
+                        // Company data from metadata
                         companyLegalName: profile.metadata?.companyLegalName || '',
                         vatNumber: profile.metadata?.vatNumber || '',
                         fiscalCode: profile.metadata?.fiscalCode || '',
                         sdiCode: profile.metadata?.sdiCode || '',
                         pecEmail: profile.metadata?.pecEmail || '',
+                        // Billing address from metadata
                         billingAddress: profile.metadata?.billingAddress || '',
                         billingCity: profile.metadata?.billingCity || '',
                         billingZip: profile.metadata?.billingZip || '',
                         billingProvince: profile.metadata?.billingProvince || '',
                         billingCountry: profile.metadata?.billingCountry || 'Italia',
+                        // Localization from metadata
+                        language: profile.metadata?.language || 'it',
+                        timezone: profile.metadata?.timezone || 'Europe/Rome',
+                        currency: profile.metadata?.currency || 'EUR',
+                        // Preferences from metadata
+                        notifications: profile.metadata?.notifications ?? true,
+                        darkMode: profile.metadata?.darkMode ?? false,
+                        // Plan
                         planTier: profile.plan_tier || 'curioso'
                     }));
                 }
@@ -155,20 +167,29 @@ export default function SettingsPage() {
         setSaving(true);
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
-            // 1. Update Profile Metadata
+            // 1. Update Profile with all settings (including phone, language, notifications)
             await supabase.from('profiles').update({
                 full_name: settings.businessName,
+                phone: settings.phone,
                 metadata: {
+                    // Company Data
                     companyLegalName: settings.companyLegalName,
                     vatNumber: settings.vatNumber,
                     fiscalCode: settings.fiscalCode,
                     sdiCode: settings.sdiCode,
                     pecEmail: settings.pecEmail,
+                    // Billing Address
                     billingAddress: settings.billingAddress,
                     billingCity: settings.billingCity,
                     billingZip: settings.billingZip,
                     billingProvince: settings.billingProvince,
                     billingCountry: settings.billingCountry,
+                    // Localization & Preferences
+                    language: settings.language,
+                    timezone: settings.timezone,
+                    currency: settings.currency,
+                    notifications: settings.notifications,
+                    darkMode: settings.darkMode,
                 }
             }).eq('id', user.id);
 
