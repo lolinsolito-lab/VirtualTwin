@@ -94,7 +94,8 @@ const channelConfig = {
                 title: 'Configura Meta App',
                 description: '1. Vai su developers.facebook.com\n2. Crea una nuova App (tipo Business)\n3. Aggiungi il prodotto "Instagram Graph API"\n4. Configura il webhook con l\'URL qui sotto',
                 link: 'https://developers.facebook.com/apps',
-                linkText: 'Vai a Meta for Developers →'
+                linkText: 'Vai a Meta for Developers →',
+                webhookUrl: true
             },
             {
                 title: 'Ottieni Access Token',
@@ -121,7 +122,8 @@ const channelConfig = {
                 title: 'Configura Meta App',
                 description: '1. Vai su developers.facebook.com\n2. Usa la stessa App di Instagram o creane una nuova\n3. Aggiungi il prodotto "Messenger"\n4. Configura il webhook',
                 link: 'https://developers.facebook.com/apps',
-                linkText: 'Vai a Meta for Developers →'
+                linkText: 'Vai a Meta for Developers →',
+                webhookUrl: true
             },
             {
                 title: 'Ottieni Access Token',
