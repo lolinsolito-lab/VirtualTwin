@@ -174,7 +174,7 @@ const channelConfig = {
         webhookPath: '/api/linkedin/webhook',
         comingSoon: true,
         pioneerWave: true,
-        addonPrice: 49,
+        addonPrice: 59,
         minTier: 'imperatore',
         availableFrom: 'Q3 2026',
         steps: []

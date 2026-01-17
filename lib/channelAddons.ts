@@ -61,8 +61,8 @@ export const CHANNEL_ADDONS: Record<string, ChannelAddon> = {
         name: 'LinkedIn Direct AI',
         description: 'Espandi il tuo network B2B con messaggi AI automatizzati',
         channelType: 'linkedin',
-        monthlyPrice: 49,
-        yearlyPrice: 490, // ~2 mesi gratis
+        monthlyPrice: 59,
+        yearlyPrice: 590, // ~2 mesi gratis
         minTier: 'imperatore',
         availableFrom: '2026-07-01', // Q3 2026
         features: [
