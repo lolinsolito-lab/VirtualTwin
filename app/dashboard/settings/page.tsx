@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { User, Bell, Shield, Palette, Globe, Save, Zap, Check, Building2, FileText, CreditCard, Users, Languages, Loader2, Database, Key } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useEffect } from 'react';
+import { checkCloneLimit } from '@/lib/limits/cloneLimitChecker';
 
 export default function SettingsPage() {
     const [loading, setLoading] = useState(true);
@@ -210,6 +211,13 @@ export default function SettingsPage() {
             if (existingClone) {
                 await supabase.from('clones').update(cloneData).eq('id', existingClone.id);
             } else {
+                // Check clone limit before creating new one
+                const limitCheck = await checkCloneLimit(user.id);
+                if (!limitCheck.canCreate) {
+                    alert(`Limite cloni raggiunto (${limitCheck.currentCount}/${limitCheck.limit}). Upgrade per creare più cloni.`);
+                    setSaving(false);
+                    return;
+                }
                 await supabase.from('clones').insert(cloneData);
             }
 
