@@ -667,15 +667,25 @@ export default function ChannelsPage() {
                                         </div>
                                     ) : isComingSoon ? (
                                         <button
-                                            disabled
+                                            onClick={() => {
+                                                if ((config as any).pioneerWave) {
+                                                    // Redirect to billing with addon
+                                                    window.location.href = `/dashboard/billing?addon=addon_${type}&price=${(config as any).addonPrice}`;
+                                                }
+                                            }}
                                             className={cn(
-                                                "w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[9px] font-bold uppercase tracking-wider cursor-not-allowed",
-                                                (config as any).imperialOnly
-                                                    ? "bg-gold/10 text-gold"
-                                                    : "bg-charcoal/5 text-charcoal/30"
+                                                "w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[9px] font-bold uppercase tracking-wider transition-all",
+                                                (config as any).pioneerWave
+                                                    ? "bg-gradient-to-r from-gold/80 to-gold hover:from-gold hover:to-amber-500 text-black cursor-pointer shadow-lg"
+                                                    : "bg-charcoal/5 text-charcoal/30 cursor-not-allowed"
                                             )}
                                         >
-                                            {(config as any).imperialOnly ? <>VIP Only</> : '🚀 Soon'}
+                                            {(config as any).pioneerWave ? (
+                                                <>
+                                                    <Zap className="w-3.5 h-3.5" />
+                                                    Acquista +€{(config as any).addonPrice}/mese
+                                                </>
+                                            ) : '🚀 Prossimamente'}
                                         </button>
                                     ) : isLimitReached ? (
                                         <button
