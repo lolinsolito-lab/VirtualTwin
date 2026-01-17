@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
     School, Copy, Check, Send, MessageCircle, Target, Sparkles,
     PlayCircle, Lock, Trophy, Award, TrendingUp, Crown, X,
@@ -742,34 +743,39 @@ export default function AcademyPage() {
                 </div>
             </div>
 
-            {/* ========== IMMERSIVE MODALS ========== */}
-            <AnimatePresence>
-                {selectedVideo && (
-                    <CinemaPlayer
-                        video={selectedVideo}
-                        onClose={() => setSelectedVideo(null)}
-                        onComplete={handleVideoComplete}
-                    />
-                )}
-            </AnimatePresence>
+            {/* ========== IMMERSIVE MODALS (Portal to body for full-screen) ========== */}
+            {typeof document !== 'undefined' && createPortal(
+                <>
+                    <AnimatePresence>
+                        {selectedVideo && (
+                            <CinemaPlayer
+                                video={selectedVideo}
+                                onClose={() => setSelectedVideo(null)}
+                                onComplete={handleVideoComplete}
+                            />
+                        )}
+                    </AnimatePresence>
 
-            <AnimatePresence>
-                {selectedPDF && (
-                    <PDFReader
-                        resource={selectedPDF}
-                        onClose={() => setSelectedPDF(null)}
-                    />
-                )}
-            </AnimatePresence>
+                    <AnimatePresence>
+                        {selectedPDF && (
+                            <PDFReader
+                                resource={selectedPDF}
+                                onClose={() => setSelectedPDF(null)}
+                            />
+                        )}
+                    </AnimatePresence>
 
-            <AnimatePresence>
-                {selectedAudio && (
-                    <AudioPlayer
-                        resource={selectedAudio}
-                        onClose={() => setSelectedAudio(null)}
-                    />
-                )}
-            </AnimatePresence>
+                    <AnimatePresence>
+                        {selectedAudio && (
+                            <AudioPlayer
+                                resource={selectedAudio}
+                                onClose={() => setSelectedAudio(null)}
+                            />
+                        )}
+                    </AnimatePresence>
+                </>,
+                document.body
+            )}
         </div>
     );
 }
