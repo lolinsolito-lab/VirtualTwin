@@ -24,11 +24,23 @@ function canAccess(userTier: PlanTier, requiredTier: PlanTier): boolean {
 function CinemaPlayer({
     video,
     onClose,
-    onComplete
+    onComplete,
+    onNext,
+    onPrevious,
+    hasNext,
+    hasPrevious,
+    currentIndex,
+    totalCount
 }: {
     video: any;
     onClose: () => void;
     onComplete: (videoId: string, xp: number) => void;
+    onNext?: () => void;
+    onPrevious?: () => void;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+    currentIndex?: number;
+    totalCount?: number;
 }) {
     const [isPlaying, setIsPlaying] = useState(true);
     const [progress, setProgress] = useState(0);
@@ -60,7 +72,7 @@ function CinemaPlayer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/98 backdrop-blur-xl flex items-center justify-center"
+            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
         >
             {/* Ambient glow */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -146,24 +158,54 @@ function CinemaPlayer({
                     </div>
                 </div>
 
-                {/* Video info below */}
+                {/* Video info below with chapter navigation */}
                 {!isFullscreen && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="mt-6 flex items-center justify-between"
+                        className="mt-6"
                     >
-                        <div>
-                            <h2 className="text-2xl font-serif italic text-white">{video.title}</h2>
-                            <p className="text-white/40 text-sm mt-1">{video.duration} • Academy Élite</p>
+                        {/* Chapter counter */}
+                        {totalCount && totalCount > 1 && (
+                            <div className="text-center mb-4">
+                                <span className="text-white/40 text-sm">
+                                    Capitolo {(currentIndex || 0) + 1} di {totalCount}
+                                </span>
+                            </div>
+                        )}
+
+                        <div className="flex items-center justify-between gap-4">
+                            {/* Previous chapter */}
+                            <button
+                                onClick={onPrevious}
+                                disabled={!hasPrevious}
+                                className="px-4 py-3 bg-white/10 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2"
+                            >
+                                <SkipBack className="w-4 h-4" />
+                                Precedente
+                            </button>
+
+                            <div className="text-center flex-1">
+                                <h2 className="text-xl font-serif italic text-white">{video.title}</h2>
+                                <p className="text-white/40 text-sm mt-1">{video.duration} • +{video.xp} XP</p>
+                            </div>
+
+                            {/* Next chapter */}
+                            <button
+                                onClick={hasNext ? onNext : () => onComplete(video.id, video.xp)}
+                                className="px-4 py-3 bg-gold text-charcoal rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-white transition-colors flex items-center gap-2"
+                            >
+                                {hasNext ? (
+                                    <>
+                                        Prossimo
+                                        <SkipForward className="w-4 h-4" />
+                                    </>
+                                ) : (
+                                    'Completa'
+                                )}
+                            </button>
                         </div>
-                        <button
-                            onClick={() => onComplete(video.id, video.xp)}
-                            className="px-6 py-3 bg-gold text-charcoal rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-white transition-colors"
-                        >
-                            Segna Completato
-                        </button>
                     </motion.div>
                 )}
             </motion.div>
@@ -174,17 +216,25 @@ function CinemaPlayer({
 // ==================== PDF READER MODAL ====================
 function PDFReader({
     resource,
-    onClose
+    onClose,
+    onNext,
+    onPrevious,
+    hasNext,
+    hasPrevious
 }: {
     resource: { title: string; url?: string };
     onClose: () => void;
+    onNext?: () => void;
+    onPrevious?: () => void;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
 }) {
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-charcoal/95 backdrop-blur-xl flex items-center justify-center p-6"
+            className="fixed inset-0 z-[9999] bg-charcoal/98 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6"
         >
             {/* Warm reading ambient */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -251,7 +301,7 @@ function AudioPlayer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-gradient-to-br from-purple-900/95 via-charcoal/95 to-indigo-900/95 backdrop-blur-xl flex items-center justify-center"
+            className="fixed inset-0 z-[9999] bg-gradient-to-br from-purple-900 via-charcoal to-indigo-900 flex items-center justify-center"
         >
             {/* Ambient waves */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -324,7 +374,7 @@ function AudioPlayer({
                     </button>
                 </div>
             </motion.div>
-        </motion.div>
+        </motion.div >
     );
 }
 
