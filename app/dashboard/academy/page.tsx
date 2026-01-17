@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { PlanTier } from '@/lib/pricing';
 
 // Tier hierarchy for access control
-const TIER_ORDER: PlanTier[] = ['curioso', 'solopreneur', 'entrepreneur', 'conquistatore', 'imperatore'];
+const TIER_ORDER: PlanTier[] = ['curioso', 'solopreneur', 'entrepreneur', 'conquistatore', 'imperatore', 'sovereignty'];
 
 function canAccess(userTier: PlanTier, requiredTier: PlanTier): boolean {
     return TIER_ORDER.indexOf(userTier) >= TIER_ORDER.indexOf(requiredTier);
@@ -419,7 +419,8 @@ function CourseModule({
         solopreneur: 'Solopreneur',
         entrepreneur: 'Entrepreneur',
         conquistatore: 'Conquistatore',
-        imperatore: 'Imperatore'
+        imperatore: 'Imperatore',
+        sovereignty: 'Sovereignty'
     };
 
     return (
@@ -616,7 +617,7 @@ export default function AcademyPage() {
 
     const userTier = (user?.plan_tier || 'curioso') as PlanTier;
     const completedIds = user?.completed_video_ids || [];
-    const userXP = user?.xp_total || 0;
+    const userXP = user?.xp || 0;
     const userLevel = user?.level || 1;
 
     return (
