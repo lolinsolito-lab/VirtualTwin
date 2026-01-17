@@ -403,53 +403,58 @@ function ChatContent() {
                 "flex-1 flex flex-col min-w-0",
                 mobileView !== 'chat' && "hidden lg:flex"
             )}>
-                {/* Chat Header - Mobile Optimized */}
-                <div className="px-4 py-3 flex items-center justify-between bg-white/80 backdrop-blur-lg border-b border-charcoal/5 flex-shrink-0 safe-top">
-                    <div className="flex items-center gap-3">
-                        {/* Mobile menu button - larger touch target */}
-                        <button
-                            onClick={() => setMobileView('list')}
-                            className="lg:hidden w-10 h-10 -ml-1 flex items-center justify-center rounded-xl bg-charcoal/5 text-charcoal hover:bg-gold hover:text-white transition-all active:scale-95"
-                        >
-                            <Menu className="w-5 h-5" />
-                        </button>
+                {/* Chat Header - Mobile Optimized with Gold Accent */}
+                <div className="flex-shrink-0">
+                    {/* Gold accent bar - visible on mobile */}
+                    <div className="h-1 bg-gradient-to-r from-gold via-amber-400 to-gold lg:hidden" />
+                    <div className="px-4 py-3 flex items-center justify-between bg-white/90 backdrop-blur-xl border-b border-charcoal/5">
+                        <div className="flex items-center gap-3">
+                            {/* Mobile menu button - larger touch target */}
+                            <button
+                                onClick={() => setMobileView('list')}
+                                className="lg:hidden w-11 h-11 flex items-center justify-center rounded-xl bg-charcoal text-gold hover:bg-gold hover:text-charcoal transition-all active:scale-95 shadow-md"
+                            >
+                                <Menu className="w-5 h-5" />
+                            </button>
 
-                        <div className="w-10 h-10 bg-charcoal rounded-xl flex items-center justify-center relative">
-                            <Bot className="w-5 h-5 text-gold" />
-                            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
+                            {/* Bot avatar - larger on mobile */}
+                            <div className="w-11 h-11 sm:w-10 sm:h-10 bg-gradient-to-br from-charcoal to-charcoal/80 rounded-xl flex items-center justify-center relative shadow-lg">
+                                <Bot className="w-5 h-5 text-gold" />
+                                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white animate-pulse" />
+                            </div>
+                            <div>
+                                <h3 className="font-serif italic text-charcoal text-base sm:text-lg">
+                                    {activeConversation?.contact_name || 'AI Clone'}
+                                </h3>
+                                <span className="flex items-center gap-1.5 text-[10px] text-green-600 font-bold uppercase tracking-wider">
+                                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                    {activeConversation?.channel_type ? CHANNEL_CONFIG[activeConversation.channel_type as keyof typeof CHANNEL_CONFIG]?.label : 'Sandbox Mode'}
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="font-serif italic text-charcoal text-base">
-                                {activeConversation?.contact_name || 'Strategic AI Clone'}
-                            </h3>
-                            <span className="flex items-center gap-1 text-[9px] text-green-600 font-bold uppercase tracking-wider">
-                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                                {activeConversation?.channel_type ? CHANNEL_CONFIG[activeConversation.channel_type as keyof typeof CHANNEL_CONFIG]?.label : 'Sandbox'}
-                            </span>
-                        </div>
-                    </div>
 
-                    <div className="flex items-center gap-2">
-                        {activeConversation && (
-                            <>
-                                <button className="hidden sm:flex p-2 bg-charcoal/5 text-charcoal/50 rounded-xl hover:bg-charcoal hover:text-gold transition-all">
-                                    <Phone className="w-4 h-4" />
-                                </button>
-                                <button className="hidden sm:flex p-2 bg-charcoal/5 text-charcoal/50 rounded-xl hover:bg-charcoal hover:text-gold transition-all">
-                                    <Mail className="w-4 h-4" />
-                                </button>
-                            </>
-                        )}
-                        {/* Mobile insights toggle */}
-                        <button
-                            onClick={() => setShowInsights(!showInsights)}
-                            className={cn(
-                                "xl:hidden w-10 h-10 rounded-xl flex items-center justify-center transition-all active:scale-95",
-                                showInsights ? "bg-gold text-white" : "bg-charcoal/5 text-charcoal/50 hover:bg-gold hover:text-white"
+                        <div className="flex items-center gap-2">
+                            {activeConversation && (
+                                <>
+                                    <button className="hidden sm:flex p-2.5 bg-charcoal/5 text-charcoal/50 rounded-xl hover:bg-charcoal hover:text-gold transition-all">
+                                        <Phone className="w-4 h-4" />
+                                    </button>
+                                    <button className="hidden sm:flex p-2.5 bg-charcoal/5 text-charcoal/50 rounded-xl hover:bg-charcoal hover:text-gold transition-all">
+                                        <Mail className="w-4 h-4" />
+                                    </button>
+                                </>
                             )}
-                        >
-                            <BarChart3 className="w-5 h-5" />
-                        </button>
+                            {/* Mobile insights toggle */}
+                            <button
+                                onClick={() => setShowInsights(!showInsights)}
+                                className={cn(
+                                    "xl:hidden w-11 h-11 rounded-xl flex items-center justify-center transition-all active:scale-95 shadow-md",
+                                    showInsights ? "bg-gold text-white" : "bg-charcoal text-gold hover:bg-gold hover:text-charcoal"
+                                )}
+                            >
+                                <BarChart3 className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -622,13 +627,15 @@ function ChatContent() {
             </div>
 
             {/* Mobile overlay for sidebar */}
-            {mobileView === 'list' && (
-                <div
-                    className="fixed inset-0 bg-black/50 z-30 lg:hidden"
-                    onClick={() => setMobileView('chat')}
-                />
-            )}
-        </div>
+            {
+                mobileView === 'list' && (
+                    <div
+                        className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+                        onClick={() => setMobileView('chat')}
+                    />
+                )
+            }
+        </div >
     );
 }
 
