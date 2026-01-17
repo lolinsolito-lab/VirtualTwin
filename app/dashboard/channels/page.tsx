@@ -145,40 +145,52 @@ const channelConfig = {
         provider: 'Telegram Bot API',
         webhookPath: '/api/telegram/webhook',
         comingSoon: true,
-        imperialOnly: true,
+        pioneerWave: true,
+        addonPrice: 19,
+        minTier: 'conquistatore',
+        availableFrom: 'Aprile 2026',
         steps: []
     },
     webchat: {
         name: 'Webchat Integrata',
         icon: Globe,
         color: 'bg-gold',
-        description: 'Widget AI avanzato da integrare nel tuo sito',
+        description: 'Widget AI premium da integrare nel tuo sito',
         provider: 'VirtualTwin Native',
         webhookPath: '/api/webchat/webhook',
         comingSoon: true,
-        imperialOnly: true,
+        pioneerWave: true,
+        addonPrice: 39,
+        minTier: 'imperatore',
+        availableFrom: 'Aprile 2026',
         steps: []
     },
     linkedin: {
         name: 'LinkedIn Direct',
         icon: Linkedin,
         color: 'bg-[#0077b5]',
-        description: 'Espandi il tuo network con messaggi AI su LinkedIn',
+        description: 'Espandi il tuo network B2B con AI',
         provider: 'LinkedIn API',
         webhookPath: '/api/linkedin/webhook',
         comingSoon: true,
-        imperialOnly: true,
+        pioneerWave: true,
+        addonPrice: 49,
+        minTier: 'imperatore',
+        availableFrom: 'Q3 2026',
         steps: []
     },
     tiktok: {
         name: 'TikTok Messages',
         icon: Music,
         color: 'bg-black',
-        description: 'Interagisci con la tua audience su TikTok',
+        description: 'Interagisci con la tua audience creator',
         provider: 'TikTok Shop API',
         webhookPath: '/api/tiktok/webhook',
         comingSoon: true,
-        imperialOnly: true,
+        pioneerWave: true,
+        addonPrice: 49,
+        minTier: 'imperatore',
+        availableFrom: 'Q4 2026',
         steps: []
     }
 };
@@ -623,7 +635,9 @@ export default function ChannelsPage() {
                                         {isActive ? (
                                             <><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> On</>
                                         ) : isComingSoon ? (
-                                            (config as any).imperialOnly ? 'VIP' : 'Soon'
+                                            (config as any).pioneerWave
+                                                ? `+€${(config as any).addonPrice || 19}`
+                                                : 'Soon'
                                         ) : 'Off'}
                                     </div>
 
