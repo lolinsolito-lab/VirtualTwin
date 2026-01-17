@@ -403,13 +403,13 @@ function ChatContent() {
                 "flex-1 flex flex-col min-w-0",
                 mobileView !== 'chat' && "hidden lg:flex"
             )}>
-                {/* Chat Header */}
-                <div className="h-14 px-4 flex items-center justify-between bg-white border-b border-charcoal/5 flex-shrink-0">
+                {/* Chat Header - Mobile Optimized */}
+                <div className="px-4 py-3 flex items-center justify-between bg-white/80 backdrop-blur-lg border-b border-charcoal/5 flex-shrink-0 safe-top">
                     <div className="flex items-center gap-3">
-                        {/* Mobile menu button */}
+                        {/* Mobile menu button - larger touch target */}
                         <button
                             onClick={() => setMobileView('list')}
-                            className="lg:hidden p-2 -ml-2 text-charcoal/50 hover:text-charcoal"
+                            className="lg:hidden w-10 h-10 -ml-1 flex items-center justify-center rounded-xl bg-charcoal/5 text-charcoal hover:bg-gold hover:text-white transition-all active:scale-95"
                         >
                             <Menu className="w-5 h-5" />
                         </button>
@@ -443,15 +443,18 @@ function ChatContent() {
                         {/* Mobile insights toggle */}
                         <button
                             onClick={() => setShowInsights(!showInsights)}
-                            className="xl:hidden p-2 bg-charcoal/5 text-charcoal/50 rounded-xl hover:bg-gold hover:text-white transition-all"
+                            className={cn(
+                                "xl:hidden w-10 h-10 rounded-xl flex items-center justify-center transition-all active:scale-95",
+                                showInsights ? "bg-gold text-white" : "bg-charcoal/5 text-charcoal/50 hover:bg-gold hover:text-white"
+                            )}
                         >
-                            <BarChart3 className="w-4 h-4" />
+                            <BarChart3 className="w-5 h-5" />
                         </button>
                     </div>
                 </div>
 
-                {/* Messages */}
-                <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+                {/* Messages - with better padding for mobile */}
+                <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-4">
                     <AnimatePresence>
                         {messages.map((m, i) => (
                             <motion.div
@@ -469,10 +472,10 @@ function ChatContent() {
                                     </div>
                                     <div className="space-y-1">
                                         <div className={cn(
-                                            "px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap",
+                                            "px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap shadow-sm",
                                             m.role === 'assistant'
-                                                ? 'bg-white rounded-2xl rounded-tl-sm border border-charcoal/5 text-charcoal'
-                                                : 'bg-charcoal rounded-2xl rounded-tr-sm text-white'
+                                                ? 'bg-white rounded-2xl rounded-tl-md border border-charcoal/5 text-charcoal'
+                                                : 'bg-gradient-to-br from-charcoal to-charcoal/90 rounded-2xl rounded-tr-md text-white shadow-lg'
                                         )}>
                                             {m.content}
                                         </div>
@@ -503,20 +506,20 @@ function ChatContent() {
                     )}
                 </div>
 
-                {/* Input */}
-                <div className="p-3 bg-white border-t border-charcoal/5 flex-shrink-0">
-                    <form onSubmit={handleSend} className="flex gap-2">
+                {/* Input - Floating Card Style */}
+                <div className="p-3 sm:p-4 bg-gradient-to-t from-champagne via-champagne/95 to-transparent flex-shrink-0 safe-bottom">
+                    <form onSubmit={handleSend} className="flex gap-2 sm:gap-3 bg-white rounded-2xl p-2 shadow-lg border border-charcoal/5">
                         <input
                             ref={inputRef}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder={activeConversation ? `Rispondi a ${activeConversation.contact_name}...` : "Scrivi un messaggio..."}
-                            className="flex-1 bg-champagne/50 border border-charcoal/10 rounded-xl px-4 py-3 text-sm focus:border-gold/40 focus:bg-white outline-none"
+                            placeholder={activeConversation ? `Rispondi...` : "Scrivi un messaggio..."}
+                            className="flex-1 bg-transparent px-3 py-3 text-[15px] placeholder:text-charcoal/30 focus:outline-none"
                         />
                         <button
                             type="submit"
                             disabled={loading || !input.trim()}
-                            className="w-12 h-12 bg-charcoal text-gold rounded-xl flex items-center justify-center hover:bg-gold hover:text-charcoal transition-all disabled:opacity-30"
+                            className="w-12 h-12 bg-gold text-white rounded-xl flex items-center justify-center hover:bg-charcoal transition-all disabled:opacity-30 active:scale-95 shadow-md"
                         >
                             <Send className="w-5 h-5" />
                         </button>
