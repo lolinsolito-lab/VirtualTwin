@@ -88,8 +88,25 @@ const channelConfig = {
         description: 'Gestisci i DM Instagram con l\'AI',
         provider: 'Meta Graph API',
         webhookPath: '/api/instagram/webhook',
-        comingSoon: true,
-        steps: []
+        comingSoon: false,
+        steps: [
+            {
+                title: 'Configura Meta App',
+                description: '1. Vai su developers.facebook.com\n2. Crea una nuova App (tipo Business)\n3. Aggiungi il prodotto "Instagram Graph API"\n4. Configura il webhook con l\'URL qui sotto',
+                link: 'https://developers.facebook.com/apps',
+                linkText: 'Vai a Meta for Developers →'
+            },
+            {
+                title: 'Ottieni Access Token',
+                description: 'Nel pannello Meta:\n1. Vai su "Instagram API with Instagram Login"\n2. Genera un Access Token con permessi messages\n3. Copia il Page ID della tua pagina Instagram Business',
+                tip: 'Salva Access Token e Page ID'
+            },
+            {
+                title: 'Inserisci le credenziali',
+                description: 'Incolla Access Token e Page ID. Clicca "Attiva Canale" per completare.',
+                isInput: true
+            }
+        ]
     },
     messenger: {
         name: 'Facebook Messenger',
@@ -98,8 +115,25 @@ const channelConfig = {
         description: 'Automatizza le conversazioni Messenger',
         provider: 'Meta Graph API',
         webhookPath: '/api/messenger/webhook',
-        comingSoon: true,
-        steps: []
+        comingSoon: false,
+        steps: [
+            {
+                title: 'Configura Meta App',
+                description: '1. Vai su developers.facebook.com\n2. Usa la stessa App di Instagram o creane una nuova\n3. Aggiungi il prodotto "Messenger"\n4. Configura il webhook',
+                link: 'https://developers.facebook.com/apps',
+                linkText: 'Vai a Meta for Developers →'
+            },
+            {
+                title: 'Ottieni Access Token',
+                description: 'Nel pannello Meta:\n1. Vai su "Messenger" → "Settings"\n2. Genera un Page Access Token\n3. Copia il Page ID della tua Facebook Page',
+                tip: 'Usa gli stessi token di Instagram se già configurato'
+            },
+            {
+                title: 'Inserisci le credenziali',
+                description: 'Incolla Access Token e Page ID. Clicca "Attiva Canale" per completare.',
+                isInput: true
+            }
+        ]
     },
     telegram: {
         name: 'Telegram Bot',
