@@ -32,6 +32,7 @@ import {
     Link as LinkIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '@/lib/supabase';
 
 interface Addon {
     id: string;
@@ -89,6 +90,16 @@ const PRODUCT_TYPES = [
 const formatCurrency = (cents: number) => `€${(cents / 100).toFixed(0)}`;
 
 export default function AdminAddons() {
+    const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        const headers = new Headers(options.headers);
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+        return fetch(url, { ...options, headers });
+    };
+
     const [addons, setAddons] = useState<Addon[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -121,7 +132,7 @@ export default function AdminAddons() {
     const fetchAddons = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/admin/addons');
+            const res = await fetchWithAuth('/api/admin/addons');
             const data = await res.json();
             setAddons(data.addons || []);
         } catch (error) {
@@ -161,7 +172,7 @@ export default function AdminAddons() {
                 ? { id: editingId, ...form, features: form.features.filter(f => f.trim()) }
                 : { ...form, features: form.features.filter(f => f.trim()) };
 
-            const res = await fetch(url, {
+            const res = await fetchWithAuth(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
@@ -208,7 +219,7 @@ export default function AdminAddons() {
         if (!confirm('Vuoi disattivare questo add-on? (Sarà nascosto dal checkout)')) return;
 
         try {
-            await fetch(`/api/admin/addons?id=${id}`, { method: 'DELETE' });
+            await fetchWithAuth(`/api/admin/addons?id=${id}`, { method: 'DELETE' });
             await fetchAddons();
         } catch (error) {
             console.error('Delete failed:', error);

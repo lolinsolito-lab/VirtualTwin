@@ -1,18 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { authenticateAdminRequest } from '@/lib/apiAuth';
 
 /**
  * Academy Modules API - Full CRUD
  * 
- * GET /api/admin/academy/modules - List modules (optional: by course_id)
- * POST /api/admin/academy/modules - Create new module
- * PUT /api/admin/academy/modules - Update module
- * DELETE /api/admin/academy/modules - Delete module
+ * GET /api/admin/academy/modules - List modules (optional: by course_id) (Admin only)
+ * POST /api/admin/academy/modules - Create new module (Admin only)
+ * PUT /api/admin/academy/modules - Update module (Admin only)
+ * DELETE /api/admin/academy/modules - Delete module (Admin only)
  */
 
 // GET - List modules
 export async function GET(req: NextRequest) {
     try {
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const { searchParams } = new URL(req.url);
         const courseId = searchParams.get('course_id');
         const publishedOnly = searchParams.get('published') === 'true';
@@ -44,6 +50,11 @@ export async function GET(req: NextRequest) {
 // POST - Create new module
 export async function POST(req: NextRequest) {
     try {
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const body = await req.json();
 
         const {
@@ -100,6 +111,11 @@ export async function POST(req: NextRequest) {
 // PUT - Update module
 export async function PUT(req: NextRequest) {
     try {
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const body = await req.json();
         const { id, ...updates } = body;
 
@@ -132,6 +148,11 @@ export async function PUT(req: NextRequest) {
 // DELETE - Delete module
 export async function DELETE(req: NextRequest) {
     try {
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');
 

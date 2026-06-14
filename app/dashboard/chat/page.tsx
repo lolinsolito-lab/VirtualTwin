@@ -188,12 +188,17 @@ function ChatContent() {
         setMessages(prev => [...prev, { role: 'user', content: userMessage, timestamp: new Date().toISOString() }]);
 
         try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+
             const response = await fetch('/api/chat', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token || ''}`
+                },
                 body: JSON.stringify({
                     userInput: userMessage,
-                    userId: userId,
                     conversationId: activeConversation?.id,
                     history: messages.slice(-10)
                 })

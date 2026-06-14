@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 /**
  * Public Academy API - For authenticated users
@@ -12,8 +13,12 @@ const TIER_HIERARCHY = ['curioso', 'solopreneur', 'entrepreneur', 'conquistatore
 
 export async function GET(req: NextRequest) {
     try {
-        const { searchParams } = new URL(req.url);
-        const userTier = searchParams.get('tier') || 'curioso';
+        const auth = await authenticateRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
+        const userTier = auth.profile.plan_tier || 'curioso';
 
         // Get user's tier index
         const userTierIndex = TIER_HIERARCHY.indexOf(userTier);

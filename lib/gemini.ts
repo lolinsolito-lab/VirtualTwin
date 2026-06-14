@@ -1,11 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-/** Sovereign Neural Link - Forcing Reload */
+/** Sovereign Neural Link - Gemini 2.5 Flash */
 import { LandingPageConfig, LandingPageData, ChatHistoryItem, ChatAIResponse } from "./types";
 
-const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || '');
+// ⚠️  USA process.env.GEMINI_API_KEY (senza NEXT_PUBLIC_!) — solo server-side
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export const generateLandingPageContent = async (config: LandingPageConfig): Promise<LandingPageData> => {
-  if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     console.warn("Gemini API Key missing. Returning mock landing page data.");
     return {
       hero: {
@@ -37,7 +38,7 @@ export const generateLandingPageContent = async (config: LandingPageConfig): Pro
   }
 
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash", // Using 2.0 flash as it's the current stable high-perf model
+    model: "gemini-2.5-flash", // Gemini 2.5 Flash — aggiornato dalla 2.0 (deprecated giugno 2026)
   });
 
   const prompt = `Genera una landing page di classe elite, ultra-lussuosa per "${config.businessName}". 
@@ -84,7 +85,7 @@ export const processConversation = async (
   mediaData?: Buffer,
   mimeType?: string
 ): Promise<ChatAIResponse> => {
-  if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     console.warn("Gemini API Key missing. Returning mock response for Sovereign Experience.");
     return {
       reply: "Saluti, Sovrano. Sto operando in modalità simulazione poiché la chiave neurale (API Key) non è stata ancora configurata. Come posso assisterla nei suoi progetti oggi?",
@@ -97,7 +98,7 @@ export const processConversation = async (
   }
 
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
   });
 
   const prompt = `

@@ -119,15 +119,17 @@ export async function checkFairUse(
 export function getUsagePercentage(usage: number, plan: string): number {
     const limits: Record<string, number> = {
         curioso: 100,
-        esploratore: 1000,
-        pioniere: 5000,
+        solopreneur: 1000,
+        entrepreneur: 5000,
         conquistatore: 20000,
-        imperatore: 50000
+        imperatore: 100000,
+        sovereignty: 999999,
     };
 
     const limit = limits[plan.toLowerCase()] || 1000;
     return Math.round((usage / limit) * 100);
 }
+
 
 /**
  * Get usage bar color based on percentage

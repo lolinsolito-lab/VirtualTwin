@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 import { calculateEligibleBadges, detectNewBadges } from '@/lib/achievements';
 import { UserProfile } from '@/lib/types';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 /**
  * API to submit quiz results and earn XP/Badges
@@ -11,27 +12,19 @@ import { UserProfile } from '@/lib/types';
  */
 export async function POST(req: Request) {
     try {
-        const { data: { user: authUser } } = await supabase.auth.getUser();
+        const auth = await authenticateRequest(req);
 
-        if (!authUser) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
         }
+
+        const authUser = auth.user;
+        const profile = auth.profile;
 
         const { moduleId, score, totalQuestions } = await req.json();
 
         if (!moduleId || score === undefined) {
             return NextResponse.json({ error: 'Module ID and score required' }, { status: 400 });
-        }
-
-        // 1. Fetch current profile
-        const { data: profile, error: fetchError } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', authUser.id)
-            .single();
-
-        if (fetchError || !profile) {
-            return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
         }
 
         const userProfile = profile as UserProfile;
@@ -81,7 +74,7 @@ export async function POST(req: Request) {
             const newLevel = Math.floor(Math.sqrt(newXP / 100)) + 1;
             const updatedBadges = [...currentBadges, ...newBadgesEarned];
 
-            const { error: updateError } = await supabase
+            const { error: updateError } = await supabaseAdmin
                 .from('profiles')
                 .update({
                     quizzes_passed: quizzesPassed,

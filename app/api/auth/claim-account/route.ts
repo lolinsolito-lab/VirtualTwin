@@ -31,11 +31,21 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Email non trovata nella sessione' }, { status: 404 });
         }
 
-        // 2. Find User in Supabase
-        const { data: { users }, error: listError } = await supabase.auth.admin.listUsers();
-        const user = users.find(u => u.email === email);
+        // 2. Find User in Supabase — cerca per email via profiles (efficiente, no full scan)
+        const { data: userByEmail } = await supabase
+            .from('profiles')
+            .select('id, email')
+            .eq('email', email)
+            .single();
 
-        if (!user) {
+        if (!userByEmail) {
+            return NextResponse.json({ error: 'Utente non ancora creato. Attendi 5 secondi e riprova.' }, { status: 404 });
+        }
+
+        // Recupera il dettaglio auth user per id
+        const { data: { user }, error: getUserError } = await supabase.auth.admin.getUserById(userByEmail.id);
+
+        if (!user || getUserError) {
             return NextResponse.json({ error: 'Utente non ancora creato. Attendi 5 secondi e riprova.' }, { status: 404 });
         }
 

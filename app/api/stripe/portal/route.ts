@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { supabase } from '@/lib/supabase';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 /**
  * Create Stripe Billing Portal Session
@@ -10,6 +11,12 @@ import { supabase } from '@/lib/supabase';
  */
 export async function POST(req: NextRequest) {
     try {
+        // 🔐 Require authenticated session
+        const auth = await authenticateRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const stripe = getStripe();
         const { userId } = await req.json();
 
@@ -17,6 +24,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json(
                 { error: 'User ID is required' },
                 { status: 400 }
+            );
+        }
+
+        // 🔐 Ensure the authenticated user can only access their own portal
+        if (auth.user.id !== userId) {
+            return NextResponse.json(
+                { error: 'Accesso non autorizzato al billing di un altro utente.' },
+                { status: 403 }
             );
         }
 

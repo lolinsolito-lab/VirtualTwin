@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 /**
  * API to mark a video as completed in the Founder Academy
@@ -9,27 +10,19 @@ import { supabase } from '@/lib/supabase';
  */
 export async function POST(req: Request) {
     try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const auth = await authenticateRequest(req);
 
-        if (!user) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
         }
+
+        const user = auth.user;
+        const profile = auth.profile;
 
         const { videoId, xpAwarded = 25 } = await req.json();
 
         if (!videoId) {
             return NextResponse.json({ error: 'Video ID required' }, { status: 400 });
-        }
-
-        // 1. Get current profile to check if video is already completed
-        const { data: profile, error: fetchError } = await supabase
-            .from('profiles')
-            .select('completed_video_ids, xp, level')
-            .eq('id', user.id)
-            .single();
-
-        if (fetchError || !profile) {
-            return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
         }
 
         const completedVideoIds = profile.completed_video_ids || [];
@@ -42,7 +35,7 @@ export async function POST(req: Request) {
             // Sovereing Leveling Curve: level = floor(sqrt(xp / 100)) + 1
             const newLevel = Math.floor(Math.sqrt(newXP / 100)) + 1;
 
-            const { error: updateError } = await supabase
+            const { error: updateError } = await supabaseAdmin
                 .from('profiles')
                 .update({
                     completed_video_ids: newCompletedVideos,

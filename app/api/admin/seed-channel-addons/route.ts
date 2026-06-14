@@ -9,10 +9,16 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { supabase } from '@/lib/supabase';
 import { CHANNEL_ADDONS } from '@/lib/channelAddons';
+import { authenticateAdminRequest } from '@/lib/apiAuth';
 
 export async function POST(req: Request) {
     try {
         // Verify admin (in production, add proper auth)
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const results = [];
 
         for (const [key, addon] of Object.entries(CHANNEL_ADDONS)) {
@@ -117,8 +123,13 @@ export async function POST(req: Request) {
 }
 
 // GET - List current channel add-ons from DB
-export async function GET() {
+export async function GET(req: Request) {
     try {
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const { data: addons, error } = await supabase
             .from('addons')
             .select('*')

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -12,7 +13,11 @@ const supabase = createClient(
  */
 export async function POST(request: NextRequest) {
     try {
-        const { userId } = await request.json();
+        const auth = await authenticateRequest(request);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+        const userId = auth.user.id;
 
         if (!userId) {
             return NextResponse.json({ error: 'User ID required' }, { status: 400 });
@@ -69,16 +74,16 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * GET /api/referral/generate?userId=xxx
+ * GET /api/referral/generate
  * Retrieves referral stats for a user.
  */
 export async function GET(request: NextRequest) {
     try {
-        const userId = request.nextUrl.searchParams.get('userId');
-
-        if (!userId) {
-            return NextResponse.json({ error: 'User ID required' }, { status: 400 });
+        const auth = await authenticateRequest(request);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
         }
+        const userId = auth.user.id;
 
         const { data: profile, error } = await supabase
             .from('profiles')

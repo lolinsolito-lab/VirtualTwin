@@ -9,15 +9,22 @@
 export const ENV = {
     SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    GEMINI_API_KEY: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
+    // ⚠️  GEMINI_API_KEY rimossa da qui — era NEXT_PUBLIC_ = esposta nel browser!
+    //     Ora è solo server-side in SERVER_ENV
 } as const;
 
 // Server-side env vars (private, solo server)
 export const SERVER_ENV = {
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    // ✅ Gemini — ora solo server-side (era NEXT_PUBLIC_ = vulnerabilità!)
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    // ✅ Claude / Anthropic
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    // Stripe
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    // Supabase admin
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    // Email
     RESEND_API_KEY: process.env.RESEND_API_KEY,
 } as const;
 
@@ -94,12 +101,14 @@ export function getEnvStrict(key: keyof typeof ENV): string {
 }
 
 /**
- * Log env status (for debugging - remove in production)
+ * Log env status (for debugging)
  */
 export function logEnvStatus(): void {
     console.log('🔧 Environment Status:');
     console.log('  SUPABASE_URL:', ENV.SUPABASE_URL ? '✅ Set' : '❌ Missing');
     console.log('  SUPABASE_ANON_KEY:', ENV.SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing');
-    console.log('  GEMINI_API_KEY:', ENV.GEMINI_API_KEY ? '✅ Set' : '❌ Missing');
-    console.log('  Build Time:', isBuildTime() ? 'Yes' : 'No');
+    console.log('  GEMINI_API_KEY (server):', SERVER_ENV.GEMINI_API_KEY ? '✅ Set' : '❌ Missing');
+    console.log('  ANTHROPIC_API_KEY (server):', SERVER_ENV.ANTHROPIC_API_KEY ? '✅ Set' : '❌ Missing');
+    console.log('  STRIPE_SECRET_KEY:', SERVER_ENV.STRIPE_SECRET_KEY ? '✅ Set' : '❌ Missing');
+    console.log('  RESEND_API_KEY:', SERVER_ENV.RESEND_API_KEY ? '✅ Set' : '❌ Missing');
 }

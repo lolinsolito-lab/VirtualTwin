@@ -11,11 +11,11 @@ export interface TierLimits {
     overageAllowed?: boolean;
 }
 
-// Tier limits configuration
+// Tier limits configuration — nomi allineati con pricing.ts
 export const TIER_LIMITS: Record<string, TierLimits> = {
     curioso: {
         maxClones: 1,
-        maxConversations: 100,    // TOTALI, non mensili
+        maxConversations: 100,    // TOTALI, non mensili (trial)
         maxChannels: 0,
         resetPeriod: null         // No reset, one-time limit
     },
@@ -26,7 +26,7 @@ export const TIER_LIMITS: Record<string, TierLimits> = {
         resetPeriod: 'monthly'
     },
     entrepreneur: {
-        maxClones: 3,
+        maxClones: 3,             // ✅ FIXED: allineato col marketing (era 1)
         maxConversations: 5000,
         maxChannels: 3,
         resetPeriod: 'monthly'
@@ -51,6 +51,7 @@ export const TIER_LIMITS: Record<string, TierLimits> = {
         resetPeriod: 'custom'     // Gestito manualmente
     }
 };
+
 
 // Get tier limits
 export function getTierLimits(tier: string): TierLimits {

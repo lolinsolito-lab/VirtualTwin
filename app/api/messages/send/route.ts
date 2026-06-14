@@ -1,13 +1,25 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { sendWhatsAppMessage, saveMessage, findOrCreateConversation, getUserChannelCredentials } from '@/lib/whatsapp';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 export async function POST(req: Request) {
     try {
+        // 🔐 Require authenticated session
+        const auth = await authenticateRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const { phone, message, userId, conversationId } = await req.json();
 
         if (!phone || !message || !userId) {
             return NextResponse.json({ error: 'Missing parameters: phone, message and userId are required.' }, { status: 400 });
+        }
+
+        // 🔐 Ensure the authenticated user matches the request userId
+        if (auth.user.id !== userId) {
+            return NextResponse.json({ error: 'Non puoi inviare messaggi per conto di altri utenti.' }, { status: 403 });
         }
 
         // 1. Recupera credenziali utente

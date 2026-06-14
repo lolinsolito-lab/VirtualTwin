@@ -233,7 +233,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                 console.log(`[Stripe] 🚀 NEW WAVE DETECTED: ${waveStatus.prevWave?.name} → ${waveStatus.newWave?.name}`);
 
                 // Trigger waitlist notification (fire-and-forget)
-                fetch(`${process.env.NEXT_PUBLIC_URL}/api/waitlist/notify`, {
+                fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/waitlist/notify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

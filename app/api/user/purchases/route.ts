@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 /**
  * API: Get user's purchased add-ons
@@ -10,11 +11,22 @@ import { supabaseAdmin } from '@/lib/supabase';
  */
 export async function GET(req: NextRequest) {
     try {
+        // 🔐 Require authenticated session
+        const auth = await authenticateRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ purchases: [], count: 0 });
+        }
+
         const { searchParams } = new URL(req.url);
         const userId = searchParams.get('userId');
 
         if (!userId) {
             // Return empty array instead of error - component handles this gracefully
+            return NextResponse.json({ purchases: [], count: 0 });
+        }
+
+        // 🔐 Users can only fetch their own purchases (IDOR prevention)
+        if (auth.user.id !== userId) {
             return NextResponse.json({ purchases: [], count: 0 });
         }
 

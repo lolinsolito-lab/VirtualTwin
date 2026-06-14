@@ -26,6 +26,7 @@ import {
     Save
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '@/lib/supabase';
 
 interface Course {
     id: string;
@@ -72,6 +73,16 @@ const CONTENT_TYPES = [
 ];
 
 export default function AdminAcademy() {
+    const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        const headers = new Headers(options.headers);
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+        return fetch(url, { ...options, headers });
+    };
+
     const [courses, setCourses] = useState<Course[]>([]);
     const [modules, setModules] = useState<Record<string, Module[]>>({});
     const [loading, setLoading] = useState(true);
@@ -115,7 +126,7 @@ export default function AdminAcademy() {
     const fetchCourses = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/admin/academy/courses');
+            const res = await fetchWithAuth('/api/admin/academy/courses');
             const data = await res.json();
             setCourses(data.courses || []);
         } catch (error) {
@@ -127,7 +138,7 @@ export default function AdminAcademy() {
 
     const fetchModules = async (courseId: string) => {
         try {
-            const res = await fetch(`/api/admin/academy/modules?course_id=${courseId}`);
+            const res = await fetchWithAuth(`/api/admin/academy/modules?course_id=${courseId}`);
             const data = await res.json();
             setModules(prev => ({ ...prev, [courseId]: data.modules || [] }));
         } catch (error) {
@@ -187,7 +198,7 @@ export default function AdminAcademy() {
                 ? { id: editingCourse.id, ...courseForm }
                 : courseForm;
 
-            const res = await fetch('/api/admin/academy/courses', {
+            const res = await fetchWithAuth('/api/admin/academy/courses', {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
@@ -211,7 +222,7 @@ export default function AdminAcademy() {
     const deleteCourse = async (id: string) => {
         if (!confirm('Eliminare questo corso e tutti i suoi moduli?')) return;
         try {
-            await fetch(`/api/admin/academy/courses?id=${id}`, { method: 'DELETE' });
+            await fetchWithAuth(`/api/admin/academy/courses?id=${id}`, { method: 'DELETE' });
             await fetchCourses();
         } catch (error) {
             console.error('Delete failed:', error);
@@ -270,7 +281,7 @@ export default function AdminAcademy() {
                 ? { id: editingModule.id, ...moduleForm }
                 : { course_id: selectedCourseForModule, ...moduleForm };
 
-            const res = await fetch('/api/admin/academy/modules', {
+            const res = await fetchWithAuth('/api/admin/academy/modules', {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
@@ -297,7 +308,7 @@ export default function AdminAcademy() {
     const deleteModule = async (id: string, courseId: string) => {
         if (!confirm('Eliminare questo modulo?')) return;
         try {
-            await fetch(`/api/admin/academy/modules?id=${id}`, { method: 'DELETE' });
+            await fetchWithAuth(`/api/admin/academy/modules?id=${id}`, { method: 'DELETE' });
             await fetchModules(courseId);
             await fetchCourses();
         } catch (error) {
@@ -307,7 +318,7 @@ export default function AdminAcademy() {
 
     const togglePublish = async (course: Course) => {
         try {
-            await fetch('/api/admin/academy/courses', {
+            await fetchWithAuth('/api/admin/academy/courses', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: course.id, is_published: !course.is_published })

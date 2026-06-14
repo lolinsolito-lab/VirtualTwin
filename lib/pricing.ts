@@ -76,7 +76,7 @@ export const PLAN_LIMITS = {
         maxTokensPerMessage: 500,
     },
     entrepreneur: {
-        clones: 1, // Fixed to 1 in lib/waves logic, but 3 in pricing? Let's keep 1 for safety or 3 if preferred. 
+        clones: 3, // ✅ FIXED: allineato col marketing (3 cloni)
         messagesPerMonth: 5000,
         channels: 3,
         teamMembers: 3,
@@ -85,11 +85,11 @@ export const PLAN_LIMITS = {
         apiRatePerMinute: 0,
         whiteLabel: false,
         prioritySupport: true,
-        aiProvider: 'gemini-pro' as const,
+        aiProvider: 'gemini-2.5-pro' as const,
         maxTokensPerMessage: 800,
     },
     conquistatore: {
-        clones: 3,
+        clones: 5,
         messagesPerMonth: 20000,
         channels: 5,
         maxChannels: 30,
@@ -99,7 +99,7 @@ export const PLAN_LIMITS = {
         apiRatePerMinute: 60,
         whiteLabel: false,
         prioritySupport: true,
-        aiProvider: 'gpt-4o' as const,
+        aiProvider: 'claude-haiku-4-5' as const, // Claude Haiku 4.5 — $1/$5 per M token
         maxTokensPerMessage: 1000,
     },
     imperatore: {
@@ -114,7 +114,7 @@ export const PLAN_LIMITS = {
         apiRatePerMinute: 300,
         whiteLabel: true,
         prioritySupport: true,
-        aiProvider: 'gpt-4-turbo' as const,
+        aiProvider: 'claude-sonnet-4-6' as const, // Claude Sonnet 4.6 — $3/$15 per M token
         maxTokensPerMessage: 2000,
     },
     sovereignty: {
@@ -127,7 +127,7 @@ export const PLAN_LIMITS = {
         apiRatePerMinute: 1000,
         whiteLabel: true,
         prioritySupport: true,
-        aiProvider: 'gpt-4-turbo' as const,
+        aiProvider: 'claude-sonnet-4-6' as const, // Same as Imperatore — top tier
         maxTokensPerMessage: 4000,
     },
 } as const;

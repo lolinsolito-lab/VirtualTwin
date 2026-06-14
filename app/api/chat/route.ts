@@ -3,14 +3,20 @@ import { hybridAIResponse, getProviderDisplayName } from '@/lib/hybridAI';
 import { processConversation } from '@/lib/gemini';
 import { ChatHistoryItem } from '@/lib/types';
 import { supabase } from '@/lib/supabase';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 export async function POST(req: Request) {
     try {
+        // Authenticate the request
+        const auth = await authenticateRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const {
             history,
             userInput,
             businessContext,
-            userId,
             conversationId: existingConversationId,
             cloneId: providedCloneId
         } = await req.json();
@@ -20,7 +26,7 @@ export async function POST(req: Request) {
         }
 
         // 1. Resolve Clone and User
-        let activeUserId = userId;
+        const activeUserId = auth.user.id;
         let activeCloneId = providedCloneId;
 
         // If no cloneId provided, try to find the first active clone for this user

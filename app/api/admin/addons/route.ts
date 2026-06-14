@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
+import { authenticateAdminRequest } from '@/lib/apiAuth';
 
 /**
  * Add-ons API - Full CRUD with automatic Stripe sync
  * 
- * GET /api/admin/addons - List all addons
- * POST /api/admin/addons - Create new addon (+ Stripe Product/Prices)
- * PUT /api/admin/addons - Update addon
- * DELETE /api/admin/addons - Deactivate addon
+ * GET /api/admin/addons - List all addons (Admin authorization required unless active=true)
+ * POST /api/admin/addons - Create new addon (+ Stripe Product/Prices) (Admin only)
+ * PUT /api/admin/addons - Update addon (Admin only)
+ * DELETE /api/admin/addons - Deactivate addon (Admin only)
  */
 
 // GET - List all addons
@@ -16,6 +17,14 @@ export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
         const activeOnly = searchParams.get('active') === 'true';
+
+        // Secure unless it's the public active-only list for checkout
+        if (!activeOnly) {
+            const auth = await authenticateAdminRequest(req);
+            if (auth.error) {
+                return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+            }
+        }
 
         let query = supabaseAdmin
             .from('addons')
@@ -40,6 +49,11 @@ export async function GET(req: NextRequest) {
 // POST - Create new addon with automatic Stripe sync
 export async function POST(req: NextRequest) {
     try {
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const stripe = getStripe();
         const body = await req.json();
 
@@ -156,6 +170,11 @@ export async function POST(req: NextRequest) {
 // PUT - Update addon
 export async function PUT(req: NextRequest) {
     try {
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const stripe = getStripe();
         const body = await req.json();
         const { id, ...updates } = body;
@@ -241,6 +260,11 @@ export async function PUT(req: NextRequest) {
 // DELETE - Soft delete (deactivate) addon
 export async function DELETE(req: NextRequest) {
     try {
+        const auth = await authenticateAdminRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const stripe = getStripe();
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');

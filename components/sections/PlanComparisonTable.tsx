@@ -65,6 +65,11 @@ export default function PlanComparisonTable() {
             name: "Support",
             values: ["Community", "<48h", "<24h", "CSM", "Dedicato"],
             highlight: [false, false, false, true, true]
+        },
+        {
+            name: "Servizio Setup Premium",
+            values: ["€49 (Promo)*", "€49 (Promo)*", "€49 (Promo)*", "€49 (Promo)*", "Gratuito"],
+            highlight: [false, false, false, false, true]
         }
     ];
 
@@ -208,6 +213,13 @@ export default function PlanComparisonTable() {
                                 )}
                             </motion.div>
                         ))}
+                    </div>
+
+                    {/* Footnote */}
+                    <div className="mt-8 text-center bg-white/40 p-4 rounded-2xl border border-charcoal/5 max-w-3xl mx-auto">
+                        <p className="text-xs text-charcoal/50 leading-relaxed italic">
+                            *Il <strong>Servizio Setup Premium</strong> (configurazione guidata chiavi, webhook, caricamento FAQ e addestramento iniziale curato dal nostro team di esperti) ha una tariffa standard di €99. In promozione speciale a <strong>€49</strong> solo per i primi 100 clienti. Incluso gratuitamente per il piano Imperatore.
+                        </p>
                     </div>
                 </motion.div>
             </div>

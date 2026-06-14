@@ -37,7 +37,7 @@ export async function GET(
                 <body style="font-family: system-ui; text-align: center; padding: 60px 20px;">
                     <h1 style="color: #ef4444;">❌ Token Non Valido</h1>
                     <p>Questo link non è valido o è già stato utilizzato.</p>
-                    <a href="${process.env.NEXT_PUBLIC_URL}/waitlist" style="color: #C9A86A;">Torna alla Waitlist</a>
+                    <a href="${process.env.NEXT_PUBLIC_APP_URL}/waitlist" style="color: #C9A86A;">Torna alla Waitlist</a>
                 </body>
                 </html>`,
                 {
@@ -64,7 +64,7 @@ export async function GET(
                     <h1 style="color: #f59e0b;">⏰ Token Scaduto</h1>
                     <p>Questo link è scaduto dopo 24 ore.</p>
                     <p>Puoi ancora iniziare al prezzo pubblico:</p>
-                    <a href="${process.env.NEXT_PUBLIC_URL}/start" 
+                    <a href="${process.env.NEXT_PUBLIC_APP_URL}/start" 
                        style="display: inline-block; background: #C9A86A; color: white; 
                               padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px;">
                         Vedi Prezzi Pubblici
@@ -111,8 +111,8 @@ export async function GET(
                 waitlistToken: token,
                 fromWaitlist: 'true'
             },
-            success_url: `${process.env.NEXT_PUBLIC_URL}/dashboard?success=true&wave=${wave.name}&founder=true`,
-            cancel_url: `${process.env.NEXT_PUBLIC_URL}/waitlist?cancelled=true`,
+            success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true&wave=${wave.name}&founder=true`,
+            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/waitlist?cancelled=true`,
             customer_email: waitlistEntry.email
         });
 

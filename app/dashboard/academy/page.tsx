@@ -13,6 +13,7 @@ import { useSovereign } from '@/components/providers/SovereignProvider';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { PlanTier } from '@/lib/pricing';
+import { supabase } from '@/lib/supabase';
 
 // Tier hierarchy for access control
 const TIER_ORDER: PlanTier[] = ['curioso', 'solopreneur', 'entrepreneur', 'conquistatore', 'imperatore', 'sovereignty'];
@@ -576,8 +577,13 @@ export default function AcademyPage() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const tier = user?.plan_tier || 'curioso';
-                const res = await fetch(`/api/academy/courses?tier=${tier}`);
+                const { data: { session } } = await supabase.auth.getSession();
+                const token = session?.access_token;
+                const res = await fetch('/api/academy/courses', {
+                    headers: {
+                        'Authorization': `Bearer ${token || ''}`
+                    }
+                });
                 const data = await res.json();
                 if (data.courses) setDbCourses(data.courses);
             } catch (error) {
@@ -587,7 +593,7 @@ export default function AcademyPage() {
             }
         };
         if (!loading) fetchCourses();
-    }, [user?.plan_tier, loading]);
+    }, [loading]);
 
     // Convert to modules format
     const modules = dbCourses.length > 0 ? dbCourses.map(course => ({
@@ -639,10 +645,16 @@ export default function AcademyPage() {
         setIsCompleting(true);
 
         try {
-            await fetch('/api/academy/progress', {
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+
+            await fetch('/api/academy/complete-video', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ videoId, xpEarned: xp, userId: user.id })
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token || ''}`
+                },
+                body: JSON.stringify({ videoId, xpAwarded: xp })
             });
             await refreshProfile();
         } catch (error) {

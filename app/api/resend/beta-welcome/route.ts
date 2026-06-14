@@ -1,8 +1,15 @@
 import { resend, SYSTEM_EMAIL, FOUNDER_EMAIL } from '@/lib/resend';
 import { NextResponse } from 'next/server';
+import { authenticateRequest } from '@/lib/apiAuth';
 
 export async function POST(req: Request) {
     try {
+        // 🔐 Require authenticated session (prevent email spam abuse)
+        const auth = await authenticateRequest(req);
+        if (auth.error) {
+            return NextResponse.json({ error: auth.error }, { status: auth.statusCode });
+        }
+
         const { name, email, source } = await req.json();
 
         if (!email || !name) {
